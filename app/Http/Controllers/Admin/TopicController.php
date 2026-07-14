@@ -20,6 +20,15 @@ class TopicController extends Controller
         ]);
     }
 
+    public function show(Topic $topic)
+    {
+        $topic->load('competitions');
+
+        return inertia('admin/topics/show', [
+            'topic' => $topic,
+        ]);
+    }
+
     public function create()
     {
         return inertia('admin/topics/create');

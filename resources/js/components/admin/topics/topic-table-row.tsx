@@ -1,6 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Pencil } from 'lucide-react';
+import { Eye, Pencil } from 'lucide-react';
 import DeleteTopicDialog from '@/components/admin/topics/delete-topic-dialog';
 import VisibilityBadge from '@/components/admin/topics/visibility-badge';
 import { Button } from '@/components/ui/button';
@@ -33,6 +33,11 @@ export default function TopicTableRow({
             <td className="whitespace-nowrap px-4 py-3 text-center">{topic.competitions_count ?? 0}</td>
             <td className="px-4 py-3">
                 <div className="flex items-center gap-2">
+                    <Link href={topics.show({ topic: topic.id }).url} className="shrink-0">
+                        <Button variant="outline" size="icon">
+                            <Eye className="h-4 w-4" />
+                        </Button>
+                    </Link>
                     <Link href={topics.edit({ topic: topic.id }).url} className="shrink-0">
                         <Button variant="outline" size="icon">
                             <Pencil className="h-4 w-4" />

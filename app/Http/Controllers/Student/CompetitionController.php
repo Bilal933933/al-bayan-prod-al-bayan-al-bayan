@@ -58,9 +58,8 @@ class CompetitionController extends Controller
         }
 
         // المسابقة مستقلة أو ابن (standalone/child) — قابلة لبدء اختبار
-        return inertia('student/competitions/show', [
-            'competition' => $competition,
-            // 'topics' => $competition->topics()->with(...)->get(), ← لاحقًا عند بناء جدول topics
-        ]);
+        $competition->load(['topics' => fn ($query) => $query->where('topics.is_active', true)]);
+
+        return inertia('student/competitions/show', compact('competition'));
     }
 }

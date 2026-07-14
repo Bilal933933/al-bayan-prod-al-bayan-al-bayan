@@ -9,7 +9,7 @@ Route::middleware(['auth', 'verified'])
     ->name('admin.')
     ->group(function () {
         Route::resource('competitions', CompetitionController::class);
-        Route::resource('topics', TopicController::class)->except(['show']);
+        Route::resource('topics', TopicController::class);
 
         // إدارة محاور المسابقة
         Route::get('competitions/{competition}/topics', [CompetitionController::class, 'editTopics'])

@@ -10,8 +10,10 @@ export function useFlashToast(): void {
 
             // التنسيق 1: كائن toast صريح (Inertia::flash('toast', [...]))
             const toastData = flash?.toast as FlashToast | undefined;
+
             if (toastData) {
                 toast[toastData.type](toastData.message);
+
                 return;
             }
 

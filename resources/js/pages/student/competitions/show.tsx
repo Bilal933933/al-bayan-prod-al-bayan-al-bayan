@@ -3,12 +3,16 @@ import { Head } from '@inertiajs/react';
 import BreadcrumbTrail from '@/components/student/competitions/breadcrumb-trail';
 import CompetitionHero from '@/components/student/competitions/competition-hero';
 import CompetitionGrid from '@/components/student/competitions/competition-grid';
+import TopicCard from '@/components/student/topics/topic-card';
 import StartExamButton from '@/components/student/competitions/start-exam-button';
+import { Layers } from 'lucide-react';
 import type { Competition } from '@/types/competition';
+import type { TopicWithPivot } from '@/types/topic';
 
 interface ShowProps {
     competition: Competition & {
         parent: Competition | null;
+        topics?: TopicWithPivot[];
     };
     children?: Competition[];
 }
@@ -24,6 +28,7 @@ const contentVariants = {
 
 export default function Show({ competition, children }: ShowProps) {
     const childrenCount = children?.length ?? 0;
+    const topics = competition.topics ?? [];
 
     return (
         <>
@@ -60,6 +65,33 @@ export default function Show({ competition, children }: ShowProps) {
                         ) : (
                             <CompetitionGrid competitions={children} />
                         )}
+                    </motion.div>
+                )}
+
+                {competition.classification !== 'container' && topics.length > 0 && (
+                    <motion.div
+                        variants={contentVariants}
+                        initial="hidden"
+                        animate="visible"
+                    >
+                        <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
+                            <Layers className="h-4 w-4 text-muted-foreground" />
+                            محاور الاختبار
+                            <span className="text-sm font-normal text-muted-foreground">({topics.length})</span>
+                        </h2>
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                            {topics.map((topic) => (
+                                <TopicCard
+                                    key={topic.id}
+                                    code={topic.code}
+                                    name={topic.name}
+                                    visibility={topic.visibility}
+                                    description={topic.description}
+                                    questionsCount={topic.pivot.questions_count}
+                                    durationMinutes={topic.pivot.duration_minutes}
+                                />
+                            ))}
+                        </div>
                     </motion.div>
                 )}
 
