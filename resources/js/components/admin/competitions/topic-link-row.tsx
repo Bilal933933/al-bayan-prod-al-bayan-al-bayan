@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
+import { X } from 'lucide-react';
+import VisibilityBadge from '@/components/admin/topics/visibility-badge';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import VisibilityBadge from '@/components/admin/topics/visibility-badge';
-import { X } from 'lucide-react';
 import type { TopicWithPivot } from '@/types/topic';
 
 export interface LinkedTopicData {

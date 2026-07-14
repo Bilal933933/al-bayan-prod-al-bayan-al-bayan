@@ -1,15 +1,15 @@
-import { useState, useCallback } from 'react';
-import { motion } from 'framer-motion';
 import { Head, Link, router } from '@inertiajs/react';
-import { dashboard } from '@/routes';
-import competitions from '@/routes/admin/competitions';
-import Heading from '@/components/heading';
+import { motion } from 'framer-motion';
+import { Save, Plus, BookOpen, Layers, X } from 'lucide-react';
+import { useState, useCallback } from 'react';
 import TopicLinkRow from '@/components/admin/competitions/topic-link-row';
+import Heading from '@/components/heading';
+import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import InputError from '@/components/input-error';
-import { Save, Plus, BookOpen, Layers, X } from 'lucide-react';
+import { dashboard } from '@/routes';
+import competitions from '@/routes/admin/competitions';
 import type { BreadcrumbItem } from '@/types';
 import type { Competition } from '@/types/competition';
 import type { Topic, TopicWithPivot } from '@/types/topic';
@@ -61,9 +61,15 @@ export default function Topics({ competition, attachedTopics, availableTopics }:
     );
 
     const addTopic = useCallback(() => {
-        if (!selectedTopicId) return;
+        if (!selectedTopicId) {
+return;
+}
+
         const topic = availableTopics.find((t) => t.id === selectedTopicId);
-        if (!topic) return;
+
+        if (!topic) {
+return;
+}
 
         setLinkedTopics((prev) => [
             ...prev,

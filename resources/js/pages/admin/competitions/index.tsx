@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
 import { Head, Link, router } from '@inertiajs/react';
-import { dashboard } from '@/routes';
-import competitions from '@/routes/admin/competitions';
-import Heading from '@/components/heading';
+import { motion } from 'framer-motion';
+import { Search, Layers, FolderOpen, FileText, Trophy, GraduationCap } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import CompetitionTable from '@/components/admin/competitions/competition-table';
+import Heading from '@/components/heading';
 import { LaravelPagination } from '@/components/laravel-pagination';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Layers, FolderOpen, FileText, Trophy, GraduationCap } from 'lucide-react';
+import { dashboard } from '@/routes';
+import competitions from '@/routes/admin/competitions';
 import type { BreadcrumbItem } from '@/types';
 import type { Competition } from '@/types/competition';
 import type { PaginationMeta } from '@/types/pagination';
@@ -93,6 +93,7 @@ export default function Index({
                 navigateWithParams({ search: searchInput || undefined, page: '1' });
             }
         }, 400);
+
         return () => clearTimeout(timer);
     }, [searchInput, currentSearch]);
 

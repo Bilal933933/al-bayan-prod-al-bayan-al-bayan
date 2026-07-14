@@ -1,10 +1,10 @@
-import { motion } from 'framer-motion';
 import { Head, Link } from '@inertiajs/react';
-import topics from '@/routes/student/topics';
-import competitions from '@/routes/student/competitions';
+import { motion } from 'framer-motion';
+import { BookOpen, ChevronLeft, Clock, House } from 'lucide-react';
 import VisibilityBadge from '@/components/admin/topics/visibility-badge';
 import { Badge } from '@/components/ui/badge';
-import { BookOpen, ChevronLeft, Clock, House } from 'lucide-react';
+import competitions from '@/routes/student/competitions';
+import topics from '@/routes/student/topics';
 import type { Topic } from '@/types/topic';
 
 interface ShowProps {

@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Link, router } from '@inertiajs/react';
-import competitions from '@/routes/admin/competitions';
+import { motion } from 'framer-motion';
+import { Eye, Layers, Pencil, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 import ClassificationBadge from '@/components/admin/competitions/classification-badge';
-import { Badge } from '@/components/ui/badge';
 import RowActions from '@/components/data-table-row-actions';
 import DeleteDialog from '@/components/delete-dialog';
-import { Eye, Layers, Pencil, Trash2 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { COMPETITION_ICONS } from '@/config/competition-icons';
+import competitions from '@/routes/admin/competitions';
 import type { Competition } from '@/types/competition';
 
 export default function CompetitionTableRow({
@@ -55,14 +55,17 @@ export default function CompetitionTableRow({
                         const iconEntry = competition.icon
                             ? COMPETITION_ICONS[competition.icon]
                             : null;
+
                         if (iconEntry) {
                             const Icon = iconEntry.icon;
+
                             return (
                                 <span className="shrink-0">
                                     <Icon className="h-4 w-4" />
                                 </span>
                             );
                         }
+
                         return null;
                     })()}
                     <Link

@@ -1,4 +1,7 @@
 import { motion } from 'framer-motion';
+import InputError from '@/components/input-error';
+import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
 import {
     Select,
     SelectContent,
@@ -6,9 +9,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import InputError from '@/components/input-error';
 import type { Competition } from '@/types/competition';
 
 export default function ParentSelect({

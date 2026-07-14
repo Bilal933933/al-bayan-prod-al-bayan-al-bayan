@@ -1,10 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\CompetitionController;
+use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\TopicController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'verified'])
+Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -16,4 +17,6 @@ Route::middleware(['auth', 'verified'])
             ->name('competitions.topics.edit');
         Route::put('competitions/{competition}/topics', [CompetitionController::class, 'syncTopics'])
             ->name('competitions.topics.sync');
+
+        Route::resource('questions', QuestionController::class)->except(['show']);
     });

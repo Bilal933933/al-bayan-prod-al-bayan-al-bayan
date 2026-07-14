@@ -14,8 +14,12 @@ const locale = 'ar-EG';
 const fallback = 'تاريخ غير معروف';
 
 function parseDate(date: Date | string | number): Date | null {
-    if (date instanceof Date) return isNaN(date.getTime()) ? null : date;
+    if (date instanceof Date) {
+return isNaN(date.getTime()) ? null : date;
+}
+
     const parsed = new Date(date);
+
     return isNaN(parsed.getTime()) ? null : parsed;
 }
 
@@ -24,7 +28,9 @@ function formatRelative(date: Date): string {
     const diffMs = date.getTime() - now;
     const absDiffSec = Math.abs(diffMs) / 1000;
 
-    if (absDiffSec < 60) return 'الآن';
+    if (absDiffSec < 60) {
+return 'الآن';
+}
 
     const units: [Intl.RelativeTimeFormatUnit, number][] = [
         ['minute', 60],
@@ -37,13 +43,16 @@ function formatRelative(date: Date): string {
 
     for (const [unit, seconds] of units) {
         const abs = absDiffSec / seconds;
+
         if (abs < 1.5) {
             const rtf = new Intl.RelativeTimeFormat('ar', { numeric: 'auto' });
+
             return rtf.format(Math.round(diffMs / 1000 / seconds), unit);
         }
     }
 
     const rtf = new Intl.RelativeTimeFormat('ar', { numeric: 'auto' });
+
     return rtf.format(Math.round(diffMs / 1000 / 31536000), 'year');
 }
 
@@ -79,6 +88,7 @@ export default function DateDisplay({
     className,
 }: DateDisplayProps) {
     const parsed = parseDate(date);
+
     if (!parsed) {
         return <span className={cn('text-muted-foreground', className)}>{fallback}</span>;
     }

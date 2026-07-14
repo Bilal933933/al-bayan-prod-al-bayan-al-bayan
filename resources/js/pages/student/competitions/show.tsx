@@ -1,11 +1,11 @@
-import { motion } from 'framer-motion';
 import { Head } from '@inertiajs/react';
-import BreadcrumbTrail from '@/components/student/competitions/breadcrumb-trail';
-import CompetitionHero from '@/components/student/competitions/competition-hero';
-import CompetitionGrid from '@/components/student/competitions/competition-grid';
-import TopicCard from '@/components/student/topics/topic-card';
-import StartExamButton from '@/components/student/competitions/start-exam-button';
+import { motion } from 'framer-motion';
 import { Layers } from 'lucide-react';
+import BreadcrumbTrail from '@/components/student/competitions/breadcrumb-trail';
+import CompetitionGrid from '@/components/student/competitions/competition-grid';
+import CompetitionHero from '@/components/student/competitions/competition-hero';
+import StartExamButton from '@/components/student/competitions/start-exam-button';
+import TopicCard from '@/components/student/topics/topic-card';
 import type { Competition } from '@/types/competition';
 import type { TopicWithPivot } from '@/types/topic';
 

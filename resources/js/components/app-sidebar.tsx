@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import adminCompetitions from '@/routes/admin/competitions';
+import adminQuestions from '@/routes/admin/questions';
 import adminTopics from '@/routes/admin/topics';
 import type { NavItem } from '@/types';
 
@@ -44,7 +45,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'الأسئلة',
-        href: '#',
+        href: adminQuestions.index(),
         icon: GraduationCap,
     },
     {

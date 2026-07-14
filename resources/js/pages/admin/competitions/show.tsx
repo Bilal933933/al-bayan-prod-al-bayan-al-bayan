@@ -1,14 +1,14 @@
-import { motion } from 'framer-motion';
 import { Head, Link } from '@inertiajs/react';
+import { motion } from 'framer-motion';
+import { Pencil, Plus, ArrowRight, Eye, Layers, Hash, Tag, Calendar } from 'lucide-react';
+import ClassificationBadge from '@/components/admin/competitions/classification-badge';
+import DateDisplay from '@/components/date-display';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { COMPETITION_ICONS } from '@/config/competition-icons';
 import { dashboard } from '@/routes';
 import competitions from '@/routes/admin/competitions';
-import ClassificationBadge from '@/components/admin/competitions/classification-badge';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
-import { Pencil, Plus, ArrowRight, Eye, Layers, Hash, Tag, Calendar } from 'lucide-react';
-import DateDisplay from '@/components/date-display';
-import { COMPETITION_ICONS } from '@/config/competition-icons';
 import type { BreadcrumbItem } from '@/types';
 import type { Competition } from '@/types/competition';
 
@@ -21,10 +21,18 @@ interface ShowProps {
 }
 
 function CompetitionIcon({ icon, className = 'h-5 w-5' }: { icon: string | null; className?: string }) {
-    if (!icon) return null;
+    if (!icon) {
+return null;
+}
+
     const entry = COMPETITION_ICONS[icon];
-    if (!entry) return null;
+
+    if (!entry) {
+return null;
+}
+
     const Icon = entry.icon;
+
     return <Icon className={className} />;
 }
 
@@ -52,7 +60,11 @@ function hexToRgba(hex: string, alpha: number): string {
     const r = Number.parseInt(clean.substring(0, 2), 16);
     const g = Number.parseInt(clean.substring(2, 4), 16);
     const b = Number.parseInt(clean.substring(4, 6), 16);
-    if ([r, g, b].some(isNaN)) return `rgba(128, 128, 128, ${alpha})`;
+
+    if ([r, g, b].some(isNaN)) {
+return `rgba(128, 128, 128, ${alpha})`;
+}
+
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
@@ -67,6 +79,7 @@ export default function Show({ competition, childrenCount }: ShowProps) {
               const r = Number.parseInt(hex.substring(0, 2), 16);
               const g = Number.parseInt(hex.substring(2, 4), 16);
               const b = Number.parseInt(hex.substring(4, 6), 16);
+
               return r * 0.299 + g * 0.587 + b * 0.114 > 160;
           })()
         : false;

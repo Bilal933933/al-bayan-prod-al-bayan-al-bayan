@@ -1,5 +1,5 @@
-import { SearchX, Layers, ArrowUp, ArrowDown } from 'lucide-react';
 import { Link, router } from '@inertiajs/react';
+import { SearchX, Layers, ArrowUp, ArrowDown } from 'lucide-react';
 import TopicTableRow from '@/components/admin/topics/topic-table-row';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -32,6 +32,7 @@ export default function TopicTable({
             params.set('sort', field);
             params.set('direction', 'asc');
         }
+
         params.set('page', '1');
 
         router.visit(currentUrl.pathname + '?' + params.toString(), {
@@ -42,6 +43,7 @@ export default function TopicTable({
 
     function SortHeader({ field, label, className }: { field: string; label: string; className?: string }) {
         const isActive = sort === field;
+
         return (
             <th className={cn('px-4 py-3 font-medium whitespace-nowrap group', className)}>
                 <button

@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { BookOpen, CheckCircle, Globe, Lock, Search } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import TopicTable from '@/components/admin/topics/topic-table';
 import Heading from '@/components/heading';
 import { LaravelPagination } from '@/components/laravel-pagination';
@@ -91,6 +91,7 @@ export default function Index({
                 navigateWithParams({ search: searchInput || undefined, page: '1' });
             }
         }, 400);
+
         return () => clearTimeout(timer);
     }, [searchInput, currentSearch]);
 

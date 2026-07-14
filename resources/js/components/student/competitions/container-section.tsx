@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
 import { FolderOpen } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import CompetitionGrid from '@/components/student/competitions/competition-grid';
 import { cn } from '@/lib/utils';
 import type { Competition } from '@/types/competition';
-import type { LucideIcon } from 'lucide-react';
 
 const sectionVariants = {
     hidden: { opacity: 0, y: 10 },
@@ -27,7 +27,9 @@ export default function ContainerSection({
     competitions: Competition[];
     accentColor?: string;
 }) {
-    if (competitions.length === 0) return null;
+    if (competitions.length === 0) {
+return null;
+}
 
     return (
         <motion.section

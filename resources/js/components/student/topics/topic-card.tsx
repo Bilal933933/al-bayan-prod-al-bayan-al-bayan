@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
 import { Link } from '@inertiajs/react';
+import { motion } from 'framer-motion';
 import { BookOpen, Clock } from 'lucide-react';
 import VisibilityBadge from '@/components/admin/topics/visibility-badge';
 

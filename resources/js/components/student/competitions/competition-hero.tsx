@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { COMPETITION_ICONS } from '@/config/competition-icons';
 import ClassificationBadge from '@/components/admin/competitions/classification-badge';
+import { COMPETITION_ICONS } from '@/config/competition-icons';
 import { cn } from '@/lib/utils';
 import type { Competition } from '@/types/competition';
 
@@ -18,7 +18,11 @@ function hexToRgba(hex: string, alpha: number): string {
     const r = Number.parseInt(clean.substring(0, 2), 16);
     const g = Number.parseInt(clean.substring(2, 4), 16);
     const b = Number.parseInt(clean.substring(4, 6), 16);
-    if ([r, g, b].some(isNaN)) return `rgba(128, 128, 128, ${alpha})`;
+
+    if ([r, g, b].some(isNaN)) {
+return `rgba(128, 128, 128, ${alpha})`;
+}
+
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
@@ -27,6 +31,7 @@ function isLightColor(hex: string): boolean {
     const r = Number.parseInt(clean.substring(0, 2), 16);
     const g = Number.parseInt(clean.substring(2, 4), 16);
     const b = Number.parseInt(clean.substring(4, 6), 16);
+
     return r * 0.299 + g * 0.587 + b * 0.114 > 160;
 }
 

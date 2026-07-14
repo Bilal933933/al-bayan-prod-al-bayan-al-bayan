@@ -15,7 +15,9 @@ interface LaravelPaginationProps {
 }
 
 export function LaravelPagination({ meta }: LaravelPaginationProps) {
-    if (meta.last_page <= 1) return null;
+    if (meta.last_page <= 1) {
+return null;
+}
 
     const pageLinks = meta.links.slice(1, -1);
 

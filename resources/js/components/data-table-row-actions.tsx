@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { MoreHorizontal } from 'lucide-react';
+import type { ComponentType } from 'react';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -8,7 +9,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import type { ComponentType } from 'react';
 
 export interface RowActionItem {
     label: string;

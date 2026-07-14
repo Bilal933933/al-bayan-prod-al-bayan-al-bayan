@@ -1,16 +1,16 @@
-import { motion } from 'framer-motion';
 import { Head, Link } from '@inertiajs/react';
+import { motion } from 'framer-motion';
+import { Pencil, ArrowRight, Hash, Calendar, BookOpen, Layers } from 'lucide-react';
+import VisibilityBadge from '@/components/admin/topics/visibility-badge';
+import DateDisplay from '@/components/date-display';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { dashboard } from '@/routes';
 import topics from '@/routes/admin/topics';
-import VisibilityBadge from '@/components/admin/topics/visibility-badge';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
-import { Pencil, ArrowRight, Hash, Calendar, BookOpen, Layers } from 'lucide-react';
-import DateDisplay from '@/components/date-display';
 import type { BreadcrumbItem } from '@/types';
-import type { Topic, CompetitionTopicPivot } from '@/types/topic';
 import type { Competition } from '@/types/competition';
+import type { Topic, CompetitionTopicPivot } from '@/types/topic';
 
 interface ShowProps {
     topic: Topic & {

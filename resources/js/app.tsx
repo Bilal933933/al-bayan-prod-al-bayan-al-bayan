@@ -3,9 +3,9 @@ import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { initializeTheme } from '@/hooks/use-appearance';
 import AdminLayout from '@/layouts/admin-layout';
-import StudentLayout from '@/layouts/student-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import StudentLayout from '@/layouts/student-layout';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

@@ -1,10 +1,10 @@
-import { motion } from 'framer-motion';
 import { Link } from '@inertiajs/react';
+import { motion } from 'framer-motion';
 import { Eye, Target } from 'lucide-react';
-import competitions from '@/routes/student/competitions';
 import ClassificationBadge from '@/components/admin/competitions/classification-badge';
 import { COMPETITION_ICONS } from '@/config/competition-icons';
 import { cn } from '@/lib/utils';
+import competitions from '@/routes/student/competitions';
 import type { Competition } from '@/types/competition';
 
 const cardVariants = {

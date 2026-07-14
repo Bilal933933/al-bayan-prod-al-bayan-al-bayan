@@ -1,9 +1,9 @@
-import { motion } from 'framer-motion';
 import { Head, Link } from '@inertiajs/react';
-import TopicCard from '@/components/student/topics/topic-card';
-import topicsRoutes from '@/routes/student/topics';
-import competitions from '@/routes/student/competitions';
+import { motion } from 'framer-motion';
 import { ChevronLeft, House, Layers } from 'lucide-react';
+import TopicCard from '@/components/student/topics/topic-card';
+import competitions from '@/routes/student/competitions';
+import topicsRoutes from '@/routes/student/topics';
 import type { Topic } from '@/types/topic';
 
 interface IndexProps {

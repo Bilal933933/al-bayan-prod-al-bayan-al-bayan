@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
-import { motion } from 'framer-motion';
 import { Head, Link } from '@inertiajs/react';
-import competitions from '@/routes/student/competitions';
-import ContainerSection from '@/components/student/competitions/container-section';
+import { motion } from 'framer-motion';
 import { FolderOpen, Layers } from 'lucide-react';
+import { useMemo } from 'react';
+import ContainerSection from '@/components/student/competitions/container-section';
+import competitions from '@/routes/student/competitions';
 import type { Competition } from '@/types/competition';
 
 interface IndexProps {

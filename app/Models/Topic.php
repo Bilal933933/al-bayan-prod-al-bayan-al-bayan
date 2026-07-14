@@ -6,6 +6,7 @@ use Database\Factories\TopicFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Topic extends Model
@@ -34,6 +35,11 @@ class Topic extends Model
             'default_questions_count' => 'integer',
             'default_duration_minutes' => 'integer',
         ];
+    }
+
+    public function questions(): HasMany
+    {
+        return $this->hasMany(Question::class);
     }
 
     public function competitions(): BelongsToMany

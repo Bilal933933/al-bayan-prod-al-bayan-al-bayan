@@ -1,8 +1,11 @@
-import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useState, useRef, useEffect } from 'react';
+import ClassificationBadge from '@/components/admin/competitions/classification-badge';
+import ParentSelect from '@/components/admin/competitions/parent-select';
+import InputError from '@/components/input-error';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
 import {
     Select,
     SelectContent,
@@ -10,9 +13,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import InputError from '@/components/input-error';
-import ParentSelect from '@/components/admin/competitions/parent-select';
-import ClassificationBadge from '@/components/admin/competitions/classification-badge';
 import { COMPETITION_ICONS, ICON_KEYS } from '@/config/competition-icons';
 import type { Competition, CompetitionFormData } from '@/types/competition';
 
@@ -50,14 +50,18 @@ export default function CompetitionForm({
 
     useEffect(() => {
         return () => {
-            if (previewUrl) URL.revokeObjectURL(previewUrl);
+            if (previewUrl) {
+URL.revokeObjectURL(previewUrl);
+}
         };
     }, [previewUrl]);
 
     function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0] ?? null;
 
-        if (previewUrl) URL.revokeObjectURL(previewUrl);
+        if (previewUrl) {
+URL.revokeObjectURL(previewUrl);
+}
 
         if (file) {
             setPreviewUrl(URL.createObjectURL(file));
@@ -69,11 +73,18 @@ export default function CompetitionForm({
     }
 
     function handleRemoveImage() {
-        if (previewUrl) URL.revokeObjectURL(previewUrl);
+        if (previewUrl) {
+URL.revokeObjectURL(previewUrl);
+}
+
         setPreviewUrl(null);
         setData('image_file', null);
         setData('image', null);
-        if (!fileInputRef.current) return;
+
+        if (!fileInputRef.current) {
+return;
+}
+
         fileInputRef.current.value = '';
     }
 
@@ -273,6 +284,7 @@ export default function CompetitionForm({
                                     <span className="flex items-center gap-2">
                                         {(() => {
                                             const Icon = COMPETITION_ICONS[data.icon].icon;
+
                                             return <Icon className="h-4 w-4" />;
                                         })()}
                                         {COMPETITION_ICONS[data.icon].label}
@@ -289,6 +301,7 @@ export default function CompetitionForm({
                             {ICON_KEYS.map((key) => {
                                 const entry = COMPETITION_ICONS[key];
                                 const Icon = entry.icon;
+
                                 return (
                                     <SelectItem key={key} value={key}>
                                         <span className="flex items-center gap-2">

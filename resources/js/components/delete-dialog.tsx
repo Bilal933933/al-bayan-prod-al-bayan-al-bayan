@@ -34,6 +34,7 @@ export default function DeleteDialog({
         if (externalProcessing === undefined) {
             setInternalProcessing(true);
         }
+
         onDelete();
     }
 

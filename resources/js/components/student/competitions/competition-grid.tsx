@@ -14,7 +14,9 @@ export default function CompetitionGrid({
 }: {
     competitions: Competition[];
 }) {
-    if (items.length === 0) return null;
+    if (items.length === 0) {
+return null;
+}
 
     return (
         <motion.div

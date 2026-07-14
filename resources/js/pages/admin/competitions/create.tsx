@@ -1,8 +1,8 @@
-import { motion } from 'framer-motion';
 import { Head, useForm } from '@inertiajs/react';
-import { dashboard } from '@/routes';
-import Heading from '@/components/heading';
+import { motion } from 'framer-motion';
 import CompetitionForm from '@/components/admin/competitions/competition-form';
+import Heading from '@/components/heading';
+import { dashboard } from '@/routes';
 import competitions from '@/routes/admin/competitions';
 import type { BreadcrumbItem } from '@/types';
 import type { Competition, CompetitionFormData } from '@/types/competition';

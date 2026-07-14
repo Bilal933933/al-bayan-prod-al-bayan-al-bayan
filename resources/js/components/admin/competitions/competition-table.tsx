@@ -1,9 +1,9 @@
-import { SearchX, Layers, ArrowUp, ArrowDown } from 'lucide-react';
 import { Link, router } from '@inertiajs/react';
-import competitions from '@/routes/admin/competitions';
-import { Button } from '@/components/ui/button';
+import { SearchX, Layers, ArrowUp, ArrowDown } from 'lucide-react';
 import CompetitionTableRow from '@/components/admin/competitions/competition-table-row';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import competitions from '@/routes/admin/competitions';
 import type { Competition } from '@/types/competition';
 import type { PaginationMeta } from '@/types/pagination';
 
@@ -32,6 +32,7 @@ export default function CompetitionTable({
             params.set('sort', field);
             params.set('direction', 'asc');
         }
+
         params.set('page', '1');
 
         router.visit(currentUrl.pathname + '?' + params.toString(), {
@@ -42,6 +43,7 @@ export default function CompetitionTable({
 
     function SortHeader({ field, label, className }: { field: string; label: string; className?: string }) {
         const isActive = sort === field;
+
         return (
             <th className={cn('px-4 py-3 font-medium whitespace-nowrap group', className)}>
                 <button
@@ -55,6 +57,7 @@ export default function CompetitionTable({
             </th>
         );
     }
+
     if (competitionList.length === 0) {
         const hasFilters = searchQuery.trim() !== '' || activeFilter !== 'all';
 
