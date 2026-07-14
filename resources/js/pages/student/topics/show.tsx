@@ -1,8 +1,9 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { BookOpen, ChevronLeft, Clock, House } from 'lucide-react';
+import { BookOpen, ChevronLeft, Clock, House, Play } from 'lucide-react';
 import VisibilityBadge from '@/components/admin/topics/visibility-badge';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import competitions from '@/routes/student/competitions';
 import topics from '@/routes/student/topics';
 import type { Topic } from '@/types/topic';
@@ -21,6 +22,14 @@ const pageVariants = {
 };
 
 export default function Show({ topic }: ShowProps) {
+    function startPractice() {
+        router.post(
+            topics.attempts.start({ topic: topic.id }).url,
+            {},
+            { preserveScroll: true },
+        );
+    }
+
     return (
         <>
             <Head title={topic.name} />
@@ -86,6 +95,13 @@ export default function Show({ topic }: ShowProps) {
                             </span>
                         </div>
                     </div>
+                </div>
+
+                <div className="flex justify-center">
+                    <Button onClick={startPractice} size="lg" className="gap-2 text-base">
+                        <Play className="h-5 w-5" />
+                        بدء التدريب الحر
+                    </Button>
                 </div>
             </motion.div>
         </>

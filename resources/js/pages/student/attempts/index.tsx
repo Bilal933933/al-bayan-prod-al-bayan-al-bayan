@@ -1,9 +1,8 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Clock, History, Layers, Trophy } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Clock, History, Layers, Trophy } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Pagination } from '@/components/ui/pagination';
 import attempts from '@/routes/student/attempts';
 import type { Attempt } from '@/types/attempt';
 import type { PaginationLink, PaginationMeta } from '@/types/pagination';
@@ -170,16 +169,38 @@ export default function Index({ attempts: paginated, filters }: IndexProps) {
                     </div>
                 )}
 
-                {paginated.meta.last_page > 1 && (
-                    <div className="flex justify-center">
-                        <Pagination
-                            currentPage={paginated.meta.current_page}
-                            lastPage={paginated.meta.last_page}
-                            total={paginated.meta.total}
-                            from={paginated.meta.from ?? 0}
-                            to={paginated.meta.to ?? 0}
-                            links={paginated.links}
-                        />
+                {paginated.meta && paginated.meta.last_page > 1 && (
+                    <div className="flex items-center justify-center gap-1" dir="ltr">
+                        {paginated.meta.prev_page_url && (
+                            <Link href={paginated.meta.prev_page_url} preserveScroll>
+                                <Button variant="outline" size="sm">
+                                    <ChevronRight className="h-4 w-4" />
+                                </Button>
+                            </Link>
+                        )}
+                        {paginated.links?.filter(l => !['&laquo; Previous', '&raquo; Next'].includes(l.label)).map((link) => (
+                            <Link
+                                key={link.label}
+                                href={link.url ?? '#'}
+                                preserveScroll
+                                preserveState
+                            >
+                                <Button
+                                    variant={link.active ? 'default' : 'outline'}
+                                    size="sm"
+                                    className="min-w-[36px]"
+                                >
+                                    {link.label}
+                                </Button>
+                            </Link>
+                        ))}
+                        {paginated.meta.next_page_url && (
+                            <Link href={paginated.meta.next_page_url} preserveScroll>
+                                <Button variant="outline" size="sm">
+                                    <ChevronLeft className="h-4 w-4" />
+                                </Button>
+                            </Link>
+                        )}
                     </div>
                 )}
             </motion.div>

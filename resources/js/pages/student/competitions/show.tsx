@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { Layers } from 'lucide-react';
 import BreadcrumbTrail from '@/components/student/competitions/breadcrumb-trail';
@@ -6,6 +6,7 @@ import CompetitionGrid from '@/components/student/competitions/competition-grid'
 import CompetitionHero from '@/components/student/competitions/competition-hero';
 import StartExamButton from '@/components/student/competitions/start-exam-button';
 import TopicCard from '@/components/student/topics/topic-card';
+import competitions from '@/routes/student/competitions';
 import type { Competition } from '@/types/competition';
 import type { TopicWithPivot } from '@/types/topic';
 
@@ -108,7 +109,14 @@ export default function Show({ competition, children }: ShowProps) {
                             </p>
                         </div>
 
-                        <StartExamButton code={competition.code} />
+                        <StartExamButton
+                            code={competition.code}
+                            onClick={() => router.post(
+                                competitions.attempts.start({ competition: competition.id }).url,
+                                {},
+                                { preserveScroll: true },
+                            )}
+                        />
                     </motion.div>
                 )}
             </motion.div>
