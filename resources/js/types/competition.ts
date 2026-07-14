@@ -14,6 +14,7 @@ export interface Competition {
     is_active: boolean;
     parent?: Competition | null;
     children_count?: number;
+    can_have_topics?: boolean;
     created_at: string;
     updated_at: string;
 }

@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreCompetitionRequest;
+use App\Http\Requests\Admin\SyncCompetitionTopicsRequest;
 use App\Http\Requests\Admin\UpdateCompetitionRequest;
 use App\Models\Competition;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -130,5 +132,39 @@ class CompetitionController extends Controller
         return redirect()
             ->route('admin.competitions.index')
             ->with('success', 'تم حذف المسابقة بنجاح.');
+    }
+
+    public function editTopics(Competition $competition)
+    {
+        abort_unless($competition->canHaveTopics(), 403);
+
+        $attachedTopics = $competition->topics()->get();
+
+        $availableTopics = Topic::active()
+            ->whereNotIn('id', $attachedTopics->pluck('id'))
+            ->get(['id', 'name', 'visibility', 'default_questions_count', 'default_duration_minutes']);
+
+        return inertia('admin/competitions/topics', [
+            'competition' => $competition,
+            'attachedTopics' => $attachedTopics,
+            'availableTopics' => $availableTopics,
+        ]);
+    }
+
+    public function syncTopics(SyncCompetitionTopicsRequest $request, Competition $competition)
+    {
+        $syncData = collect($request->validated('topics'))
+            ->mapWithKeys(fn ($item) => [
+                $item['topic_id'] => [
+                    'questions_count' => $item['questions_count'],
+                    'duration_minutes' => $item['duration_minutes'],
+                    'difficulty_distribution' => $item['difficulty_distribution'] ?? null,
+                ],
+            ])
+            ->toArray();
+
+        $competition->topics()->sync($syncData);
+
+        return back()->with('success', 'تم تحديث محاور المسابقة بنجاح.');
     }
 }

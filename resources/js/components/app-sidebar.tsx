@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import adminCompetitions from '@/routes/admin/competitions';
+import adminTopics from '@/routes/admin/topics';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -35,6 +36,11 @@ const mainNavItems: NavItem[] = [
         title: 'المسابقات',
         href: adminCompetitions.index(),
         icon: Trophy,
+    },
+    {
+        title: 'المحاور',
+        href: adminTopics.index(),
+        icon: BookOpen,
     },
     {
         title: 'الأسئلة',

@@ -4,7 +4,7 @@ import competitions from '@/routes/admin/competitions';
 import ClassificationBadge from '@/components/admin/competitions/classification-badge';
 import DeleteCompetitionDialog from '@/components/admin/competitions/delete-competition-dialog';
 import { Button } from '@/components/ui/button';
-import { Eye, Pencil } from 'lucide-react';
+import { Eye, Layers, Pencil } from 'lucide-react';
 import { COMPETITION_ICONS } from '@/config/competition-icons';
 import type { Competition } from '@/types/competition';
 
@@ -88,6 +88,13 @@ export default function CompetitionTableRow({
                             <Pencil className="h-4 w-4" />
                         </Button>
                     </Link>
+                    {competition.can_have_topics && (
+                        <Link href={competitions.topics.edit({ competition: competition.id }).url} className="shrink-0">
+                            <Button variant="outline" size="icon" title="إدارة المحاور">
+                                <Layers className="h-4 w-4" />
+                            </Button>
+                        </Link>
+                    )}
                     <DeleteCompetitionDialog competition={competition} />
                 </div>
             </td>

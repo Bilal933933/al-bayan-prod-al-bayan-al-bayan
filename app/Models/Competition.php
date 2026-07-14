@@ -6,6 +6,7 @@ use Database\Factories\CompetitionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -34,7 +35,7 @@ class Competition extends Model
         'is_active',
     ];
 
-    protected $appends = ['image_url'];
+    protected $appends = ['image_url', 'can_have_topics'];
 
     protected function casts(): array
     {
@@ -61,6 +62,19 @@ class Competition extends Model
     public function children(): HasMany
     {
         return $this->hasMany(Competition::class, 'parent_id');
+    }
+
+    public function topics(): BelongsToMany
+    {
+        return $this->belongsToMany(Topic::class, 'competition_topic')
+            ->using(CompetitionTopic::class)
+            ->withPivot(['questions_count', 'duration_minutes', 'difficulty_distribution'])
+            ->withTimestamps();
+    }
+
+    public function getCanHaveTopicsAttribute(): bool
+    {
+        return $this->canHaveTopics();
     }
 
     public function scopeActive($query)
