@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -43,5 +44,37 @@ class HandleInertiaRequests extends Middleware
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
+    }
+
+    /**
+     * Reflash session data — نقل الفلاش القياسي من Laravel إلى Inertia.
+     */
+    protected function reflash(Request $request): void
+    {
+        $this->transferFlash($request);
+
+        parent::reflash($request);
+    }
+
+    /**
+     * نقل رسائل الفلاش القياسية (success, error) من Laravel إلى Inertia flash.
+     */
+    protected function transferFlash(Request $request): void
+    {
+        if (! $request->hasSession()) {
+            return;
+        }
+
+        $mapped = [];
+
+        foreach (['success', 'error', 'warning', 'info'] as $key) {
+            if ($request->session()->has($key)) {
+                $mapped[$key] = $request->session()->get($key);
+            }
+        }
+
+        if ($mapped) {
+            Inertia::flash($mapped);
+        }
     }
 }

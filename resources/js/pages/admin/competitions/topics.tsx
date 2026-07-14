@@ -1,6 +1,6 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Head, router, usePage } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { dashboard } from '@/routes';
 import competitions from '@/routes/admin/competitions';
 import Heading from '@/components/heading';
@@ -55,17 +55,10 @@ export default function Topics({ competition, attachedTopics, availableTopics }:
     const [newDuration, setNewDuration] = useState(15);
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
-    const { flash } = usePage<{ flash: { success?: string; error?: string } }>().props;
 
     const remainingTopics = availableTopics.filter(
         (t) => !linkedTopics.some((lt) => lt.topic_id === t.id)
     );
-
-    useEffect(() => {
-        if (flash?.success || flash?.error) {
-            setErrors({});
-        }
-    }, [flash]);
 
     const addTopic = useCallback(() => {
         if (!selectedTopicId) return;
@@ -138,18 +131,6 @@ export default function Topics({ competition, attachedTopics, availableTopics }:
                     title={`محاور: ${competition.name}`}
                     description="إدارة المحاور المرتبطة بهذه المسابقة"
                 />
-
-                {flash?.success && (
-                    <div className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
-                        {flash.success}
-                    </div>
-                )}
-
-                {flash?.error && (
-                    <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                        {flash.error}
-                    </div>
-                )}
 
                 <InputError message={errors.topics} />
 

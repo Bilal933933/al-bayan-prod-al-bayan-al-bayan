@@ -7,13 +7,28 @@ export function useFlashToast(): void {
     useEffect(() => {
         return router.on('flash', (event) => {
             const flash = (event as CustomEvent).detail?.flash;
-            const data = flash?.toast as FlashToast | undefined;
 
-            if (!data) {
+            // التنسيق 1: كائن toast صريح (Inertia::flash('toast', [...]))
+            const toastData = flash?.toast as FlashToast | undefined;
+            if (toastData) {
+                toast[toastData.type](toastData.message);
                 return;
             }
 
-            toast[data.type](data.message);
+            // التنسيق 2: مفاتيح مسطّحة (->with('success', '...'))
+            const typeMap: Record<string, FlashToast['type']> = {
+                success: 'success',
+                error: 'error',
+                warning: 'warning',
+                info: 'info',
+            };
+
+            for (const [key, type] of Object.entries(typeMap)) {
+                if (flash?.[key]) {
+                    toast[type](flash[key]);
+                    break;
+                }
+            }
         });
     }, []);
 }
