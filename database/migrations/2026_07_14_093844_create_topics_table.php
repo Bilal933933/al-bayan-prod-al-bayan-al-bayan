@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -26,12 +27,13 @@ return new class extends Migration
             $table->index(['visibility', 'is_active']);
         });
 
-        // CHECK constraint (نفس نمط classification في competitions)
-        DB::statement("
-            ALTER TABLE topics
-            ADD CONSTRAINT topics_visibility_check
-            CHECK (visibility IN ('general', 'private'))
-        ");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("
+                ALTER TABLE topics
+                ADD CONSTRAINT topics_visibility_check
+                CHECK (visibility IN ('general', 'private'))
+            ");
+        }
 
     }
 

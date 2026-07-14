@@ -24,14 +24,18 @@ return new class extends Migration
             $table->index('difficulty');
         });
 
-        DB::statement("ALTER TABLE questions ADD CONSTRAINT questions_type_check CHECK (type IN ('mcq', 'true_false'))");
-        DB::statement("ALTER TABLE questions ADD CONSTRAINT questions_difficulty_check CHECK (difficulty IN ('easy', 'medium', 'hard'))");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE questions ADD CONSTRAINT questions_type_check CHECK (type IN ('mcq', 'true_false'))");
+            DB::statement("ALTER TABLE questions ADD CONSTRAINT questions_difficulty_check CHECK (difficulty IN ('easy', 'medium', 'hard'))");
+        }
     }
 
     public function down(): void
     {
-        DB::statement('ALTER TABLE questions DROP CONSTRAINT IF EXISTS questions_type_check');
-        DB::statement('ALTER TABLE questions DROP CONSTRAINT IF EXISTS questions_difficulty_check');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE questions DROP CONSTRAINT IF EXISTS questions_type_check');
+            DB::statement('ALTER TABLE questions DROP CONSTRAINT IF EXISTS questions_difficulty_check');
+        }
 
         Schema::dropIfExists('questions');
     }

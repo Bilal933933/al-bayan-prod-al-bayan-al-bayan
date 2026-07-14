@@ -29,16 +29,20 @@ return new class extends Migration
             $table->index('classification');
         });
 
-        DB::statement("
-            ALTER TABLE competitions
-            ADD CONSTRAINT competitions_classification_check
-            CHECK (classification IN ('container', 'standalone', 'child'))
-        ");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("
+                ALTER TABLE competitions
+                ADD CONSTRAINT competitions_classification_check
+                CHECK (classification IN ('container', 'standalone', 'child'))
+            ");
+        }
     }
 
     public function down(): void
     {
-        DB::statement('ALTER TABLE competitions DROP CONSTRAINT IF EXISTS competitions_classification_check');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE competitions DROP CONSTRAINT IF EXISTS competitions_classification_check');
+        }
 
         Schema::table('competitions', function (Blueprint $table) {
             $table->boolean('is_container')->default(false);

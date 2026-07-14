@@ -42,6 +42,11 @@ class Topic extends Model
         return $this->hasMany(Question::class);
     }
 
+    public function attempts(): HasMany
+    {
+        return $this->hasMany(Attempt::class)->where('type', Attempt::TYPE_PRACTICE);
+    }
+
     public function competitions(): BelongsToMany
     {
         return $this->belongsToMany(Competition::class, 'competition_topic')

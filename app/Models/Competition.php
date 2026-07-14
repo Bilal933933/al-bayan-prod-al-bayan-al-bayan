@@ -64,6 +64,11 @@ class Competition extends Model
         return $this->hasMany(Competition::class, 'parent_id');
     }
 
+    public function attempts(): HasMany
+    {
+        return $this->hasMany(Attempt::class)->where('type', Attempt::TYPE_EXAM);
+    }
+
     public function topics(): BelongsToMany
     {
         return $this->belongsToMany(Topic::class, 'competition_topic')
