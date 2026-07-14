@@ -14,15 +14,58 @@ use Illuminate\Support\Str;
 
 class CompetitionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $competitions = Competition::with('parent')
+        $sort = $request->query('sort', 'created_at');
+        $direction = $request->query('direction', 'desc');
+        $search = $request->query('search', '');
+        $filter = $request->query('filter', 'all');
+
+        $allowedSorts = ['name', 'code', 'classification', 'order', 'created_at'];
+        $sort = in_array($sort, $allowedSorts) ? $sort : 'created_at';
+        $direction = in_array($direction, ['asc', 'desc']) ? $direction : 'desc';
+
+        $query = Competition::query();
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%");
+            });
+        }
+
+        if ($filter !== 'all') {
+            $query->where('classification', $filter);
+        }
+
+        $stats = (clone $query)
+            ->selectRaw('COUNT(*) as total')
+            ->selectRaw('SUM(CASE WHEN is_active THEN 1 ELSE 0 END) as active')
+            ->selectRaw("SUM(CASE WHEN classification = 'container' THEN 1 ELSE 0 END) as containers")
+            ->selectRaw("SUM(CASE WHEN classification = 'standalone' THEN 1 ELSE 0 END) as standalone")
+            ->selectRaw("SUM(CASE WHEN classification = 'child' THEN 1 ELSE 0 END) as children")
+            ->first();
+
+        $competitions = $query
+            ->with('parent')
             ->withCount('children')
-            ->latest()
-            ->paginate(10);
+            ->orderBy($sort, $direction)
+            ->paginate(10)
+            ->withQueryString();
 
         return inertia('admin/competitions/index', [
             'competitions' => $competitions,
+            'sort' => $sort,
+            'direction' => $direction,
+            'search' => $search,
+            'filter' => $filter,
+            'stats' => [
+                'total' => (int) $stats->total,
+                'active' => (int) $stats->active,
+                'containers' => (int) $stats->containers,
+                'standalone' => (int) $stats->standalone,
+                'children' => (int) $stats->children,
+            ],
         ]);
     }
 

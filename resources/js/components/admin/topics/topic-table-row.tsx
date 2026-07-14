@@ -1,9 +1,10 @@
-import { Link } from '@inertiajs/react';
+import { useState } from 'react';
+import { Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Eye, Pencil } from 'lucide-react';
-import DeleteTopicDialog from '@/components/admin/topics/delete-topic-dialog';
+import { Eye, Pencil, Trash2 } from 'lucide-react';
 import VisibilityBadge from '@/components/admin/topics/visibility-badge';
-import { Button } from '@/components/ui/button';
+import RowActions from '@/components/data-table-row-actions';
+import DeleteDialog from '@/components/delete-dialog';
 import topics from '@/routes/admin/topics';
 import type { Topic } from '@/types/topic';
 
@@ -14,6 +15,8 @@ export default function TopicTableRow({
     topic: Topic;
     index?: number;
 }) {
+    const [deleteOpen, setDeleteOpen] = useState(false);
+
     return (
         <motion.tr
             initial={{ opacity: 0, y: -8 }}
@@ -32,19 +35,38 @@ export default function TopicTableRow({
             </td>
             <td className="whitespace-nowrap px-4 py-3 text-center">{topic.competitions_count ?? 0}</td>
             <td className="px-4 py-3">
-                <div className="flex items-center gap-2">
-                    <Link href={topics.show({ topic: topic.id }).url} className="shrink-0">
-                        <Button variant="outline" size="icon">
-                            <Eye className="h-4 w-4" />
-                        </Button>
-                    </Link>
-                    <Link href={topics.edit({ topic: topic.id }).url} className="shrink-0">
-                        <Button variant="outline" size="icon">
-                            <Pencil className="h-4 w-4" />
-                        </Button>
-                    </Link>
-                    <DeleteTopicDialog topic={topic} />
-                </div>
+                <RowActions
+                    items={[
+                        {
+                            label: 'عرض التفاصيل',
+                            icon: Eye,
+                            href: topics.show({ topic: topic.id }).url,
+                        },
+                        {
+                            label: 'تعديل',
+                            icon: Pencil,
+                            href: topics.edit({ topic: topic.id }).url,
+                        },
+                        { separator: true },
+                        {
+                            label: 'حذف',
+                            icon: Trash2,
+                            variant: 'destructive',
+                            onClick: () => setDeleteOpen(true),
+                        },
+                    ]}
+                />
+                <DeleteDialog
+                    open={deleteOpen}
+                    onOpenChange={setDeleteOpen}
+                    description={`هل أنت متأكد من حذف المحور "${topic.name}"؟ هذا الإجراء لا يمكن التراجع عنه.`}
+                    onDelete={() => {
+                        router.delete(topics.destroy(topic.id).url, {
+                            onSuccess: () => setDeleteOpen(false),
+                            onFinish: () => setDeleteOpen(false),
+                        });
+                    }}
+                />
             </td>
         </motion.tr>
     );
