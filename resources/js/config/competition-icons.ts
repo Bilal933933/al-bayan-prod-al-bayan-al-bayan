@@ -1,0 +1,71 @@
+import {
+    Book,
+    BookOpen,
+    GraduationCap,
+    School,
+    Award,
+    Trophy,
+    Star,
+    Heart,
+    Flag,
+    Pen,
+    Calculator,
+    Globe,
+    Atom,
+    Brain,
+    Lightbulb,
+    Palette,
+    Target,
+    Compass,
+    Feather,
+    Scroll,
+    Library,
+    Notebook,
+    Sparkles,
+    Sword,
+    Shield,
+    Users,
+    ClipboardList,
+    FileText,
+    Music,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+
+export interface IconEntry {
+    label: string;
+    icon: LucideIcon;
+}
+
+export const COMPETITION_ICONS: Record<string, IconEntry> = {
+    'book': { label: 'كتاب', icon: Book },
+    'book-open': { label: 'كتاب مفتوح', icon: BookOpen },
+    'graduation-cap': { label: 'تخرج', icon: GraduationCap },
+    'school': { label: 'مدرسة', icon: School },
+    'award': { label: 'جائزة', icon: Award },
+    'trophy': { label: 'كأس', icon: Trophy },
+    'star': { label: 'نجمة', icon: Star },
+    'sparkles': { label: 'تألق', icon: Sparkles },
+    'target': { label: 'هدف', icon: Target },
+    'heart': { label: 'قلب', icon: Heart },
+    'flag': { label: 'علم', icon: Flag },
+    'pen': { label: 'قلم', icon: Pen },
+    'calculator': { label: 'آلة حاسبة', icon: Calculator },
+    'globe': { label: 'عالم', icon: Globe },
+    'atom': { label: 'ذرة', icon: Atom },
+    'brain': { label: 'عقل', icon: Brain },
+    'lightbulb': { label: 'مصباح', icon: Lightbulb },
+    'palette': { label: 'لوحة ألوان', icon: Palette },
+    'compass': { label: 'بوصلة', icon: Compass },
+    'feather': { label: 'ريشة', icon: Feather },
+    'scroll': { label: 'درج', icon: Scroll },
+    'library': { label: 'مكتبة', icon: Library },
+    'notebook': { label: 'مفكرة', icon: Notebook },
+    'sword': { label: 'سيف', icon: Sword },
+    'shield': { label: 'درع', icon: Shield },
+    'users': { label: 'مستخدمون', icon: Users },
+    'clipboard-list': { label: 'قائمة', icon: ClipboardList },
+    'file-text': { label: 'ملف نصي', icon: FileText },
+    'music': { label: 'موسيقى', icon: Music },
+};
+
+export const ICON_KEYS = Object.keys(COMPETITION_ICONS);
