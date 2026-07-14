@@ -22,6 +22,8 @@ class Attempt extends Model
 
     const STATUS_ABANDONED = 'abandoned';
 
+    protected $appends = ['subject_name'];
+
     protected $fillable = [
         'user_id',
         'type',
@@ -82,5 +84,14 @@ class Attempt extends Model
     public function isCompleted(): bool
     {
         return $this->status === self::STATUS_COMPLETED;
+    }
+
+    public function getSubjectNameAttribute(): string
+    {
+        if ($this->isPractice()) {
+            return $this->topic?->name ?? '—';
+        }
+
+        return $this->competition?->name ?? '—';
     }
 }

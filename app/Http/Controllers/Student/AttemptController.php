@@ -11,6 +11,7 @@ use App\Models\QuestionOption;
 use App\Models\Topic;
 use App\Services\AttemptCreationService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Response;
 
 class AttemptController extends Controller
@@ -18,6 +19,22 @@ class AttemptController extends Controller
     public function __construct(
         private readonly AttemptCreationService $attemptCreationService,
     ) {}
+
+    public function index(Request $request): Response
+    {
+        $attempts = Attempt::query()
+            ->where('user_id', auth()->id())
+            ->with(['topic:id,name', 'competition:id,name'])
+            ->when($request->filled('type'), fn ($q) => $q->where('type', $request->string('type')))
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
+        return inertia('student/attempts/index', [
+            'attempts' => $attempts,
+            'filters' => $request->only('type'),
+        ]);
+    }
 
     public function show(Attempt $attempt): Response
     {

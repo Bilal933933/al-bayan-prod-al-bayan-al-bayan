@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BarChart3, BookOpen, Menu, Search, Trophy } from 'lucide-react';
+import { BarChart3, BookOpen, History, Menu, Search, Trophy } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Breadcrumbs } from '@/components/breadcrumbs';
@@ -28,6 +28,7 @@ import { useCurrentUrl } from '@/hooks/use-current-url';
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes';
+import attempts from '@/routes/student/attempts';
 import competitions from '@/routes/student/competitions';
 import topics from '@/routes/student/topics';
 import type { BreadcrumbItem, NavItem } from '@/types';
@@ -46,6 +47,11 @@ const mainNavItems: NavItem[] = [
         title: 'التدريب الحر',
         href: topics.index().url,
         icon: BookOpen,
+    },
+    {
+        title: 'محاولاتي',
+        href: attempts.index().url,
+        icon: History,
     },
     {
         title: 'نتائجي',

@@ -25,6 +25,7 @@ export interface Attempt {
     id: number;
     user_id: number;
     type: 'practice' | 'exam';
+    subject_name: string;
     topic_id: number | null;
     competition_id: number | null;
     status: 'in_progress' | 'completed' | 'abandoned';
