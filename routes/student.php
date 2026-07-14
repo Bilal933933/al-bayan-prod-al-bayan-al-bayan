@@ -24,6 +24,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Student attempt routes
     Route::prefix('attempts')->name('student.attempts.')->group(function () {
         Route::get('/{attempt}', [AttemptController::class, 'show'])->name('show');
+        Route::patch('{attempt}/questions/{attemptQuestion}', [AttemptController::class, 'answerQuestion'])->name('questions.update');
+        Route::post('{attempt}/finish', [AttemptController::class, 'finish'])->name('finish');
     });
 
 });

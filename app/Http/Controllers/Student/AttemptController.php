@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Student\AnswerQuestionRequest;
 use App\Models\Attempt;
+use App\Models\AttemptQuestion;
 use App\Models\Competition;
+use App\Models\QuestionOption;
 use App\Models\Topic;
 use App\Services\AttemptCreationService;
 use Illuminate\Http\RedirectResponse;
@@ -18,7 +21,12 @@ class AttemptController extends Controller
 
     public function show(Attempt $attempt): Response
     {
-        $attempt->load(['sections.questions.question.options']);
+        abort_unless($attempt->user_id === auth()->id(), 403);
+
+        $attempt->load([
+            'sections.questions.question.options',
+            'sections.questions.selectedOption',
+        ]);
 
         return inertia('student/attempts/show', [
             'attempt' => $attempt,
@@ -50,6 +58,38 @@ class AttemptController extends Controller
             auth()->user(),
             $competition,
         );
+
+        return redirect()->route('student.attempts.show', $attempt);
+    }
+
+    public function answerQuestion(AnswerQuestionRequest $request, Attempt $attempt, AttemptQuestion $attemptQuestion): RedirectResponse
+    {
+        abort_unless($attempt->user_id === auth()->id(), 403);
+
+        $option = QuestionOption::findOrFail($request->validated('selected_option_id'));
+
+        $attemptQuestion->update([
+            'selected_option_id' => $option->id,
+            'is_correct' => $option->is_correct,
+        ]);
+
+        return back();
+    }
+
+    public function finish(Attempt $attempt): RedirectResponse
+    {
+        abort_unless($attempt->user_id === auth()->id(), 403);
+        abort_unless($attempt->isInProgress(), 422);
+
+        $correctCount = AttemptQuestion::whereHas('section', fn ($q) => $q->where('attempt_id', $attempt->id))
+            ->where('is_correct', true)
+            ->count();
+
+        $attempt->update([
+            'status' => Attempt::STATUS_COMPLETED,
+            'finished_at' => now(),
+            'correct_answers' => $correctCount,
+        ]);
 
         return redirect()->route('student.attempts.show', $attempt);
     }

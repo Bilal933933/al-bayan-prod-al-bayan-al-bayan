@@ -16,6 +16,12 @@ class Attempt extends Model
 
     const TYPE_EXAM = 'exam';
 
+    const STATUS_IN_PROGRESS = 'in_progress';
+
+    const STATUS_COMPLETED = 'completed';
+
+    const STATUS_ABANDONED = 'abandoned';
+
     protected $fillable = [
         'user_id',
         'type',
@@ -66,5 +72,15 @@ class Attempt extends Model
     public function isExam(): bool
     {
         return $this->type === self::TYPE_EXAM;
+    }
+
+    public function isInProgress(): bool
+    {
+        return $this->status === self::STATUS_IN_PROGRESS;
+    }
+
+    public function isCompleted(): bool
+    {
+        return $this->status === self::STATUS_COMPLETED;
     }
 }
