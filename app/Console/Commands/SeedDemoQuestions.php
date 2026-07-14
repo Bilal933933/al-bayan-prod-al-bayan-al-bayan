@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\Question;
-use App\Models\QuestionOption;
 use App\Models\Topic;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;

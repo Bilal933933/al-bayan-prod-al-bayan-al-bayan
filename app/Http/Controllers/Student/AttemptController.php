@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\AnswerQuestionRequest;
 use App\Models\Attempt;
 use App\Models\AttemptQuestion;
+use App\Models\AttemptSection;
 use App\Models\Competition;
 use App\Models\QuestionOption;
 use App\Models\Topic;
 use App\Services\AttemptCreationService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
@@ -40,14 +42,38 @@ class AttemptController extends Controller
     {
         abort_unless($attempt->user_id === auth()->id(), 403);
 
+        if ($attempt->isCompleted()) {
+            $attempt->load([
+                'sections.questions.question.options',
+                'sections.questions.selectedOption',
+            ]);
+
+            return inertia('student/attempts/show', [
+                'attempt' => $attempt,
+            ]);
+        }
+
         $attempt->load([
-            'sections.questions.question.options',
-            'sections.questions.selectedOption',
+            'sections.topic:id,name',
         ]);
 
-        return inertia('student/attempts/show', [
+        return inertia('student/attempts/take', [
             'attempt' => $attempt,
         ]);
+    }
+
+    public function section(Attempt $attempt, AttemptSection $section): JsonResponse
+    {
+        abort_unless($attempt->user_id === auth()->id(), 403);
+        abort_unless($section->attempt_id === $attempt->id, 404);
+
+        $section->load([
+            'topic:id,name',
+            'questions.question.options',
+            'questions.selectedOption',
+        ]);
+
+        return response()->json($section);
     }
 
     public function startPractice(Topic $topic): RedirectResponse

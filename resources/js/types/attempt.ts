@@ -15,6 +15,7 @@ export interface AttemptSection {
     id: number;
     attempt_id: number;
     topic_id: number;
+    topic?: { id: number; name: string } | null;
     questions_count: number;
     duration_minutes: number | null;
     order: number;
