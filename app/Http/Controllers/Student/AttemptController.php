@@ -66,8 +66,12 @@ class AttemptController extends Controller
 
         if ($attempt->isCompleted()) {
             $attempt->load([
+                'sections' => fn ($q) => $q->orderBy('order'),
+                'sections.topic:id,name',
                 'sections.questions.question.options',
                 'sections.questions.selectedOption',
+                'topic:id,name',
+                'competition:id,name',
             ]);
 
             return inertia('student/attempts/show', [
@@ -78,6 +82,8 @@ class AttemptController extends Controller
         $attempt->load([
             'sections' => fn ($q) => $q->orderBy('order'),
             'sections.topic:id,name',
+            'topic:id,name',
+            'competition:id,name',
         ]);
 
         return inertia('student/attempts/take', [
