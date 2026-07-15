@@ -1,11 +1,22 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Clock, History, Layers, Trophy } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { ChevronLeft, ChevronRight, History } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { AttemptCard } from '@/components/student/attempts/attempt-card';
+import { AttemptStatsBar } from '@/components/student/attempts/attempt-stats-bar';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import attempts from '@/routes/student/attempts';
 import type { Attempt } from '@/types/attempt';
 import type { PaginationLink, PaginationMeta } from '@/types/pagination';
+import { cn } from '@/lib/utils';
+
+interface AttemptStats {
+    total: number;
+    completed: number;
+    in_progress: number;
+    average_percentage: number | null;
+}
 
 interface IndexProps {
     attempts: {
@@ -16,6 +27,7 @@ interface IndexProps {
     filters: {
         type: string | null;
     };
+    stats: AttemptStats;
 }
 
 const pageVariants = {
@@ -27,34 +39,54 @@ const pageVariants = {
     },
 };
 
-const typeBadgeVariants: Record<string, 'default' | 'secondary'> = {
-    practice: 'secondary',
-    exam: 'default',
-};
-
 const typeLabels: Record<string, string> = {
     practice: 'تدريب',
     exam: 'محاكاة',
 };
 
-const statusLabels: Record<string, { label: string; variant: 'default' | 'secondary' | 'outline' }> = {
-    in_progress: { label: 'قيد التنفيذ', variant: 'default' },
-    completed: { label: 'مكتمل', variant: 'secondary' },
-    abandoned: { label: 'ملغي', variant: 'outline' },
-};
+const filterTabs = [
+    { key: null, label: 'الكل' },
+    { key: 'practice', label: 'تدريب' },
+    { key: 'exam', label: 'محاكاة' },
+] as const;
 
-function formatDate(dateStr: string): string {
+function getGroupKey(dateStr: string): string {
     const date = new Date(dateStr);
-    return date.toLocaleDateString('ar-SA', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-    });
+    const now = new Date();
+    const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return 'اليوم';
+    if (diffDays <= 7) return 'هذا الأسبوع';
+    if (diffDays <= 30) return 'هذا الشهر';
+    if (diffDays <= 60) return 'الشهر الماضي';
+
+    return 'أقدم';
 }
 
-export default function Index({ attempts: paginated, filters }: IndexProps) {
+const groupOrder = ['اليوم', 'هذا الأسبوع', 'هذا الشهر', 'الشهر الماضي', 'أقدم'];
+
+export default function Index({ attempts: paginated, filters, stats }: IndexProps) {
+    const [search, setSearch] = useState('');
+
+    const grouped = useMemo(() => {
+        const filtered = paginated.data.filter((a) => {
+            if (!search.trim()) return true;
+            const q = search.trim().toLowerCase();
+            return a.subject_name.toLowerCase().includes(q);
+        });
+
+        const groups: Record<string, Attempt[]> = {};
+        for (const attempt of filtered) {
+            const key = getGroupKey(attempt.started_at);
+            if (!groups[key]) groups[key] = [];
+            groups[key].push(attempt);
+        }
+
+        return Object.entries(groups).sort(
+            ([a], [b]) => groupOrder.indexOf(a) - groupOrder.indexOf(b),
+        );
+    }, [paginated.data, search]);
+
     function handleFilterChange(type: string | null) {
         router.get(
             attempts.index().url,
@@ -62,6 +94,8 @@ export default function Index({ attempts: paginated, filters }: IndexProps) {
             { preserveScroll: true, preserveState: true },
         );
     }
+
+    const hasInProgress = paginated.data.some((a) => a.status === 'in_progress');
 
     return (
         <>
@@ -71,7 +105,7 @@ export default function Index({ attempts: paginated, filters }: IndexProps) {
                 variants={pageVariants}
                 initial="hidden"
                 animate="visible"
-                className="mx-auto flex max-w-7xl flex-col gap-6 p-6"
+                className="mx-auto flex max-w-4xl flex-col gap-6 p-6"
             >
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
@@ -80,18 +114,36 @@ export default function Index({ attempts: paginated, filters }: IndexProps) {
                             سجل جميع محاولاتك السابقة
                         </p>
                     </div>
+                </div>
 
-                    <div className="flex gap-2">
-                        {[null, 'practice', 'exam'].map((value) => (
-                            <Button
-                                key={value ?? 'all'}
-                                variant={filters.type === value ? 'default' : 'outline'}
-                                size="sm"
-                                onClick={() => handleFilterChange(value)}
-                            >
-                                {value === null ? 'الكل' : typeLabels[value]}
-                            </Button>
-                        ))}
+                <AttemptStatsBar stats={stats} />
+
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <Input
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder="ابحث باسم المحاولة..."
+                        className="h-9 max-w-xs"
+                    />
+
+                    <div className="flex gap-1 rounded-lg bg-muted p-1">
+                        {filterTabs.map((tab) => {
+                            const isActive = filters.type === tab.key;
+                            return (
+                                <Button
+                                    key={tab.key ?? 'all'}
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleFilterChange(tab.key)}
+                                    className={cn(
+                                        'relative flex-1 text-sm',
+                                        isActive && 'bg-background shadow-xs',
+                                    )}
+                                >
+                                    {tab.label}
+                                </Button>
+                            );
+                        })}
                     </div>
                 </div>
 
@@ -100,70 +152,82 @@ export default function Index({ attempts: paginated, filters }: IndexProps) {
                         <History className="mb-2 h-10 w-10 text-muted-foreground/30" />
                         <p className="text-muted-foreground">
                             {filters.type
-                                ? `لا توجد محاولات ${
-                                      typeLabels[filters.type] ?? ''
-                                  } سابقة`
+                                ? `لا توجد محاولات ${typeLabels[filters.type] ?? ''} سابقة`
                                 : 'لا توجد محاولات سابقة'}
                         </p>
                         <p className="mt-1 text-sm text-muted-foreground/60">
                             ابدأ تدريباً حراً أو شارك في مسابقة لتظهر محاولاتك هنا
                         </p>
                     </div>
+                ) : grouped.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed py-16">
+                        <History className="mb-2 h-10 w-10 text-muted-foreground/30" />
+                        <p className="text-muted-foreground">لا توجد نتائج للبحث</p>
+                        <p className="mt-1 text-sm text-muted-foreground/60">
+                            حاول تغيير كلمة البحث
+                        </p>
+                    </div>
                 ) : (
-                    <div className="divide-y overflow-hidden rounded-xl border">
-                        {paginated.data.map((attempt) => {
-                            const statusInfo = statusLabels[attempt.status] ?? {
-                                label: attempt.status,
-                                variant: 'outline',
-                            };
+                    <div className="space-y-6">
+                        {hasInProgress && (
+                            <section>
+                                <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-amber-700">
+                                    <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+                                    نشط
+                                </h2>
+                                <div className="space-y-2">
+                                    {paginated.data
+                                        .filter((a) => a.status === 'in_progress')
+                                        .map((attempt) => (
+                                            <AttemptCard
+                                                key={attempt.id}
+                                                attempt={attempt}
+                                                href={attempts.show({ attempt: attempt.id }).url}
+                                            />
+                                        ))}
+                                </div>
+                            </section>
+                        )}
+
+                        {grouped.map(([groupName, groupAttempts]) => {
+                            if (groupName === 'اليوم' && hasInProgress) {
+                                const completedToday = groupAttempts.filter(
+                                    (a) => a.status !== 'in_progress',
+                                );
+                                if (completedToday.length === 0) return null;
+                                return (
+                                    <section key={groupName}>
+                                        <h2 className="mb-3 text-sm font-semibold text-muted-foreground">
+                                            {groupName}
+                                        </h2>
+                                        <div className="space-y-2">
+                                            {completedToday.map((attempt) => (
+                                                <AttemptCard
+                                                    key={attempt.id}
+                                                    attempt={attempt}
+                                                    href={attempts.show({ attempt: attempt.id }).url}
+                                                />
+                                            ))}
+                                        </div>
+                                    </section>
+                                );
+                            }
 
                             return (
-                                <div
-                                    key={attempt.id}
-                                    className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6"
-                                >
-                                    <div className="min-w-0 flex-1 space-y-1.5">
-                                        <div className="flex flex-wrap items-center gap-2">
-                                            <Badge
-                                                variant={
-                                                    typeBadgeVariants[
-                                                        attempt.type
-                                                    ] ?? 'outline'
-                                                }
-                                            >
-                                                {typeLabels[attempt.type] ?? attempt.type}
-                                            </Badge>
-                                            <Badge variant={statusInfo.variant}>
-                                                {statusInfo.label}
-                                            </Badge>
-                                            <span className="text-sm font-medium">
-                                                {attempt.subject_name}
-                                            </span>
-                                        </div>
-
-                                        <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                                            <span className="inline-flex items-center gap-1">
-                                                <Trophy className="h-3.5 w-3.5" />
-                                                {attempt.correct_answers} / {attempt.total_questions}
-                                            </span>
-                                            <span className="inline-flex items-center gap-1">
-                                                <Clock className="h-3.5 w-3.5" />
-                                                {formatDate(attempt.started_at)}
-                                            </span>
-                                        </div>
+                                <section key={groupName}>
+                                    <h2 className="mb-3 text-sm font-semibold text-muted-foreground">
+                                        {groupName}
+                                    </h2>
+                                    <div className="space-y-2">
+                                        {groupAttempts.map((attempt) => (
+                                            <AttemptCard
+                                                key={attempt.id}
+                                                attempt={attempt}
+                                                href={attempts.show({ attempt: attempt.id }).url}
+                                            />
+                                        ))}
                                     </div>
-
-                                    <Link
-                                        href={attempts.show({ attempt: attempt.id }).url}
-                                        className="shrink-0"
-                                    >
-                                        <Button variant="outline" size="sm">
-                                            {attempt.status === 'in_progress'
-                                                ? 'متابعة'
-                                                : 'عرض النتيجة'}
-                                        </Button>
-                                    </Link>
-                                </div>
+                                </section>
                             );
                         })}
                     </div>

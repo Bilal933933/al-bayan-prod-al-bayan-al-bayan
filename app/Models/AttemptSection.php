@@ -17,6 +17,7 @@ class AttemptSection extends Model
         'questions_count',
         'duration_minutes',
         'order',
+        'submitted_at',
     ];
 
     protected function casts(): array
@@ -25,7 +26,13 @@ class AttemptSection extends Model
             'questions_count' => 'integer',
             'duration_minutes' => 'integer',
             'order' => 'integer',
+            'submitted_at' => 'datetime',
         ];
+    }
+
+    public function isSubmitted(): bool
+    {
+        return $this->submitted_at !== null;
     }
 
     public function attempt(): BelongsTo

@@ -1,5 +1,5 @@
 import { Head, router } from '@inertiajs/react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { ExamHeader } from '@/components/student/attempts/exam-header';
 import { NavigationFooter } from '@/components/student/attempts/navigation-footer';
@@ -25,6 +25,7 @@ export default function Take({ attempt }: TakeProps) {
     const [lockedQuestions, setLockedQuestions] = useState<Set<string>>(new Set());
     const [elapsedSeconds, setElapsedSeconds] = useState(0);
     const [isFinishing, setIsFinishing] = useState(false);
+    const [isSubmittingSection, setIsSubmittingSection] = useState(false);
 
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -35,10 +36,18 @@ export default function Take({ attempt }: TakeProps) {
     const questions = loadedSection?.questions ?? [];
     const currentQuestion = questions[currentQuestionIndex] ?? null;
     const totalQuestionsInSection = currentSection?.questions_count ?? questions.length;
-    const isLastQuestion =
-        currentSectionIndex === sections.length - 1 &&
-        currentQuestionIndex >= totalQuestionsInSection - 1;
-    const totalDuration = sections.reduce((acc, s) => acc + (s.duration_minutes ?? 0), 0);
+    const currentSectionDuration = currentSection?.duration_minutes ?? 0;
+    const isLastQuestionInSection = currentQuestionIndex >= totalQuestionsInSection - 1;
+    const isLastSection = currentSectionIndex === sections.length - 1;
+    const isLastQuestion = isLastSection && isLastQuestionInSection;
+    const currentSectionSubmitted = currentSection?.submitted_at !== null;
+
+    const submittedSectionIndices: number[] = [];
+    for (const [idx, s] of sections.entries()) {
+        if (s.submitted_at !== null) {
+            submittedSectionIndices.push(idx);
+        }
+    }
 
     const answeredQuestions = new Set<string>();
     for (const [, section] of sectionsData) {
@@ -46,15 +55,6 @@ export default function Take({ attempt }: TakeProps) {
             if (q.selected_option_id !== null) {
                 answeredQuestions.add(getCurrentKey(section.id, q.order));
             }
-        }
-    }
-
-    const completedSectionIndices: number[] = [];
-    for (const [sectionId, section] of sectionsData) {
-        const allAnswered = (section.questions ?? []).every((q) => q.selected_option_id !== null);
-        if (allAnswered) {
-            const idx = sections.findIndex((s) => s.id === section.id);
-            if (idx >= 0) completedSectionIndices.push(idx);
         }
     }
 
@@ -93,24 +93,32 @@ export default function Take({ attempt }: TakeProps) {
         loadSection(0);
     }, []);
 
+    // Per-section timer
     useEffect(() => {
-        if (totalDuration > 0) {
+        if (timerRef.current) {
+            clearInterval(timerRef.current);
+            timerRef.current = null;
+        }
+
+        if (currentSectionDuration > 0 && !currentSectionSubmitted) {
+            setElapsedSeconds(0);
+
             timerRef.current = setInterval(() => {
                 setElapsedSeconds((prev) => {
-                    if (prev >= totalDuration * 60) {
+                    if (prev >= currentSectionDuration * 60 - 1) {
                         if (timerRef.current) clearInterval(timerRef.current);
-                        handleFinish();
+                        handleSubmitSection();
                         return prev;
                     }
                     return prev + 1;
                 });
             }, 1000);
-
-            return () => {
-                if (timerRef.current) clearInterval(timerRef.current);
-            };
         }
-    }, [totalDuration]);
+
+        return () => {
+            if (timerRef.current) clearInterval(timerRef.current);
+        };
+    }, [currentSectionIndex, currentSectionDuration, currentSectionSubmitted]);
 
     function handleSelectOption(optionId: number) {
         if (!currentQuestion || currentQuestion.selected_option_id === optionId) return;
@@ -151,9 +159,35 @@ export default function Take({ attempt }: TakeProps) {
         if (!isSimulation) return true;
         const section = sections[targetSectionIdx];
         if (!section) return false;
+        if (section.submitted_at !== null) return false;
         const key = getCurrentKey(section.id, targetQuestionIdx);
         return !lockedQuestions.has(key);
     }
+
+    const handleSubmitSection = useCallback(() => {
+        if (isSubmittingSection || !currentSection) return;
+        if (currentSectionSubmitted) return;
+
+        setIsSubmittingSection(true);
+
+        router.post(
+            attempts.sections.submit({ attempt: attempt.id, section: currentSection.id }).url,
+            {},
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setIsSubmittingSection(false);
+                    if (isLastSection) {
+                        toast.success('تم إنهاء الاختبار بنجاح');
+                    }
+                },
+                onError: () => {
+                    setIsSubmittingSection(false);
+                    toast.error('فشل تسليم القسم');
+                },
+            },
+        );
+    }, [currentSection, currentSectionSubmitted, isLastSection, isSubmittingSection]);
 
     function goToNext() {
         if (isSimulation && currentQuestion) {
@@ -169,7 +203,11 @@ export default function Take({ attempt }: TakeProps) {
             return;
         }
 
-        if (currentSectionIndex < sections.length - 1) {
+        if (!isLastSection) {
+            if (isSimulation) {
+                handleSubmitSection();
+            }
+
             const nextSectionIdx = currentSectionIndex + 1;
             setCurrentQuestionIndex(0);
             setCurrentSectionIndex(nextSectionIdx);
@@ -217,6 +255,8 @@ export default function Take({ attempt }: TakeProps) {
     }
 
     const canGoBack = canGoBackTo(currentSectionIndex, currentQuestionIndex - 1);
+    const isSectionSubmitted = currentSectionSubmitted;
+
     return (
         <>
             <Head title={`${isSimulation ? 'محاكاة' : 'تدريب'} - ${attempt.subject_name}`} />
@@ -226,15 +266,23 @@ export default function Take({ attempt }: TakeProps) {
                 sectionName={currentSection?.topic?.name ?? `المحور ${currentSectionIndex + 1}`}
                 sectionIndex={currentSectionIndex}
                 totalSections={sections.length}
-                totalMinutes={totalDuration}
+                totalMinutes={currentSectionDuration}
                 elapsedSeconds={elapsedSeconds}
             />
 
             <SectionProgress
                 sections={sections}
                 currentIndex={currentSectionIndex}
-                completedIndices={completedSectionIndices}
+                completedIndices={submittedSectionIndices}
             />
+
+            {isSectionSubmitted && (
+                <div className="mx-auto w-full max-w-3xl px-4 pt-2">
+                    <div className="rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 text-sm text-amber-800">
+                        تم تسليم هذا القسم. سيتم نقلك إلى القسم التالي قريباً.
+                    </div>
+                </div>
+            )}
 
             <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-8">
                 <QuestionCard
@@ -255,11 +303,15 @@ export default function Take({ attempt }: TakeProps) {
                 answeredQuestions={answeredQuestions}
                 currentKey={getCurrentKey(currentSection?.id ?? 0, currentQuestionIndex)}
                 isLastQuestion={isLastQuestion}
-                canGoBack={canGoBack}
+                isLastQuestionInSection={isLastQuestionInSection}
                 isSimulation={isSimulation}
+                isSectionSubmitted={isSectionSubmitted}
+                canGoBack={canGoBack}
                 onPrevious={goToPrevious}
                 onNext={goToNext}
                 onFinish={handleFinish}
+                onSubmitSection={handleSubmitSection}
+                isSubmittingSection={isSubmittingSection}
             />
         </>
     );

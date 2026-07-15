@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, CheckCircle, Flag } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle, Flag, LoaderCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -8,11 +8,15 @@ interface NavigationFooterProps {
     answeredQuestions: Set<string>;
     currentKey: string;
     isLastQuestion: boolean;
-    canGoBack: boolean;
+    isLastQuestionInSection: boolean;
     isSimulation: boolean;
+    isSectionSubmitted: boolean;
+    canGoBack: boolean;
     onPrevious: () => void;
     onNext: () => void;
     onFinish: () => void;
+    onSubmitSection: () => void;
+    isSubmittingSection: boolean;
 }
 
 export function NavigationFooter({
@@ -21,12 +25,64 @@ export function NavigationFooter({
     answeredQuestions,
     currentKey,
     isLastQuestion,
-    canGoBack,
+    isLastQuestionInSection,
     isSimulation,
+    isSectionSubmitted,
+    canGoBack,
     onPrevious,
     onNext,
     onFinish,
+    onSubmitSection,
+    isSubmittingSection,
 }: NavigationFooterProps) {
+    const sectionKey = currentKey.split(':')[0];
+
+    function renderNextButton() {
+        if (isLastQuestion) {
+            return (
+                <Button variant="destructive" size="sm" onClick={onFinish}>
+                    <Flag className="ml-1.5 h-4 w-4" />
+                    إنهاء الاختبار
+                </Button>
+            );
+        }
+
+        if (isSimulation && isLastQuestionInSection && !isSectionSubmitted) {
+            return (
+                <Button
+                    variant="default"
+                    size="sm"
+                    onClick={onSubmitSection}
+                    disabled={isSubmittingSection}
+                    className="gap-1"
+                >
+                    {isSubmittingSection ? (
+                        <LoaderCircle className="h-4 w-4 animate-spin" />
+                    ) : (
+                        <CheckCircle className="h-4 w-4" />
+                    )}
+                    تسليم القسم
+                </Button>
+            );
+        }
+
+        if (isSimulation && isLastQuestionInSection && isSectionSubmitted) {
+            return (
+                <Button variant="default" size="sm" onClick={onNext} className="gap-1">
+                    التالي
+                    <ArrowLeft className="mr-1.5 h-4 w-4" />
+                </Button>
+            );
+        }
+
+        return (
+            <Button variant="default" size="sm" onClick={onNext}>
+                التالي
+                <ArrowLeft className="mr-1.5 h-4 w-4" />
+            </Button>
+        );
+    }
+
     return (
         <footer className="sticky bottom-0 z-50 border-t bg-white shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
             <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-4 py-3">
@@ -46,7 +102,7 @@ export function NavigationFooter({
 
                 <div className="flex items-center gap-1.5">
                     {Array.from({ length: Math.min(totalQuestions, 15) }, (_, i) => {
-                        const key = `${currentKey.split(':')[0]}:${i}`;
+                        const key = `${sectionKey}:${i}`;
                         const isCurrent = i === currentIndex;
                         const isAnswered = answeredQuestions.has(key);
 
@@ -67,25 +123,7 @@ export function NavigationFooter({
                 </div>
 
                 <div>
-                    {isLastQuestion ? (
-                        <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={onFinish}
-                        >
-                            <Flag className="ml-1.5 h-4 w-4" />
-                            إنهاء الاختبار
-                        </Button>
-                    ) : (
-                        <Button
-                            variant="default"
-                            size="sm"
-                            onClick={onNext}
-                        >
-                            التالي
-                            <ArrowLeft className="mr-1.5 h-4 w-4" />
-                        </Button>
-                    )}
+                    {renderNextButton()}
                 </div>
             </div>
         </footer>

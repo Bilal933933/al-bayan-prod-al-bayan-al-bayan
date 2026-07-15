@@ -84,6 +84,7 @@ export default function Show({ competition, children }: ShowProps) {
                             {topics.map((topic) => (
                                 <TopicCard
                                     key={topic.id}
+                                    id={topic.id}
                                     code={topic.code}
                                     name={topic.name}
                                     visibility={topic.visibility}

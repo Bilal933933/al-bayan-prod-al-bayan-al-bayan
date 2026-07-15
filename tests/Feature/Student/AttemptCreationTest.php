@@ -169,6 +169,26 @@ it('exam respects difficulty distribution approximately', function () {
 
 // ─── Auth ─────────────────────────────────────────────────────
 
+it('practice respects difficulty filter', function () {
+    $topic = Topic::factory()->active()->create(['default_questions_count' => 10]);
+    Question::factory(5)->active()->for($topic)->easy()->create();
+    Question::factory(5)->active()->for($topic)->medium()->create();
+    Question::factory(5)->active()->for($topic)->hard()->create();
+
+    $response = $this->actingAs($this->user)->post(
+        route('student.topics.attempts.start', $topic),
+        ['difficulty' => 'easy'],
+    );
+
+    $response->assertRedirect();
+
+    $attempt = Attempt::where('user_id', $this->user->id)->first();
+    expect($attempt->total_questions)->toBe(5);
+
+    $difficulties = $attempt->sections->first()->questions->map(fn ($aq) => $aq->question->difficulty);
+    $difficulties->each(fn ($d) => expect($d)->toBe('easy'));
+});
+
 it('guest cannot create any attempt', function () {
     $topic = Topic::factory()->active()->create();
 

@@ -45,7 +45,7 @@ const topicColors = [
 ];
 
 function getColor(id: number) {
-    return topicColors[id % topicColors.length];
+    return topicColors[id % topicColors.length] ?? topicColors[0];
 }
 
 export default function TopicCard({

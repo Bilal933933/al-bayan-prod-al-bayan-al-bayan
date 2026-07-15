@@ -20,6 +20,7 @@ export interface AttemptSection {
     duration_minutes: number | null;
     order: number;
     questions: AttemptQuestion[];
+    submitted_at?: string | null;
 }
 
 export interface Attempt {

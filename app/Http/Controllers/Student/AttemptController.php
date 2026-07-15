@@ -24,17 +24,39 @@ class AttemptController extends Controller
 
     public function index(Request $request): Response
     {
+        $userId = auth()->id();
+
         $attempts = Attempt::query()
-            ->where('user_id', auth()->id())
-            ->with(['topic:id,name', 'competition:id,name'])
+            ->where('user_id', $userId)
+            ->with(['topic:id,name', 'competition:id,name', 'sections' => fn ($q) => $q->select(['id', 'attempt_id', 'submitted_at', 'order', 'questions_count'])])
             ->when($request->filled('type'), fn ($q) => $q->where('type', $request->string('type')))
             ->latest()
             ->paginate(15)
             ->withQueryString();
 
+        $allUserAttempts = Attempt::where('user_id', $userId);
+
+        $stats = [
+            'total' => (clone $allUserAttempts)->count(),
+            'completed' => (clone $allUserAttempts)->where('status', Attempt::STATUS_COMPLETED)->count(),
+            'in_progress' => (clone $allUserAttempts)->where('status', Attempt::STATUS_IN_PROGRESS)->count(),
+            'average_percentage' => (function () use ($allUserAttempts) {
+                $completed = (clone $allUserAttempts)->where('status', Attempt::STATUS_COMPLETED)->get();
+
+                if ($completed->isEmpty()) {
+                    return null;
+                }
+
+                return round(
+                    $completed->sum('correct_answers') / max($completed->sum('total_questions'), 1) * 100,
+                );
+            })(),
+        ];
+
         return inertia('student/attempts/index', [
             'attempts' => $attempts,
             'filters' => $request->only('type'),
+            'stats' => $stats,
         ]);
     }
 
@@ -54,6 +76,7 @@ class AttemptController extends Controller
         }
 
         $attempt->load([
+            'sections' => fn ($q) => $q->orderBy('order'),
             'sections.topic:id,name',
         ]);
 
@@ -122,6 +145,32 @@ class AttemptController extends Controller
         return back();
     }
 
+    public function submitSection(Attempt $attempt, AttemptSection $section): RedirectResponse
+    {
+        abort_unless($attempt->user_id === auth()->id(), 403);
+        abort_unless($section->attempt_id === $attempt->id, 404);
+        abort_unless($attempt->isInProgress(), 422);
+        abort_if($section->isSubmitted(), 422);
+
+        $section->update(['submitted_at' => now()]);
+
+        $allSubmitted = $attempt->sections()->whereNull('submitted_at')->doesntExist();
+
+        if ($allSubmitted) {
+            $correctCount = AttemptQuestion::whereHas('section', fn ($q) => $q->where('attempt_id', $attempt->id))
+                ->where('is_correct', true)
+                ->count();
+
+            $attempt->update([
+                'status' => Attempt::STATUS_COMPLETED,
+                'finished_at' => now(),
+                'correct_answers' => $correctCount,
+            ]);
+        }
+
+        return redirect()->route('student.attempts.show', $attempt);
+    }
+
     public function finish(Attempt $attempt): RedirectResponse
     {
         abort_unless($attempt->user_id === auth()->id(), 403);
@@ -136,6 +185,10 @@ class AttemptController extends Controller
             'finished_at' => now(),
             'correct_answers' => $correctCount,
         ]);
+
+        if ($attempt->isExam()) {
+            $attempt->sections()->whereNull('submitted_at')->update(['submitted_at' => now()]);
+        }
 
         return redirect()->route('student.attempts.show', $attempt);
     }
