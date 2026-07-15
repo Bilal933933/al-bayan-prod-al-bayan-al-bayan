@@ -76,13 +76,16 @@ class AttemptController extends Controller
         return response()->json($section);
     }
 
-    public function startPractice(Topic $topic): RedirectResponse
+    public function startPractice(Request $request, Topic $topic): RedirectResponse
     {
         abort_unless($topic->is_active, 404);
+
+        $difficulty = $request->input('difficulty');
 
         $attempt = $this->attemptCreationService->createPractice(
             auth()->user(),
             $topic,
+            $difficulty,
         );
 
         return redirect()->route('student.attempts.show', $attempt);

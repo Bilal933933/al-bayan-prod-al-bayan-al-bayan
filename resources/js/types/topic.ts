@@ -1,3 +1,8 @@
+export interface BestScore {
+    correct: number;
+    total: number;
+}
+
 export interface Topic {
     id: number;
     code: string;
@@ -8,6 +13,10 @@ export interface Topic {
     default_duration_minutes: number | null;
     is_active: boolean;
     competitions_count?: number;
+    user_attempts_count?: number;
+    has_in_progress?: boolean;
+    in_progress_attempt_id?: number | null;
+    best_score?: BestScore | null;
     created_at: string;
     updated_at: string;
 }

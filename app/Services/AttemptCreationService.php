@@ -14,11 +14,15 @@ use Illuminate\Support\Facades\DB;
 
 class AttemptCreationService
 {
-    public function createPractice(User $user, Topic $topic): Attempt
+    public function createPractice(User $user, Topic $topic, ?string $difficulty = null): Attempt
     {
-        $questions = $topic->questions()
-            ->active()
-            ->inRandomOrder()
+        $query = $topic->questions()->active();
+
+        if ($difficulty !== null) {
+            $query->where('difficulty', $difficulty);
+        }
+
+        $questions = $query->inRandomOrder()
             ->limit($topic->default_questions_count)
             ->get();
 
