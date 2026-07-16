@@ -30,6 +30,7 @@ import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import attempts from '@/routes/student/attempts';
 import competitions from '@/routes/student/competitions';
+import results from '@/routes/student/results';
 import topics from '@/routes/student/topics';
 import type { BreadcrumbItem, NavItem } from '@/types';
 
@@ -55,7 +56,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'نتائجي',
-        href: '#',
+        href: results.index().url,
         icon: BarChart3,
     },
 ];

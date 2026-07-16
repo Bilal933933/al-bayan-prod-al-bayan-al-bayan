@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Student\AttemptController;
 use App\Http\Controllers\Student\CompetitionController;
+use App\Http\Controllers\Student\ResultController;
 use App\Http\Controllers\Student\TopicController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{topic}', [TopicController::class, 'show'])->name('show');
         Route::post('/{topic}/attempts', [AttemptController::class, 'startPractice'])->name('attempts.start');
     });
+
+    // Student results route
+    Route::get('/results', [ResultController::class, 'index'])->name('student.results.index');
 
     // Student attempt routes
     Route::prefix('attempts')->name('student.attempts.')->group(function () {
