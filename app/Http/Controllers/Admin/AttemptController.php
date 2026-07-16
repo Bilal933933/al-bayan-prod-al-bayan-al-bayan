@@ -66,4 +66,19 @@ class AttemptController extends Controller
             'competitions' => $competitions,
         ]);
     }
+
+    public function show(Attempt $attempt)
+    {
+        $attempt->load([
+            'user:id,name,email',
+            'sections.topic:id,name',
+            'sections.questions.question.options',
+            'topic:id,name',
+            'competition:id,name',
+        ]);
+
+        return inertia('admin/attempts/show', [
+            'attempt' => $attempt,
+        ]);
+    }
 }
