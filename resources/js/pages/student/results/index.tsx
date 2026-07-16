@@ -1,6 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { BarChart3, BookCheck, Clock, Play, Timer, Trophy } from 'lucide-react';
+import { BarChart3, Clock, Eye, Play, Trophy } from 'lucide-react';
 import DateDisplay from '@/components/date-display';
 import { EvaluationBadge } from '@/components/student/results/evaluation-badge';
 import { ProgressChart } from '@/components/student/results/progress-chart';
@@ -32,41 +32,42 @@ export default function Index({ overallStats, evaluation, topicBreakdown, compet
             <Head title="نتائجي" />
 
             <motion.div
-                className="space-y-6"
+                className="space-y-5"
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
             >
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold">نتائجي</h1>
-                        <p className="text-sm text-muted-foreground">ملخص أدائك وتقييمك العام</p>
+                        <h1 className="text-2xl font-bold tracking-tight">نتائجي</h1>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                            مرحباً بك، تقييمك العام: <EvaluationBadge evaluation={evaluation} />
+                        </p>
                     </div>
-                    <EvaluationBadge evaluation={evaluation} />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                     <ResultStatsCard icon={BarChart3} label="إجمالي المحاولات" value={overallStats.total_attempts} sub={overallStats.completed_count > 0 ? `${overallStats.completed_count} مكتملة` : undefined} />
-                    <ResultStatsCard icon={Trophy} label="متوسط النتيجة" value={overallStats.average_percentage !== null ? `${overallStats.average_percentage}%` : '—'} sub={overallStats.best_score > 0 ? `أفضل درجة: ${overallStats.best_score}` : undefined} />
+                    <ResultStatsCard icon={Trophy} label="متوسط النتيجة" value={overallStats.average_percentage !== null ? `${overallStats.average_percentage}%` : '—'} sub={overallStats.best_score > 0 && overallStats.average_percentage !== null ? `أفضل درجة: ${overallStats.best_score}` : undefined} />
                     <ResultStatsCard icon={Clock} label="الوقت الإجمالي" value={formatDuration(overallStats.total_seconds)} />
                     <ResultStatsCard icon={Play} label="قيد التنفيذ" value={overallStats.in_progress_count} />
                 </div>
 
                 {progress.length > 0 && (
                     <div className="rounded-xl border bg-card p-4">
-                        <h2 className="mb-4 text-sm font-medium text-muted-foreground">التقدم عبر المحاولات</h2>
+                        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">التقدم عبر المحاولات</h2>
                         <ProgressChart data={progress} />
                     </div>
                 )}
 
                 <div>
-                    <h2 className="mb-3 text-lg font-semibold">أداء المواضيع</h2>
+                    <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">أداء المواضيع</h2>
                     <TopicBreakdown data={topicBreakdown} />
                 </div>
 
                 {competitionBreakdown.length > 0 && (
                     <div>
-                        <h2 className="mb-3 text-lg font-semibold">أداء المسابقات</h2>
+                        <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">أداء المسابقات</h2>
                         <div className="overflow-x-auto rounded-xl border">
                             <table className="w-full text-sm">
                                 <thead>
@@ -94,18 +95,18 @@ export default function Index({ overallStats, evaluation, topicBreakdown, compet
 
                 {recentResults.length > 0 && (
                     <div>
-                        <h2 className="mb-3 text-lg font-semibold">آخر النتائج</h2>
-                        <div className="space-y-2">
+                        <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">آخر النتائج</h2>
+                        <div className="divide-y rounded-xl border">
                             {recentResults.map((result) => {
                                 const typeInfo = typeLabels[result.type] ?? typeLabels.practice;
 
                                 return (
                                     <div
                                         key={result.id}
-                                        className="flex items-center justify-between gap-4 rounded-xl border bg-card p-4 transition-colors hover:bg-muted/30"
+                                        className="flex items-center justify-between gap-4 px-4 py-3 transition-colors hover:bg-muted/30"
                                     >
                                         <div className="flex items-center gap-3 min-w-0">
-                                            <div className={cn('shrink-0 rounded-lg border px-2 py-1 text-xs font-medium', typeInfo.class)}>
+                                            <div className={cn('shrink-0 rounded-md border px-2 py-0.5 text-xs font-medium', typeInfo.class)}>
                                                 {typeInfo.label}
                                             </div>
                                             <div className="min-w-0">
@@ -118,7 +119,7 @@ export default function Index({ overallStats, evaluation, topicBreakdown, compet
                                         <div className="flex shrink-0 items-center gap-3">
                                             <div className="text-left">
                                                 <p className="text-sm font-medium">
-                                                    <span className={cn(result.percentage >= 70 ? 'text-emerald-600' : result.percentage >= 40 ? 'text-amber-600' : 'text-red-600')}>
+                                                    <span className={cn(result.percentage >= 70 ? 'text-emerald-600' : result.percentage >= 40 ? 'text-amber-600' : 'text-rose-500')}>
                                                         {result.percentage}%
                                                     </span>
                                                 </p>
@@ -127,7 +128,10 @@ export default function Index({ overallStats, evaluation, topicBreakdown, compet
                                                 </p>
                                             </div>
                                             <Link href={attempts.show({ attempt: result.id }).url}>
-                                                <Button variant="ghost" size="sm">عرض</Button>
+                                                <Button variant="outline" size="sm" className="gap-1.5">
+                                                    <Eye className="h-3.5 w-3.5" />
+                                                    عرض
+                                                </Button>
                                             </Link>
                                         </div>
                                     </div>

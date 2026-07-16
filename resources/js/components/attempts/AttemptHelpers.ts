@@ -22,9 +22,10 @@ export const difficultyColors: Record<string, string> = {
 };
 
 export function formatDuration(seconds: number): string {
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = seconds % 60;
+    const abs = Math.abs(seconds);
+    const h = Math.floor(abs / 3600);
+    const m = Math.floor((abs % 3600) / 60);
+    const s = Math.floor(abs % 60);
 
     if (h > 0) {
 return `${h}س ${m}د`;
