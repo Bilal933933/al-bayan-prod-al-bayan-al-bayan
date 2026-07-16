@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BarChart3, BookOpen, History, Menu, Search, Trophy } from 'lucide-react';
+import { BarChart3, BookOpen, History, Menu, Play, Search, Trophy } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Breadcrumbs } from '@/components/breadcrumbs';
@@ -170,6 +170,14 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                 <Search className="!size-5 opacity-80 group-hover:opacity-100" />
                             </Button>
                         </div>
+                        {page.url !== attempts.create().url && (
+                            <Link href={attempts.create().url}>
+                                <Button variant="default" size="sm" className="gap-1.5">
+                                    <Play className="h-4 w-4" />
+                                    بدء محاولة
+                                </Button>
+                            </Link>
+                        )}
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button

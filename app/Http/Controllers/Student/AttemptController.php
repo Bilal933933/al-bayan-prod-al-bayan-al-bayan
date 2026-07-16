@@ -60,6 +60,23 @@ class AttemptController extends Controller
         ]);
     }
 
+    public function create(Request $request): Response
+    {
+        $topics = Topic::active()
+            ->whereHas('questions')
+            ->get(['id', 'name']);
+
+        $competitions = Competition::active()
+            ->roots()
+            ->with(['children' => fn ($q) => $q->active()])
+            ->get(['id', 'name', 'classification', 'description']);
+
+        return inertia('student/attempts/create', [
+            'topics' => $topics,
+            'competitions' => $competitions,
+        ]);
+    }
+
     public function show(Attempt $attempt): Response
     {
         abort_unless($attempt->user_id === auth()->id(), 403);

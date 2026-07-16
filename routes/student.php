@@ -30,6 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Student attempt routes
     Route::prefix('attempts')->name('student.attempts.')->group(function () {
         Route::get('/', [AttemptController::class, 'index'])->name('index');
+        Route::get('/create', [AttemptController::class, 'create'])->name('create');
         Route::get('/{attempt}', [AttemptController::class, 'show'])->name('show');
         Route::get('{attempt}/sections/{section}', [AttemptController::class, 'section'])->name('sections.show');
         Route::post('{attempt}/sections/{section}/submit', [AttemptController::class, 'submitSection'])->name('sections.submit');

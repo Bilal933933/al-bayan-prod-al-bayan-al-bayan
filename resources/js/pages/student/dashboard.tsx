@@ -1,6 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Play, RotateCcw, Clock, Trophy, Layers, ChevronRight } from 'lucide-react';
+import { Play, RotateCcw, Clock, Trophy, Layers, ChevronRight, BookOpen, GraduationCap } from 'lucide-react';
 import { AttemptCard } from '@/components/student/attempts/attempt-card';
 import CompetitionCard from '@/components/student/competitions/competition-card';
 import TopicCard from '@/components/student/topics/topic-card';
@@ -71,6 +71,41 @@ export default function Dashboard({
                 animate="visible"
                 className="mx-auto flex max-w-7xl flex-col gap-6 p-6"
             >
+                {/* Quick Action Cards */}
+                <div className="grid gap-4 sm:grid-cols-2">
+                    <Link
+                        href={attempts.create().url}
+                        className="group relative flex items-start gap-4 rounded-xl border-2 border-muted bg-card p-5 transition-all duration-200 hover:border-emerald-500 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20"
+                    >
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
+                            <BookOpen className="h-6 w-6" />
+                        </div>
+                        <div>
+                            <h3 className="text-base font-semibold group-hover:text-emerald-700 dark:group-hover:text-emerald-300 transition-colors">تدريب حر</h3>
+                            <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
+                                اختر محوراً وتدرب على أسئلته بمستوى الصعوبة الذي تختاره
+                            </p>
+                        </div>
+                        <ChevronRight className="mr-auto mt-3 h-5 w-5 text-muted-foreground shrink-0" />
+                    </Link>
+
+                    <Link
+                        href={attempts.create().url}
+                        className="group relative flex items-start gap-4 rounded-xl border-2 border-muted bg-card p-5 transition-all duration-200 hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-950/20"
+                    >
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                            <GraduationCap className="h-6 w-6" />
+                        </div>
+                        <div>
+                            <h3 className="text-base font-semibold group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors">اختبار محاكاة</h3>
+                            <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
+                                شارك في مسابقة بمحاور متعددة ووقت محدد
+                            </p>
+                        </div>
+                        <ChevronRight className="mr-auto mt-3 h-5 w-5 text-muted-foreground shrink-0" />
+                    </Link>
+                </div>
+
                 {/* In-Progress Attempt Banner */}
                 {inProgressAttempt && (
                     <motion.div
