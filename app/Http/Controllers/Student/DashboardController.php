@@ -69,6 +69,10 @@ class DashboardController extends Controller
             ->get();
 
         return inertia('student/dashboard', [
+            'user' => [
+                'name' => auth()->user()->name,
+                'email' => auth()->user()->email,
+            ],
             'inProgressAttempt' => $inProgressAttempt,
             'recentAttempts' => $recentAttempts,
             'stats' => [
