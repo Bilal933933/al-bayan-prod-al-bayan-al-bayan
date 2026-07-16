@@ -2,7 +2,7 @@ import { Head, useForm } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import QuestionForm from '@/components/admin/questions/question-form';
 import Heading from '@/components/heading';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import questions from '@/routes/admin/questions';
 import type { BreadcrumbItem } from '@/types';
 import type { QuestionFormData } from '@/types/question';

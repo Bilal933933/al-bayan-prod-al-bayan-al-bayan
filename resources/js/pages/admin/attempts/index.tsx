@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import AttemptFilters from '@/components/admin/attempts/attempt-filters';
 import AttemptTable from '@/components/admin/attempts/attempt-table';
 import Heading from '@/components/heading';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import type { BreadcrumbItem } from '@/types';
 import type { Attempt } from '@/types/attempt';
 import type { PaginationMeta } from '@/types/pagination';

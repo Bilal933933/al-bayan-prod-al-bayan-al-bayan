@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attempt;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Inertia\Response;
 
 class ResultController extends Controller
@@ -24,7 +26,7 @@ class ResultController extends Controller
 
         $totalCorrect = $completed->sum('correct_answers');
         $totalQuestions = $completed->sum('total_questions');
-        $averagePercentage = $totalQuestions > 0 ? round($totalCorrect / $totalQuestions * 100) : null;
+        $averagePercentage = $totalQuestions > 0 ? (int) round($totalCorrect / $totalQuestions * 100) : null;
 
         $bestScore = $completed->max('correct_answers') ?? 0;
 
@@ -79,6 +81,7 @@ class ResultController extends Controller
         ]);
     }
 
+    /** @return array{level: string, label: string, color: string} */
     private function evaluate(?int $averagePercentage): array
     {
         if ($averagePercentage === null) {
@@ -94,10 +97,11 @@ class ResultController extends Controller
         };
     }
 
-    private function getTopicBreakdown($completed)
+    /** @param EloquentCollection<int, Attempt> $completed
+     * @return Collection<int, mixed> */
+    private function getTopicBreakdown(EloquentCollection $completed): Collection
     {
-        return $completed->groupBy('topic_id')
-            ->filter(fn ($group, $topicId) => $topicId !== null)
+        return $completed->filter(fn ($a) => $a->topic_id !== null)->groupBy('topic_id')
             ->map(function ($group) {
                 $totalCorrect = $group->sum('correct_answers');
                 $totalQuestions = $group->sum('total_questions');
@@ -112,7 +116,7 @@ class ResultController extends Controller
 
                 return [
                     'topic_id' => $topic?->id,
-                    'topic_name' => $topic?->name ?? '—',
+                    'topic_name' => $topic->name ?? '—',
                     'attempts_count' => $group->count(),
                     'average_percentage' => $avg,
                     'best_score' => $group->max('correct_answers') ?? 0,
@@ -122,11 +126,12 @@ class ResultController extends Controller
             ->values();
     }
 
-    private function getCompetitionBreakdown($completed)
+    /** @param EloquentCollection<int, Attempt> $completed
+     * @return Collection<int, mixed> */
+    private function getCompetitionBreakdown(EloquentCollection $completed): Collection
     {
         return $completed->where('type', Attempt::TYPE_EXAM)
             ->groupBy('competition_id')
-            ->filter(fn ($group, $compId) => $compId !== null)
             ->map(function ($group) {
                 $totalCorrect = $group->sum('correct_answers');
                 $totalQuestions = $group->sum('total_questions');
@@ -134,7 +139,7 @@ class ResultController extends Controller
 
                 return [
                     'competition_id' => $competition?->id,
-                    'competition_name' => $competition?->name ?? '—',
+                    'competition_name' => $competition->name ?? '—',
                     'attempts_count' => $group->count(),
                     'average_percentage' => $totalQuestions > 0 ? round($totalCorrect / $totalQuestions * 100) : 0,
                     'best_score' => $group->max('correct_answers') ?? 0,

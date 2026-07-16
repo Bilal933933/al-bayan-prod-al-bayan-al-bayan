@@ -2,8 +2,11 @@
 
 namespace App\Http\Requests\Student;
 
+use App\Models\Attempt;
+use App\Models\AttemptQuestion;
 use App\Models\QuestionOption;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class AnswerQuestionRequest extends FormRequest
 {
@@ -12,6 +15,7 @@ class AnswerQuestionRequest extends FormRequest
         return true;
     }
 
+    /** @return array<string, mixed> */
     public function rules(): array
     {
         return [
@@ -19,13 +23,22 @@ class AnswerQuestionRequest extends FormRequest
         ];
     }
 
-    public function withValidator($validator): void
+    public function withValidator(Validator $validator): void
     {
-        $validator->after(function ($validator) {
+        $validator->after(function (Validator $validator) {
             $attemptQuestion = $this->route('attemptQuestion');
+
+            if (! $attemptQuestion instanceof AttemptQuestion) {
+                abort(404);
+            }
+
             $attempt = $attemptQuestion->section->attempt;
 
-            if ($attempt->user_id !== $this->user()->id) {
+            if (! $attempt instanceof Attempt) {
+                abort(404);
+            }
+
+            if ($attempt->user_id !== $this->user()?->id) {
                 abort(403);
             }
 
@@ -35,14 +48,14 @@ class AnswerQuestionRequest extends FormRequest
                 return;
             }
 
-            $option = QuestionOption::find($this->input('selected_option_id'));
-            if ($option?->question_id !== $attemptQuestion->question_id) {
+            $option = QuestionOption::find((int) $this->input('selected_option_id'));
+            if ($option?->getAttribute('question_id') !== $attemptQuestion->getAttribute('question_id')) {
                 $validator->errors()->add('selected_option_id', 'الخيار لا ينتمي لهذا السؤال.');
 
                 return;
             }
 
-            if ($attempt->isExam() && $attemptQuestion->selected_option_id !== null) {
+            if ($attempt->isExam() && $attemptQuestion->getAttribute('selected_option_id') !== null) {
                 $validator->errors()->add('attempt', 'لا يمكن تغيير الإجابة في وضع المحاكاة.');
             }
         });

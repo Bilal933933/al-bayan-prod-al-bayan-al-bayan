@@ -1,7 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { BookOpen, ChevronRight, Clock, GraduationCap } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/student';
 
 interface ExamHeaderProps {
     type: 'practice' | 'exam';

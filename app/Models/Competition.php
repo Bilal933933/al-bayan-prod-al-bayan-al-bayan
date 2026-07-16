@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\CompetitionFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -54,21 +55,25 @@ class Competition extends Model
         return asset('storage/'.$this->image);
     }
 
+    /** @return BelongsTo<Competition, $this> */
     public function parent(): BelongsTo
     {
         return $this->belongsTo(Competition::class, 'parent_id');
     }
 
+    /** @return HasMany<Competition, $this> */
     public function children(): HasMany
     {
         return $this->hasMany(Competition::class, 'parent_id');
     }
 
+    /** @return HasMany<Attempt, $this> */
     public function attempts(): HasMany
     {
         return $this->hasMany(Attempt::class)->where('type', Attempt::TYPE_EXAM);
     }
 
+    /** @return BelongsToMany<Topic, $this, CompetitionTopic> */
     public function topics(): BelongsToMany
     {
         return $this->belongsToMany(Topic::class, 'competition_topic')
@@ -79,17 +84,19 @@ class Competition extends Model
 
     public function getCanHaveTopicsAttribute(): bool
     {
-        return $this->canHaveTopics();
+        return ! $this->isContainer();
     }
 
-    public function scopeActive($query)
+    /** @param Builder<self> $query */
+    public function scopeActive(Builder $query): void
     {
-        return $query->where('is_active', true);
+        $query->where('is_active', true);
     }
 
-    public function scopeRoots($query)
+    /** @param Builder<self> $query */
+    public function scopeRoots(Builder $query): void
     {
-        return $query->whereNull('parent_id');
+        $query->whereNull('parent_id');
     }
 
     public function isContainer(): bool
@@ -105,11 +112,6 @@ class Competition extends Model
     public function isChild(): bool
     {
         return $this->classification === self::CLASSIFICATION_CHILD;
-    }
-
-    public function canHaveTopics(): bool
-    {
-        return ! $this->isContainer();
     }
 
     public function canBeParentOf(): bool

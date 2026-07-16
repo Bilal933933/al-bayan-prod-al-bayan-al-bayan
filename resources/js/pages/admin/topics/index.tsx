@@ -7,7 +7,7 @@ import Heading from '@/components/heading';
 import { LaravelPagination } from '@/components/laravel-pagination';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import topics from '@/routes/admin/topics';
 import type { BreadcrumbItem } from '@/types';
 import type { PaginationMeta } from '@/types/pagination';

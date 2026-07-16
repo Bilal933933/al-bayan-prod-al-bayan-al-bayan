@@ -7,10 +7,11 @@ use App\Models\Attempt;
 use App\Models\Competition;
 use App\Models\Topic;
 use Illuminate\Http\Request;
+use Inertia\Response;
 
 class AttemptController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $search = $request->query('search', '');
         $type = $request->query('type');
@@ -67,7 +68,7 @@ class AttemptController extends Controller
         ]);
     }
 
-    public function show(Attempt $attempt)
+    public function show(Attempt $attempt): Response
     {
         $attempt->load([
             'user:id,name,email',

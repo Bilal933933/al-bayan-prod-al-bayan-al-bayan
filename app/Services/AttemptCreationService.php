@@ -100,6 +100,8 @@ class AttemptCreationService
         return $attempt->load(['sections.questions']);
     }
 
+    /** @param array<string, int>|null $difficultyDistribution
+     * @return Collection<int, Question> */
     private function selectQuestionsForTopic(Topic $topic, int $plannedCount, ?array $difficultyDistribution): Collection
     {
         $query = $topic->questions()->active();
@@ -124,6 +126,8 @@ class AttemptCreationService
         return $query->inRandomOrder()->limit($plannedCount)->get();
     }
 
+    /** @param array<string, int> $distribution
+     * @return array<string, int> */
     private function calculateDistribution(int $total, array $distribution): array
     {
         $levels = [Question::DIFFICULTY_EASY, Question::DIFFICULTY_MEDIUM, Question::DIFFICULTY_HARD];
@@ -152,6 +156,7 @@ class AttemptCreationService
         return $counts;
     }
 
+    /** @param Collection<int, Question> $questions */
     private function insertAttemptQuestions(AttemptSection $section, Collection $questions): void
     {
         $data = $questions->values()->map(fn ($question, $index) => [

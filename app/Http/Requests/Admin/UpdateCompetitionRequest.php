@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use App\Models\Competition;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class UpdateCompetitionRequest extends FormRequest
 {
@@ -12,6 +13,7 @@ class UpdateCompetitionRequest extends FormRequest
         return true;
     }
 
+    /** @return array<string, mixed> */
     public function rules(): array
     {
         $competition = $this->route('competition');
@@ -19,7 +21,7 @@ class UpdateCompetitionRequest extends FormRequest
         return [
             'parent_id' => ['nullable', 'exists:competitions,id'],
             'classification' => ['required', 'string', 'in:container,standalone,child'],
-            'code' => ['required', 'string', 'max:255', 'unique:competitions,code,'.$competition->id],
+            'code' => ['required', 'string', 'max:255', 'unique:competitions,code,'.($competition instanceof Competition ? $competition->id : '')],
             'name' => ['required', 'string', 'max:255'],
             'image_file' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
             'image' => ['nullable', 'string'],
@@ -30,9 +32,9 @@ class UpdateCompetitionRequest extends FormRequest
         ];
     }
 
-    public function withValidator($validator): void
+    public function withValidator(Validator $validator): void
     {
-        $validator->after(function ($validator) {
+        $validator->after(function (Validator $validator) {
             $competition = $this->route('competition');
             $classification = $this->input('classification');
             $parentId = $this->input('parent_id');
@@ -52,7 +54,7 @@ class UpdateCompetitionRequest extends FormRequest
             }
 
             if ($parentId) {
-                $parent = Competition::find($parentId);
+                $parent = Competition::find((int) $parentId);
 
                 if ($parent && ! $parent->isContainer()) {
                     $validator->errors()->add(
@@ -62,7 +64,7 @@ class UpdateCompetitionRequest extends FormRequest
                 }
             }
 
-            if ($classification !== 'container' && $competition->children()->exists()) {
+            if ($competition instanceof Competition && $classification !== 'container' && $competition->children()->exists()) {
                 $validator->errors()->add(
                     'classification',
                     'لا يمكن إزالة صفة الحاوية عن مسابقة لها أبناء.'

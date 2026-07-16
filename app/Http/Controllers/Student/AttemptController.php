@@ -141,7 +141,7 @@ class AttemptController extends Controller
     {
         abort_unless($attempt->user_id === auth()->id(), 403);
 
-        $option = QuestionOption::findOrFail($request->validated('selected_option_id'));
+        $option = QuestionOption::findOrFail((int) $request->validated('selected_option_id'));
 
         $attemptQuestion->update([
             'selected_option_id' => $option->id,

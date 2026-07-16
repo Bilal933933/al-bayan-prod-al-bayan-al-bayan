@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\QuestionFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -40,19 +41,22 @@ class Question extends Model
         ];
     }
 
+    /** @return BelongsTo<Topic, $this> */
     public function topic(): BelongsTo
     {
         return $this->belongsTo(Topic::class);
     }
 
+    /** @return HasMany<QuestionOption, $this> */
     public function options(): HasMany
     {
         return $this->hasMany(QuestionOption::class)->orderBy('order');
     }
 
-    public function scopeActive($query)
+    /** @param Builder<self> $query */
+    public function scopeActive(Builder $query): void
     {
-        return $query->where('is_active', true);
+        $query->where('is_active', true);
     }
 
     public function isTrueFalse(): bool

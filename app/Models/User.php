@@ -3,8 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -30,6 +32,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable implements PasskeyUser
 {
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
 
     public const ROLE_ADMIN = 'admin';
@@ -55,7 +58,8 @@ class User extends Authenticatable implements PasskeyUser
         return $this->role === self::ROLE_STUDENT;
     }
 
-    public function scopeAdmins($query): void
+    /** @param Builder<self> $query */
+    public function scopeAdmins(Builder $query): void
     {
         $query->where('role', self::ROLE_ADMIN);
     }

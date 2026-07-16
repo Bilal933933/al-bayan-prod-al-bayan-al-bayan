@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AttemptQuestion extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'attempt_section_id',
         'question_id',
@@ -26,16 +23,19 @@ class AttemptQuestion extends Model
         ];
     }
 
+    /** @return BelongsTo<AttemptSection, $this> */
     public function section(): BelongsTo
     {
         return $this->belongsTo(AttemptSection::class, 'attempt_section_id');
     }
 
+    /** @return BelongsTo<Question, $this> */
     public function question(): BelongsTo
     {
         return $this->belongsTo(Question::class);
     }
 
+    /** @return BelongsTo<QuestionOption, $this> */
     public function selectedOption(): BelongsTo
     {
         return $this->belongsTo(QuestionOption::class, 'selected_option_id');

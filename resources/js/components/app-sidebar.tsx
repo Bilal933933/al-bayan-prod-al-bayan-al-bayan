@@ -22,7 +22,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import adminAttempts from '@/routes/admin/attempts';
 import adminCompetitions from '@/routes/admin/competitions';
 import adminQuestions from '@/routes/admin/questions';

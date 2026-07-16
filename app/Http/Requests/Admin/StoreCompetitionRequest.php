@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use App\Models\Competition;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class StoreCompetitionRequest extends FormRequest
 {
@@ -12,6 +13,7 @@ class StoreCompetitionRequest extends FormRequest
         return true;
     }
 
+    /** @return array<string, mixed> */
     public function rules(): array
     {
         return [
@@ -28,9 +30,9 @@ class StoreCompetitionRequest extends FormRequest
         ];
     }
 
-    public function withValidator($validator): void
+    public function withValidator(Validator $validator): void
     {
-        $validator->after(function ($validator) {
+        $validator->after(function (Validator $validator) {
             $classification = $this->input('classification');
             $parentId = $this->input('parent_id');
 
@@ -49,7 +51,7 @@ class StoreCompetitionRequest extends FormRequest
             }
 
             if ($parentId) {
-                $parent = Competition::find($parentId);
+                $parent = Competition::find((int) $parentId);
 
                 if ($parent && ! $parent->isContainer()) {
                     $validator->errors()->add(

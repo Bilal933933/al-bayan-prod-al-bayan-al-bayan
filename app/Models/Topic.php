@@ -3,12 +3,20 @@
 namespace App\Models;
 
 use Database\Factories\TopicFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $user_attempts_count
+ * @property bool $has_in_progress
+ * @property int|null $in_progress_attempt_id
+ * @property array{correct: int, total: int}|null $best_score
+ * @property-read CompetitionTopic $pivot
+ */
 class Topic extends Model
 {
     /** @use HasFactory<TopicFactory> */
@@ -37,16 +45,19 @@ class Topic extends Model
         ];
     }
 
+    /** @return HasMany<Question, $this> */
     public function questions(): HasMany
     {
         return $this->hasMany(Question::class);
     }
 
+    /** @return HasMany<Attempt, $this> */
     public function attempts(): HasMany
     {
         return $this->hasMany(Attempt::class)->where('type', Attempt::TYPE_PRACTICE);
     }
 
+    /** @return BelongsToMany<Competition, $this, CompetitionTopic> */
     public function competitions(): BelongsToMany
     {
         return $this->belongsToMany(Competition::class, 'competition_topic')
@@ -55,19 +66,22 @@ class Topic extends Model
             ->withTimestamps();
     }
 
-    public function scopeActive($query)
+    /** @param Builder<self> $query */
+    public function scopeActive(Builder $query): void
     {
-        return $query->where('is_active', true);
+        $query->where('is_active', true);
     }
 
-    public function scopeGeneral($query)
+    /** @param Builder<self> $query */
+    public function scopeGeneral(Builder $query): void
     {
-        return $query->where('visibility', self::VISIBILITY_GENERAL);
+        $query->where('visibility', self::VISIBILITY_GENERAL);
     }
 
-    public function scopePrivate($query)
+    /** @param Builder<self> $query */
+    public function scopePrivate(Builder $query): void
     {
-        return $query->where('visibility', self::VISIBILITY_PRIVATE);
+        $query->where('visibility', self::VISIBILITY_PRIVATE);
     }
 
     public function isGeneral(): bool

@@ -22,7 +22,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import questions from '@/routes/admin/questions';
 import type { BreadcrumbItem } from '@/types';
 import type { PaginationMeta } from '@/types/pagination';

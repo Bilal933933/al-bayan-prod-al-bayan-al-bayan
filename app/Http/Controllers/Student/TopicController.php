@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Attempt;
 use App\Models\Topic;
+use Inertia\Response;
 
 class TopicController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
         $userId = auth()->id();
 
@@ -43,7 +44,7 @@ class TopicController extends Controller
         return inertia('student/topics/index', compact('topics'));
     }
 
-    public function show(Topic $topic)
+    public function show(Topic $topic): Response
     {
         abort_unless($topic->is_active, 404);
 

@@ -6,7 +6,7 @@ import DateDisplay from '@/components/date-display';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import topics from '@/routes/admin/topics';
 import type { BreadcrumbItem } from '@/types';
 import type { Competition } from '@/types/competition';

@@ -7,12 +7,14 @@ use App\Http\Requests\Admin\StoreQuestionRequest;
 use App\Http\Requests\Admin\UpdateQuestionRequest;
 use App\Models\Question;
 use App\Models\Topic;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Inertia\Response;
 
 class QuestionController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $sort = $request->query('sort', 'created_at');
         $direction = $request->query('direction', 'desc');
@@ -21,7 +23,7 @@ class QuestionController extends Controller
 
         $allowedSorts = ['text', 'type', 'difficulty', 'created_at'];
         $sort = in_array($sort, $allowedSorts) ? $sort : 'created_at';
-        $direction = in_array($direction, ['asc', 'desc']) ? $direction : 'desc';
+        $direction = $direction === 'asc' ? 'asc' : 'desc';
 
         $query = Question::query()->with('topic:id,name')->withCount('options');
 
@@ -61,7 +63,7 @@ class QuestionController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): Response
     {
         $topics = Topic::active()->get(['id', 'name']);
 
@@ -70,7 +72,7 @@ class QuestionController extends Controller
         ]);
     }
 
-    public function show(Question $question)
+    public function show(Question $question): Response
     {
         $question->load('options', 'topic:id,name');
         $question->loadCount('options');
@@ -80,13 +82,14 @@ class QuestionController extends Controller
         ]);
     }
 
-    public function store(StoreQuestionRequest $request)
+    public function store(StoreQuestionRequest $request): RedirectResponse
     {
-        DB::transaction(function () use ($request) {
+        $options = $request->validated('options', []);
+        DB::transaction(function () use ($request, $options) {
             $question = Question::create($request->safe()->except('options'));
 
             $question->options()->createMany(
-                collect($request->validated('options'))->map(fn ($opt, $i) => [
+                collect((array) $options)->map(fn ($opt, $i) => [
                     ...$opt,
                     'order' => $i,
                 ])
@@ -98,7 +101,7 @@ class QuestionController extends Controller
             ->with('success', 'تم إنشاء السؤال بنجاح.');
     }
 
-    public function edit(Question $question)
+    public function edit(Question $question): Response
     {
         $question->load('options');
 
@@ -110,17 +113,16 @@ class QuestionController extends Controller
         ]);
     }
 
-    public function update(UpdateQuestionRequest $request, Question $question)
+    public function update(UpdateQuestionRequest $request, Question $question): RedirectResponse
     {
-        // TODO: منع التعديل إذا كان للسؤال تاريخ استخدام (عند بناء exam_attempts)
-
-        DB::transaction(function () use ($request, $question) {
+        $options = $request->validated('options', []);
+        DB::transaction(function () use ($request, $question, $options) {
             $question->update($request->safe()->except('options'));
 
             $question->options()->delete();
 
             $question->options()->createMany(
-                collect($request->validated('options'))->map(fn ($opt, $i) => [
+                collect((array) $options)->map(fn ($opt, $i) => [
                     ...$opt,
                     'order' => $i,
                 ])
@@ -132,10 +134,8 @@ class QuestionController extends Controller
             ->with('success', 'تم تحديث السؤال بنجاح.');
     }
 
-    public function destroy(Question $question)
+    public function destroy(Question $question): RedirectResponse
     {
-        // TODO: منع الحذف إذا كان للسؤال تاريخ استخدام (عند بناء exam_attempts)
-
         $question->delete();
 
         return redirect()

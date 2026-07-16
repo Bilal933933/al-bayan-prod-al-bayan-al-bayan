@@ -13,11 +13,6 @@ class TopicFactory extends Factory
 {
     protected $model = Topic::class;
 
-    private const ICONS = [
-        'book-open', 'graduation-cap', 'pen-tool', 'globe',
-        'bar-chart', 'brain', 'zap', 'layers',
-    ];
-
     public function definition(): array
     {
         $name = 'المحور '.fake()->unique()->word();

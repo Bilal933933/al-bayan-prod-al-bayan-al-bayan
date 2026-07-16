@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreTopicRequest;
 use App\Http\Requests\Admin\UpdateTopicRequest;
 use App\Models\Topic;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Inertia\Response;
 
 class TopicController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $sort = $request->query('sort', 'created_at');
         $direction = $request->query('direction', 'desc');
@@ -19,7 +21,7 @@ class TopicController extends Controller
 
         $allowedSorts = ['name', 'code', 'visibility', 'default_questions_count', 'default_duration_minutes', 'created_at'];
         $sort = in_array($sort, $allowedSorts) ? $sort : 'created_at';
-        $direction = in_array($direction, ['asc', 'desc']) ? $direction : 'desc';
+        $direction = $direction === 'asc' ? 'asc' : 'desc';
 
         $query = Topic::query();
 
@@ -34,7 +36,7 @@ class TopicController extends Controller
             $query->where('visibility', $filter);
         }
 
-        $stats = (clone $query)
+        $stats = (clone $query)->toBase()
             ->selectRaw('COUNT(*) as total')
             ->selectRaw('SUM(CASE WHEN is_active THEN 1 ELSE 0 END) as active')
             ->selectRaw("SUM(CASE WHEN visibility = 'general' THEN 1 ELSE 0 END) as general")
@@ -54,15 +56,15 @@ class TopicController extends Controller
             'search' => $search,
             'filter' => $filter,
             'stats' => [
-                'total' => (int) $stats->total,
-                'active' => (int) $stats->active,
-                'general' => (int) $stats->general,
-                'private_' => (int) $stats->private_,
+                'total' => (int) ($stats->total ?? 0),
+                'active' => (int) ($stats->active ?? 0),
+                'general' => (int) ($stats->general ?? 0),
+                'private_' => (int) ($stats->private_ ?? 0),
             ],
         ]);
     }
 
-    public function show(Topic $topic)
+    public function show(Topic $topic): Response
     {
         $topic->load('competitions');
 
@@ -71,12 +73,12 @@ class TopicController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): Response
     {
         return inertia('admin/topics/create');
     }
 
-    public function store(StoreTopicRequest $request)
+    public function store(StoreTopicRequest $request): RedirectResponse
     {
         Topic::create($request->validated());
 
@@ -85,14 +87,14 @@ class TopicController extends Controller
             ->with('success', 'تم إنشاء المحور بنجاح.');
     }
 
-    public function edit(Topic $topic)
+    public function edit(Topic $topic): Response
     {
         return inertia('admin/topics/edit', [
             'topic' => $topic,
         ]);
     }
 
-    public function update(UpdateTopicRequest $request, Topic $topic)
+    public function update(UpdateTopicRequest $request, Topic $topic): RedirectResponse
     {
         $topic->update($request->validated());
 
@@ -101,7 +103,7 @@ class TopicController extends Controller
             ->with('success', 'تم تحديث المحور بنجاح.');
     }
 
-    public function destroy(Topic $topic)
+    public function destroy(Topic $topic): RedirectResponse
     {
         if ($topic->competitions()->exists()) {
             return back()->with('error', 'لا يمكن حذف محور مرتبط بمسابقات.');

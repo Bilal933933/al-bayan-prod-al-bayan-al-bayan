@@ -2,15 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property Carbon|null $started_at
+ * @property Carbon|null $finished_at
+ */
 class Attempt extends Model
 {
-    use HasFactory, SoftDeletes;
+    use SoftDeletes;
 
     const TYPE_PRACTICE = 'practice';
 
@@ -36,6 +40,7 @@ class Attempt extends Model
         'correct_answers',
     ];
 
+    /** @return array<string, string> */
     protected function casts(): array
     {
         return [
@@ -46,21 +51,25 @@ class Attempt extends Model
         ];
     }
 
+    /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /** @return BelongsTo<Topic, $this> */
     public function topic(): BelongsTo
     {
         return $this->belongsTo(Topic::class);
     }
 
+    /** @return BelongsTo<Competition, $this> */
     public function competition(): BelongsTo
     {
         return $this->belongsTo(Competition::class);
     }
 
+    /** @return HasMany<AttemptSection, $this> */
     public function sections(): HasMany
     {
         return $this->hasMany(AttemptSection::class)->orderBy('order');
@@ -89,9 +98,9 @@ class Attempt extends Model
     public function getSubjectNameAttribute(): string
     {
         if ($this->isPractice()) {
-            return $this->topic?->name ?? '—';
+            return $this->topic->name ?? '—';
         }
 
-        return $this->competition?->name ?? '—';
+        return $this->competition->name ?? '—';
     }
 }

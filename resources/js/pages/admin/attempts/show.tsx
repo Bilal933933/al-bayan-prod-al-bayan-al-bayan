@@ -19,7 +19,7 @@ import DeleteDialog from '@/components/delete-dialog';
 import Heading from '@/components/heading';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import attempts from '@/routes/admin/attempts';
 import { cn } from '@/lib/utils';
 import type { BreadcrumbItem } from '@/types';

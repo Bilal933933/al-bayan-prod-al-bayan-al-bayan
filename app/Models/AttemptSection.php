@@ -2,15 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class AttemptSection extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'attempt_id',
         'topic_id',
@@ -35,16 +32,19 @@ class AttemptSection extends Model
         return $this->submitted_at !== null;
     }
 
+    /** @return BelongsTo<Attempt, $this> */
     public function attempt(): BelongsTo
     {
         return $this->belongsTo(Attempt::class);
     }
 
+    /** @return BelongsTo<Topic, $this> */
     public function topic(): BelongsTo
     {
         return $this->belongsTo(Topic::class);
     }
 
+    /** @return HasMany<AttemptQuestion, $this> */
     public function questions(): HasMany
     {
         return $this->hasMany(AttemptQuestion::class)->orderBy('order');

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class StoreQuestionRequest extends FormRequest
 {
@@ -11,6 +12,7 @@ class StoreQuestionRequest extends FormRequest
         return true;
     }
 
+    /** @return array<string, mixed> */
     public function rules(): array
     {
         return [
@@ -26,10 +28,10 @@ class StoreQuestionRequest extends FormRequest
         ];
     }
 
-    public function withValidator($validator): void
+    public function withValidator(Validator $validator): void
     {
-        $validator->after(function ($validator) {
-            $options = collect($this->input('options', []));
+        $validator->after(function (Validator $validator) {
+            $options = collect((array) $this->input('options', []));
             $correctCount = $options->where('is_correct', true)->count();
 
             if ($correctCount !== 1) {

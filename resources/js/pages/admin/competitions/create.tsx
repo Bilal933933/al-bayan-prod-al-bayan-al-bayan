@@ -2,7 +2,7 @@ import { Head, useForm } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import CompetitionForm from '@/components/admin/competitions/competition-form';
 import Heading from '@/components/heading';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import competitions from '@/routes/admin/competitions';
 import type { BreadcrumbItem } from '@/types';
 import type { Competition, CompetitionFormData } from '@/types/competition';

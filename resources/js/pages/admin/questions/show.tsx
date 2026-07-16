@@ -9,7 +9,7 @@ import DeleteDialog from '@/components/delete-dialog';
 import Heading from '@/components/heading';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import questions from '@/routes/admin/questions';
 import type { BreadcrumbItem } from '@/types';
 import type { Question } from '@/types/question';

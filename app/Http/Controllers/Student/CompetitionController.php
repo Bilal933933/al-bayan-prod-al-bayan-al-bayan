@@ -6,10 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Attempt;
 use App\Models\Competition;
 use Illuminate\Http\Request;
+use Inertia\Response;
 
 class CompetitionController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $classification = $request->query('classification');
 
@@ -39,7 +40,7 @@ class CompetitionController extends Controller
         ]);
     }
 
-    public function show(Competition $competition)
+    public function show(Competition $competition): Response
     {
         abort_unless($competition->is_active, 404);
 

@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { COMPETITION_ICONS } from '@/config/competition-icons';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import competitions from '@/routes/admin/competitions';
 import type { BreadcrumbItem } from '@/types';
 import type { Competition } from '@/types/competition';

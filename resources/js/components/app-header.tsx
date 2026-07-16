@@ -27,7 +27,7 @@ import { UserMenuContent } from '@/components/user-menu-content';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/student';
 import attempts from '@/routes/student/attempts';
 import competitions from '@/routes/student/competitions';
 import results from '@/routes/student/results';

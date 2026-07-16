@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\Topic;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateTopicRequest extends FormRequest
@@ -11,12 +12,13 @@ class UpdateTopicRequest extends FormRequest
         return true;
     }
 
+    /** @return array<string, mixed> */
     public function rules(): array
     {
         $topic = $this->route('topic');
 
         return [
-            'code' => ['required', 'string', 'max:255', 'unique:topics,code,'.$topic->id],
+            'code' => ['required', 'string', 'max:255', 'unique:topics,code,'.($topic instanceof Topic ? $topic->id : '')],
             'name' => ['required', 'string', 'max:255'],
             'visibility' => ['required', 'string', 'in:general,private'],
             'description' => ['nullable', 'string'],
