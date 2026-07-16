@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { Eye, History } from 'lucide-react';
+import DateDisplay from '@/components/date-display';
 import AttemptStatusBadge from '@/components/admin/attempts/attempt-status-badge';
 import AttemptTypeBadge from '@/components/admin/attempts/attempt-type-badge';
 import { LaravelPagination } from '@/components/laravel-pagination';
@@ -101,11 +102,7 @@ export default function AttemptTable({ attempts: paginated }: AttemptTableProps)
                                         )}
                                     </td>
                                     <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
-                                        {new Date(attempt.created_at).toLocaleDateString('ar-SA', {
-                                            year: 'numeric',
-                                            month: 'short',
-                                            day: 'numeric',
-                                        })}
+                                        <DateDisplay date={attempt.created_at} format="short" />
                                     </td>
                                     <td className="whitespace-nowrap px-4 py-3">
                                         <Link href={attempts.show({ attempt: attempt.id }).url}>

@@ -1,3 +1,4 @@
+import DateDisplay from '@/components/date-display';
 import { Link } from '@inertiajs/react';
 import { BookCheck, BookOpen, CheckCircle, ChevronLeft, Clock, GraduationCap, Trophy } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -41,22 +42,6 @@ const statusLabels: Record<string, { label: string; variant: 'default' | 'second
     completed: { label: 'مكتمل', variant: 'secondary' },
     abandoned: { label: 'ملغي', variant: 'outline' },
 };
-
-function formatDate(dateStr: string): string {
-    const date = new Date(dateStr);
-    const now = new Date();
-    const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 0) return 'اليوم';
-    if (diffDays === 1) return 'أمس';
-    if (diffDays < 7) return `منذ ${diffDays} أيام`;
-
-    return date.toLocaleDateString('ar-SA', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-    });
-}
 
 export function AttemptCard({ attempt, href }: AttemptCardProps) {
     const typeInfo = typeConfig[attempt.type] ?? typeConfig.practice;
@@ -114,7 +99,7 @@ export function AttemptCard({ attempt, href }: AttemptCardProps) {
                         )}
                         <span className="inline-flex items-center gap-1">
                             <Clock className="h-3.5 w-3.5" />
-                            {formatDate(attempt.started_at)}
+                            <DateDisplay date={attempt.started_at} format="relative" />
                         </span>
                     </div>
 

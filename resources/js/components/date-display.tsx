@@ -12,11 +12,12 @@ interface DateDisplayProps {
 
 const locale = 'ar-EG';
 const fallback = 'تاريخ غير معروف';
+const rtf = new Intl.RelativeTimeFormat('ar', { numeric: 'auto' });
 
 function parseDate(date: Date | string | number): Date | null {
     if (date instanceof Date) {
-return isNaN(date.getTime()) ? null : date;
-}
+        return isNaN(date.getTime()) ? null : date;
+    }
 
     const parsed = new Date(date);
 
@@ -26,34 +27,50 @@ return isNaN(date.getTime()) ? null : date;
 function formatRelative(date: Date): string {
     const now = Date.now();
     const diffMs = date.getTime() - now;
-    const absDiffSec = Math.abs(diffMs) / 1000;
+    const diffSec = Math.round(diffMs / 1000);
+    const absDiff = Math.abs(diffSec);
 
-    if (absDiffSec < 60) {
-return 'الآن';
-}
-
-    const units: [Intl.RelativeTimeFormatUnit, number][] = [
-        ['minute', 60],
-        ['hour', 3600],
-        ['day', 86400],
-        ['week', 604800],
-        ['month', 2592000],
-        ['year', 31536000],
-    ];
-
-    for (const [unit, seconds] of units) {
-        const abs = absDiffSec / seconds;
-
-        if (abs < 1.5) {
-            const rtf = new Intl.RelativeTimeFormat('ar', { numeric: 'auto' });
-
-            return rtf.format(Math.round(diffMs / 1000 / seconds), unit);
-        }
+    if (absDiff < 5) {
+        return 'الآن';
     }
 
-    const rtf = new Intl.RelativeTimeFormat('ar', { numeric: 'auto' });
+    if (absDiff < 60) {
+        return rtf.format(diffSec, 'second');
+    }
 
-    return rtf.format(Math.round(diffMs / 1000 / 31536000), 'year');
+    const diffMin = Math.round(diffSec / 60);
+
+    if (Math.abs(diffMin) < 60) {
+        return rtf.format(diffMin, 'minute');
+    }
+
+    const diffHour = Math.round(diffSec / 3600);
+
+    if (Math.abs(diffHour) < 24) {
+        return rtf.format(diffHour, 'hour');
+    }
+
+    const diffDay = Math.round(diffSec / 86400);
+
+    if (Math.abs(diffDay) < 7) {
+        return rtf.format(diffDay, 'day');
+    }
+
+    const diffWeek = Math.round(diffSec / 604800);
+
+    if (Math.abs(diffWeek) < 5) {
+        return rtf.format(diffWeek, 'week');
+    }
+
+    const diffMonth = Math.round(diffSec / 2592000);
+
+    if (Math.abs(diffMonth) < 12) {
+        return rtf.format(diffMonth, 'month');
+    }
+
+    const diffYear = Math.round(diffSec / 31536000);
+
+    return rtf.format(diffYear, 'year');
 }
 
 function formatShort(date: Date): string {

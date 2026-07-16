@@ -159,7 +159,7 @@ export default function Show({ attempt }: ShowProps) {
                                         {formatDuration(durationSeconds)}
                                     </span>
                                     <span className="text-slate-300">|</span>
-                                    <DateDisplay date={attempt.started_at} format="full" />
+                                    <DateDisplay date={attempt.started_at} format="relative" showTooltip />
                                 </div>
                             </div>
                         </div>

@@ -57,7 +57,7 @@ class TopicController extends Controller
 
         $userStats = [
             'total_attempts' => $attempts->count(),
-            'last_practice_at' => $attempts->first()?->created_at?->diffForHumans(),
+            'last_practice_at' => $attempts->first()?->created_at,
             'best_score' => $attempts
                 ->where('status', Attempt::STATUS_COMPLETED)
                 ->sortByDesc('correct_answers')
@@ -84,7 +84,7 @@ class TopicController extends Controller
                 'status' => $a->status,
                 'correct_answers' => $a->correct_answers,
                 'total_questions' => $a->total_questions,
-                'created_at' => $a->created_at->diffForHumans(),
+                'created_at' => $a->created_at,
             ]);
 
         return inertia('student/topics/show', [

@@ -1,3 +1,4 @@
+import DateDisplay from '@/components/date-display';
 import { Link } from '@inertiajs/react';
 import { ArrowLeft, CheckCircle, Clock, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -51,7 +52,7 @@ export function AttemptTimeline({ attempts, hasInProgress }: AttemptTimelineProp
                                 </div>
                                 <div className="min-w-0">
                                     <div className="flex items-center gap-2">
-                                        <span className="text-sm font-medium">{attempt.created_at}</span>
+                                        <span className="text-sm font-medium"><DateDisplay date={attempt.created_at} format="relative" /></span>
                                         <span className={cn('text-xs', config.class)}>{config.label}</span>
                                     </div>
                                     {attempt.status === 'completed' && (

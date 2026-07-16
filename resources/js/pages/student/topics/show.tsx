@@ -11,6 +11,7 @@ import { getColor } from '@/components/student/topics/topic-colors';
 import competitions from '@/routes/student/competitions';
 import topics from '@/routes/student/topics';
 import type { Topic } from '@/types/topic';
+import DateDisplay from '@/components/date-display';
 import { cn } from '@/lib/utils';
 
 interface UserStats {
@@ -164,7 +165,7 @@ export default function Show({ topic, userStats, hasInProgress, inProgressAttemp
                                     <Clock className="h-3.5 w-3.5" />
                                     <span>آخر تدريب</span>
                                 </div>
-                                <p className="mt-1 text-sm font-medium">{userStats.last_practice_at}</p>
+                                <p className="mt-1 text-sm font-medium"><DateDisplay date={userStats.last_practice_at} format="relative" /></p>
                             </div>
                         )}
                         {bestScorePercent !== null && (
