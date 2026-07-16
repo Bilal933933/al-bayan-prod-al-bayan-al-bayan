@@ -1,158 +1,143 @@
 import { Link, router } from '@inertiajs/react';
-import { motion } from 'framer-motion';
-import { BookOpen, CheckCircle, ChevronLeft, Clock, Play, RotateCcw } from 'lucide-react';
-import VisibilityBadge from '@/components/admin/topics/visibility-badge';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Award, CheckCircle, Play, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-interface BestScore {
-    correct: number;
-    total: number;
-}
+import { getColor } from './topic-colors';
+import type { BestScore } from '@/types/topic';
 
 interface TopicCardProps {
     id: number;
-    code: string;
     name: string;
-    visibility: 'general' | 'private';
-    description: string | null;
-    questionsCount: number;
-    durationMinutes: number | null;
-    href?: string;
+    description?: string | null;
+    questionsCount?: number;
+    durationMinutes?: number | null;
     userAttemptsCount?: number;
     hasInProgress?: boolean;
     inProgressAttemptId?: number | null;
     bestScore?: BestScore | null;
-}
-
-const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.3, ease: 'easeOut' },
-    },
-};
-
-const topicColors = [
-    { from: 'from-indigo-500/10', border: 'border-indigo-200', icon: 'text-indigo-600', bg: 'bg-indigo-50' },
-    { from: 'from-emerald-500/10', border: 'border-emerald-200', icon: 'text-emerald-600', bg: 'bg-emerald-50' },
-    { from: 'from-amber-500/10', border: 'border-amber-200', icon: 'text-amber-600', bg: 'bg-amber-50' },
-    { from: 'from-rose-500/10', border: 'border-rose-200', icon: 'text-rose-600', bg: 'bg-rose-50' },
-    { from: 'from-violet-500/10', border: 'border-violet-200', icon: 'text-violet-600', bg: 'bg-violet-50' },
-    { from: 'from-cyan-500/10', border: 'border-cyan-200', icon: 'text-cyan-600', bg: 'bg-cyan-50' },
-];
-
-function getColor(id: number) {
-    return topicColors[id % topicColors.length] ?? topicColors[0];
+    competitionId?: number;
+    href?: string;
 }
 
 export default function TopicCard({
     id,
-    code,
     name,
-    visibility,
     description,
-    questionsCount,
-    durationMinutes,
-    href,
+    questionsCount = 10,
+    durationMinutes = 15,
     userAttemptsCount = 0,
     hasInProgress = false,
     inProgressAttemptId,
     bestScore,
+    competitionId,
+    href,
 }: TopicCardProps) {
-    const color = getColor(id);
+    const colors = getColor(id);
+
+    const scorePercent = bestScore
+        ? Math.round((bestScore.correct / bestScore.total) * 100)
+        : null;
 
     function handleResume(e: React.MouseEvent) {
         if (!hasInProgress || !inProgressAttemptId) return;
         e.preventDefault();
         e.stopPropagation();
-
         router.visit(`/attempts/${inProgressAttemptId}`);
     }
 
-    const scorePercent = bestScore ? Math.round((bestScore.correct / bestScore.total) * 100) : null;
+    function handleStart(e: React.MouseEvent) {
+        if (hasInProgress) return;
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (href) {
+            router.visit(href);
+        }
+    }
 
     const card = (
-        <motion.div variants={cardVariants} whileHover={{ y: -4, transition: { duration: 0.2, ease: 'easeOut' } }}>
-            <div className={`group relative overflow-hidden rounded-xl border bg-card shadow-sm transition-all hover:shadow-lg ${color.border} ${href ? 'cursor-pointer' : ''}`}>
-                <div className={`absolute inset-0 bg-gradient-to-br ${color.from} to-transparent opacity-0 transition-opacity group-hover:opacity-100`} />
-
-                <div className="relative p-5">
-                    <div className="flex items-start justify-between gap-2">
-                        <div className="min-w-0 flex-1">
-                            <div className="flex items-center gap-2">
-                                <div className={cn('flex h-8 w-8 shrink-0 items-center justify-center rounded-lg', color.bg)}>
-                                    <BookOpen className={cn('h-4 w-4', color.icon)} />
-                                </div>
-                                <h3 className="truncate font-semibold group-hover:text-primary transition-colors">
-                                    {name}
-                                </h3>
-                            </div>
-                            <div className="mt-1.5 flex items-center gap-2">
-                                <p className="font-mono text-xs text-muted-foreground" dir="ltr">
-                                    {code}
-                                </p>
-                                <VisibilityBadge visibility={visibility} />
-                                {userAttemptsCount > 0 && (
-                                    <span className="text-xs text-muted-foreground">
-                                        {userAttemptsCount} محاولة
-                                    </span>
-                                )}
-                            </div>
+        <div className={cn(
+            'relative flex flex-col justify-between rounded-2xl border p-5 transition-all duration-200 hover:shadow-md',
+            colors.border,
+            colors.bg,
+            colors.hover,
+        )}>
+            <div>
+                <div className="mb-2 flex items-start justify-between gap-2">
+                    <h3 className={cn('text-lg font-bold leading-tight', colors.text)}>
+                        {name}
+                    </h3>
+                    {bestScore && (
+                        <div className="flex shrink-0 items-center gap-1 rounded-lg border border-emerald-100 bg-emerald-50/90 px-2 py-1 text-xs font-semibold text-emerald-600">
+                            <Award className="h-3.5 w-3.5" />
+                            <span>أفضل: {bestScore.correct}/{bestScore.total}</span>
                         </div>
-                    </div>
-
-                    {description && (
-                        <p className="mt-3 line-clamp-2 text-sm text-muted-foreground leading-relaxed">
-                            {description}
-                        </p>
                     )}
+                </div>
 
-                    <div className="mt-4 flex items-center justify-between border-t pt-3">
-                        <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                            <span className="flex items-center gap-1">
-                                <BookOpen className="h-3.5 w-3.5" />
-                                {questionsCount} سؤال
-                            </span>
-                            <span className="flex items-center gap-1">
-                                <Clock className="h-3.5 w-3.5" />
-                                {durationMinutes ? `${durationMinutes} د` : 'بدون'}
-                            </span>
-                        </div>
+                {description && (
+                    <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-slate-600">
+                        {description}
+                    </p>
+                )}
 
-                        <div className="flex items-center gap-2">
-                            {hasInProgress ? (
-                                <Button
-                                    size="xs"
-                                    variant="secondary"
-                                    onClick={handleResume}
-                                    className="gap-1 text-xs"
-                                >
-                                    <Play className="h-3 w-3" />
-                                    استئناف
-                                </Button>
-                            ) : bestScore ? (
-                                <div className="flex items-center gap-1.5">
-                                    <Badge variant="secondary" className="gap-1 text-xs">
-                                        <CheckCircle className="h-3 w-3 text-emerald-600" />
-                                        {bestScore.correct}/{bestScore.total}
-                                    </Badge>
-                                    <Button size="xs" variant="ghost" className="gap-1 text-xs text-muted-foreground">
-                                        <RotateCcw className="h-3 w-3" />
-                                        إعادة
-                                    </Button>
-                                </div>
-                            ) : null}
-                        </div>
-                    </div>
+                <div className="mb-5 flex flex-wrap items-center gap-2.5 text-xs text-slate-500">
+                    <span className="rounded-md border border-slate-100 bg-white/90 px-2.5 py-1">
+                        {questionsCount} أسئلة
+                    </span>
+                    <span className="rounded-md border border-slate-100 bg-white/90 px-2.5 py-1">
+                        {durationMinutes ? `${durationMinutes} دقيقة` : 'بدون مؤقت'}
+                    </span>
+                    {userAttemptsCount > 0 && (
+                        <span className="inline-flex items-center gap-1 rounded-md border border-slate-100 bg-white/90 px-2.5 py-1 text-slate-600">
+                            <CheckCircle className="h-3 w-3 text-slate-400" />
+                            {userAttemptsCount} محاولة{userAttemptsCount > 1 ? 'ات' : ''}
+                        </span>
+                    )}
                 </div>
             </div>
-        </motion.div>
+
+            {!href && (
+                <div className="mt-auto flex items-center gap-2">
+                    {hasInProgress && inProgressAttemptId ? (
+                        <button
+                            onClick={handleResume}
+                            className={cn(
+                                'flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold text-white shadow-sm transition-all',
+                                colors.primary,
+                            )}
+                        >
+                            <RotateCcw className="h-4 w-4" />
+                            استئناف المحاولة
+                        </button>
+                    ) : bestScore ? (
+                        <button
+                            onClick={handleStart}
+                            className={cn(
+                                'flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold text-white shadow-sm transition-all',
+                                colors.primary,
+                            )}
+                        >
+                            <RotateCcw className="h-4 w-4" />
+                            إعادة الاختبار
+                        </button>
+                    ) : (
+                        <button
+                            onClick={handleStart}
+                            className={cn(
+                                'flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold text-white shadow-sm transition-all',
+                                colors.primary,
+                            )}
+                        >
+                            <Play className="h-4 w-4 fill-current" />
+                            ابدأ الاختبار
+                        </button>
+                    )}
+                </div>
+            )}
+        </div>
     );
 
-    if (href) {
+    if (href && !hasInProgress) {
         return <Link href={href}>{card}</Link>;
     }
 

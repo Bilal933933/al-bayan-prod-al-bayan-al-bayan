@@ -7,6 +7,7 @@ import { AttemptTimeline } from '@/components/student/topics/attempt-timeline';
 import { DifficultySelector } from '@/components/student/topics/difficulty-selector';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { getColor } from '@/components/student/topics/topic-colors';
 import competitions from '@/routes/student/competitions';
 import topics from '@/routes/student/topics';
 import type { Topic } from '@/types/topic';
@@ -43,19 +44,6 @@ const pageVariants = {
         transition: { duration: 0.3, ease: 'easeOut' },
     },
 };
-
-const topicColors = [
-    { from: 'from-indigo-500/10', border: 'border-indigo-200', icon: 'text-indigo-600', bg: 'bg-indigo-50' },
-    { from: 'from-emerald-500/10', border: 'border-emerald-200', icon: 'text-emerald-600', bg: 'bg-emerald-50' },
-    { from: 'from-amber-500/10', border: 'border-amber-200', icon: 'text-amber-600', bg: 'bg-amber-50' },
-    { from: 'from-rose-500/10', border: 'border-rose-200', icon: 'text-rose-600', bg: 'bg-rose-50' },
-    { from: 'from-violet-500/10', border: 'border-violet-200', icon: 'text-violet-600', bg: 'bg-violet-50' },
-    { from: 'from-cyan-500/10', border: 'border-cyan-200', icon: 'text-cyan-600', bg: 'bg-cyan-50' },
-];
-
-function getColor(id: number) {
-    return topicColors[id % topicColors.length];
-}
 
 export default function Show({ topic, userStats, hasInProgress, inProgressAttemptId, recentAttempts }: ShowProps) {
     const [difficulty, setDifficulty] = useState<string | null>(null);
