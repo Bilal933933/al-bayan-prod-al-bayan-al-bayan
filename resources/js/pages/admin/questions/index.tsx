@@ -1,12 +1,19 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Search, SearchX, FileQuestion } from 'lucide-react';
+import { Eye, FileQuestion, MoreHorizontal, Pencil, Search, SearchX, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import DeleteDialog from '@/components/delete-dialog';
 import DifficultyBadge from '@/components/admin/questions/difficulty-badge';
 import Heading from '@/components/heading';
 import { LaravelPagination } from '@/components/laravel-pagination';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import {
     Select,
@@ -72,6 +79,8 @@ export default function Index({
     filters = {},
 }: IndexProps) {
     const [searchInput, setSearchInput] = useState(currentSearch);
+    const [deleteTarget, setDeleteTarget] = useState<Question | null>(null);
+    const [deleting, setDeleting] = useState(false);
 
     useEffect(() => {
         setSearchInput(currentSearch);
@@ -89,13 +98,19 @@ export default function Index({
 
     const allQuestions = questionsPage.data;
 
-    function handleDelete(question: Question) {
-        if (confirm(`هل أنت متأكد من حذف هذا السؤال؟ هذا الإجراء لا يمكن التراجع عنه.`)) {
-            router.delete(questions.destroy({ question: question.id }).url, {
-                preserveState: true,
-                preserveScroll: true,
-            });
-        }
+    function handleDelete() {
+        if (!deleteTarget) return;
+
+        setDeleting(true);
+
+        router.delete(questions.destroy({ question: deleteTarget.id }).url, {
+            preserveState: true,
+            preserveScroll: true,
+            onFinish: () => {
+                setDeleting(false);
+                setDeleteTarget(null);
+            },
+        });
     }
 
     return (
@@ -222,7 +237,7 @@ export default function Index({
                                             >
                                                 <td className="break-words px-4 py-3 max-w-xs">
                                                     <Link
-                                                        href={questions.edit({ question: question.id }).url}
+                                                        href={questions.show({ question: question.id }).url}
                                                         className="hover:text-primary transition-colors line-clamp-2"
                                                     >
                                                         {question.text}
@@ -247,19 +262,34 @@ export default function Index({
                                                     )}
                                                 </td>
                                                 <td className="px-4 py-3">
-                                                    <div className="flex items-center gap-1">
-                                                        <Link href={questions.edit({ question: question.id }).url}>
-                                                            <Button variant="ghost" size="sm">تعديل</Button>
-                                                        </Link>
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            className="text-destructive hover:text-destructive"
-                                                            onClick={() => handleDelete(question)}
-                                                        >
-                                                            حذف
-                                                        </Button>
-                                                    </div>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                                                <MoreHorizontal className="h-4 w-4" />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end" side="left">
+                                                            <DropdownMenuItem asChild>
+                                                                <Link href={questions.show({ question: question.id }).url}>
+                                                                    <Eye className="h-4 w-4" />
+                                                                    عرض
+                                                                </Link>
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem asChild>
+                                                                <Link href={questions.edit({ question: question.id }).url}>
+                                                                    <Pencil className="h-4 w-4" />
+                                                                    تعديل
+                                                                </Link>
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem
+                                                                variant="destructive"
+                                                                onClick={() => setDeleteTarget(question)}
+                                                            >
+                                                                <Trash2 className="h-4 w-4" />
+                                                                حذف
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
                                                 </td>
                                             </motion.tr>
                                         );
@@ -274,6 +304,14 @@ export default function Index({
                     </>
                 )}
             </motion.div>
+
+                <DeleteDialog
+                    open={deleteTarget !== null}
+                    onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}
+                    description="هل أنت متأكد من حذف هذا السؤال؟ هذا الإجراء لا يمكن التراجع عنه."
+                    onDelete={handleDelete}
+                    processing={deleting}
+                />
         </>
     );
 }

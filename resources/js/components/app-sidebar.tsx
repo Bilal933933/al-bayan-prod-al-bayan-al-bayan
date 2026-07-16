@@ -2,6 +2,7 @@ import { Link } from '@inertiajs/react';
 import {
     BookOpen,
     GraduationCap,
+    History,
     LayoutGrid,
     LogOut,
     Settings,
@@ -22,6 +23,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import adminAttempts from '@/routes/admin/attempts';
 import adminCompetitions from '@/routes/admin/competitions';
 import adminQuestions from '@/routes/admin/questions';
 import adminTopics from '@/routes/admin/topics';
@@ -47,6 +49,11 @@ const mainNavItems: NavItem[] = [
         title: 'الأسئلة',
         href: adminQuestions.index(),
         icon: GraduationCap,
+    },
+    {
+        title: 'المحاولات',
+        href: adminAttempts.index(),
+        icon: History,
     },
     {
         title: 'المستخدمون',

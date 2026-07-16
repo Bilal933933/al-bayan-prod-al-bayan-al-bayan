@@ -70,6 +70,16 @@ class QuestionController extends Controller
         ]);
     }
 
+    public function show(Question $question)
+    {
+        $question->load('options', 'topic:id,name');
+        $question->loadCount('options');
+
+        return inertia('admin/questions/show', [
+            'question' => $question,
+        ]);
+    }
+
     public function store(StoreQuestionRequest $request)
     {
         DB::transaction(function () use ($request) {

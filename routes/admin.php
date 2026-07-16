@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AttemptController;
 use App\Http\Controllers\Admin\CompetitionController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\TopicController;
@@ -18,5 +19,6 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::put('competitions/{competition}/topics', [CompetitionController::class, 'syncTopics'])
             ->name('competitions.topics.sync');
 
-        Route::resource('questions', QuestionController::class)->except(['show']);
+        Route::resource('questions', QuestionController::class);
+        Route::resource('attempts', AttemptController::class)->only(['index', 'show']);
     });
