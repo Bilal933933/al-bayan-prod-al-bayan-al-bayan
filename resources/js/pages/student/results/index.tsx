@@ -22,8 +22,8 @@ interface IndexProps {
 }
 
 const typeLabels: Record<string, { label: string; class: string }> = {
-    practice: { label: 'تدريب', class: 'bg-blue-50 text-blue-700 border-blue-200' },
-    exam: { label: 'محاكاة', class: 'bg-orange-50 text-orange-700 border-orange-200' },
+    practice: { label: 'تدريب', class: 'bg-info/10 text-info border-info/30' },
+    exam: { label: 'محاكاة', class: 'bg-warning/10 text-warning border-warning/30' },
 };
 
 export default function Index({ overallStats, evaluation, topicBreakdown, competitionBreakdown, recentResults, progress }: IndexProps) {
@@ -119,7 +119,7 @@ export default function Index({ overallStats, evaluation, topicBreakdown, compet
                                         <div className="flex shrink-0 items-center gap-3">
                                             <div className="text-left">
                                                 <p className="text-sm font-medium">
-                                                    <span className={cn(result.percentage >= 70 ? 'text-emerald-600' : result.percentage >= 40 ? 'text-amber-600' : 'text-rose-500')}>
+                                                    <span className={cn(result.percentage >= 70 ? 'text-success' : result.percentage >= 40 ? 'text-warning' : 'text-destructive')}>
                                                         {result.percentage}%
                                                     </span>
                                                 </p>

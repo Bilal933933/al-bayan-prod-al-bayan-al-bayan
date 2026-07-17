@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Question } from '@/types/question';
 
 const TYPE_CONFIG: Record<string, { label: string; className: string }> = {
-    mcq: { label: 'اختيار من متعدد', className: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' },
-    true_false: { label: 'صح/خطأ', className: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' },
+    mcq: { label: 'اختيار من متعدد', className: 'bg-info/20 text-info' },
+    true_false: { label: 'صح/خطأ', className: 'bg-palette-3/20 text-palette-3' },
 };
 
 export default function QuestionInfoGrid({ question }: { question: Question }) {

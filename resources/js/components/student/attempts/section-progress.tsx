@@ -35,7 +35,7 @@ export function SectionProgress({ sections, currentIndex, completedIndices }: Se
                             <div className={cn(
                                 'flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium transition-colors',
                                 isCurrent && 'bg-primary/10 text-primary ring-1 ring-primary/30',
-                                isCompleted && 'bg-emerald-50 text-emerald-700',
+                                isCompleted && 'bg-success/10 text-success',
                                 isPending && 'bg-muted text-muted-foreground',
                             )}>
                                 {isCompleted ? (

@@ -58,50 +58,50 @@ export default function Dashboard({ stats, recentAttempts }: DashboardProps) {
                         icon={Users}
                         label="المستخدمين"
                         value={stats.total_users}
-                        iconColor="text-blue-600"
-                        bgColor="bg-blue-50 dark:bg-blue-900/20"
+                        iconColor="text-palette-1"
+                        bgColor="bg-palette-1/10 dark:bg-palette-1/20"
                     />
                     <StatCard
                         icon={Trophy}
                         label="المسابقات"
                         value={stats.total_competitions}
-                        iconColor="text-amber-600"
-                        bgColor="bg-amber-50 dark:bg-amber-900/20"
+                        iconColor="text-palette-4"
+                        bgColor="bg-palette-4/10 dark:bg-palette-4/20"
                     />
                     <StatCard
                         icon={BookOpen}
                         label="المواضيع"
                         value={stats.total_topics}
-                        iconColor="text-emerald-600"
-                        bgColor="bg-emerald-50 dark:bg-emerald-900/20"
+                        iconColor="text-palette-2"
+                        bgColor="bg-palette-2/10 dark:bg-palette-2/20"
                     />
                     <StatCard
                         icon={HelpCircle}
                         label="الأسئلة"
                         value={stats.total_questions}
-                        iconColor="text-purple-600"
-                        bgColor="bg-purple-50 dark:bg-purple-900/20"
+                        iconColor="text-palette-3"
+                        bgColor="bg-palette-3/10 dark:bg-palette-3/20"
                     />
                     <StatCard
                         icon={Layers}
                         label="إجمالي المحاولات"
                         value={stats.total_attempts}
-                        iconColor="text-rose-600"
-                        bgColor="bg-rose-50 dark:bg-rose-900/20"
+                        iconColor="text-palette-5"
+                        bgColor="bg-palette-5/10 dark:bg-palette-5/20"
                     />
                     <StatCard
                         icon={CheckCircle}
                         label="مكتملة"
                         value={stats.completed_attempts}
-                        iconColor="text-green-600"
-                        bgColor="bg-green-50 dark:bg-green-900/20"
+                        iconColor="text-success"
+                        bgColor="bg-success/10 dark:bg-success/20"
                     />
                     <StatCard
                         icon={Play}
                         label="قيد التنفيذ"
                         value={stats.in_progress_attempts}
-                        iconColor="text-orange-600"
-                        bgColor="bg-orange-50 dark:bg-orange-900/20"
+                        iconColor="text-warning"
+                        bgColor="bg-warning/10 dark:bg-warning/20"
                     />
                 </div>
 
@@ -135,9 +135,9 @@ export default function Dashboard({ stats, recentAttempts }: DashboardProps) {
                                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
                                             <span className={cn(
                                                 'rounded-full px-2 py-0.5 font-medium',
-                                                attempt.status === 'completed' && 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-                                                attempt.status === 'in_progress' && 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-                                                attempt.status === 'abandoned' && 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400',
+                                                attempt.status === 'completed' && 'bg-success/20 text-success',
+                                                attempt.status === 'in_progress' && 'bg-info/20 text-info',
+                                                attempt.status === 'abandoned' && 'bg-muted text-muted-foreground',
                                             )}>
                                                 {attempt.status === 'completed' ? 'مكتملة' : attempt.status === 'in_progress' ? 'قيد التنفيذ' : 'ملغاة'}
                                             </span>

@@ -4,9 +4,9 @@ export const typeLabels: Record<string, string> = {
 };
 
 export const statusConfig: Record<string, { label: string; classes: string }> = {
-    in_progress: { label: 'قيد التنفيذ', classes: 'bg-blue-100 text-blue-700 border-blue-200' },
-    completed: { label: 'مكتمل', classes: 'bg-emerald-100 text-emerald-700 border-emerald-200' },
-    abandoned: { label: 'ملغي', classes: 'bg-gray-100 text-gray-600 border-gray-200' },
+    in_progress: { label: 'قيد التنفيذ', classes: 'bg-info/20 text-info border-info/30' },
+    completed: { label: 'مكتمل', classes: 'bg-success/20 text-success border-success/30' },
+    abandoned: { label: 'ملغي', classes: 'bg-muted text-muted-foreground border-border' },
 };
 
 export const difficultyLabels: Record<string, string> = {
@@ -16,9 +16,9 @@ export const difficultyLabels: Record<string, string> = {
 };
 
 export const difficultyColors: Record<string, string> = {
-    easy: 'bg-emerald-100 text-emerald-700',
-    medium: 'bg-amber-100 text-amber-700',
-    hard: 'bg-red-100 text-red-700',
+    easy: 'bg-success/20 text-success',
+    medium: 'bg-warning/20 text-warning',
+    hard: 'bg-destructive/20 text-destructive',
 };
 
 export function formatDuration(seconds: number): string {

@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import { router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { GraduationCap, Play, ArrowRight, ChevronLeft, FolderOpen, Trophy } from 'lucide-react';
+import { Play, ArrowRight, ChevronLeft, FolderOpen, Trophy } from 'lucide-react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -30,7 +30,10 @@ export default function SimulationConfig({ competitions, onBack }: SimulationCon
     }
 
     function handleStart() {
-        if (!selectedCompetition || isStarting) return;
+        if (!selectedCompetition || isStarting) {
+            return;
+        }
+
         setIsStarting(true);
 
         router.post(startExam.url({ competition: selectedCompetition.id }), {}, {
@@ -49,7 +52,14 @@ export default function SimulationConfig({ competitions, onBack }: SimulationCon
                     <div className="flex items-center gap-3">
                         <button
                             type="button"
-                            onClick={selectedParent ? () => { setSelectedParent(null); setSelectedCompetition(null); } : onBack}
+                            onClick={
+                                selectedParent
+                                    ? () => {
+                                        setSelectedParent(null);
+                                        setSelectedCompetition(null);
+                                    }
+                                    : onBack
+                            }
                             className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted transition-colors"
                         >
                             <ArrowRight className="h-4 w-4" />
@@ -71,7 +81,10 @@ export default function SimulationConfig({ competitions, onBack }: SimulationCon
                             <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                                 <button
                                     type="button"
-                                    onClick={() => { setSelectedParent(null); setSelectedCompetition(null); }}
+                                    onClick={() => {
+                                        setSelectedParent(null);
+                                        setSelectedCompetition(null);
+                                    }}
                                     className="hover:text-foreground transition-colors"
                                 >
                                     جميع المسابقات
@@ -91,14 +104,14 @@ export default function SimulationConfig({ competitions, onBack }: SimulationCon
                                     className={cn(
                                         'flex items-center gap-3 rounded-xl border-2 p-4 text-right transition-all duration-200',
                                         selectedCompetition?.id === competition.id
-                                            ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-600'
+                                            ? 'border-info bg-info/10 dark:bg-info/10 dark:border-info'
                                             : 'border-muted bg-card hover:border-muted-foreground/25',
                                     )}
                                 >
                                     <div className={cn(
                                         'flex h-10 w-10 shrink-0 items-center justify-center rounded-lg',
                                         selectedCompetition?.id === competition.id
-                                            ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                                            ? 'bg-info/20 dark:bg-info/20 text-info dark:text-info'
                                             : 'bg-muted text-muted-foreground',
                                     )}>
                                         {competition.classification === 'container'

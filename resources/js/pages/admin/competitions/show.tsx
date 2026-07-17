@@ -83,8 +83,8 @@ export default function Show({ competition, childrenCount }: ShowProps) {
               return r * 0.299 + g * 0.587 + b * 0.114 > 160;
           })()
         : false;
-    const textClass = isLight ? 'text-gray-900' : 'text-white';
-    const mutedClass = isLight ? 'text-gray-600' : 'text-white/70';
+    const textClass = isLight ? 'text-foreground' : 'text-white';
+    const mutedClass = isLight ? 'text-muted-foreground' : 'text-white/70';
 
     return (
         <>
@@ -148,7 +148,7 @@ export default function Show({ competition, childrenCount }: ShowProps) {
                                 <span>تنتمي إلى</span>
                                 <Link
                                     href={competitions.show({ competition: competition.parent.id }).url}
-                                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-medium backdrop-blur-sm transition-colors ${isLight ? 'bg-black/10 text-gray-800 hover:bg-black/20' : 'bg-white/15 text-white hover:bg-white/25'}`}
+                                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-medium backdrop-blur-sm transition-colors ${isLight ? 'bg-black/10 text-foreground hover:bg-black/20' : 'bg-white/15 text-white hover:bg-white/25'}`}
                                 >
                                     <CompetitionIcon icon={competition.parent.icon} className="h-3.5 w-3.5" />
                                     {competition.parent.name}

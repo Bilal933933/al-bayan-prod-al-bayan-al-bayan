@@ -22,7 +22,7 @@ export default function SectionBlock({ section, attempt, filter }: SectionBlockP
 
     return (
         <Collapsible defaultOpen>
-            <CollapsibleTrigger className="group flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 text-right shadow-sm transition-all hover:shadow-md">
+            <CollapsibleTrigger className="group flex w-full items-center gap-3 rounded-xl border border-border bg-card p-4 text-right shadow-sm transition-all hover:shadow-md">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
                     <ChevronDown className="h-4 w-4 text-primary transition-transform group-data-[state=open]:rotate-180" />
                 </div>
@@ -30,7 +30,7 @@ export default function SectionBlock({ section, attempt, filter }: SectionBlockP
                     <div className="flex items-center gap-2">
                         <span className="font-semibold">{section.topic?.name ?? `القسم ${section.order + 1}`}</span>
                         {section.submitted_at && (
-                            <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-600 ring-1 ring-emerald-200">
+                            <span className="rounded-full bg-success/10 px-2 py-0.5 text-[10px] font-medium text-success ring-success/30">
                                 تم التسليم
                             </span>
                         )}
@@ -41,15 +41,15 @@ export default function SectionBlock({ section, attempt, filter }: SectionBlockP
                         )}
                     </div>
                     <div className="mt-1 flex items-center gap-1.5 text-xs leading-relaxed">
-                        <span className="text-slate-500">{section.questions.length} أسئلة</span>
-                        <span className="text-slate-300" aria-hidden="true">•</span>
-                        <span className="font-medium text-emerald-600">{correctCount} صحيح</span>
-                        <span className="text-slate-300" aria-hidden="true">•</span>
-                        <span className="font-medium text-rose-600">{wrongCount} خطأ</span>
+                        <span className="text-muted-foreground">{section.questions.length} أسئلة</span>
+                        <span className="text-muted-foreground/50" aria-hidden="true">•</span>
+                        <span className="font-medium text-success">{correctCount} صحيح</span>
+                        <span className="text-muted-foreground/50" aria-hidden="true">•</span>
+                        <span className="font-medium text-destructive">{wrongCount} خطأ</span>
                         {unansweredCount > 0 && (
                             <>
-                                <span className="text-slate-300" aria-hidden="true">•</span>
-                                <span className="font-medium text-slate-400">{unansweredCount} لم يُجب</span>
+                                <span className="text-muted-foreground/50" aria-hidden="true">•</span>
+                                <span className="font-medium text-muted-foreground">{unansweredCount} لم يُجب</span>
                             </>
                         )}
                     </div>
@@ -66,7 +66,7 @@ export default function SectionBlock({ section, attempt, filter }: SectionBlockP
                         />
                     ))
                 ) : (
-                    <p className="py-6 text-center text-sm text-slate-400">لا توجد أسئلة في هذا التصنيف</p>
+                    <p className="py-6 text-center text-sm text-muted-foreground">لا توجد أسئلة في هذا التصنيف</p>
                 )}
             </CollapsibleContent>
         </Collapsible>

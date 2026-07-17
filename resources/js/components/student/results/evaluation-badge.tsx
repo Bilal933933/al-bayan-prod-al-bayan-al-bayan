@@ -2,12 +2,12 @@ import { cn } from '@/lib/utils';
 import type { Evaluation } from '@/types/result';
 
 const colorMap: Record<string, { bg: string; text: string; border: string; dot: string }> = {
-    emerald: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', dot: 'bg-emerald-500' },
-    blue: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', dot: 'bg-blue-500' },
-    amber: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', dot: 'bg-amber-500' },
-    orange: { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200', dot: 'bg-orange-500' },
-    red: { bg: 'bg-rose-50', text: 'text-rose-600', border: 'border-rose-200', dot: 'bg-rose-400' },
-    gray: { bg: 'bg-gray-50', text: 'text-gray-500', border: 'border-gray-200', dot: 'bg-gray-400' },
+    emerald: { bg: 'bg-success/10', text: 'text-success', border: 'border-success/30', dot: 'bg-success' },
+    blue: { bg: 'bg-info/10', text: 'text-info', border: 'border-info/30', dot: 'bg-info' },
+    amber: { bg: 'bg-warning/10', text: 'text-warning', border: 'border-warning/30', dot: 'bg-warning' },
+    orange: { bg: 'bg-warning/10', text: 'text-warning', border: 'border-warning/30', dot: 'bg-warning' },
+    red: { bg: 'bg-destructive/10', text: 'text-destructive', border: 'border-destructive/30', dot: 'bg-destructive' },
+    gray: { bg: 'bg-muted', text: 'text-muted-foreground', border: 'border-border', dot: 'bg-muted-foreground' },
 };
 
 export function EvaluationBadge({ evaluation }: { evaluation: Evaluation }) {

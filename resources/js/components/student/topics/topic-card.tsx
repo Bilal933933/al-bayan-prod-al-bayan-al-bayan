@@ -67,7 +67,7 @@ export default function TopicCard({
                         {name}
                     </h3>
                     {bestScore && (
-                        <div className="flex shrink-0 items-center gap-1 rounded-lg border border-emerald-100 bg-emerald-50/90 px-2 py-1 text-xs font-semibold text-emerald-600">
+                        <div className="flex shrink-0 items-center gap-1 rounded-lg border border-success/20 bg-success/10 px-2 py-1 text-xs font-semibold text-success">
                             <Award className="h-3.5 w-3.5" />
                             <span>أفضل: {bestScore.correct}/{bestScore.total}</span>
                         </div>
@@ -75,21 +75,21 @@ export default function TopicCard({
                 </div>
 
                 {description && (
-                    <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-slate-600">
+                    <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
                         {description}
                     </p>
                 )}
 
-                <div className="mb-5 flex flex-wrap items-center gap-2.5 text-xs text-slate-500">
-                    <span className="rounded-md border border-slate-100 bg-white/90 px-2.5 py-1">
+                <div className="mb-5 flex flex-wrap items-center gap-2.5 text-xs text-muted-foreground">
+                    <span className="rounded-md border border-border bg-card/90 px-2.5 py-1">
                         {questionsCount} أسئلة
                     </span>
-                    <span className="rounded-md border border-slate-100 bg-white/90 px-2.5 py-1">
+                    <span className="rounded-md border border-border bg-card/90 px-2.5 py-1">
                         {durationMinutes ? `${durationMinutes} دقيقة` : 'بدون مؤقت'}
                     </span>
                     {userAttemptsCount > 0 && (
-                        <span className="inline-flex items-center gap-1 rounded-md border border-slate-100 bg-white/90 px-2.5 py-1 text-slate-600">
-                            <CheckCircle className="h-3 w-3 text-slate-400" />
+                        <span className="inline-flex items-center gap-1 rounded-md border border-border bg-card/90 px-2.5 py-1 text-muted-foreground">
+                            <CheckCircle className="h-3 w-3 text-muted-foreground" />
                             {userAttemptsCount} محاولة{userAttemptsCount > 1 ? 'ات' : ''}
                         </span>
                     )}

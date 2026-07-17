@@ -24,22 +24,22 @@ export function InProgressBanner({ attempt }: InProgressBannerProps) {
     };
 
     return (
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-50 via-amber-100/50 to-amber-50 dark:from-amber-950/30 dark:via-amber-900/20 dark:to-amber-950/30 border-2 border-amber-200 dark:border-amber-800 p-6 shadow-lg shadow-amber-500/10">
-            <div className="absolute top-0 right-0 h-32 w-32 bg-gradient-to-br from-amber-400/20 to-transparent rounded-bl-full" />
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-warning/10 via-warning/20 to-warning/10 dark:from-warning/10 dark:via-warning/10 dark:to-warning/10 border-2 border-warning/30 dark:border-warning/30 p-6 shadow-lg shadow-warning/10">
+            <div className="absolute top-0 right-0 h-32 w-32 bg-gradient-to-br from-warning/20 to-transparent rounded-bl-full" />
             <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-4">
-                    <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 to-amber-500 text-white shadow-lg">
+                    <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-warning to-warning text-warning-foreground shadow-lg">
                         <Clock className="h-8 w-8" />
-                        <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 animate-pulse" />
+                        <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-destructive animate-pulse" />
                     </div>
                     <div>
                         <div className="flex items-center gap-2 mb-1">
-                            <span className="inline-flex items-center rounded-full bg-amber-500/20 px-2.5 py-0.5 text-xs font-semibold text-amber-700 dark:text-amber-300">
+                            <span className="inline-flex items-center rounded-full bg-warning/20 px-2.5 py-0.5 text-xs font-semibold text-warning">
                                 جارية الآن
                             </span>
                         </div>
-                        <h2 className="text-xl font-bold text-amber-900 dark:text-amber-100">لديك محاولة جارية</h2>
-                        <p className="text-sm text-amber-700/80 dark:text-amber-300/80">
+                        <h2 className="text-xl font-bold text-warning">لديك محاولة جارية</h2>
+                        <p className="text-sm text-warning/80">
                             {attempt.topic?.name ?? attempt.competition?.name ?? 'محاولة غير محددة'}
                         </p>
                     </div>
@@ -48,7 +48,7 @@ export function InProgressBanner({ attempt }: InProgressBannerProps) {
                     <Button
                         onClick={handleContinue}
                         size="lg"
-                        className="gap-2 bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-500/30"
+                        className="gap-2 bg-warning hover:bg-warning/90 text-warning-foreground shadow-lg shadow-warning/30"
                     >
                         <Play className="h-4 w-4" />
                         استئناف المحاولة
@@ -56,7 +56,7 @@ export function InProgressBanner({ attempt }: InProgressBannerProps) {
                     <Button
                         variant="outline"
                         onClick={handleNew}
-                        className="gap-2 border-amber-300 dark:border-amber-700 hover:bg-amber-100 dark:hover:bg-amber-900/30"
+                        className="gap-2 border-warning/50 hover:bg-warning/10"
                     >
                         <RotateCcw className="h-4 w-4" />
                         محاولة جديدة

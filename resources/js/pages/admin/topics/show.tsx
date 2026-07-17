@@ -207,9 +207,9 @@ export default function Show({ topic }: ShowProps) {
                                                         {Object.entries(c.pivot.difficulty_distribution).map(([level, pct]) => (
                                                             <span key={level} className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-xs">
                                                                 <span className={
-                                                                    level === 'easy' ? 'text-green-600' :
-                                                                    level === 'medium' ? 'text-yellow-600' :
-                                                                    'text-red-600'
+                                                                     level === 'easy' ? 'text-success' :
+                                                                     level === 'medium' ? 'text-warning' :
+                                                                     'text-destructive'
                                                                 }>
                                                                     {pct}%
                                                                 </span>

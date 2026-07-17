@@ -171,8 +171,8 @@ export default function Index({ attempts: paginated, filters, stats }: IndexProp
                     <div className="space-y-6">
                         {hasInProgress && (
                             <section>
-                                <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-amber-700">
-                                    <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+                                <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-warning">
+                                    <span className="h-2 w-2 rounded-full bg-warning animate-pulse" />
                                     نشط
                                 </h2>
                                 <div className="space-y-2">

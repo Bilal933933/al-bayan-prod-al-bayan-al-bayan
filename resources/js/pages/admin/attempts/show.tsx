@@ -41,7 +41,7 @@ export default function Show({ attempt }: ShowProps) {
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [deleting, setDeleting] = useState(false);
 
-    const statusInfo = statusConfig[attempt.status] ?? { label: attempt.status, classes: 'bg-gray-100 text-gray-600' };
+    const statusInfo = statusConfig[attempt.status] ?? { label: attempt.status, classes: 'bg-muted text-muted-foreground' };
 
     const correctCount = attempt.sections.reduce((acc, s) => acc + s.questions.filter((q) => q.is_correct === true).length, 0);
     const wrongCount = attempt.sections.reduce((acc, s) => acc + s.questions.filter((q) => q.is_correct === false).length, 0);
@@ -83,10 +83,10 @@ export default function Show({ attempt }: ShowProps) {
             <div className="flex flex-col items-center gap-4 py-6">
                 <ScoreCircle percentage={percentage} />
                 <div className="flex items-center justify-center gap-5">
-                    <StatBadge count={correctCount} label="صحيحة" color="text-emerald-600" />
-                    <StatBadge count={wrongCount} label="خاطئة" color="text-rose-600" />
+                    <StatBadge count={correctCount} label="صحيحة" color="text-success" />
+                    <StatBadge count={wrongCount} label="خاطئة" color="text-destructive" />
                     {unansweredCount > 0 && (
-                        <StatBadge count={unansweredCount} label="لم تُجب" color="text-slate-400" />
+                        <StatBadge count={unansweredCount} label="لم تُجب" color="text-muted-foreground" />
                     )}
                 </div>
             </div>
@@ -107,7 +107,7 @@ export default function Show({ attempt }: ShowProps) {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
-                className="min-h-screen bg-slate-50"
+                className="min-h-screen bg-background"
             >
                 <div className="mx-auto flex max-w-7xl flex-col gap-6 p-4 sm:p-6 lg:grid lg:grid-cols-[1fr_320px]">
                     <div className="flex flex-col gap-5">
@@ -117,12 +117,12 @@ export default function Show({ attempt }: ShowProps) {
                                 <House className="h-3.5 w-3.5" />
                                 <span>لوحة التحكم</span>
                             </Link>
-                            <span className="text-slate-300">/</span>
+                            <span className="text-muted-foreground/50">/</span>
                             <Link href={attempts.index()} className="inline-flex items-center gap-1 transition-colors hover:text-foreground">
                                 <List className="h-3.5 w-3.5" />
                                 <span>المحاولات</span>
                             </Link>
-                            <span className="text-slate-300">/</span>
+                            <span className="text-muted-foreground/50">/</span>
                             <span className="font-medium text-foreground">عرض محاولة #{attempt.id}</span>
                         </nav>
 
@@ -139,7 +139,7 @@ export default function Show({ attempt }: ShowProps) {
                         {attempt.user && <AttemptUserCard user={attempt.user} />}
 
                         {/* Hero */}
-                        <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200/50 sm:p-6">
+                        <div className="rounded-2xl bg-card p-5 shadow-sm ring-border/50 sm:p-6">
                             <div className="flex flex-wrap items-center justify-between gap-3">
                                 <div className="min-w-0 flex-1">
                                     <h1 className="text-xl font-bold sm:text-2xl">{attempt.subject_name}</h1>
@@ -150,15 +150,15 @@ export default function Show({ attempt }: ShowProps) {
                                         <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
                                             {typeLabels[attempt.type] ?? attempt.type}
                                         </span>
-                                        <span className="text-xs text-slate-400">{attempt.total_questions} سؤال</span>
+                                        <span className="text-xs text-muted-foreground">{attempt.total_questions} سؤال</span>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-3 text-xs text-slate-500">
+                                <div className="flex items-center gap-3 text-xs text-muted-foreground">
                                     <span className="flex items-center gap-1">
                                         <Clock className="h-3.5 w-3.5" />
                                         {formatDuration(durationSeconds)}
                                     </span>
-                                    <span className="text-slate-300">|</span>
+                                    <span className="text-muted-foreground/50">|</span>
                                     <DateDisplay date={attempt.started_at} format="relative" showTooltip />
                                 </div>
                             </div>
@@ -174,7 +174,7 @@ export default function Show({ attempt }: ShowProps) {
                                         'inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-1.5 text-xs font-medium transition-all',
                                         filter === f.value
                                             ? 'bg-primary text-primary-foreground shadow-sm'
-                                            : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50',
+                                            : 'bg-card text-muted-foreground ring-border hover:bg-muted',
                                     )}
                                 >
                                     {f.label}
@@ -182,7 +182,7 @@ export default function Show({ attempt }: ShowProps) {
                                         <span
                                             className={cn(
                                                 'inline-flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold',
-                                                filter === f.value ? 'bg-white/20' : 'bg-slate-100 text-slate-500',
+                                                filter === f.value ? 'bg-white/20' : 'bg-muted text-muted-foreground',
                                             )}
                                         >
                                             {f.countKey === 'wrong' ? wrongCount : unansweredCount}
@@ -200,7 +200,7 @@ export default function Show({ attempt }: ShowProps) {
 
                     {/* Sidebar (Desktop) */}
                     <div className="hidden flex-col gap-5 lg:sticky lg:top-6 lg:flex lg:self-start">
-                        <div className="flex flex-col items-center rounded-2xl bg-white shadow-sm ring-1 ring-slate-200/50">
+                        <div className="flex flex-col items-center rounded-2xl bg-card shadow-sm ring-border/50">
                             {sidebarContent}
                         </div>
                     </div>

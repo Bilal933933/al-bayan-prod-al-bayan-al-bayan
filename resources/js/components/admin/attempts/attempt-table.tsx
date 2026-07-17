@@ -87,10 +87,10 @@ export default function AttemptTable({ attempts: paginated }: AttemptTableProps)
                                                         variant="outline"
                                                         className={
                                                             scorePercent >= 70
-                                                                ? 'border-emerald-200 text-emerald-700'
-                                                                : scorePercent >= 40
-                                                                    ? 'border-amber-200 text-amber-700'
-                                                                    : 'border-rose-200 text-rose-700'
+                                                                 ? 'border-success/30 text-success'
+                                                                 : scorePercent >= 40
+                                                                     ? 'border-warning/30 text-warning'
+                                                                     : 'border-destructive/30 text-destructive'
                                                         }
                                                     >
                                                         {scorePercent}%

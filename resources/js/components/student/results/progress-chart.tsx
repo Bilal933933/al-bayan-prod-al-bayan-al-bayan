@@ -32,11 +32,11 @@ export function ProgressChart({ data }: ProgressChartProps) {
                 <span>{data.length} محاولة</span>
                 <div className="flex items-center gap-3" dir="rtl">
                     <span className="flex items-center gap-1.5">
-                        <span className="h-3 w-3 rounded-sm bg-orange-400" />
+                        <span className="h-3 w-3 rounded-sm bg-warning" />
                         محاكاة
                     </span>
                     <span className="flex items-center gap-1.5">
-                        <span className="h-3 w-3 rounded-sm bg-blue-400" />
+                        <span className="h-3 w-3 rounded-sm bg-info" />
                         تدريب
                     </span>
                 </div>

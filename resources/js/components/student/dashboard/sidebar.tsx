@@ -71,18 +71,18 @@ function TipsCard() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border-2 border-blue-200 dark:border-blue-800 p-5"
+            className="rounded-2xl bg-gradient-to-br from-info/10 to-info/20 dark:from-info/20 dark:to-info/20 border-2 border-info/30 dark:border-info/30 p-5"
         >
             <div className="flex items-center gap-3 mb-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500 text-white">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-info text-info-foreground">
                     <Sparkles className="h-5 w-5" />
                 </div>
-                <h3 className="font-semibold text-blue-900 dark:text-blue-100">نصائح سريعة</h3>
+                <h3 className="font-semibold text-info dark:text-info">نصائح سريعة</h3>
             </div>
-            <ul className="space-y-2 text-sm text-blue-800 dark:text-blue-200">
+            <ul className="space-y-2 text-sm text-info dark:text-info">
                 {tips.map((tip) => (
                     <li key={tip} className="flex items-start gap-2">
-                        <span className="text-blue-500">•</span>
+                        <span className="text-info">•</span>
                         <span>{tip}</span>
                     </li>
                 ))}

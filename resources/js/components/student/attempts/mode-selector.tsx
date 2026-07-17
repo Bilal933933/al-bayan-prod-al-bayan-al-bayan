@@ -14,18 +14,18 @@ const modes = [
         icon: BookOpen,
         label: 'تدريب حر',
         description: 'اختر محوراً وتدرب على أسئلته بمستوى الصعوبة الذي تختاره',
-        activeClass: 'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/20 dark:border-emerald-600',
-        iconBg: 'bg-emerald-100 dark:bg-emerald-900/30',
-        iconColor: 'text-emerald-600 dark:text-emerald-400',
+        activeClass: 'border-success bg-success/10 dark:bg-success/10 dark:border-success',
+        iconBg: 'bg-success/20 dark:bg-success/20',
+        iconColor: 'text-success dark:text-success',
     },
     {
         key: 'simulation' as const,
         icon: GraduationCap,
         label: 'اختبار محاكاة',
         description: 'شارك في مسابقة بمحاور متعددة ووقت محدد لتجربة تشبه الاختبار الحقيقي',
-        activeClass: 'border-blue-500 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-600',
-        iconBg: 'bg-blue-100 dark:bg-blue-900/30',
-        iconColor: 'text-blue-600 dark:text-blue-400',
+        activeClass: 'border-info bg-info/10 dark:bg-info/10 dark:border-info',
+        iconBg: 'bg-info/20 dark:bg-info/20',
+        iconColor: 'text-info dark:text-info',
     },
 ];
 
@@ -60,7 +60,7 @@ export function ModeSelector({ selected, onChange }: ModeSelectorProps) {
                         {isSelected && (
                             <div className={cn(
                                 'absolute left-3 top-3 flex h-6 w-6 items-center justify-center rounded-full',
-                                mode.key === 'training' ? 'bg-emerald-500' : 'bg-blue-500',
+                                mode.key === 'training' ? 'bg-success' : 'bg-info',
                             )}>
                                 <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />

@@ -2,9 +2,9 @@ import { cn } from '@/lib/utils';
 import type { TopicBreakdownItem } from '@/types/result';
 
 const statusConfig = {
-    strength: { label: 'قوة', icon: '🟢', class: 'text-emerald-600 bg-emerald-50' },
-    average: { label: 'متوسط', icon: '🟡', class: 'text-amber-600 bg-amber-50' },
-    weakness: { label: 'ضعف', icon: '🔴', class: 'text-rose-600 bg-rose-50' },
+    strength: { label: 'قوة', icon: '🟢', class: 'text-success bg-success/10' },
+    average: { label: 'متوسط', icon: '🟡', class: 'text-warning bg-warning/10' },
+    weakness: { label: 'ضعف', icon: '🔴', class: 'text-destructive bg-destructive/10' },
 };
 
 export function TopicBreakdown({ data }: { data: TopicBreakdownItem[] }) {
@@ -33,7 +33,7 @@ export function TopicBreakdown({ data }: { data: TopicBreakdownItem[] }) {
                                 <td className="px-4 py-3 font-medium">{item.topic_name}</td>
                                 <td className="px-4 py-3 text-center text-muted-foreground">{item.attempts_count}</td>
                                 <td className="px-4 py-3 text-center">
-                                    <span className={cn('font-medium', item.average_percentage >= 75 ? 'text-emerald-600' : item.average_percentage >= 50 ? 'text-amber-600' : 'text-rose-500')}>
+                                    <span className={cn('font-medium', item.average_percentage >= 75 ? 'text-success' : item.average_percentage >= 50 ? 'text-warning' : 'text-destructive')}>
                                         {item.average_percentage}%
                                     </span>
                                 </td>

@@ -4,9 +4,9 @@ import { OptionCard } from '@/components/student/attempts/option-card';
 import type { AttemptQuestion } from '@/types/attempt';
 
 const difficultyStyles: Record<string, { label: string; class: string }> = {
-    easy: { label: 'سهل', class: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-    medium: { label: 'متوسط', class: 'bg-amber-50 text-amber-700 border-amber-200' },
-    hard: { label: 'صعب', class: 'bg-rose-50 text-rose-700 border-rose-200' },
+    easy: { label: 'سهل', class: 'bg-success/10 text-success border-success/30' },
+    medium: { label: 'متوسط', class: 'bg-warning/10 text-warning border-warning/30' },
+    hard: { label: 'صعب', class: 'bg-destructive/10 text-destructive border-destructive/30' },
 };
 
 const optionLetters = ['أ', 'ب', 'ج', 'د', 'ه', 'و'];

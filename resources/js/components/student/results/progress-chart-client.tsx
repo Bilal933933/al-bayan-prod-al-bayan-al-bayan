@@ -5,14 +5,22 @@ interface ChartData {
 
 const Y_TICKS = [0, 20, 40, 60, 80, 100];
 const MARGIN = { top: 22, right: 30, bottom: 28, left: 8 };
-const PRACTICE_COLOR = '#60a5fa';
-const EXAM_COLOR = '#fb923c';
+
+function cssVar(name: string): string {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+function getColor(type: string): string {
+    return type === 'exam' ? cssVar('--warning') || '#fb923c' : cssVar('--info') || '#60a5fa';
+}
 
 export function RechartsBar({ data, height = 240 }: { data: ChartData[]; height?: number }) {
     const pointCount = data.length;
     const w = Math.max(300, pointCount * 56);
     const chartW = w - MARGIN.left - MARGIN.right;
     const chartH = height - MARGIN.top - MARGIN.bottom;
+    const practiceColor = cssVar('--info') || '#60a5fa';
+    const examColor = cssVar('--warning') || '#fb923c';
 
     const points = data.map((d, i) => ({
         x: MARGIN.left + (i / Math.max(pointCount - 1, 1)) * chartW,
@@ -59,12 +67,12 @@ export function RechartsBar({ data, height = 240 }: { data: ChartData[]; height?
             {/* Gradients */}
             <defs>
                 <linearGradient id="areaPractice" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor={PRACTICE_COLOR} stopOpacity={0.08} />
-                    <stop offset="100%" stopColor={PRACTICE_COLOR} stopOpacity={0.005} />
+                    <stop offset="0%" stopColor={practiceColor} stopOpacity={0.08} />
+                    <stop offset="100%" stopColor={practiceColor} stopOpacity={0.005} />
                 </linearGradient>
                 <linearGradient id="areaExam" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor={EXAM_COLOR} stopOpacity={0.08} />
-                    <stop offset="100%" stopColor={EXAM_COLOR} stopOpacity={0.01} />
+                    <stop offset="0%" stopColor={examColor} stopOpacity={0.08} />
+                    <stop offset="100%" stopColor={examColor} stopOpacity={0.01} />
                 </linearGradient>
             </defs>
 
@@ -81,7 +89,7 @@ export function RechartsBar({ data, height = 240 }: { data: ChartData[]; height?
                 <polyline
                     points={practicePoints.map((p) => `${p.x},${p.y}`).join(' ')}
                     fill="none"
-                    stroke={PRACTICE_COLOR}
+                    stroke={practiceColor}
                     strokeWidth={2}
                     strokeLinejoin="round"
                     strokeLinecap="round"
@@ -101,7 +109,7 @@ export function RechartsBar({ data, height = 240 }: { data: ChartData[]; height?
                 <polyline
                     points={examPoints.map((p) => `${p.x},${p.y}`).join(' ')}
                     fill="none"
-                    stroke={EXAM_COLOR}
+                    stroke={examColor}
                     strokeWidth={2}
                     strokeLinejoin="round"
                     strokeLinecap="round"
@@ -115,7 +123,7 @@ export function RechartsBar({ data, height = 240 }: { data: ChartData[]; height?
                     <text x={p.x} y={p.y - 8} textAnchor="middle" fontSize={9} className="fill-muted-foreground/70">
                         {p.percentage}%
                     </text>
-                    <circle cx={p.x} cy={p.y} r={4} fill={p.type === 'exam' ? EXAM_COLOR : PRACTICE_COLOR} stroke="#fff" strokeWidth={2} />
+                    <circle cx={p.x} cy={p.y} r={4} fill={p.type === 'exam' ? examColor : practiceColor} stroke="#fff" strokeWidth={2} />
                 </g>
             ))}
         </svg>

@@ -17,22 +17,22 @@ export default function QuestionOptionsList({ options }: { options?: QuestionOpt
                         key={option.id ?? index}
                         className={`flex items-center gap-3 rounded-xl border p-4 transition-colors ${
                             isCorrect
-                                ? 'border-emerald-200 bg-emerald-50/50 dark:border-emerald-800/50 dark:bg-emerald-950/20'
-                                : 'border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800/50'
+                                ? 'border-success/30 bg-success/10 dark:border-success/30 dark:bg-success/10'
+                                : 'border-border bg-card dark:border-border dark:bg-card'
                         }`}
                     >
                         <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sm font-bold ${
                             isCorrect
-                                ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400'
-                                : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400'
+                                ? 'bg-success/20 text-success'
+                                : 'bg-muted text-muted-foreground'
                         }`}>
                             {optionLetters[index] ?? index + 1}
                         </div>
-                        <p className={`flex-1 text-base ${isCorrect ? 'font-medium text-emerald-800 dark:text-emerald-300' : ''}`}>
+                        <p className={`flex-1 text-base ${isCorrect ? 'font-medium text-success' : ''}`}>
                             {option.text}
                         </p>
                         {isCorrect && (
-                            <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-500" />
+                            <CheckCircle2 className="h-5 w-5 shrink-0 text-success" />
                         )}
                     </div>
                 );

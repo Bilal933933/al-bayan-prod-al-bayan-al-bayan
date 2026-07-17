@@ -8,7 +8,9 @@ interface AttemptStats {
 }
 
 export function AttemptStatsBar({ stats }: { stats: AttemptStats }) {
-    if (stats.total === 0) return null;
+    if (stats.total === 0) {
+return null;
+}
 
     const items = [
         { icon: BarChart3, label: 'إجمالي المحاولات', value: stats.total },

@@ -141,7 +141,7 @@ export default function Show({ topic, userStats, hasInProgress, inProgressAttemp
                             </span>
                             {bestScorePercent !== null && (
                                 <span className="flex items-center gap-2">
-                                    <Trophy className="h-4 w-4 text-amber-500" />
+                                    <Trophy className="h-4 w-4 text-warning" />
                                     أفضل نتيجة: {userStats.best_score!.correct_answers}/{userStats.best_score!.total_questions} ({bestScorePercent}%)
                                 </span>
                             )}

@@ -2,9 +2,9 @@ import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 
 const DIFFICULTY_CONFIG = {
-    easy: { label: 'سهل', variant: 'secondary', className: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' },
-    medium: { label: 'متوسط', variant: 'secondary', className: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' },
-    hard: { label: 'صعب', variant: 'secondary', className: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' },
+    easy: { label: 'سهل', variant: 'secondary', className: 'bg-success/20 text-success' },
+    medium: { label: 'متوسط', variant: 'secondary', className: 'bg-warning/20 text-warning' },
+    hard: { label: 'صعب', variant: 'secondary', className: 'bg-destructive/20 text-destructive' },
 } as const;
 
 export default function DifficultyBadge({ difficulty }: { difficulty: string }) {

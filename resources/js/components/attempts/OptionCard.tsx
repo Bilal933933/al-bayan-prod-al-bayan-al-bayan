@@ -22,18 +22,18 @@ export default function OptionCard({
         <div
             className={cn(
                 'flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 text-sm transition-all',
-                showCorrect && 'border-emerald-200 bg-emerald-50/80 shadow-sm',
-                showWrong && 'border-rose-200 bg-rose-50/80 shadow-sm',
-                !showCorrect && !showWrong && isCompleted && 'border-slate-100 bg-slate-50/50 opacity-50',
-                !showCorrect && !showWrong && !isCompleted && 'border-slate-200 bg-white hover:border-slate-300',
+                showCorrect && 'border-success/30 bg-success/10 shadow-sm',
+                showWrong && 'border-destructive/30 bg-destructive/10 shadow-sm',
+                !showCorrect && !showWrong && isCompleted && 'border-border bg-muted/50 opacity-50',
+                !showCorrect && !showWrong && !isCompleted && 'border-border bg-card hover:border-muted-foreground/25',
             )}
         >
             <span
                 className={cn(
                     'flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold',
-                    showCorrect && 'bg-emerald-500 text-white shadow-sm shadow-emerald-200',
-                    showWrong && 'bg-rose-500 text-white shadow-sm shadow-rose-200',
-                    !showCorrect && !showWrong && 'border-2 border-slate-300 text-transparent',
+                    showCorrect && 'bg-success text-success-foreground shadow-sm shadow-success/20',
+                    showWrong && 'bg-destructive text-destructive-foreground shadow-sm shadow-destructive/20',
+                    !showCorrect && !showWrong && 'border-2 border-muted-foreground/30 text-transparent',
                 )}
             >
                 {showCorrect ? <Check className="h-3 w-3" /> : showWrong ? <X className="h-3 w-3" /> : ''}
@@ -41,8 +41,8 @@ export default function OptionCard({
             <span
                 className={cn(
                     'flex-1 leading-relaxed',
-                    showCorrect && 'font-medium text-emerald-800',
-                    showWrong && 'font-medium text-rose-800',
+                    showCorrect && 'font-medium text-success',
+                    showWrong && 'font-medium text-destructive',
                 )}
             >
                 {option.text}

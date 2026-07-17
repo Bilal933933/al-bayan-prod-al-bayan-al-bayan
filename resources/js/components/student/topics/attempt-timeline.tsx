@@ -18,9 +18,9 @@ interface AttemptTimelineProps {
 }
 
 const statusConfig = {
-    completed: { icon: CheckCircle, class: 'text-emerald-600', bg: 'bg-emerald-50', label: 'مكتمل' },
-    in_progress: { icon: Clock, class: 'text-amber-600', bg: 'bg-amber-50', label: 'قيد التنفيذ' },
-    abandoned: { icon: XCircle, class: 'text-red-600', bg: 'bg-red-50', label: 'ملغي' },
+    completed: { icon: CheckCircle, class: 'text-success', bg: 'bg-success/10', label: 'مكتمل' },
+    in_progress: { icon: Clock, class: 'text-warning', bg: 'bg-warning/10', label: 'قيد التنفيذ' },
+    abandoned: { icon: XCircle, class: 'text-destructive', bg: 'bg-destructive/10', label: 'ملغي' },
 };
 
 export function AttemptTimeline({ attempts, hasInProgress }: AttemptTimelineProps) {

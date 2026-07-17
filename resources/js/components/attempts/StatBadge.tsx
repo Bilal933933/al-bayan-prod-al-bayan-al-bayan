@@ -12,7 +12,7 @@ export default function StatBadge({ count, label, color }: StatBadgeProps) {
             <div className={cn('text-xl font-bold', color)}>
                 {count}
             </div>
-            <span className="text-[11px] text-slate-500">{label}</span>
+            <span className="text-[11px] text-muted-foreground">{label}</span>
         </div>
     );
 }

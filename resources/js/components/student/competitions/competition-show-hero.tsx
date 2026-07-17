@@ -24,7 +24,7 @@ export default function CompetitionShowHero({
     const Icon = iconEntry?.icon;
 
     return (
-        <div className="relative overflow-hidden bg-slate-900 py-10 text-white sm:py-14">
+        <div className="relative overflow-hidden bg-foreground py-10 text-white sm:py-14">
             <div
                 className="absolute inset-0 opacity-20 blur-2xl"
                 style={{
@@ -59,15 +59,15 @@ export default function CompetitionShowHero({
                                 {competition.name}
                             </h1>
                             {competition.description && (
-                                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-300 line-clamp-2 sm:line-clamp-none">
+                                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/60 line-clamp-2 sm:line-clamp-none">
                                     {competition.description}
                                 </p>
                             )}
-                            <div className="mt-2 flex items-center gap-3 text-xs text-slate-400">
+                            <div className="mt-2 flex items-center gap-3 text-xs text-white/50">
                                 <span className="font-mono" dir="ltr">#{competition.code}</span>
                                 <span className={cn(
                                     'rounded-full px-2 py-0.5 text-[10px] font-medium',
-                                    competition.is_active ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-500/20 text-slate-400',
+                                    competition.is_active ? 'bg-success/20 text-success' : 'bg-white/10 text-white/50',
                                 )}>
                                     {competition.is_active ? 'نشط' : 'غير نشط'}
                                 </span>
