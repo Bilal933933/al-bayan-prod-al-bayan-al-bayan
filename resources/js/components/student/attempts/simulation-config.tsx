@@ -36,7 +36,7 @@ export default function SimulationConfig({ competitions, onBack }: SimulationCon
 
         setIsStarting(true);
 
-        router.post(startExam.url({ competition: selectedCompetition.id }), {}, {
+        router.post(startExam.url({ competition: selectedCompetition.slug }), {}, {
             preserveScroll: true,
         });
     }

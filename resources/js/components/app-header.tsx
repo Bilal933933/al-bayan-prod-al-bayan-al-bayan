@@ -1,10 +1,12 @@
 import { Link, usePage } from '@inertiajs/react';
 import { BarChart3, BookOpen, History, Menu, Play, Search, Trophy } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import AppLogo from '@/components/app-logo';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { GlobalSearch } from '@/components/student/global-search';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import {
     DropdownMenu,
@@ -71,9 +73,49 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
     const getInitials = useInitials();
     const { isCurrentUrl, whenCurrentUrl } = useCurrentUrl();
 
+    const [isVisible, setIsVisible] = useState(true);
+    const [searchOpen, setSearchOpen] = useState(false);
+    const lastScrollY = useRef(0);
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                setSearchOpen((prev) => !prev);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+            const scrollingDown = currentScrollY > lastScrollY.current;
+
+            if (scrollingDown && currentScrollY > 80) {
+                setIsVisible(false);
+            } else if (!scrollingDown) {
+                setIsVisible(true);
+            }
+
+            lastScrollY.current = currentScrollY;
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     return (
         <>
-            <div className="border-b border-sidebar-border/80">
+        <header
+            className={cn(
+                'fixed inset-x-0 top-0 z-50 transition-transform duration-300',
+                isVisible ? 'translate-y-0' : '-translate-y-full',
+            )}
+        >
+            <div className="border-b border-sidebar-border/80 bg-background">
                 <div className="mx-auto flex h-16 items-center px-4 md:max-w-7xl">
                     {/* Mobile Menu */}
                     <div className="lg:hidden">
@@ -167,12 +209,14 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                 variant="ghost"
                                 size="icon"
                                 className="group h-9 w-9 cursor-pointer"
+                                onClick={() => setSearchOpen(true)}
+                                title="بحث (Ctrl+K)"
                             >
                                 <Search className="!size-5 opacity-80 group-hover:opacity-100" />
                             </Button>
                             <ThemeSwitcher />
                         </div>
-                        {page.url !== attempts.create().url && (
+                        {page.component !== 'student/attempts/create' && (
                             <Link href={attempts.create().url}>
                                 <Button variant="default" size="sm" className="gap-1.5">
                                     <Play className="h-4 w-4" />
@@ -213,6 +257,9 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                     </div>
                 </div>
             )}
+        </header>
+
+            <GlobalSearch open={searchOpen} onOpenChange={setSearchOpen} />
         </>
     );
 }

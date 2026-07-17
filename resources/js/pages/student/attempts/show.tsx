@@ -153,7 +153,7 @@ return q.is_correct === null;
                                         <span
                                             className={cn(
                                                 'inline-flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold',
-                                                filter === f.value ? 'bg-white/20' : 'bg-muted text-muted-foreground',
+                                                filter === f.value ? 'bg-primary-foreground/20' : 'bg-muted text-muted-foreground',
                                             )}
                                         >
                                             {f.countKey === 'wrong' ? wrongCount : unansweredCount}

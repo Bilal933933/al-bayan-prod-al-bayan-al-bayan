@@ -17,12 +17,15 @@ class UpdateCompetitionRequest extends FormRequest
     public function rules(): array
     {
         $competition = $this->route('competition');
+        $competitionId = $competition instanceof Competition ? $competition->id : null;
+        $slugUnique = 'unique:competitions,slug'.($competitionId ? ','.$competitionId : '');
 
         return [
             'parent_id' => ['nullable', 'exists:competitions,id'],
             'classification' => ['required', 'string', 'in:container,standalone,child'],
-            'code' => ['required', 'string', 'max:255', 'unique:competitions,code,'.($competition instanceof Competition ? $competition->id : '')],
+            'code' => ['required', 'string', 'max:255', 'unique:competitions,code,'.($competitionId ?: '')],
             'name' => ['required', 'string', 'max:255'],
+            'slug' => ['nullable', 'string', 'max:255', $slugUnique, 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/'],
             'image_file' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
             'image' => ['nullable', 'string'],
             'color' => ['nullable', 'string', 'max:20'],

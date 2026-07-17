@@ -69,7 +69,7 @@ export default function CompetitionTableRow({
                         return null;
                     })()}
                     <Link
-                        href={competitions.show({ competition: competition.id }).url}
+                        href={competitions.show({ competition: competition.slug }).url}
                         className="break-words hover:text-primary transition-colors"
                     >
                         {competition.name}
@@ -88,7 +88,7 @@ export default function CompetitionTableRow({
             <td className="break-words px-4 py-3">
                 {competition.parent ? (
                     <Link
-                        href={competitions.show({ competition: competition.parent.id }).url}
+                        href={competitions.show({ competition: competition.parent.slug }).url}
                         className="inline-flex items-center gap-1.5 hover:text-primary transition-colors"
                     >
                         {competition.parent.color && (
@@ -120,19 +120,19 @@ export default function CompetitionTableRow({
                         {
                             label: 'عرض التفاصيل',
                             icon: Eye,
-                            href: competitions.show({ competition: competition.id }).url,
+                            href: competitions.show({ competition: competition.slug }).url,
                         },
                         {
                             label: 'تعديل',
                             icon: Pencil,
-                            href: competitions.edit({ competition: competition.id }).url,
+                            href: competitions.edit({ competition: competition.slug }).url,
                         },
                         ...(competition.can_have_topics
                             ? [
                                   {
                                       label: 'إدارة المحاور',
                                       icon: Layers,
-                                      href: competitions.topics.edit({ competition: competition.id }).url,
+                                      href: competitions.topics.edit({ competition: competition.slug }).url,
                                   } as const,
                               ]
                             : []),
@@ -150,7 +150,7 @@ export default function CompetitionTableRow({
                     onOpenChange={setDeleteOpen}
                     description={`هل أنت متأكد من حذف المسابقة "${competition.name}"؟ هذا الإجراء لا يمكن التراجع عنه.`}
                     onDelete={() => {
-                        router.delete(competitions.destroy(competition.id).url, {
+                        router.delete(competitions.destroy(competition.slug).url, {
                             onSuccess: () => setDeleteOpen(false),
                             onFinish: () => setDeleteOpen(false),
                         });

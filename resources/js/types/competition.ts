@@ -25,6 +25,7 @@ export interface CompetitionFormData {
     order: number;
     code: string;
     name: string;
+    slug?: string | null;
     image: string | null;
     color: string | null;
     icon: string | null;

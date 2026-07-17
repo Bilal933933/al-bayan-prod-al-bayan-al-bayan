@@ -46,6 +46,11 @@ class Competition extends Model
         ];
     }
 
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     public function getImageUrlAttribute(): ?string
     {
         if (! $this->image) {

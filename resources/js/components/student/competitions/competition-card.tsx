@@ -40,7 +40,7 @@ export default function CompetitionCard({
             whileHover={{ y: -6, transition: { duration: 0.2, ease: 'easeOut' } }}
         >
             <Link
-                href={competitions.show({ competition: competition.id }).url}
+                href={competitions.show({ competition: competition.slug }).url}
                 className={cn(
                     'group relative block overflow-hidden rounded-xl border bg-card shadow-sm transition-all duration-300 hover:shadow-lg',
                     competition.classification === 'container' && 'border-primary/20 hover:border-primary/40 hover:shadow-primary/10',

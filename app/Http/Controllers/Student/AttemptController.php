@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\AnswerQuestionRequest;
+use App\Http\Requests\Student\StartPracticeRequest;
 use App\Models\Attempt;
 use App\Models\AttemptQuestion;
 use App\Models\AttemptSection;
@@ -122,16 +123,12 @@ class AttemptController extends Controller
         return response()->json($section);
     }
 
-    public function startPractice(Request $request, Topic $topic): RedirectResponse
+    public function startPractice(StartPracticeRequest $request, Topic $topic): RedirectResponse
     {
-        abort_unless($topic->is_active, 404);
-
-        $difficulty = $request->input('difficulty');
-
         $attempt = $this->attemptCreationService->createPractice(
             auth()->user(),
             $topic,
-            $difficulty,
+            $request->validated('difficulty'),
         );
 
         return redirect()->route('student.attempts.show', $attempt);
@@ -144,6 +141,14 @@ class AttemptController extends Controller
             $competition->topics()->where('topics.is_active', true)->exists(),
             422,
             'No active topics available for this competition.',
+        );
+        abort_if(
+            Attempt::where('user_id', auth()->id())
+                ->where('competition_id', $competition->id)
+                ->where('status', Attempt::STATUS_IN_PROGRESS)
+                ->exists(),
+            422,
+            'You already have an in-progress attempt for this competition.',
         );
 
         $attempt = $this->attemptCreationService->createExam(

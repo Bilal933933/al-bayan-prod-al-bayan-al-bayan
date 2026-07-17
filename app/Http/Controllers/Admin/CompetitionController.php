@@ -93,7 +93,7 @@ class CompetitionController extends Controller
     {
         $validated = $request->validated();
         $validated['order'] = Competition::where('parent_id', $request->parent_id)->max('order') + 1;
-        $validated['slug'] = Str::slug($request->name) ?: $request->code;
+        $validated['slug'] = $request->slug ?? (Str::slug($request->name) ?: $request->code);
 
         if ($request->hasFile('image_file')) {
             $validated['image'] = $request->file('image_file')->store('competitions', 'public');
@@ -142,6 +142,10 @@ class CompetitionController extends Controller
     public function update(UpdateCompetitionRequest $request, Competition $competition): RedirectResponse
     {
         $validated = $request->validated();
+
+        if ($request->has('slug')) {
+            $validated['slug'] = $request->slug;
+        }
 
         if ($request->hasFile('image_file')) {
             if ($competition->image) {

@@ -22,13 +22,13 @@ export function ExamHeader({ type, sectionName, sectionIndex, totalSections, tot
     const isCritical = remaining <= 60;
 
     const timerClass = isCritical
-        ? 'text-red-600 animate-pulse'
+        ? 'text-destructive animate-pulse'
         : isUrgent
-            ? 'text-amber-600'
+            ? 'text-warning'
             : 'text-muted-foreground';
 
     return (
-        <header className="sticky top-0 z-50 border-b bg-white shadow-xs">
+        <header className="sticky top-0 z-50 border-b bg-background shadow-xs">
             <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
                 <div className="flex items-center gap-3">
                     <Link href={dashboard()} className="flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground">

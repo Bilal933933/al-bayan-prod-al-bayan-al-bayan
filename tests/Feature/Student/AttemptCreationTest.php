@@ -38,6 +38,45 @@ it('prevents practice on inactive topic', function () {
     $response->assertNotFound();
 });
 
+it('prevents practice on topic with no questions', function () {
+    $topic = Topic::factory()->active()->create(['default_questions_count' => 5]);
+
+    $response = $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic));
+
+    $response->assertSessionHasErrors('topic');
+});
+
+it('prevents practice on topic with default_questions_count of zero', function () {
+    $topic = Topic::factory()->active()->create(['default_questions_count' => 0]);
+    Question::factory(3)->active()->for($topic)->create();
+
+    $response = $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic));
+
+    $response->assertSessionHasErrors('topic');
+});
+
+it('rejects invalid difficulty value for practice', function () {
+    $topic = Topic::factory()->active()->create(['default_questions_count' => 5]);
+    Question::factory(5)->active()->for($topic)->create();
+
+    $response = $this->actingAs($this->user)->post(
+        route('student.topics.attempts.start', $topic),
+        ['difficulty' => 'invalid'],
+    );
+
+    $response->assertSessionHasErrors('difficulty');
+});
+
+it('prevents starting a practice when one is already in progress', function () {
+    $topic = Topic::factory()->active()->create(['default_questions_count' => 5]);
+    Question::factory(5)->active()->for($topic)->create();
+
+    $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic));
+    $response = $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic));
+
+    $response->assertSessionHasErrors('attempt');
+});
+
 it('practice with fewer active questions than default count still succeeds', function () {
     $topic = Topic::factory()->active()->create(['default_questions_count' => 10]);
     Question::factory(3)->active()->for($topic)->create();
@@ -101,6 +140,18 @@ it('student can start an exam attempt with multiple topics', function () {
     $attempt = Attempt::where('user_id', $this->user->id)->first();
     expect($attempt->sections)->toHaveCount(2);
     expect($attempt->total_questions)->toBe(5);
+});
+
+it('prevents starting an exam when one is already in progress', function () {
+    $competition = Competition::factory()->standalone()->active()->create();
+    $topic = Topic::factory()->active()->create();
+    $competition->topics()->attach($topic, ['questions_count' => 3, 'duration_minutes' => 10, 'difficulty_distribution' => null]);
+    Question::factory(3)->active()->for($topic)->create();
+
+    $this->actingAs($this->user)->post(route('student.competitions.attempts.start', $competition));
+    $response = $this->actingAs($this->user)->post(route('student.competitions.attempts.start', $competition));
+
+    $response->assertStatus(422);
 });
 
 it('prevents exam on container competition', function () {

@@ -21,6 +21,7 @@ class StoreCompetitionRequest extends FormRequest
             'classification' => ['required', 'string', 'in:container,standalone,child'],
             'code' => ['required', 'string', 'max:255', 'unique:competitions,code'],
             'name' => ['required', 'string', 'max:255'],
+            'slug' => ['nullable', 'string', 'max:255', 'unique:competitions,slug', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/'],
             'image_file' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
             'image' => ['nullable', 'string'],
             'color' => ['nullable', 'string', 'max:20'],

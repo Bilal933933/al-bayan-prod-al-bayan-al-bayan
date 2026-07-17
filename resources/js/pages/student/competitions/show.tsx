@@ -37,8 +37,8 @@ export default function Show({ competition, children, topics }: ShowProps) {
     const [starting, setStarting] = useState(false);
     const sectionTitleClass = 'flex items-center gap-2 border-r-4 border-primary pr-3';
     const sectionIconClass = 'h-5 w-5 text-primary';
-    const sectionHeadingClass = 'text-lg font-bold text-slate-800';
-    const emptyClass = 'rounded-2xl border border-dashed border-slate-300 bg-white py-12 text-center text-slate-400';
+    const sectionHeadingClass = 'text-lg font-bold text-foreground';
+    const emptyClass = 'rounded-2xl border border-dashed border-border bg-card py-12 text-center text-muted-foreground';
 
     function handleStartExam() {
         setStarting(true);
@@ -49,32 +49,32 @@ export default function Show({ competition, children, topics }: ShowProps) {
         <>
             <Head title={competition.name} />
 
-            <div className="min-h-screen bg-slate-50 pb-12">
+            <div className="min-h-screen bg-background pb-12">
                 {/* Breadcrumb */}
-                <div className="border-b border-slate-200 bg-white py-3">
+                <div className="border-b border-border bg-card py-3 sm:py-4">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6">
-                        <nav className="flex items-center gap-1.5 text-xs font-medium text-slate-500 sm:text-sm">
-                            <Link href="/" className="flex items-center gap-1 transition-colors hover:text-slate-800">
+                        <nav className="flex items-center gap-1.5 sm:gap-2.5 text-xs font-medium text-muted-foreground sm:text-sm">
+                            <Link href="/" className="flex items-center gap-1 transition-colors hover:text-foreground">
                                 <House className="h-3.5 w-3.5" />
                                 <span>الرئيسية</span>
                             </Link>
-                            <ChevronLeft className="h-3.5 w-3.5 text-slate-400" />
-                            <Link href="/student/competitions" className="transition-colors hover:text-slate-800">
+                            <ChevronLeft className="h-3.5 w-3.5 text-muted-foreground/60" />
+                            <Link href="/student/competitions" className="transition-colors hover:text-foreground">
                                 المسابقات
                             </Link>
                             {competition.parent && (
                                 <>
-                                    <ChevronLeft className="h-3.5 w-3.5 text-slate-400" />
+                                    <ChevronLeft className="h-3.5 w-3.5 text-muted-foreground/60" />
                                     <Link
-                                        href={`/student/competitions/${competition.parent.id}`}
-                                        className="truncate transition-colors hover:text-slate-800"
+                                        href={`/student/competitions/${competition.parent.slug}`}
+                                        className="truncate transition-colors hover:text-foreground"
                                     >
                                         {competition.parent.name}
                                     </Link>
                                 </>
                             )}
-                            <ChevronLeft className="h-3.5 w-3.5 text-slate-400" />
-                            <span className="max-w-[200px] truncate font-semibold text-slate-900 sm:max-w-none">
+                            <ChevronLeft className="h-3.5 w-3.5 text-muted-foreground/60" />
+                            <span className="max-w-[200px] truncate font-semibold text-foreground sm:max-w-none">
                                 {competition.name}
                             </span>
                         </nav>
@@ -116,12 +116,12 @@ export default function Show({ competition, children, topics }: ShowProps) {
                             <div className={sectionTitleClass}>
                                 <BookOpen className={sectionIconClass} />
                                 <h2 className={sectionHeadingClass}>محاور الاختبار</h2>
-                                <span className="text-sm font-normal text-slate-400">({topics.length})</span>
+                                <span className="text-sm font-normal text-muted-foreground/60">({topics.length})</span>
                             </div>
 
                             <div className="mt-6">
                                 {topics.length > 0 ? (
-                                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                    <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
                                         {topics.map((topic) => (
                                             <TopicCard
                                                 key={topic.id}
@@ -149,7 +149,7 @@ export default function Show({ competition, children, topics }: ShowProps) {
                                 <button
                                     onClick={handleStartExam}
                                     disabled={starting}
-                                    className="inline-flex items-center gap-2.5 rounded-2xl bg-gradient-to-b from-emerald-500 to-emerald-600 px-8 py-4 text-base font-bold text-white shadow-lg shadow-emerald-200/50 transition-all hover:from-emerald-600 hover:to-emerald-700 hover:shadow-xl hover:shadow-emerald-200/60 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+                                    className="inline-flex items-center gap-2.5 rounded-2xl bg-primary px-8 py-4 text-base font-bold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
                                 >
                                     {starting ? (
                                         <Loader2 className="h-5 w-5 animate-spin" />
@@ -169,7 +169,7 @@ export default function Show({ competition, children, topics }: ShowProps) {
 
 function CompetitionCardList({ competitions }: { competitions: Competition[] }) {
     return (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {competitions.map((child) => (
                 <motion.div key={child.id} variants={itemVariants}>
                     <CompetitionCard competition={child} />

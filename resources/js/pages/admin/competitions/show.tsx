@@ -120,7 +120,7 @@ export default function Show({ competition, childrenCount }: ShowProps) {
                                     <h1 className={`text-2xl font-bold sm:text-3xl ${textClass}`}>{competition.name}</h1>
                                 </div>
                             </div>
-                            <Link href={competitions.edit({ competition: competition.id }).url}>
+                            <Link href={competitions.edit({ competition: competition.slug }).url}>
                                 <Button variant={isLight ? 'outline' : 'secondary'} size="sm" className="backdrop-blur-sm">
                                     <Pencil className="h-4 w-4 ms-1" />
                                     تعديل
@@ -147,7 +147,7 @@ export default function Show({ competition, childrenCount }: ShowProps) {
                             <div className="mt-4 flex items-center gap-2 text-sm" style={{ color: mutedClass }}>
                                 <span>تنتمي إلى</span>
                                 <Link
-                                    href={competitions.show({ competition: competition.parent.id }).url}
+                                    href={competitions.show({ competition: competition.parent.slug }).url}
                                     className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-medium backdrop-blur-sm transition-colors ${isLight ? 'bg-black/10 text-foreground hover:bg-black/20' : 'bg-white/15 text-white hover:bg-white/25'}`}
                                 >
                                     <CompetitionIcon icon={competition.parent.icon} className="h-3.5 w-3.5" />
@@ -309,7 +309,7 @@ export default function Show({ competition, childrenCount }: ShowProps) {
                                         animate="visible"
                                     >
                                         <Link
-                                            href={competitions.show({ competition: child.id }).url}
+                                            href={competitions.show({ competition: child.slug }).url}
                                             className="group relative block overflow-hidden rounded-xl border bg-card shadow-sm transition-all hover:shadow-md hover:-translate-y-1"
                                         >
                                             {child.color && (

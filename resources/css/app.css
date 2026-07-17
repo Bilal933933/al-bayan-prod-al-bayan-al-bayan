@@ -46,6 +46,10 @@
   --brand-muted: oklch(0.5119 0.0230 163.90);      /* #5B6B63 */
   --brand-muted-soft: oklch(0.7416 0.0221 165.87); /* #9FB0A8 — لاستخدامها فقط في الوضع الداكن */
 
+  /* أزرق سماوي — المعلومات والإرشادات */
+  --brand-sky: oklch(0.5 0.13 250);                 /* #3A6FBF */
+  --brand-sky-soft: oklch(0.65 0.11 250);           /* #6FA3E0 — لاستخدامها فقط في الوضع الداكن */
+
   /* حدود */
   --brand-border-light: oklch(0.9243 0.0074 132.42); /* #E4E7E2 */
   --brand-border-dark: oklch(0.3472 0.0301 168.91);  /* #2A3F37 */
@@ -113,6 +117,13 @@
   --color-brand-brick-soft: var(--brand-brick-soft);
   --color-brand-muted: var(--brand-muted);
   --color-brand-muted-soft: var(--brand-muted-soft);
+  --color-brand-sky: var(--brand-sky);
+  --color-brand-sky-soft: var(--brand-sky-soft);
+
+  /* ألوان الحالة الدلالية */
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
 }
 
 /* ==========================================================================
@@ -143,6 +154,10 @@
   --accent-foreground: var(--brand-ink);
 
   --destructive: var(--brand-brick);
+
+  --success: var(--brand-teal);
+  --warning: var(--brand-gold);
+  --info: var(--brand-sky);
 
   --border: var(--brand-border-light);
   --input: var(--brand-border-light);
@@ -195,6 +210,10 @@
   --accent-foreground: var(--brand-ink-deep);
 
   --destructive: var(--brand-brick-soft);
+
+  --success: var(--brand-teal-soft);
+  --warning: var(--brand-gold-soft);
+  --info: var(--brand-sky-soft);
 
   --border: var(--brand-border-dark);
   --input: var(--brand-border-dark);

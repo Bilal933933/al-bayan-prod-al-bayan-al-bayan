@@ -121,6 +121,25 @@ return;
                 </div>
             </div>
 
+            {/* الرابط المختصر (slug) */}
+            <div className="grid gap-2">
+                <Label htmlFor="slug">
+                    الرابط المختصر
+                    <span className="text-xs text-muted-foreground me-1">(اختياري)</span>
+                </Label>
+                <Input
+                    id="slug"
+                    dir="ltr"
+                    value={data.slug ?? ''}
+                    onChange={(e) => setData('slug', e.target.value || null)}
+                    placeholder="مثال: linguistic"
+                />
+                <p className="text-xs text-muted-foreground">
+                    إذا تركت الحقل فارغاً، سيتم إنشاء الرابط تلقائياً من الكود.
+                </p>
+                <InputError message={errors.slug} />
+            </div>
+
             {/* تصنيف المسابقة (حاوية/مستقلة/ابن) */}
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div className="grid gap-2">

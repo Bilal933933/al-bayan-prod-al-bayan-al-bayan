@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Attempt;
 use App\Models\Competition;
 use App\Models\Question;
 use App\Models\QuestionOption;
@@ -25,6 +26,7 @@ it('lists all attempts for the user', function () {
     Question::factory(2)->active()->for($topic)->create()->each(fn ($q) => QuestionOption::factory()->for($q)->correct()->create(['order' => 0]));
 
     $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic));
+    Attempt::where('user_id', $this->user->id)->update(['status' => Attempt::STATUS_COMPLETED, 'finished_at' => now()]);
     $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic));
 
     $response = $this->actingAs($this->user)->get(route('student.attempts.index'));
@@ -79,6 +81,7 @@ it('shows attempts in reverse chronological order', function () {
     Question::factory(1)->active()->for($topic)->create()->each(fn ($q) => QuestionOption::factory()->for($q)->correct()->create(['order' => 0]));
 
     $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic));
+    Attempt::where('user_id', $this->user->id)->update(['status' => Attempt::STATUS_COMPLETED, 'finished_at' => now()]);
     $this->travel(1)->second();
     $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic));
 
@@ -96,6 +99,7 @@ it('paginates attempts', function () {
 
     foreach (range(1, 20) as $i) {
         $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic));
+        Attempt::where('user_id', $this->user->id)->update(['status' => Attempt::STATUS_COMPLETED, 'finished_at' => now()]);
     }
 
     $response = $this->actingAs($this->user)->get(route('student.attempts.index'));

@@ -1,5 +1,5 @@
 import { Link, router } from '@inertiajs/react';
-import { Award, CheckCircle, Play, RotateCcw } from 'lucide-react';
+import { Award, CheckCircle, Clock, FileText, Play, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { getColor } from './topic-colors';
 import type { BestScore } from '@/types/topic';
@@ -56,7 +56,7 @@ export default function TopicCard({
 
     const card = (
         <div className={cn(
-            'relative flex flex-col justify-between rounded-2xl border p-5 transition-all duration-200 hover:shadow-md',
+            'relative flex flex-col justify-between rounded-2xl border p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg',
             colors.border,
             colors.bg,
             colors.hover,
@@ -81,19 +81,36 @@ export default function TopicCard({
                 )}
 
                 <div className="mb-5 flex flex-wrap items-center gap-2.5 text-xs text-muted-foreground">
-                    <span className="rounded-md border border-border bg-card/90 px-2.5 py-1">
+                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/50 px-2.5 py-1">
+                        <FileText className="h-3.5 w-3.5" />
                         {questionsCount} أسئلة
                     </span>
-                    <span className="rounded-md border border-border bg-card/90 px-2.5 py-1">
+                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/50 px-2.5 py-1">
+                        <Clock className="h-3.5 w-3.5" />
                         {durationMinutes ? `${durationMinutes} دقيقة` : 'بدون مؤقت'}
                     </span>
                     {userAttemptsCount > 0 && (
-                        <span className="inline-flex items-center gap-1 rounded-md border border-border bg-card/90 px-2.5 py-1 text-muted-foreground">
-                            <CheckCircle className="h-3 w-3 text-muted-foreground" />
+                        <span className="inline-flex items-center gap-1 rounded-md bg-muted/50 px-2.5 py-1">
+                            <CheckCircle className="h-3.5 w-3.5" />
                             {userAttemptsCount} محاولة{userAttemptsCount > 1 ? 'ات' : ''}
                         </span>
                     )}
                 </div>
+
+                {bestScore && (
+                    <div className="mb-4">
+                        <div className="flex items-center justify-between text-xs text-muted-foreground">
+                            <span>نسبة الإنجاز</span>
+                            <span className={cn('font-semibold', colors.text)}>{scorePercent}%</span>
+                        </div>
+                        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                            <div
+                                className={cn('h-full rounded-full transition-all duration-500', colors.primary.split(' ')[0])}
+                                style={{ width: `${scorePercent}%` }}
+                            />
+                        </div>
+                    </div>
+                )}
             </div>
 
             {!href && (

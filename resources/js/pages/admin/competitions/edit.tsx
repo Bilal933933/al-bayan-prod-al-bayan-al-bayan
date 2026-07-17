@@ -24,6 +24,7 @@ export default function Edit({ competition, availableParents }: EditProps) {
         classification: competition.classification,
         code: competition.code,
         name: competition.name,
+        slug: competition.slug,
         image: competition.image,
         color: competition.color,
         icon: competition.icon,
@@ -33,7 +34,7 @@ export default function Edit({ competition, availableParents }: EditProps) {
 
     function submit(e: React.FormEvent) {
         e.preventDefault();
-        put(competitions.update(competition.id).url);
+        put(competitions.update(competition.slug).url);
     }
 
     return (

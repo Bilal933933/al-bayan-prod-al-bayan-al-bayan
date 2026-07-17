@@ -84,7 +84,7 @@ export function NavigationFooter({
     }
 
     return (
-        <footer className="sticky bottom-0 z-50 border-t bg-white shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
+        <footer className="sticky bottom-0 z-50 border-t bg-background shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
             <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-4 py-3">
                 <div>
                     {!isSimulation && (

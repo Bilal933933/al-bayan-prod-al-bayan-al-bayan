@@ -4,11 +4,13 @@ use App\Http\Controllers\Student\AttemptController;
 use App\Http\Controllers\Student\CompetitionController;
 use App\Http\Controllers\Student\DashboardController;
 use App\Http\Controllers\Student\ResultController;
+use App\Http\Controllers\Student\SearchController;
 use App\Http\Controllers\Student\TopicController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('student.dashboard');
+    Route::get('search', SearchController::class)->name('student.search');
 
     // Student competition routes
     Route::prefix('competitions')->name('student.competitions.')->group(function () {

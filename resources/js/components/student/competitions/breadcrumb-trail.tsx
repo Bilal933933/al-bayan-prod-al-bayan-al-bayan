@@ -27,7 +27,7 @@ export default function BreadcrumbTrail({
                     <ChevronLeft className="h-3.5 w-3.5" />
 
                     <Link
-                        href={competitions.show({ competition: parent.id }).url}
+                        href={competitions.show({ competition: parent.slug }).url}
                         className="hover:text-foreground transition-colors"
                     >
                         {parent.name}

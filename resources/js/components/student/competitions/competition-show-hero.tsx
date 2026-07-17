@@ -24,12 +24,20 @@ export default function CompetitionShowHero({
     const Icon = iconEntry?.icon;
 
     return (
-        <div className="relative overflow-hidden bg-foreground py-10 text-white sm:py-14">
+        <div className="relative overflow-hidden bg-foreground py-12 sm:py-16"
+            style={{
+                background: `linear-gradient(160deg, ${hexToRgba(themeColor, 0.35)}, ${hexToRgba(themeColor, 0.08)} 60%, transparent 100%), linear-gradient(180deg, var(--brand-ink) 0%, var(--brand-ink-deep) 100%)`,
+            }}
+        >
             <div
-                className="absolute inset-0 opacity-20 blur-2xl"
+                className="absolute inset-0 opacity-25 blur-3xl"
                 style={{
-                    background: `radial-gradient(circle at 20% 50%, ${themeColor}, transparent), radial-gradient(circle at 80% 50%, #000, transparent)`,
+                    background: `radial-gradient(circle at 15% 30%, ${themeColor}, transparent 60%), radial-gradient(circle at 85% 70%, ${themeColor}, transparent 50%)`,
                 }}
+            />
+
+            <div className="absolute -top-20 -end-20 h-64 w-64 rounded-full opacity-10 blur-3xl"
+                style={{ background: themeColor }}
             />
 
             <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
@@ -43,8 +51,7 @@ export default function CompetitionShowHero({
                             />
                         ) : (
                             <div
-                                className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border-2 border-white/15 text-white/90 shadow-lg sm:h-24 sm:w-24"
-                                style={{ backgroundColor: themeColor }}
+                                className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-white/90 shadow-xl backdrop-blur-sm ring-1 ring-white/10 sm:h-24 sm:w-24"
                             >
                                 {Icon ? (
                                     <Icon className="h-10 w-10" />
@@ -55,7 +62,7 @@ export default function CompetitionShowHero({
                         )}
 
                         <div className="min-w-0">
-                            <h1 className="text-2xl font-black tracking-tight sm:text-3xl">
+                            <h1 className="text-2xl font-black tracking-tight text-white sm:text-3xl">
                                 {competition.name}
                             </h1>
                             {competition.description && (
@@ -63,11 +70,11 @@ export default function CompetitionShowHero({
                                     {competition.description}
                                 </p>
                             )}
-                            <div className="mt-2 flex items-center gap-3 text-xs text-white/50">
-                                <span className="font-mono" dir="ltr">#{competition.code}</span>
+                            <div className="mt-2 flex items-center gap-3 text-xs">
+                                <span className="font-mono text-white/60" dir="ltr">#{competition.code}</span>
                                 <span className={cn(
                                     'rounded-full px-2 py-0.5 text-[10px] font-medium',
-                                    competition.is_active ? 'bg-success/20 text-success' : 'bg-white/10 text-white/50',
+                                    competition.is_active ? 'bg-white/15 text-white/80' : 'bg-white/10 text-white/50',
                                 )}>
                                     {competition.is_active ? 'نشط' : 'غير نشط'}
                                 </span>

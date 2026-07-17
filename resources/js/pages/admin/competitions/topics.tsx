@@ -113,7 +113,7 @@ return;
             })),
         };
 
-        router.put(competitions.topics.sync({ competition: competition.id }).url, payload, {
+        router.put(competitions.topics.sync({ competition: competition.slug }).url, payload, {
             onSuccess: () => {
                 setSaving(false);
             },
@@ -286,7 +286,7 @@ return;
                 {/* العودة للمسابقة */}
                 <div className="flex justify-start">
                     <Link
-                        href={competitions.show({ competition: competition.id }).url}
+                        href={competitions.show({ competition: competition.slug }).url}
                         className="shrink-0"
                     >
                         <Button variant="outline" size="sm">
