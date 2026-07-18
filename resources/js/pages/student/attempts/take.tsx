@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import { Head, router } from '@inertiajs/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
@@ -41,6 +42,7 @@ export default function Take({ attempt }: TakeProps) {
     const isLastSection = currentSectionIndex === sections.length - 1;
     const isLastQuestion = isLastSection && isLastQuestionInSection;
     const currentSectionSubmitted = currentSection?.submitted_at !== null;
+    const isSectionSubmitted = currentSectionSubmitted;
 
     const submittedSectionIndices: number[] = [];
     for (const [idx, s] of sections.entries()) {
@@ -119,6 +121,36 @@ export default function Take({ attempt }: TakeProps) {
             if (timerRef.current) clearInterval(timerRef.current);
         };
     }, [currentSectionIndex, currentSectionDuration, currentSectionSubmitted]);
+
+    // Keyboard shortcuts
+    useEffect(() => {
+        function handleKeyDown(e: KeyboardEvent) {
+            if (isLoadingSection || !currentQuestion || isSectionSubmitted) return;
+
+            if (e.key >= '1' && e.key <= '9') {
+                const idx = parseInt(e.key) - 1;
+                const option = currentQuestion.question.options?.[idx];
+                if (option?.id) {
+                    handleSelectOption(option.id);
+                }
+                return;
+            }
+
+            if (e.key === 'Enter' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                goToNext();
+                return;
+            }
+
+            if (e.key === 'ArrowRight' && !isSimulation) {
+                e.preventDefault();
+                goToPrevious();
+            }
+        }
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [currentQuestion, isLoadingSection, isSectionSubmitted, isSimulation]);
 
     function handleSelectOption(optionId: number) {
         if (!currentQuestion || currentQuestion.selected_option_id === optionId) return;
@@ -255,7 +287,6 @@ export default function Take({ attempt }: TakeProps) {
     }
 
     const canGoBack = canGoBackTo(currentSectionIndex, currentQuestionIndex - 1);
-    const isSectionSubmitted = currentSectionSubmitted;
 
     return (
         <>
@@ -285,16 +316,26 @@ export default function Take({ attempt }: TakeProps) {
             )}
 
             <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-8">
-                <QuestionCard
-                    question={currentQuestion}
-                    questionIndex={currentQuestionIndex}
-                    totalQuestions={totalQuestionsInSection}
-                    isLocked={isSimulation && currentQuestion !== null && lockedQuestions.has(
-                        getCurrentKey(currentSection?.id ?? 0, currentQuestion?.order ?? 0)
-                    )}
-                    isLoading={isLoadingSection}
-                    onSelectOption={handleSelectOption}
-                />
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={currentQuestion?.id ?? 'loading'}
+                        initial={{ opacity: 0, x: 30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -30 }}
+                        transition={{ duration: 0.2, ease: 'easeOut' }}
+                    >
+                        <QuestionCard
+                            question={currentQuestion}
+                            questionIndex={currentQuestionIndex}
+                            totalQuestions={totalQuestionsInSection}
+                            isLocked={isSimulation && currentQuestion !== null && lockedQuestions.has(
+                                getCurrentKey(currentSection?.id ?? 0, currentQuestion?.order ?? 0)
+                            )}
+                            isLoading={isLoadingSection}
+                            onSelectOption={handleSelectOption}
+                        />
+                    </motion.div>
+                </AnimatePresence>
             </main>
 
             <NavigationFooter

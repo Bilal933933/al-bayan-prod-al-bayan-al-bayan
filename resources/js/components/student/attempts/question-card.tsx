@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { OptionCard } from '@/components/student/attempts/option-card';
@@ -21,9 +22,17 @@ interface QuestionCardProps {
 }
 
 export function QuestionCard({ question, questionIndex, totalQuestions, isLocked, isLoading, onSelectOption }: QuestionCardProps) {
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (question && containerRef.current) {
+            containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, [question?.id]);
+
     if (isLoading || !question) {
         return (
-            <div className="space-y-6">
+            <div ref={containerRef} className="space-y-6">
                 <div className="flex items-center gap-2">
                     <Skeleton className="h-5 w-24" />
                     <Skeleton className="h-5 w-14" />
@@ -41,7 +50,7 @@ export function QuestionCard({ question, questionIndex, totalQuestions, isLocked
     const difficultyInfo = difficultyStyles[question.question.difficulty] ?? { label: question.question.difficulty, class: '' };
 
     return (
-        <div className="space-y-6">
+        <div ref={containerRef} className="space-y-6">
             <div className="flex flex-wrap items-center gap-2">
                 <Badge variant="outline" className="shrink-0">
                     سؤال {questionIndex + 1} من {totalQuestions}

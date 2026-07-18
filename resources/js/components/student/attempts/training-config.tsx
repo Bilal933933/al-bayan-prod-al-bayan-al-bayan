@@ -32,15 +32,16 @@ export default function TrainingConfig({ topics, hasInProgress, onBack }: Traini
         if (!canStart || isStarting) return;
         setIsStarting(true);
 
-        const options = difficulty
+        const routeOptions = difficulty
             ? { query: { difficulty } }
-            : {};
+            : undefined;
 
-        router.post(
-            studentTopics.attempts.start({ topic: Number(selectedTopicId) }).url,
-            {},
-            { ...options, preserveScroll: true },
-        );
+        const url = studentTopics.attempts.start(
+            { topic: Number(selectedTopicId) },
+            routeOptions,
+        ).url;
+
+        router.post(url, {}, { preserveScroll: true });
     }
 
     function handleResume() {

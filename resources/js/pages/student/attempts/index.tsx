@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, History } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { AttemptCard } from '@/components/student/attempts/attempt-card';
 import { AttemptStatsBar } from '@/components/student/attempts/attempt-stats-bar';
+import { EmptyState } from '@/components/empty-state';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import attempts from '@/routes/student/attempts';
@@ -148,25 +149,23 @@ export default function Index({ attempts: paginated, filters, stats }: IndexProp
                 </div>
 
                 {paginated.data.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed py-20">
-                        <History className="mb-2 h-10 w-10 text-muted-foreground/30" />
-                        <p className="text-muted-foreground">
-                            {filters.type
-                                ? `لا توجد محاولات ${typeLabels[filters.type] ?? ''} سابقة`
-                                : 'لا توجد محاولات سابقة'}
-                        </p>
-                        <p className="mt-1 text-sm text-muted-foreground/60">
-                            ابدأ تدريباً حراً أو شارك في مسابقة لتظهر محاولاتك هنا
-                        </p>
-                    </div>
+                    <EmptyState
+                        icon={History}
+                        title={filters.type
+                            ? `لا توجد محاولات ${typeLabels[filters.type] ?? ''} سابقة`
+                            : 'لا توجد محاولات سابقة'}
+                        description="ابدأ تدريباً حراً أو شارك في مسابقة لتظهر محاولاتك هنا"
+                        actionLabel="ابدأ التدريب"
+                        actionHref={attempts.create().url}
+                        className="py-20"
+                    />
                 ) : grouped.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed py-16">
-                        <History className="mb-2 h-10 w-10 text-muted-foreground/30" />
-                        <p className="text-muted-foreground">لا توجد نتائج للبحث</p>
-                        <p className="mt-1 text-sm text-muted-foreground/60">
-                            حاول تغيير كلمة البحث
-                        </p>
-                    </div>
+                    <EmptyState
+                        icon={History}
+                        title="لا توجد نتائج للبحث"
+                        description="حاول تغيير كلمة البحث"
+                        className="py-16"
+                    />
                 ) : (
                     <div className="space-y-6">
                         {hasInProgress && (

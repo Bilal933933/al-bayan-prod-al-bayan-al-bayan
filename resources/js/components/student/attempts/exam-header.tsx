@@ -20,6 +20,7 @@ export function ExamHeader({ type, sectionName, sectionIndex, totalSections, tot
 
     const isUrgent = remaining <= 300;
     const isCritical = remaining <= 60;
+    const progressPct = totalMinutes > 0 ? (elapsedSeconds / (totalMinutes * 60)) * 100 : 0;
 
     const timerClass = isCritical
         ? 'text-destructive animate-pulse'
@@ -27,9 +28,15 @@ export function ExamHeader({ type, sectionName, sectionIndex, totalSections, tot
             ? 'text-warning'
             : 'text-muted-foreground';
 
+    const barClass = isCritical
+        ? 'bg-destructive'
+        : isUrgent
+            ? 'bg-warning'
+            : 'bg-primary';
+
     return (
         <header className="sticky top-0 z-50 border-b bg-background shadow-xs">
-            <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
+            <div className="relative mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
                 <div className="flex items-center gap-3">
                     <Link href={dashboard()} className="flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground">
                         <GraduationCap className="h-4 w-4" />
@@ -58,6 +65,14 @@ export function ExamHeader({ type, sectionName, sectionIndex, totalSections, tot
                     )}
                 </div>
             </div>
+            {totalMinutes > 0 && (
+                <div className="h-0.5 w-full bg-muted/50">
+                    <div
+                        className={`h-full transition-all duration-1000 ease-linear ${barClass}`}
+                        style={{ width: `${Math.min(progressPct, 100)}%` }}
+                    />
+                </div>
+            )}
         </header>
     );
 }

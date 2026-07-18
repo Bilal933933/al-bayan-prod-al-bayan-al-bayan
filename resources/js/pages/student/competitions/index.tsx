@@ -2,6 +2,7 @@ import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { FolderOpen, Layers } from 'lucide-react';
 import { useMemo } from 'react';
+import { EmptyState } from '@/components/empty-state';
 import ContainerSection from '@/components/student/competitions/container-section';
 import competitions from '@/routes/student/competitions';
 import type { Competition } from '@/types/competition';
@@ -56,15 +57,12 @@ export default function Index({ competitions: items }: IndexProps) {
                 </div>
 
                 {items.length === 0 && (
-                    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed py-20">
-                        <Layers className="mb-2 h-10 w-10 text-muted-foreground/30" />
-                        <p className="text-muted-foreground">
-                            لا توجد مسابقات متاحة حالياً
-                        </p>
-                        <p className="mt-1 text-sm text-muted-foreground/60">
-                            سيتم إضافة مسابقات جديدة قريباً
-                        </p>
-                    </div>
+                    <EmptyState
+                        icon={Layers}
+                        title="لا توجد مسابقات متاحة حالياً"
+                        description="سيتم إضافة مسابقات جديدة قريباً"
+                        className="py-20"
+                    />
                 )}
 
                 {containers.length > 0 && (

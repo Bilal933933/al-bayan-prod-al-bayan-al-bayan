@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface EmptyStateProps {
     icon: React.ComponentType<{ className?: string }>;
@@ -8,11 +9,12 @@ interface EmptyStateProps {
     description: string;
     actionLabel?: string;
     actionHref?: string;
+    className?: string;
 }
 
-export function EmptyState({ icon: Icon, title, description, actionLabel, actionHref }: EmptyStateProps) {
+export function EmptyState({ icon: Icon, title, description, actionLabel, actionHref, className }: EmptyStateProps) {
     return (
-        <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed py-12 text-center">
+        <div className={cn('flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed py-12 text-center', className)}>
             <Icon className="h-10 w-10 text-muted-foreground/30" />
             <p className="text-muted-foreground">{title}</p>
             <p className="text-sm text-muted-foreground/60 max-w-xs">{description}</p>
