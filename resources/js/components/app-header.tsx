@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BarChart3, BookOpen, History, Menu, Play, Search, Trophy } from 'lucide-react';
+import { BarChart3, BookOpen, History, Medal, Menu, Play, Search, Trophy } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import AppLogo from '@/components/app-logo';
 import AppLogoIcon from '@/components/app-logo-icon';
@@ -30,7 +30,7 @@ import { UserMenuContent } from '@/components/user-menu-content';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
-import { dashboard } from '@/routes/student';
+import { dashboard, leaderboard } from '@/routes/student';
 import attempts from '@/routes/student/attempts';
 import competitions from '@/routes/student/competitions';
 import results from '@/routes/student/results';
@@ -61,6 +61,11 @@ const mainNavItems: NavItem[] = [
         title: 'نتائجي',
         href: results.index().url,
         icon: BarChart3,
+    },
+    {
+        title: 'المتصدرين',
+        href: leaderboard(),
+        icon: Medal,
     },
 ];
 

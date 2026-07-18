@@ -57,7 +57,7 @@ export function AttemptCard({ attempt, href }: AttemptCardProps) {
 
     return (
         <div className={cn(
-            'group flex flex-col gap-3 rounded-xl border bg-card p-4 transition-all hover:shadow-md sm:flex-row sm:items-center sm:justify-between sm:gap-6',
+            'group flex flex-col gap-3 rounded-xl border bg-card p-4 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg sm:flex-row sm:items-center sm:justify-between sm:gap-6',
             attempt.status === 'in_progress' && 'border-warning/30 bg-warning/5',
             attempt.status === 'completed' && 'border-success/30',
         )}>

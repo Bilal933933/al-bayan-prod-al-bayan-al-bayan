@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import AppLogoIcon from '@/components/app-logo-icon';
+import { PageTransition } from '@/components/page-transition';
 import { home } from '@/routes';
 import type { AuthLayoutProps } from '@/types';
 
@@ -30,7 +31,7 @@ export default function AuthSimpleLayout({
                             </p>
                         </div>
                     </div>
-                    {children}
+                    <PageTransition>{children}</PageTransition>
                 </div>
             </div>
         </div>

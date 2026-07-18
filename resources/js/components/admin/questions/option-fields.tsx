@@ -53,7 +53,7 @@ return;
                                 name="correct_option"
                                 checked={option.is_correct}
                                 onChange={() => handleCorrectChange(index)}
-                                className="h-4 w-4 shrink-0 border-gray-300 text-primary"
+                                className="h-4 w-4 shrink-0 border-border text-primary"
                             />
                             <span className="text-sm font-medium">{option.text}</span>
                         </div>
@@ -68,7 +68,7 @@ return;
                                 name="correct_option"
                                 checked={option.is_correct}
                                 onChange={() => handleCorrectChange(index)}
-                                className="h-4 w-4 shrink-0 border-gray-300 text-primary"
+                                className="h-4 w-4 shrink-0 border-border text-primary"
                             />
                             <Input
                                 value={option.text}

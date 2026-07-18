@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { SidebarInset } from '@/components/ui/sidebar';
+import { PageTransition } from '@/components/page-transition';
 import type { AppVariant } from '@/types';
 
 type Props = React.ComponentProps<'main'> & {
@@ -8,7 +9,7 @@ type Props = React.ComponentProps<'main'> & {
 
 export function AppContent({ variant = 'sidebar', children, ...props }: Props) {
     if (variant === 'sidebar') {
-        return <SidebarInset {...props}>{children}</SidebarInset>;
+        return <SidebarInset {...props}><PageTransition>{children}</PageTransition></SidebarInset>;
     }
 
     return (
@@ -16,7 +17,7 @@ export function AppContent({ variant = 'sidebar', children, ...props }: Props) {
             className="mx-auto flex h-full w-full max-w-7xl flex-1 flex-col gap-4 rounded-xl"
             {...props}
         >
-            {children}
+            <PageTransition>{children}</PageTransition>
         </main>
     );
 }

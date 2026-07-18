@@ -155,7 +155,7 @@ return;
                                     setData('classification', 'container');
                                     setData('parent_id', null);
                                 }}
-                                className="h-4 w-4 border-gray-300 text-primary"
+                                className="h-4 w-4 border-border text-primary"
                             />
                             <span className="text-sm">حاوية</span>
                         </label>
@@ -168,7 +168,7 @@ return;
                                     setData('classification', 'standalone');
                                     setData('parent_id', null);
                                 }}
-                                className="h-4 w-4 border-gray-300 text-primary"
+                                className="h-4 w-4 border-border text-primary"
                             />
                             <span className="text-sm">مستقلة</span>
                         </label>
@@ -178,7 +178,7 @@ return;
                                 name="classification"
                                 checked={data.classification === 'child'}
                                 onChange={() => setData('classification', 'child')}
-                                className="h-4 w-4 border-gray-300 text-primary"
+                                className="h-4 w-4 border-border text-primary"
                             />
                             <span className="text-sm">ابن</span>
                         </label>

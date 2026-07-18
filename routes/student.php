@@ -3,27 +3,78 @@
 use App\Http\Controllers\Student\AttemptController;
 use App\Http\Controllers\Student\CompetitionController;
 use App\Http\Controllers\Student\DashboardController;
+use App\Http\Controllers\Student\JoinCompetitionController;
+use App\Http\Controllers\Student\LeaderboardController;
+use App\Http\Controllers\Student\OnboardingController;
+use App\Http\Controllers\Student\ProfileController;
+use App\Http\Controllers\Student\ReportController;
 use App\Http\Controllers\Student\ResultController;
 use App\Http\Controllers\Student\SearchController;
 use App\Http\Controllers\Student\TopicController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('student.dashboard');
     Route::get('search', SearchController::class)->name('student.search');
 
+    // Student leaderboard route
+    Route::get('leaderboard', [LeaderboardController::class, 'index'])->name('student.leaderboard');
+
+    // Student report routes
+    Route::prefix('report')->name('student.report.')->group(function () {
+        Route::get('/', [ReportController::class, 'index'])->name('index');
+    });
+
+    // Student onboarding route
+    Route::get('onboarding', [OnboardingController::class, 'index'])->name('student.onboarding');
+
+    // Student profile route
+    Route::get('profile', [ProfileController::class, 'index'])->name('student.profile');
+
     // Student competition routes
     Route::prefix('competitions')->name('student.competitions.')->group(function () {
         Route::get('/', [CompetitionController::class, 'index'])->name('index');
-        Route::get('/{competition}', [CompetitionController::class, 'show'])->name('show');
-        Route::post('/{competition}/attempts', [AttemptController::class, 'startExam'])->name('attempts.start');
+        Route::get('/{competition}', [CompetitionController::class, 'show'])->name('show')->missing(fn () => Inertia::render('ErrorPage', [
+            'status' => 404,
+            'title' => 'المسابقة غير موجودة',
+            'description' => 'عذراً، المسابقة التي تبحث عنها غير متوفرة أو قد تم حذفها',
+            'actionLabel' => 'تصفح المسابقات',
+            'actionHref' => route('student.competitions.index'),
+        ]));
+        Route::get('/{competition}/join', [JoinCompetitionController::class, 'index'])->name('join')->missing(fn () => Inertia::render('ErrorPage', [
+            'status' => 404,
+            'title' => 'المسابقة غير موجودة',
+            'description' => 'عذراً، المسابقة التي تبحث عنها غير متوفرة أو قد تم حذفها',
+            'actionLabel' => 'تصفح المسابقات',
+            'actionHref' => route('student.competitions.index'),
+        ]));
+        Route::post('/{competition}/attempts', [AttemptController::class, 'startExam'])->name('attempts.start')->missing(fn () => Inertia::render('ErrorPage', [
+            'status' => 404,
+            'title' => 'المسابقة غير موجودة',
+            'description' => 'عذراً، المسابقة التي تبحث عنها غير متوفرة أو قد تم حذفها',
+            'actionLabel' => 'تصفح المسابقات',
+            'actionHref' => route('student.competitions.index'),
+        ]));
     });
 
     // Student topic routes (free training hub)
     Route::prefix('topics')->name('student.topics.')->group(function () {
         Route::get('/', [TopicController::class, 'index'])->name('index');
-        Route::get('/{topic}', [TopicController::class, 'show'])->name('show');
-        Route::post('/{topic}/attempts', [AttemptController::class, 'startPractice'])->name('attempts.start');
+        Route::get('/{topic}', [TopicController::class, 'show'])->name('show')->missing(fn () => Inertia::render('ErrorPage', [
+            'status' => 404,
+            'title' => 'المحور غير موجود',
+            'description' => 'عذراً، المحور التدريبي الذي تبحث عنه غير متوفر',
+            'actionLabel' => 'التدريب الحر',
+            'actionHref' => route('student.topics.index'),
+        ]));
+        Route::post('/{topic}/attempts', [AttemptController::class, 'startPractice'])->name('attempts.start')->missing(fn () => Inertia::render('ErrorPage', [
+            'status' => 404,
+            'title' => 'المحور غير موجود',
+            'description' => 'عذراً، المحور التدريبي الذي تبحث عنه غير متوفر',
+            'actionLabel' => 'التدريب الحر',
+            'actionHref' => route('student.topics.index'),
+        ]));
     });
 
     // Student results route
@@ -33,7 +84,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('attempts')->name('student.attempts.')->group(function () {
         Route::get('/', [AttemptController::class, 'index'])->name('index');
         Route::get('/create', [AttemptController::class, 'create'])->name('create');
-        Route::get('/{attempt}', [AttemptController::class, 'show'])->name('show');
+        Route::get('/{attempt}', [AttemptController::class, 'show'])->name('show')->missing(fn () => Inertia::render('ErrorPage', [
+            'status' => 404,
+            'title' => 'المحاولة غير موجودة',
+            'description' => 'عذراً، المحاولة التي تبحث عنها غير متوفرة',
+            'actionLabel' => 'محاولاتي',
+            'actionHref' => route('student.attempts.index'),
+        ]));
         Route::get('{attempt}/sections/{section}', [AttemptController::class, 'section'])->name('sections.show');
         Route::post('{attempt}/sections/{section}/submit', [AttemptController::class, 'submitSection'])->name('sections.submit');
         Route::patch('{attempt}/questions/{attemptQuestion}', [AttemptController::class, 'answerQuestion'])->name('questions.update');

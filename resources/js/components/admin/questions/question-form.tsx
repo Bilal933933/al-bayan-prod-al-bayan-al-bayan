@@ -94,7 +94,7 @@ export default function QuestionForm({
                                 name="type"
                                 checked={data.type === 'mcq'}
                                 onChange={() => handleTypeChange('mcq')}
-                                className="h-4 w-4 border-gray-300 text-primary"
+                                className="h-4 w-4 border-border text-primary"
                             />
                             <span className="text-sm">اختيار من متعدد</span>
                         </label>
@@ -104,7 +104,7 @@ export default function QuestionForm({
                                 name="type"
                                 checked={data.type === 'true_false'}
                                 onChange={() => handleTypeChange('true_false')}
-                                className="h-4 w-4 border-gray-300 text-primary"
+                                className="h-4 w-4 border-border text-primary"
                             />
                             <span className="text-sm">صح/خطأ</span>
                         </label>
