@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Attempt;
+use App\Observers\AttemptObserver;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Attempt::observe(AttemptObserver::class);
+
         $this->configureDefaults();
 
         Inertia::handleExceptionsUsing(function (ExceptionResponse $response) {

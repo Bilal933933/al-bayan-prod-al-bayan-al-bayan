@@ -21,10 +21,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Student leaderboard route
     Route::get('leaderboard', [LeaderboardController::class, 'index'])->name('student.leaderboard');
 
-    // Student report routes
-    Route::prefix('report')->name('student.report.')->group(function () {
-        Route::get('/', [ReportController::class, 'index'])->name('index');
-    });
+    // Student report route
+    Route::get('report', [ReportController::class, 'index'])->name('student.report');
 
     // Student onboarding route
     Route::get('onboarding', [OnboardingController::class, 'index'])->name('student.onboarding');
