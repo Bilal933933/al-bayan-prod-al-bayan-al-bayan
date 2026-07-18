@@ -142,6 +142,16 @@ class AttemptController extends Controller
             422,
             'No active topics available for this competition.',
         );
+
+        $targetContainerId = $competition->parent_id ?? $competition->id;
+        abort_unless(
+            auth()->user()->competitions()
+                ->where('competition_id', $targetContainerId)
+                ->exists(),
+            403,
+            'يجب عليك الانضمام إلى المسابقة أولاً.',
+        );
+
         abort_if(
             Attempt::where('user_id', auth()->id())
                 ->where('competition_id', $competition->id)

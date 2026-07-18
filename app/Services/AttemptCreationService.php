@@ -55,7 +55,6 @@ class AttemptCreationService
     {
         $topics = $competition->topics()
             ->where('topics.is_active', true)
-            ->withPivot(['questions_count', 'duration_minutes', 'difficulty_distribution'])
             ->get();
 
         $attempt = DB::transaction(function () use ($user, $competition, $topics) {

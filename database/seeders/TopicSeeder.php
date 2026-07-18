@@ -39,11 +39,11 @@ class TopicSeeder extends Seeder
                 $competition->topics()->attach($topic->id, [
                     'questions_count' => fake()->randomElement([10, 15, 20, 25]),
                     'duration_minutes' => fake()->randomElement([15, 20, 30, 45, 60]),
-                    'difficulty_distribution' => json_encode([
+                    'difficulty_distribution' => [
                         'easy' => fake()->numberBetween(20, 40),
                         'medium' => fake()->numberBetween(30, 50),
                         'hard' => fake()->numberBetween(10, 30),
-                    ]),
+                    ],
                 ]);
             }
         }

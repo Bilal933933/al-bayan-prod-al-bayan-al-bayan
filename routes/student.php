@@ -47,6 +47,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'actionLabel' => 'تصفح المسابقات',
             'actionHref' => route('student.competitions.index'),
         ]));
+        Route::post('/{competition}/join', [JoinCompetitionController::class, 'store'])->name('join.store')->missing(fn () => Inertia::render('ErrorPage', [
+            'status' => 404,
+            'title' => 'المسابقة غير موجودة',
+            'description' => 'عذراً، المسابقة التي تبحث عنها غير متوفرة أو قد تم حذفها',
+            'actionLabel' => 'تصفح المسابقات',
+            'actionHref' => route('student.competitions.index'),
+        ]));
         Route::post('/{competition}/attempts', [AttemptController::class, 'startExam'])->name('attempts.start')->missing(fn () => Inertia::render('ErrorPage', [
             'status' => 404,
             'title' => 'المسابقة غير موجودة',

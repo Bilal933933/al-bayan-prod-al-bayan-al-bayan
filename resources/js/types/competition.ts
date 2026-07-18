@@ -1,3 +1,13 @@
+export interface ChildCompetition {
+    id: number;
+    parent_id: number | null;
+    name: string;
+    slug: string;
+    icon: string | null;
+    color: string | null;
+    description: string | null;
+}
+
 export interface Competition {
     id: number;
     parent_id: number | null;
@@ -14,6 +24,8 @@ export interface Competition {
     is_active: boolean;
     parent?: Competition | null;
     children_count?: number;
+    users_count?: number;
+    topics_count?: number;
     can_have_topics?: boolean;
     created_at: string;
     updated_at: string;

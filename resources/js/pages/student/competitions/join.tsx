@@ -1,40 +1,61 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { UserPlus } from 'lucide-react';
-import { EmptyState } from '@/components/empty-state';
-import type { Competition } from '@/types/competition';
+import { ArrowRight } from 'lucide-react';
+import competitions from '@/routes/student/competitions';
+import JoinHero from '@/components/student/competitions/join/join-hero';
+import StatCards from '@/components/student/competitions/join/stat-cards';
+import PerksList from '@/components/student/competitions/join/perks-list';
+import ChildrenList from '@/components/student/competitions/join/children-list';
+import JoinActions from '@/components/student/competitions/join/join-actions';
+import type { Competition, ChildCompetition } from '@/types/competition';
 
 interface JoinProps {
-    competition: Competition;
+    competition: Competition & { users_count?: number; topics_count?: number; children?: ChildCompetition[] };
+    is_joined: boolean;
+    total_questions: number;
 }
 
-const pageVariants = {
-    hidden: { opacity: 0, y: 15 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0, 0, 0.2, 1] as const } },
-};
-
-export default function Join({ competition }: JoinProps) {
+export default function Join({ competition, is_joined, total_questions }: JoinProps) {
     return (
         <>
             <Head title={`الانضمام إلى ${competition.name}`} />
 
-            <motion.div
-                variants={pageVariants}
-                initial="hidden"
-                animate="visible"
-                className="mx-auto flex max-w-7xl flex-col gap-6 p-6"
-            >
-                <div className="flex flex-col gap-1">
-                    <h1 className="text-2xl font-bold text-foreground">الانضمام إلى المسابقة</h1>
-                    <p className="text-sm text-muted-foreground">{competition.name}</p>
-                </div>
+            <div className="mx-auto max-w-4xl px-4 py-8" dir="rtl">
+                <Link
+                    href={competitions.index.url()}
+                    className="mb-6 flex w-fit items-center gap-2 text-sm text-slate-500 transition-colors hover:text-slate-800"
+                >
+                    <ArrowRight className="h-4 w-4" />
+                    <span>العودة للمسابقات</span>
+                </Link>
 
-                <EmptyState
-                    icon={UserPlus}
-                    title="قريباً"
-                    description="صفحة الانضمام إلى المسابقة قيد التطوير، ستتمكن قريباً من التسجيل والمشاركة في هذه المسابقة."
-                />
-            </motion.div>
+                <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-xl shadow-slate-100/50"
+                >
+                    <JoinHero competition={competition} />
+
+                    <div className="p-8">
+                        <StatCards
+                            totalQuestions={total_questions}
+                            topicsCount={competition.topics_count ?? 0}
+                            usersCount={competition.users_count ?? 0}
+                        />
+
+                        <PerksList />
+
+                        {competition.children && competition.children.length > 0 && (
+                            <ChildrenList children={competition.children} />
+                        )}
+
+                        <div className="pt-4">
+                            <JoinActions competition={competition} isJoined={is_joined} />
+                        </div>
+                    </div>
+                </motion.div>
+            </div>
         </>
     );
 }

@@ -86,10 +86,16 @@ class CompetitionController extends Controller
             unset($competition->topics);
         }
 
+        $targetContainerId = $competition->parent_id ?? $competition->id;
+        $isJoined = auth()->user()->competitions()
+            ->where('competition_id', $targetContainerId)
+            ->exists();
+
         return inertia('student/competitions/show', [
             'competition' => $competition,
             'children' => $children,
             'topics' => $topics,
+            'is_joined' => $isJoined,
         ]);
     }
 }

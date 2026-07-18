@@ -7,6 +7,7 @@ import CompetitionShowHero from '@/components/student/competitions/competition-s
 import TopicCard from '@/components/student/topics/topic-card';
 import { show as topicShow } from '@/routes/student/topics';
 import { start as startCompetitionAttempt } from '@/routes/student/competitions/attempts';
+import competitions from '@/routes/student/competitions';
 import type { Competition } from '@/types/competition';
 import type { TopicWithPivot } from '@/types/topic';
 
@@ -14,6 +15,7 @@ interface ShowProps {
     competition: Competition & { parent: Competition | null };
     children: Competition[];
     topics: TopicWithPivot[];
+    is_joined: boolean;
 }
 
 const containerVariants = {
@@ -33,7 +35,7 @@ const itemVariants = {
     },
 };
 
-export default function Show({ competition, children, topics }: ShowProps) {
+export default function Show({ competition, children, topics, is_joined }: ShowProps) {
     const [starting, setStarting] = useState(false);
     const sectionTitleClass = 'flex items-center gap-2 border-r-4 border-primary pr-3';
     const sectionIconClass = 'h-5 w-5 text-primary';
@@ -146,18 +148,27 @@ export default function Show({ competition, children, topics }: ShowProps) {
                             </div>
 
                             <div className="mt-10 flex justify-center">
-                                <button
-                                    onClick={handleStartExam}
-                                    disabled={starting}
-                                    className="inline-flex items-center gap-2.5 rounded-2xl bg-primary px-8 py-4 text-base font-bold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
-                                >
-                                    {starting ? (
-                                        <Loader2 className="h-5 w-5 animate-spin" />
-                                    ) : (
-                                        <Play className="h-5 w-5 fill-white" />
-                                    )}
-                                    {starting ? 'جارٍ إنشاء الاختبار...' : 'ابدأ اختبار المحاكاة'}
-                                </button>
+                                {is_joined ? (
+                                    <button
+                                        onClick={handleStartExam}
+                                        disabled={starting}
+                                        className="inline-flex items-center gap-2.5 rounded-2xl bg-primary px-8 py-4 text-base font-bold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+                                    >
+                                        {starting ? (
+                                            <Loader2 className="h-5 w-5 animate-spin" />
+                                        ) : (
+                                            <Play className="h-5 w-5 fill-white" />
+                                        )}
+                                        {starting ? 'جارٍ إنشاء الاختبار...' : 'ابدأ اختبار المحاكاة'}
+                                    </button>
+                                ) : (
+                                    <Link
+                                        href={competitions.join.url({ competition: competition.slug })}
+                                        className="inline-flex items-center gap-2.5 rounded-2xl bg-blue-600 px-8 py-4 text-base font-bold text-white shadow-lg transition-all hover:bg-blue-700 hover:shadow-xl active:scale-95"
+                                    >
+                                        الانضمام إلى المسابقة
+                                    </Link>
+                                )}
                             </div>
                         </motion.div>
                     )}
