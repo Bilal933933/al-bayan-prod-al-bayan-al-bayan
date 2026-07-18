@@ -25,6 +25,8 @@ class StartPracticeRequest extends FormRequest
                 'string',
                 Rule::in([Question::DIFFICULTY_EASY, Question::DIFFICULTY_MEDIUM, Question::DIFFICULTY_HARD]),
             ],
+            'questions_count' => ['nullable', 'integer', 'min:5', 'max:50'],
+            'with_timer' => ['required', 'boolean'],
         ];
     }
 

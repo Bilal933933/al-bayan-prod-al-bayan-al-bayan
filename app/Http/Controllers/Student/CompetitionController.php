@@ -57,6 +57,8 @@ class CompetitionController extends Controller
 
         $children = collect();
         $topics = collect();
+        $totalQuestions = 0;
+        $totalMinutes = 0;
 
         if ($competition->isContainer()) {
             $children = $competition->children()
@@ -93,6 +95,9 @@ class CompetitionController extends Controller
 
             $topics = $competition->topics;
             unset($competition->topics);
+
+            $totalQuestions = $topics->sum(fn ($t) => $t->pivot->questions_count);
+            $totalMinutes = $topics->sum(fn ($t) => $t->pivot->duration_minutes);
         }
 
         $targetContainerId = $competition->parent_id ?? $competition->id;
@@ -105,6 +110,8 @@ class CompetitionController extends Controller
             'children' => $children,
             'topics' => $topics,
             'is_joined' => $isJoined,
+            'total_questions' => $totalQuestions,
+            'total_minutes' => $totalMinutes,
         ]);
     }
 }

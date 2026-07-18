@@ -1,134 +1,142 @@
-import { useState } from 'react';
-import { router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { BookOpen, Play, ArrowRight, RotateCcw } from 'lucide-react';
-import { DifficultySelector } from '@/components/student/topics/difficulty-selector';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import studentTopics from '@/routes/student/topics';
 
 interface Topic {
     id: number;
     name: string;
+    default_questions_count: number;
+    default_duration_minutes: number | null;
 }
 
 interface TrainingConfigProps {
     topics: Topic[];
-    hasInProgress: boolean;
-    onBack: () => void;
+    selectedTopic: number | null;
+    onTopicSelect: (id: number) => void;
+    difficulty: string | null;
+    onDifficultySelect: (value: string | null) => void;
+    questionsCount: number;
+    onQuestionsCountChange: (count: number) => void;
+    withTimer: boolean;
+    onTimerToggle: (value: boolean) => void;
 }
 
-export default function TrainingConfig({ topics, hasInProgress, onBack }: TrainingConfigProps) {
-    const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
-    const [difficulty, setDifficulty] = useState<string | null>(null);
-    const [isStarting, setIsStarting] = useState(false);
+const difficultyOptions = [
+    { id: null, title: 'شامل الكل', desc: 'مزيج عشوائي', style: 'bg-slate-50/60 border-slate-200 text-slate-700 hover:bg-slate-100' },
+    { id: 'easy', title: 'سهل', desc: 'أسئلة مباشرة', style: 'bg-emerald-50/40 border-emerald-100 text-emerald-800 hover:bg-emerald-50' },
+    { id: 'medium', title: 'متوسط', desc: 'تحتاج تركيز', style: 'bg-amber-50/40 border-amber-100 text-amber-800 hover:bg-amber-50' },
+    { id: 'hard', title: 'صعب', desc: 'مهارات عليا', style: 'bg-rose-50/40 border-rose-100 text-rose-800 hover:bg-rose-50' },
+];
 
-    const selectedTopic = topics.find((t) => t.id === Number(selectedTopicId));
-    const canStart = selectedTopicId !== null;
+const questionPresets = [10, 20, 30, 40];
 
-    function handleStart() {
-        if (!canStart || isStarting) return;
-        setIsStarting(true);
-
-        const routeOptions = difficulty
-            ? { query: { difficulty } }
-            : undefined;
-
-        const url = studentTopics.attempts.start(
-            { topic: Number(selectedTopicId) },
-            routeOptions,
-        ).url;
-
-        router.post(url, {}, { preserveScroll: true });
-    }
-
-    function handleResume() {
-        if (!hasInProgress) return;
-        router.visit('/attempts');
-    }
-
+export default function TrainingConfig({
+    topics, selectedTopic, onTopicSelect,
+    difficulty, onDifficultySelect,
+    questionsCount, onQuestionsCountChange,
+    withTimer, onTimerToggle,
+}: TrainingConfigProps) {
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25 }}
-        >
-            <Card>
-                <CardContent className="p-6">
-                    <div className="flex items-center gap-3">
-                        <button
-                            type="button"
-                            onClick={onBack}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted transition-colors"
-                        >
-                            <ArrowRight className="h-4 w-4" />
-                        </button>
-                        <div>
-                            <h3 className="font-semibold">تدريب حر</h3>
-                            <p className="text-sm text-muted-foreground">اختر المحور ومستوى الصعوبة للبدء</p>
-                        </div>
-                    </div>
+        <div className="space-y-6 text-right">
+            <div>
+                <label className="block text-sm font-black text-slate-700 mb-2">اختر المحور المعرفي:</label>
+                <select
+                    value={selectedTopic ?? ''}
+                    onChange={(e) => onTopicSelect(Number(e.target.value))}
+                    className="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-700 focus:outline-none focus:border-blue-500 transition-colors text-sm"
+                >
+                    <option value="" disabled>-- اختر مادة للتدريب عليها --</option>
+                    {topics.map((t) => (
+                        <option key={t.id} value={t.id}>{t.name}</option>
+                    ))}
+                </select>
+            </div>
 
-                    <div className="mt-5 space-y-5">
-                        {/* Topic Select */}
-                        <div>
-                            <label className="mb-2 block text-sm font-medium text-muted-foreground">المحور:</label>
-                            <Select
-                                value={selectedTopicId ?? undefined}
-                                onValueChange={setSelectedTopicId}
-                            >
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="اختر المحور..." />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {topics.map((topic) => (
-                                        <SelectItem key={topic.id} value={String(topic.id)}>
-                                            {topic.name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        {/* Difficulty - show after topic is selected */}
-                        {selectedTopic && (
-                            <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                transition={{ duration: 0.2 }}
-                            >
-                                <DifficultySelector value={difficulty} onChange={setDifficulty} />
-                            </motion.div>
-                        )}
-
-                        {/* Actions */}
-                        <div className={cn('flex gap-3', hasInProgress && 'justify-between')}>
-                            {hasInProgress && (
-                                <Button
+            {selectedTopic && (
+                <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50/50 p-4 rounded-2xl border border-slate-100"
+                >
+                    <div>
+                        <label className="block text-xs font-black text-slate-500 mb-2">عدد أسئلة التدريب:</label>
+                        <div className="flex gap-2">
+                            {questionPresets.map((num) => (
+                                <button
+                                    key={num}
                                     type="button"
-                                    variant="outline"
-                                    onClick={handleResume}
-                                    className="gap-2"
+                                    onClick={() => onQuestionsCountChange(num)}
+                                    className={cn(
+                                        'flex-1 py-2 rounded-lg font-black text-xs border transition-all',
+                                        questionsCount === num
+                                            ? 'bg-blue-600 border-blue-600 text-white shadow-sm'
+                                            : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300',
+                                    )}
                                 >
-                                    <RotateCcw className="h-4 w-4" />
-                                    استئناف المحاولة
-                                </Button>
-                            )}
-                            <Button
-                                type="button"
-                                onClick={handleStart}
-                                disabled={!canStart || isStarting}
-                                className={cn('gap-2', !hasInProgress && 'w-full sm:w-auto')}
-                            >
-                                <Play className="h-4 w-4" />
-                                {isStarting ? 'جاري البدء...' : 'بدء التدريب'}
-                            </Button>
+                                    {num}
+                                </button>
+                            ))}
                         </div>
                     </div>
-                </CardContent>
-            </Card>
-        </motion.div>
+
+                    <div>
+                        <label className="block text-xs font-black text-slate-500 mb-2">مؤقت الضغط الزمني:</label>
+                        <div className="flex bg-white p-1 rounded-xl border border-slate-200">
+                            <button
+                                type="button"
+                                onClick={() => onTimerToggle(true)}
+                                className={cn(
+                                    'flex-1 py-1.5 rounded-lg font-bold text-xs transition-all',
+                                    withTimer ? 'bg-emerald-50 text-emerald-700 font-black' : 'text-slate-400',
+                                )}
+                            >
+                                تفعيل الوقت الافتراضي
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => onTimerToggle(false)}
+                                className={cn(
+                                    'flex-1 py-1.5 rounded-lg font-bold text-xs transition-all',
+                                    !withTimer ? 'bg-amber-50 text-amber-700 font-black' : 'text-slate-400',
+                                )}
+                            >
+                                تدريب مفتوح (بدون وقت)
+                            </button>
+                        </div>
+                    </div>
+                </motion.div>
+            )}
+
+            {selectedTopic && (
+                <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                >
+                    <label className="block text-sm font-black text-slate-700 mb-2">مستوى الصعوبة المستهدف:</label>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        {difficultyOptions.map((card) => (
+                            <button
+                                key={card.id ?? 'all'}
+                                type="button"
+                                onClick={() => onDifficultySelect(card.id)}
+                                className={cn(
+                                    'p-3 rounded-2xl border text-right transition-all duration-200 relative overflow-hidden',
+                                    card.style,
+                                    difficulty === card.id && 'ring-2 ring-blue-600 scale-[1.02]',
+                                )}
+                            >
+                                <span className="font-black text-sm block">{card.title}</span>
+                                <span className="text-[10px] text-slate-400 font-medium block mt-0.5">{card.desc}</span>
+                                {difficulty === card.id && (
+                                    <span className="absolute top-2 left-2 bg-blue-600 text-white p-0.5 rounded-full">
+                                        <Check className="w-3 h-3" />
+                                    </span>
+                                )}
+                            </button>
+                        ))}
+                    </div>
+                </motion.div>
+            )}
+        </div>
     );
 }

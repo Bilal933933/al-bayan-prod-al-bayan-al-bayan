@@ -14,24 +14,32 @@ use Illuminate\Support\Facades\DB;
 
 class AttemptCreationService
 {
-    public function createPractice(User $user, Topic $topic, ?string $difficulty = null): Attempt
-    {
-        $query = $topic->questions()->active();
+    public function createPractice(
+        User $user,
+        Topic $topic,
+        ?string $difficulty = null,
+        ?int $questionsCount = null,
+        bool $withTimer = true,
+    ): Attempt {
+        $finalCount = $questionsCount ?? $topic->default_questions_count;
+        $duration = $withTimer ? ($topic->default_duration_minutes ?? 15) : null;
 
-        if ($difficulty !== null) {
-            $query->where('difficulty', $difficulty);
-        }
+        return DB::transaction(function () use ($user, $topic, $difficulty, $finalCount, $duration) {
+            $query = $topic->questions()->active();
 
-        $questions = $query->inRandomOrder()
-            ->limit($topic->default_questions_count)
-            ->get();
+            if ($difficulty !== null) {
+                $query->where('difficulty', $difficulty);
+            }
 
-        $attempt = DB::transaction(function () use ($user, $topic, $questions) {
+            $questions = $query->inRandomOrder()
+                ->limit($finalCount)
+                ->get();
+
             $attempt = Attempt::create([
                 'user_id' => $user->id,
                 'type' => Attempt::TYPE_PRACTICE,
                 'topic_id' => $topic->id,
-                'status' => 'in_progress',
+                'status' => Attempt::STATUS_IN_PROGRESS,
                 'total_questions' => $questions->count(),
             ]);
 
@@ -39,7 +47,7 @@ class AttemptCreationService
                 'attempt_id' => $attempt->id,
                 'topic_id' => $topic->id,
                 'questions_count' => $questions->count(),
-                'duration_minutes' => $topic->default_duration_minutes,
+                'duration_minutes' => $duration,
                 'order' => 0,
             ]);
 
@@ -47,8 +55,6 @@ class AttemptCreationService
 
             return $attempt;
         });
-
-        return $attempt->load(['sections.questions']);
     }
 
     public function createExam(User $user, Competition $competition): Attempt
@@ -62,7 +68,7 @@ class AttemptCreationService
                 'user_id' => $user->id,
                 'type' => Attempt::TYPE_EXAM,
                 'competition_id' => $competition->id,
-                'status' => 'in_progress',
+                'status' => Attempt::STATUS_IN_PROGRESS,
             ]);
 
             $totalQuestions = 0;

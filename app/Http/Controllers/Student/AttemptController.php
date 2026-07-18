@@ -65,12 +65,12 @@ class AttemptController extends Controller
     {
         $topics = Topic::active()
             ->whereHas('questions')
-            ->get(['id', 'name']);
+            ->get(['id', 'name', 'default_questions_count', 'default_duration_minutes']);
 
         $competitions = Competition::active()
             ->roots()
             ->with(['children' => fn ($q) => $q->active()])
-            ->get(['id', 'name', 'classification', 'description']);
+            ->get(['id', 'name', 'slug', 'classification', 'description']);
 
         return inertia('student/attempts/create', [
             'topics' => $topics,
@@ -129,6 +129,8 @@ class AttemptController extends Controller
             auth()->user(),
             $topic,
             $request->validated('difficulty'),
+            $request->validated('questions_count'),
+            $request->validated('with_timer'),
         );
 
         return redirect()->route('student.attempts.show', $attempt);
