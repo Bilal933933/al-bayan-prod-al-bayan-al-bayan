@@ -29,10 +29,13 @@ interface DashboardProps {
         completed_attempts: number;
         in_progress_attempts: number;
         average_percentage: number | null;
+        streak_days?: number;
     };
     activeCompetitions: (Competition & { topics_count: number })[];
     recommendedTopics: (Topic & { questions_count: number })[];
     recentCompetitions: (Competition & { topics_count: number })[];
+    upcomingCompetitions: (Competition & { topics_count: number })[];
+    lastActivityAt: string | null;
 }
 
 const pageVariants = {
@@ -48,6 +51,7 @@ export default function Dashboard({
     activeCompetitions,
     recommendedTopics,
     recentCompetitions,
+    upcomingCompetitions,
 }: DashboardProps) {
     return (
         <>
@@ -79,6 +83,7 @@ export default function Dashboard({
                     <DashboardSidebar
                         activeCompetitions={activeCompetitions}
                         recentCompetitions={recentCompetitions}
+                        upcomingCompetitions={upcomingCompetitions}
                     />
                 </div>
             </motion.div>

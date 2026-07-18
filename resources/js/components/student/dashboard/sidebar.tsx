@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Calendar } from 'lucide-react';
 import CompetitionCard from '@/components/student/competitions/competition-card';
 import { SectionHeader } from '@/components/section-header';
 import competitions from '@/routes/student/competitions';
@@ -8,6 +8,7 @@ import type { Competition } from '@/types/competition';
 interface SidebarProps {
     activeCompetitions: (Competition & { topics_count: number })[];
     recentCompetitions: (Competition & { topics_count: number })[];
+    upcomingCompetitions: (Competition & { topics_count: number })[];
 }
 
 const tips = [
@@ -16,7 +17,7 @@ const tips = [
     'ابدأ بالأسئلة السهلة',
 ];
 
-export function DashboardSidebar({ activeCompetitions, recentCompetitions }: SidebarProps) {
+export function DashboardSidebar({ activeCompetitions, recentCompetitions, upcomingCompetitions }: SidebarProps) {
     return (
         <motion.div
             initial={{ opacity: 0, x: 20 }}
@@ -47,6 +48,24 @@ export function DashboardSidebar({ activeCompetitions, recentCompetitions }: Sid
                     <SectionHeader title="مسابقاتك الأخيرة" href={competitions.index().url} />
                     <div className="space-y-3">
                         {recentCompetitions.map((competition, index) => (
+                            <motion.div
+                                key={competition.id}
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.3, delay: 0.1 * index }}
+                            >
+                                <CompetitionCard competition={competition} />
+                            </motion.div>
+                        ))}
+                    </div>
+                </>
+            )}
+
+            {upcomingCompetitions.length > 0 && (
+                <>
+                    <SectionHeader title="مسابقات قادمة" />
+                    <div className="space-y-3">
+                        {upcomingCompetitions.map((competition, index) => (
                             <motion.div
                                 key={competition.id}
                                 initial={{ opacity: 0, scale: 0.95 }}

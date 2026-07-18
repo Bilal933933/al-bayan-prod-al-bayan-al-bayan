@@ -1,4 +1,4 @@
-import { Layers, Play, Trophy } from 'lucide-react';
+import { Layers, Play, Trophy, Flame } from 'lucide-react';
 import { StatCard } from '@/components/stat-card';
 
 interface StatsGridProps {
@@ -7,6 +7,7 @@ interface StatsGridProps {
         completed_attempts: number;
         in_progress_attempts: number;
         average_percentage: number | null;
+        streak_days?: number;
     };
 }
 
@@ -43,11 +44,19 @@ const statItems = [
         bgColor: 'bg-gradient-to-br from-palette-3/10 to-palette-3/20 dark:from-palette-3/20 dark:to-palette-3/30',
         borderColor: 'border-palette-3/30 dark:border-palette-3/40',
     },
+    {
+        icon: Flame,
+        label: 'أيام المواظبة',
+        getValue: (s: StatsGridProps['stats']) => s.streak_days !== undefined ? `${s.streak_days} يوم` : '—',
+        iconColor: 'text-orange-500',
+        bgColor: 'bg-gradient-to-br from-orange-500/10 to-orange-500/20 dark:from-orange-500/20 dark:to-orange-500/30',
+        borderColor: 'border-orange-500/30 dark:border-orange-500/40',
+    },
 ];
 
 export function StatsGrid({ stats }: StatsGridProps) {
     return (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {statItems.map(({ icon, label, getValue, iconColor, bgColor, borderColor }) => (
                 <StatCard
                     key={label}

@@ -30,7 +30,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable implements PasskeyUser
 {
@@ -60,6 +60,12 @@ class User extends Authenticatable implements PasskeyUser
             ->withTimestamps();
     }
 
+    /** @return HasMany<Attempt, $this> */
+    public function attempts(): HasMany
+    {
+        return $this->hasMany(Attempt::class);
+    }
+
     /** @return HasMany<UserScore, $this> */
     public function scores(): HasMany
     {
@@ -80,5 +86,17 @@ class User extends Authenticatable implements PasskeyUser
     public function scopeAdmins(Builder $query): void
     {
         $query->where('role', self::ROLE_ADMIN);
+    }
+
+    /** @param Builder<self> $query */
+    public function scopeStudents(Builder $query): void
+    {
+        $query->where('role', self::ROLE_STUDENT);
+    }
+
+    /** @param Builder<self> $query */
+    public function scopeVerified(Builder $query): void
+    {
+        $query->whereNotNull('email_verified_at');
     }
 }

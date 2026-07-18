@@ -26,6 +26,7 @@ import { dashboard } from '@/routes/admin';
 import adminAttempts from '@/routes/admin/attempts';
 import adminCompetitions from '@/routes/admin/competitions';
 import adminQuestions from '@/routes/admin/questions';
+import adminStudents from '@/routes/admin/students';
 import adminTopics from '@/routes/admin/topics';
 import type { NavItem } from '@/types';
 
@@ -57,7 +58,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'المستخدمون',
-        href: '#',
+        href: adminStudents.index(),
         icon: Users,
     },
     {

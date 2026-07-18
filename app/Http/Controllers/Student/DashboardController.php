@@ -68,10 +68,30 @@ class DashboardController extends Controller
             ->limit(3)
             ->get();
 
+        // Upcoming competitions the user joined
+        $upcomingCompetitions = auth()->user()->competitions()
+            ->active()
+            ->upcoming()
+            ->withCount('topics')
+            ->orderBy('start_date')
+            ->limit(3)
+            ->get();
+
+        if ($upcomingCompetitions->isEmpty()) {
+            $upcomingCompetitions = Competition::active()
+                ->upcoming()
+                ->withCount('topics')
+                ->orderBy('start_date')
+                ->limit(3)
+                ->get();
+        }
+
+        $userModel = auth()->user();
+
         return inertia('student/dashboard', [
             'user' => [
-                'name' => auth()->user()->name,
-                'email' => auth()->user()->email,
+                'name' => $userModel->name,
+                'email' => $userModel->email,
             ],
             'inProgressAttempt' => $inProgressAttempt,
             'recentAttempts' => $recentAttempts,
@@ -80,10 +100,13 @@ class DashboardController extends Controller
                 'completed_attempts' => $totalCompleted,
                 'in_progress_attempts' => (clone $allAttempts)->where('status', Attempt::STATUS_IN_PROGRESS)->count(),
                 'average_percentage' => $averagePercentage,
+                'streak_days' => $userModel->streak_days ?? 0,
             ],
             'activeCompetitions' => $activeCompetitions,
             'recommendedTopics' => $recommendedTopics,
             'recentCompetitions' => $recentCompetitions,
+            'upcomingCompetitions' => $upcomingCompetitions,
+            'lastActivityAt' => $userModel->last_activity_at,
         ]);
     }
 }

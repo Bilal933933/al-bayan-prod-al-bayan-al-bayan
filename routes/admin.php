@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AttemptController;
 use App\Http\Controllers\Admin\CompetitionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\QuestionController;
+use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TopicController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -68,5 +69,15 @@ Route::middleware(['auth', 'verified', 'admin'])
                 'description' => 'عذراً، المحاولة التي تبحث عنها غير متوفرة',
                 'actionLabel' => 'المحاولات',
                 'actionHref' => route('admin.attempts.index'),
+            ]));
+
+        Route::resource('students', StudentController::class)
+            ->parameters(['students' => 'student'])
+            ->missing(fn () => Inertia::render('ErrorPage', [
+                'status' => 404,
+                'title' => 'الطالب غير موجود',
+                'description' => 'عذراً، الطالب الذي تبحث عنه غير متوفر',
+                'actionLabel' => 'الطلاب',
+                'actionHref' => route('admin.students.index'),
             ]));
     });
