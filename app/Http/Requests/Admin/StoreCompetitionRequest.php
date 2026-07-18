@@ -28,6 +28,8 @@ class StoreCompetitionRequest extends FormRequest
             'icon' => ['nullable', 'string', 'max:100'],
             'description' => ['nullable', 'string'],
             'is_active' => ['boolean'],
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
         ];
     }
 

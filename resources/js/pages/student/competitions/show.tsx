@@ -1,6 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { BookOpen, ChevronLeft, Folder, House, Play, Loader2 } from 'lucide-react';
+import { BookOpen, Calendar, ChevronLeft, Folder, House, Play, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import CompetitionCard from '@/components/student/competitions/competition-card';
 import CompetitionShowHero from '@/components/student/competitions/competition-show-hero';
@@ -85,6 +85,30 @@ export default function Show({ competition, children, topics, is_joined }: ShowP
 
                 {/* Hero */}
                 <CompetitionShowHero competition={competition} />
+
+                {/* Stats Bar */}
+                {competition.classification !== 'container' && topics.length > 0 && (
+                    <div className="mx-auto max-w-7xl px-4 sm:px-6">
+                        <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 rounded-2xl border bg-card px-6 py-4 text-sm">
+                            <span className="flex items-center gap-2 font-medium text-foreground">
+                                <BookOpen className="h-4 w-4 text-primary" />
+                                {topics.length} محاور
+                            </span>
+                            {competition.start_date && (
+                                <span className="flex items-center gap-2 text-muted-foreground">
+                                    <Calendar className="h-4 w-4" />
+                                    يبدأ: {new Date(competition.start_date).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' })}
+                                </span>
+                            )}
+                            {competition.end_date && (
+                                <span className="flex items-center gap-2 text-muted-foreground">
+                                    <Calendar className="h-4 w-4" />
+                                    ينتهي: {new Date(competition.end_date).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' })}
+                                </span>
+                            )}
+                        </div>
+                    </div>
+                )}
 
                 {/* Content */}
                 <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">

@@ -4,11 +4,13 @@ import { FolderOpen, Layers } from 'lucide-react';
 import { useMemo } from 'react';
 import { EmptyState } from '@/components/empty-state';
 import ContainerSection from '@/components/student/competitions/container-section';
+import MyCompetitionsSection from '@/components/student/competitions/my-competitions-section';
 import competitions from '@/routes/student/competitions';
 import type { Competition } from '@/types/competition';
 
 interface IndexProps {
     competitions: Competition[];
+    myCompetitions: Competition[];
     filters: {
         classification: string | null;
     };
@@ -23,7 +25,7 @@ const pageVariants = {
     },
 };
 
-export default function Index({ competitions: items }: IndexProps) {
+export default function Index({ competitions: items, myCompetitions }: IndexProps) {
     const { containers, standalone } = useMemo(() => {
         const containers: Competition[] = [];
         const standalone: Competition[] = [];
@@ -56,7 +58,7 @@ export default function Index({ competitions: items }: IndexProps) {
                     </p>
                 </div>
 
-                {items.length === 0 && (
+                {items.length === 0 && myCompetitions.length === 0 && (
                     <EmptyState
                         icon={Layers}
                         title="لا توجد مسابقات متاحة حالياً"
@@ -64,6 +66,8 @@ export default function Index({ competitions: items }: IndexProps) {
                         className="py-20"
                     />
                 )}
+
+                <MyCompetitionsSection competitions={myCompetitions} />
 
                 {containers.length > 0 && (
                     <ContainerSection

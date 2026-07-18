@@ -29,6 +29,8 @@ export default function Create({ availableParents, defaultParentId }: CreateProp
         icon: null,
         description: null,
         is_active: true,
+        start_date: null,
+        end_date: null,
     });
 
     function submit(e: React.FormEvent) {

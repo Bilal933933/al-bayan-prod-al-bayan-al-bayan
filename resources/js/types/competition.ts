@@ -22,10 +22,15 @@ export interface Competition {
     icon: string | null;
     description: string | null;
     is_active: boolean;
+    start_date: string | null;
+    end_date: string | null;
     parent?: Competition | null;
     children_count?: number;
     users_count?: number;
     topics_count?: number;
+    user_attempts_count?: number;
+    last_attempt_at?: string | null;
+    joined_at?: string | null;
     can_have_topics?: boolean;
     created_at: string;
     updated_at: string;
@@ -43,5 +48,7 @@ export interface CompetitionFormData {
     icon: string | null;
     description: string | null;
     is_active: boolean;
+    start_date: string | null;
+    end_date: string | null;
     image_file?: File | null;
 }

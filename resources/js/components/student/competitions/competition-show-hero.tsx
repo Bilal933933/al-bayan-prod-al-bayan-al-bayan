@@ -1,7 +1,25 @@
-import { Layers } from 'lucide-react';
+import { Calendar, Layers } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Competition } from '@/types/competition';
 import { COMPETITION_ICONS } from '@/config/competition-icons';
+
+function formatDate(dateStr: string | null | undefined): string | null {
+    if (!dateStr) return null;
+    const d = new Date(dateStr);
+    const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+
+    return `${d.getUTCDate()} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+}
+
+function getStatusLabel(competition: Competition): { label: string; className: string } | null {
+    if (competition.start_date && new Date(competition.start_date) > new Date()) {
+        return { label: 'قريباً', className: 'bg-amber-400/20 text-amber-300' };
+    }
+    if (competition.end_date && new Date(competition.end_date) < new Date()) {
+        return { label: 'منتهية', className: 'bg-red-400/20 text-red-300' };
+    }
+    return null;
+}
 
 function hexToRgba(hex: string, alpha: number): string {
     const clean = hex.replace('#', '');
@@ -70,7 +88,7 @@ export default function CompetitionShowHero({
                                     {competition.description}
                                 </p>
                             )}
-                            <div className="mt-2 flex items-center gap-3 text-xs">
+                            <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
                                 <span className="font-mono text-white/60" dir="ltr">#{competition.code}</span>
                                 <span className={cn(
                                     'rounded-full px-2 py-0.5 text-[10px] font-medium',
@@ -78,6 +96,28 @@ export default function CompetitionShowHero({
                                 )}>
                                     {competition.is_active ? 'نشط' : 'غير نشط'}
                                 </span>
+                                {(() => {
+                                    const status = getStatusLabel(competition);
+                                    if (!status) return null;
+                                    return (
+                                        <span className={cn('flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium', status.className)}>
+                                            <Calendar className="h-3 w-3" />
+                                            {status.label}
+                                        </span>
+                                    );
+                                })()}
+                                {competition.start_date && (
+                                    <span className="flex items-center gap-1 text-white/60">
+                                        <Calendar className="h-3 w-3" />
+                                        {formatDate(competition.start_date)}
+                                    </span>
+                                )}
+                                {competition.end_date && (
+                                    <span className="flex items-center gap-1 text-white/60">
+                                        <Calendar className="h-3 w-3" />
+                                        {formatDate(competition.end_date)}
+                                    </span>
+                                )}
                             </div>
                         </div>
                     </div>

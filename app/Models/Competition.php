@@ -34,6 +34,8 @@ class Competition extends Model
         'icon',
         'description',
         'is_active',
+        'start_date',
+        'end_date',
     ];
 
     protected $appends = ['image_url', 'can_have_topics'];
@@ -43,6 +45,8 @@ class Competition extends Model
         return [
             'classification' => 'string',
             'is_active' => 'boolean',
+            'start_date' => 'datetime',
+            'end_date' => 'datetime',
         ];
     }
 
@@ -125,6 +129,47 @@ class Competition extends Model
     public function isChild(): bool
     {
         return $this->classification === self::CLASSIFICATION_CHILD;
+    }
+
+    public function isUpcoming(): bool
+    {
+        return $this->start_date !== null && $this->start_date->isFuture();
+    }
+
+    public function isOngoing(): bool
+    {
+        if ($this->start_date !== null && $this->start_date->isFuture()) {
+            return false;
+        }
+
+        return ! ($this->end_date !== null && $this->end_date->isPast());
+    }
+
+    public function isEnded(): bool
+    {
+        return $this->end_date !== null && $this->end_date->isPast();
+    }
+
+    /** @param Builder<self> $query */
+    public function scopeUpcoming(Builder $query): void
+    {
+        $query->whereNotNull('start_date')->where('start_date', '>', now());
+    }
+
+    /** @param Builder<self> $query */
+    public function scopeOngoing(Builder $query): void
+    {
+        $query->where(function (Builder $q) {
+            $q->whereNull('start_date')->orWhere('start_date', '<=', now());
+        })->where(function (Builder $q) {
+            $q->whereNull('end_date')->orWhere('end_date', '>', now());
+        });
+    }
+
+    /** @param Builder<self> $query */
+    public function scopeEnded(Builder $query): void
+    {
+        $query->whereNotNull('end_date')->where('end_date', '<=', now());
     }
 
     public function canBeParentOf(): bool

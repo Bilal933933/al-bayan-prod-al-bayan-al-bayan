@@ -102,6 +102,7 @@ it('student can start an exam attempt with one topic', function () {
     Question::factory(2)->active()->for($topic)->easy()->create();
     Question::factory(2)->active()->for($topic)->medium()->create();
     Question::factory(1)->active()->for($topic)->hard()->create();
+    $this->user->competitions()->attach($competition, ['joined_at' => now()]);
 
     $response = $this->actingAs($this->user)->post(route('student.competitions.attempts.start', $competition));
 
@@ -132,6 +133,7 @@ it('student can start an exam attempt with multiple topics', function () {
     ]);
     Question::factory(3)->active()->for($topicA)->create();
     Question::factory(2)->active()->for($topicB)->create();
+    $this->user->competitions()->attach($competition, ['joined_at' => now()]);
 
     $response = $this->actingAs($this->user)->post(route('student.competitions.attempts.start', $competition));
 
@@ -147,6 +149,7 @@ it('prevents starting an exam when one is already in progress', function () {
     $topic = Topic::factory()->active()->create();
     $competition->topics()->attach($topic, ['questions_count' => 3, 'duration_minutes' => 10, 'difficulty_distribution' => null]);
     Question::factory(3)->active()->for($topic)->create();
+    $this->user->competitions()->attach($competition, ['joined_at' => now()]);
 
     $this->actingAs($this->user)->post(route('student.competitions.attempts.start', $competition));
     $response = $this->actingAs($this->user)->post(route('student.competitions.attempts.start', $competition));
@@ -170,6 +173,7 @@ it('prevents exam with no active topics', function () {
         'duration_minutes' => 10,
         'difficulty_distribution' => null,
     ]);
+    $this->user->competitions()->attach($competition, ['joined_at' => now()]);
 
     $response = $this->actingAs($this->user)->post(route('student.competitions.attempts.start', $competition));
 
@@ -186,6 +190,7 @@ it('exam handles insufficient questions gracefully', function () {
     ]);
     Question::factory(2)->active()->for($topic)->easy()->create();
     Question::factory(1)->active()->for($topic)->medium()->create();
+    $this->user->competitions()->attach($competition, ['joined_at' => now()]);
 
     $response = $this->actingAs($this->user)->post(route('student.competitions.attempts.start', $competition));
 
@@ -206,6 +211,7 @@ it('exam respects difficulty distribution approximately', function () {
     Question::factory(4)->active()->for($topic)->easy()->create();
     Question::factory(4)->active()->for($topic)->medium()->create();
     Question::factory(4)->active()->for($topic)->hard()->create();
+    $this->user->competitions()->attach($competition, ['joined_at' => now()]);
 
     $response = $this->actingAs($this->user)->post(route('student.competitions.attempts.start', $competition));
 

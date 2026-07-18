@@ -336,6 +336,37 @@ return;
                 </div>
             </div>
 
+            {/* الصف: تاريخ البداية + تاريخ النهاية */}
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="grid gap-2">
+                    <Label htmlFor="start_date">تاريخ البداية</Label>
+                    <Input
+                        id="start_date"
+                        type="datetime-local"
+                        value={data.start_date ?? ''}
+                        onChange={(e) => setData('start_date', e.target.value || null)}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                        اترك فارغاً لبدء فوري. قبل هذا التاريخ تظهر المسابقة كـ "قريباً".
+                    </p>
+                    <InputError message={errors.start_date} />
+                </div>
+
+                <div className="grid gap-2">
+                    <Label htmlFor="end_date">تاريخ النهاية</Label>
+                    <Input
+                        id="end_date"
+                        type="datetime-local"
+                        value={data.end_date ?? ''}
+                        onChange={(e) => setData('end_date', e.target.value || null)}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                        اترك فارغاً لمسابقة مفتوحة. بعد هذا التاريخ تظهر كـ "منتهية".
+                    </p>
+                    <InputError message={errors.end_date} />
+                </div>
+            </div>
+
             {/* الوصف (كامل العرض) */}
             <div className="grid gap-2">
                 <Label htmlFor="description">الوصف</Label>

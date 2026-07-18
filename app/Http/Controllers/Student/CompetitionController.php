@@ -28,12 +28,21 @@ class CompetitionController extends Controller
                 ! $classification,
                 fn ($query) => $query->roots()
             )
-            ->withCount('children')
+            ->withCount(['children', 'users', 'topics'])
             ->orderBy('order')
+            ->get();
+
+        $myCompetitions = auth()->user()->competitions()
+            ->active()
+            ->withPivot('joined_at')
+            ->withCount(['topics', 'users'])
+            ->withCount(['attempts as user_attempts_count' => fn ($q) => $q->where('user_id', auth()->id())])
+            ->withMax(['attempts as last_attempt_at' => fn ($q) => $q->where('user_id', auth()->id())], 'created_at')
             ->get();
 
         return inertia('student/competitions/index', [
             'competitions' => $competitions,
+            'myCompetitions' => $myCompetitions,
             'filters' => [
                 'classification' => $classification,
             ],

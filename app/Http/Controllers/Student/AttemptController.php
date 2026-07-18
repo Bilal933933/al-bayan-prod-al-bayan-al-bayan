@@ -137,6 +137,8 @@ class AttemptController extends Controller
     public function startExam(Competition $competition): RedirectResponse
     {
         abort_unless(! $competition->isContainer(), 403);
+        abort_if($competition->isUpcoming(), 403, 'المسابقة لم تبدأ بعد.');
+        abort_if($competition->isEnded(), 403, 'المسابقة انتهت.');
         abort_unless(
             $competition->topics()->where('topics.is_active', true)->exists(),
             422,

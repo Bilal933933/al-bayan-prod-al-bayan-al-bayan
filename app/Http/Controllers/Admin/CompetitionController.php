@@ -108,7 +108,7 @@ class CompetitionController extends Controller
             ->with('success', 'تم إنشاء المسابقة بنجاح.');
     }
 
-    public function show(Competition $competition): Response
+    public function show(Request $request, Competition $competition): Response
     {
         $competition->load([
             'parent',
@@ -116,12 +116,21 @@ class CompetitionController extends Controller
                 $query->orderBy('order')->withCount('children');
             },
         ]);
+        $competition->loadCount('users');
 
         $childrenCount = $competition->children->count();
+
+        $sourceCompetition = $competition->parent ?? $competition;
+        $joinedUsers = $sourceCompetition->users()
+            ->select(['users.id', 'users.name', 'users.email', 'users.email_verified_at'])
+            ->withPivot('joined_at')
+            ->orderBy('competition_user.joined_at', 'desc')
+            ->paginate(10, ['*'], 'users_page', $request->integer('users_page', 1));
 
         return inertia('admin/competitions/show', [
             'competition' => $competition,
             'childrenCount' => $childrenCount,
+            'joinedUsers' => $joinedUsers,
         ]);
     }
 

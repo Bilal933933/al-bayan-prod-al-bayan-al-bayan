@@ -1,8 +1,10 @@
 import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Pencil, Plus, ArrowRight, Eye, Layers, Hash, Tag, Calendar } from 'lucide-react';
+import { Pencil, Plus, ArrowRight, Eye, Layers, Hash, Tag, Calendar, Users } from 'lucide-react';
 import ClassificationBadge from '@/components/admin/competitions/classification-badge';
 import DateDisplay from '@/components/date-display';
+import JoinedUsersTable from '@/components/admin/competitions/joined-users-table';
+import { LaravelPagination } from '@/components/laravel-pagination';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -11,13 +13,23 @@ import { dashboard } from '@/routes/admin';
 import competitions from '@/routes/admin/competitions';
 import type { BreadcrumbItem } from '@/types';
 import type { Competition } from '@/types/competition';
+import type { PaginationMeta } from '@/types/pagination';
 
 interface ShowProps {
     competition: Competition & {
         parent: Competition | null;
         children: (Competition & { children_count?: number })[];
-    };
+    } & { users_count?: number };
     childrenCount: number;
+    joinedUsers?: {
+        data: {
+            id: number;
+            name: string;
+            email: string;
+            email_verified_at: string | null;
+            pivot: { joined_at: string };
+        }[];
+    } & PaginationMeta;
 }
 
 function CompetitionIcon({ icon, className = 'h-5 w-5' }: { icon: string | null; className?: string }) {
@@ -68,7 +80,7 @@ return `rgba(128, 128, 128, ${alpha})`;
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-export default function Show({ competition, childrenCount }: ShowProps) {
+export default function Show({ competition, childrenCount, joinedUsers }: ShowProps) {
     const color = competition.color;
     const bgGradient = color
         ? `linear-gradient(135deg, ${color} 0%, ${hexToRgba(color, 0.7)} 100%)`
@@ -252,6 +264,10 @@ export default function Show({ competition, childrenCount }: ShowProps) {
                                         <p className="mt-1 text-xs text-muted-foreground">إجمالي الأحفاد</p>
                                     </div>
                                 )}
+                                <div className="rounded-lg bg-muted p-4 text-center">
+                                    <p className="text-3xl font-bold text-muted-foreground">{joinedUsers?.total ?? 0}</p>
+                                    <p className="mt-1 text-xs text-muted-foreground">المنضمون</p>
+                                </div>
                                 <div className="flex items-center gap-2 rounded-lg bg-muted p-3 text-xs text-muted-foreground">
                                     <Calendar className="h-3.5 w-3.5 shrink-0" />
                                     <span>
@@ -367,6 +383,35 @@ export default function Show({ competition, childrenCount }: ShowProps) {
                         <p className="text-sm text-muted-foreground">
                             مسابقة مستقلة — لا تتبع حاوية ولا تحتوي على أبناء.
                         </p>
+                    </motion.div>
+                )}
+
+                {/* ===== المنضمون ===== */}
+                {joinedUsers && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.35 }}
+                    >
+                        <div className="mb-4 flex items-center justify-between">
+                            <h3 className="flex items-center gap-2 text-lg font-semibold">
+                                <Users className="h-4 w-4 text-muted-foreground" />
+                                الطلاب المنضمون
+                                <span className="text-sm font-normal text-muted-foreground">({joinedUsers.total})</span>
+                            </h3>
+                        </div>
+
+                        <JoinedUsersTable
+                            users={joinedUsers.data}
+                            meta={joinedUsers}
+                            competitionName={competition.name}
+                        />
+
+                        {joinedUsers.last_page > 1 && (
+                            <div className="mt-4">
+                                <LaravelPagination meta={joinedUsers} />
+                            </div>
+                        )}
                     </motion.div>
                 )}
             </motion.div>
