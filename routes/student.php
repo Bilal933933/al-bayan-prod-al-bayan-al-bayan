@@ -96,8 +96,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'actionLabel' => 'محاولاتي',
             'actionHref' => route('student.attempts.index'),
         ]));
-        Route::get('{attempt}/sections/{section}', [AttemptController::class, 'section'])->name('sections.show');
-        Route::post('{attempt}/sections/{section}/submit', [AttemptController::class, 'submitSection'])->name('sections.submit');
+        Route::get('{attempt}/sections/{section}', [AttemptController::class, 'section'])->name('sections.show')->scopeBindings();
+        Route::post('{attempt}/sections/{section}/submit', [AttemptController::class, 'submitSection'])->name('sections.submit')->scopeBindings();
         Route::patch('{attempt}/questions/{attemptQuestion}', [AttemptController::class, 'answerQuestion'])->name('questions.update');
         Route::post('{attempt}/finish', [AttemptController::class, 'finish'])->name('finish');
     });

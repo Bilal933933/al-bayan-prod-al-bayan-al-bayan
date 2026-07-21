@@ -34,7 +34,6 @@ export default function Take({ attempt }: TakeProps) {
         currentSectionDuration,
         isSectionSubmitted,
         isSimulation,
-        isLastSection,
         isLastQuestion,
         isSubmittingSection,
         submittedSectionIndices,

@@ -5,8 +5,10 @@ namespace App\Providers;
 use App\Models\Attempt;
 use App\Observers\AttemptObserver;
 use Carbon\CarbonImmutable;
+use App\Policies\AttemptPolicy;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Inertia\ExceptionResponse;
@@ -28,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Attempt::observe(AttemptObserver::class);
+        Gate::policy(Attempt::class, AttemptPolicy::class);
 
         $this->configureDefaults();
 

@@ -116,6 +116,11 @@ class Competition extends Model
         $query->whereNull('parent_id');
     }
 
+    public function getRootId(): int
+    {
+        return $this->parent_id ?? $this->id;
+    }
+
     public function isContainer(): bool
     {
         return $this->classification === self::CLASSIFICATION_CONTAINER;

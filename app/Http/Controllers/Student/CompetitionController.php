@@ -100,9 +100,8 @@ class CompetitionController extends Controller
             $totalMinutes = $topics->sum(fn ($t) => $t->pivot->duration_minutes);
         }
 
-        $targetContainerId = $competition->parent_id ?? $competition->id;
         $isJoined = auth()->user()->competitions()
-            ->where('competition_id', $targetContainerId)
+            ->where('competition_id', $competition->getRootId())
             ->exists();
 
         return inertia('student/competitions/show', [

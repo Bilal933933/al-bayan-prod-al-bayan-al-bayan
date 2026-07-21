@@ -38,31 +38,21 @@ class ResultController extends Controller
             return $carry;
         }, 0);
 
-        $recentResults = (clone $allAttempts)
-            ->where('status', Attempt::STATUS_COMPLETED)
-            ->with(['topic:id,name', 'competition:id,name'])
-            ->latest()
-            ->take(10)
-            ->get()
-            ->map(fn ($a) => [
-                'id' => $a->id,
-                'type' => $a->type,
-                'subject_name' => $a->subject_name,
-                'correct_answers' => $a->correct_answers,
-                'total_questions' => $a->total_questions,
-                'percentage' => $a->total_questions > 0 ? round($a->correct_answers / $a->total_questions * 100) : 0,
-                'created_at' => $a->created_at,
-            ]);
+        $recentResults = $completed->sortByDesc('created_at')->take(10)->map(fn ($a) => [
+            'id' => $a->id,
+            'type' => $a->type,
+            'subject_name' => $a->subject_name,
+            'correct_answers' => $a->correct_answers,
+            'total_questions' => $a->total_questions,
+            'percentage' => $a->total_questions > 0 ? round($a->correct_answers / $a->total_questions * 100) : 0,
+            'created_at' => $a->created_at,
+        ]);
 
-        $progress = (clone $allAttempts)
-            ->where('status', Attempt::STATUS_COMPLETED)
-            ->orderBy('created_at')
-            ->get(['created_at', 'correct_answers', 'total_questions', 'type'])
-            ->map(fn ($a) => [
-                'date' => $a->created_at,
-                'percentage' => $a->total_questions > 0 ? round($a->correct_answers / $a->total_questions * 100) : 0,
-                'type' => $a->type,
-            ]);
+        $progress = $completed->sortBy('created_at')->values()->map(fn ($a) => [
+            'date' => $a->created_at,
+            'percentage' => $a->total_questions > 0 ? round($a->correct_answers / $a->total_questions * 100) : 0,
+            'type' => $a->type,
+        ]);
 
         return inertia('student/results/index', [
             'overallStats' => [

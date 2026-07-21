@@ -70,6 +70,7 @@ export function useAttemptEngine(attempt: Attempt) {
         .filter((idx) => idx !== -1);
 
     const answeredQuestions = new Set<string>();
+
     for (const [, section] of sectionsData) {
         for (const q of section.questions ?? []) {
             if (q.selected_option_id !== null) {
@@ -80,11 +81,16 @@ export function useAttemptEngine(attempt: Attempt) {
 
     function loadSection(sectionIndex: number) {
         const section = sections[sectionIndex];
-        if (!section) return;
+
+        if (!section) {
+return;
+}
 
         const cached = sectionsData.get(section.id);
+
         if (cached?.questions) {
             setIsLoadingSection(false);
+
             return;
         }
 
@@ -95,13 +101,17 @@ export function useAttemptEngine(attempt: Attempt) {
                 .url,
         )
             .then((res) => {
-                if (!res.ok) throw new Error('Failed to load section');
+                if (!res.ok) {
+throw new Error('Failed to load section');
+}
+
                 return res.json();
             })
             .then((data: AttemptSection) => {
                 setSectionsData((prev) => {
                     const next = new Map(prev);
                     next.set(data.id, data);
+
                     return next;
                 });
                 setIsLoadingSection(false);
@@ -136,17 +146,24 @@ export function useAttemptEngine(attempt: Attempt) {
             timerRef.current = setInterval(() => {
                 setElapsedSeconds((prev) => {
                     if (prev >= currentSectionDuration * 60 - 1) {
-                        if (timerRef.current) clearInterval(timerRef.current);
+                        if (timerRef.current) {
+clearInterval(timerRef.current);
+}
+
                         handleSubmitSection();
+
                         return prev;
                     }
+
                     return prev + 1;
                 });
             }, 1000);
         }
 
         return () => {
-            if (timerRef.current) clearInterval(timerRef.current);
+            if (timerRef.current) {
+clearInterval(timerRef.current);
+}
         };
     }, [
         currentSectionIndex,
@@ -156,15 +173,19 @@ export function useAttemptEngine(attempt: Attempt) {
     ]);
 
     function handleSelectOption(optionId: number) {
-        if (!currentQuestion || currentQuestion.selected_option_id === optionId)
-            return;
+        if (!currentQuestion || currentQuestion.selected_option_id === optionId) {
+return;
+}
 
         const isLocked =
             isSimulation &&
             lockedQuestions.has(
                 getCurrentKey(currentSection.id, currentQuestion.order),
             );
-        if (isLocked) return;
+
+        if (isLocked) {
+return;
+}
 
         const url = attempts.questions.update({
             attempt: attempt.id,
@@ -183,6 +204,7 @@ export function useAttemptEngine(attempt: Attempt) {
         setSectionsData((prev) => {
             const next = new Map(prev);
             const section = next.get(currentSection.id);
+
             if (section) {
                 section.questions = section.questions.map((q) =>
                     q.id === currentQuestion.id
@@ -194,6 +216,7 @@ export function useAttemptEngine(attempt: Attempt) {
                     questions: [...section.questions],
                 });
             }
+
             return next;
         });
     }
@@ -202,18 +225,29 @@ export function useAttemptEngine(attempt: Attempt) {
         targetSectionIdx: number,
         targetQuestionIdx: number,
     ): boolean {
-        if (!isSimulation) return true;
+        if (!isSimulation) {
+return true;
+}
+
         const section = sections[targetSectionIdx];
-        if (!section) return false;
-        if (section.submitted_at !== null) return false;
+
+        if (!section) {
+return false;
+}
+
+        if (section.submitted_at !== null) {
+return false;
+}
+
         return !lockedQuestions.has(
             getCurrentKey(section.id, targetQuestionIdx),
         );
     }
 
     const handleSubmitSection = useCallback(() => {
-        if (isSubmittingSection || !currentSection || currentSectionSubmitted)
-            return;
+        if (isSubmittingSection || !currentSection || currentSectionSubmitted) {
+return;
+}
 
         setIsSubmittingSection(true);
 
@@ -227,6 +261,7 @@ export function useAttemptEngine(attempt: Attempt) {
                 preserveScroll: true,
                 onSuccess: () => {
                     setIsSubmittingSection(false);
+
                     if (isLastSection) {
                         removeFromStorage(ls(id, 'section'));
                         removeFromStorage(ls(id, 'question'));
@@ -256,17 +291,22 @@ export function useAttemptEngine(attempt: Attempt) {
                 next.add(
                     getCurrentKey(currentSection.id, currentQuestion.order),
                 );
+
                 return next;
             });
         }
 
         if (currentQuestionIndex < totalQuestionsInSection - 1) {
             setCurrentQuestionIndex((prev) => prev + 1);
+
             return;
         }
 
         if (!isLastSection) {
-            if (isSimulation) handleSubmitSection();
+            if (isSimulation) {
+handleSubmitSection();
+}
+
             setCurrentQuestionIndex(0);
             setCurrentSectionIndex((prev) => prev + 1);
         }
@@ -275,18 +315,24 @@ export function useAttemptEngine(attempt: Attempt) {
     function goToPrevious() {
         if (currentQuestionIndex > 0) {
             const targetIdx = currentQuestionIndex - 1;
+
             if (canGoBackTo(currentSectionIndex, targetIdx)) {
                 setCurrentQuestionIndex(targetIdx);
             }
+
             return;
         }
 
         if (currentSectionIndex > 0) {
             const prevSectionIdx = currentSectionIndex - 1;
             const prevSection = sections[prevSectionIdx];
-            if (!prevSection) return;
+
+            if (!prevSection) {
+return;
+}
 
             const lastQuestionIdx = (prevSection.questions_count ?? 1) - 1;
+
             if (canGoBackTo(prevSectionIdx, lastQuestionIdx)) {
                 setCurrentQuestionIndex(lastQuestionIdx);
                 setCurrentSectionIndex(prevSectionIdx);
@@ -295,7 +341,9 @@ export function useAttemptEngine(attempt: Attempt) {
     }
 
     function handleFinish() {
-        if (isFinishing) return;
+        if (isFinishing) {
+return;
+}
 
         setIsFinishing(true);
 

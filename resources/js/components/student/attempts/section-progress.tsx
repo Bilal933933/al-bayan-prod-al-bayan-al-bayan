@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 
 interface SectionMeta {
     id: number;
-    topic: { id: number; name: string } | null;
+    topic?: { id: number; name: string } | null;
     questions_count: number;
 }
 

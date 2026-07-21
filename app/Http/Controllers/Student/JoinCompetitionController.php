@@ -13,10 +13,8 @@ class JoinCompetitionController extends Controller
     {
         abort_unless($competition->is_active, 404);
 
-        $targetContainerId = $competition->parent_id ?? $competition->id;
-
         $isJoined = auth()->user()->competitions()
-            ->where('competition_id', $targetContainerId)
+            ->where('competition_id', $competition->getRootId())
             ->exists();
 
         if ($isJoined && ! $competition->isContainer()) {
@@ -41,10 +39,8 @@ class JoinCompetitionController extends Controller
         abort_if($competition->isUpcoming(), 403, 'المسابقة لم تبدأ بعد.');
         abort_if($competition->isEnded(), 403, 'المسابقة انتهت.');
 
-        $targetContainerId = $competition->parent_id ?? $competition->id;
-
         auth()->user()->competitions()->syncWithoutDetaching([
-            $targetContainerId => ['joined_at' => now()],
+            $competition->getRootId() => ['joined_at' => now()],
         ]);
 
         return redirect()->route('student.competitions.show', $competition)
