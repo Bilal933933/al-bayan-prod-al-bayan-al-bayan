@@ -16,6 +16,7 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { useAttemptEngine } from '@/hooks/use-attempt-engine';
+import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
 import ExamWorkspaceLayout from '@/layouts/exam-workspace-layout';
 import type { Attempt } from '@/types/attempt';
 
@@ -27,6 +28,7 @@ export default function Take({ attempt }: TakeProps) {
     const {
         currentSectionIndex,
         currentQuestionIndex,
+        setCurrentQuestionIndex,
         isLoadingSection,
         currentSection,
         currentQuestion,
@@ -47,9 +49,36 @@ export default function Take({ attempt }: TakeProps) {
         handleFinish,
         sections,
         lockedQuestions,
+        flaggedQuestions,
+        toggleFlag,
     } = useAttemptEngine(attempt);
 
     const [showFinishDialog, setShowFinishDialog] = useState(false);
+
+    const currentKey = `${currentSection?.id}:${currentQuestionIndex ?? 0}`;
+
+    const jumpToQuestion = (index: number) => {
+        if (!isSimulation && index >= 0 && index < totalQuestionsInSection) {
+            setCurrentQuestionIndex(index);
+        }
+    };
+    const optionsCount = currentQuestion?.question.options?.length ?? 0;
+
+    useKeyboardShortcuts({
+        onNext: goToNext,
+        onPrevious: goToPrevious,
+        onFlag: () => toggleFlag(currentKey),
+        onSubmit: handleSubmitSection,
+        onSelectOption: (index: number) => {
+            const option = currentQuestion?.question.options?.[index];
+
+            if (option?.id) {
+                handleSelectOption(option.id);
+            }
+        },
+        optionsCount,
+        isEnabled: !showFinishDialog,
+    });
 
     return (
         <>
@@ -114,7 +143,8 @@ export default function Take({ attempt }: TakeProps) {
                 currentIndex={currentQuestionIndex}
                 totalQuestions={totalQuestionsInSection}
                 answeredQuestions={answeredQuestions}
-                currentKey={`${currentSection?.id}:${currentQuestionIndex}`}
+                flaggedQuestions={flaggedQuestions}
+                currentKey={currentKey}
                 isLastQuestion={isLastQuestion}
                 isLastQuestionInSection={
                     currentQuestionIndex >= totalQuestionsInSection - 1
@@ -124,21 +154,26 @@ export default function Take({ attempt }: TakeProps) {
                 canGoBack={canGoBack}
                 onPrevious={goToPrevious}
                 onNext={goToNext}
-                    onFinish={() => setShowFinishDialog(true)}
+                onFinish={() => setShowFinishDialog(true)}
                 onSubmitSection={handleSubmitSection}
+                onToggleFlag={() => toggleFlag(currentKey)}
+                onJumpToQuestion={jumpToQuestion}
                 isSubmittingSection={isSubmittingSection}
             />
 
             <Dialog open={showFinishDialog} onOpenChange={setShowFinishDialog}>
-                <DialogContent>
+                <DialogContent
+                    onOpenAutoFocus={(e) => e.preventDefault()}
+                    aria-describedby="finish-desc"
+                >
                     <DialogHeader>
                         <DialogTitle>تأكيد إنهاء الاختبار</DialogTitle>
-                        <DialogDescription>
+                        <DialogDescription id="finish-desc">
                             هل أنت متأكد من إنهاء الاختبار؟ سيتم تسليم جميع الإجابات ولن تتمكن من العودة.
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setShowFinishDialog(false)}>
+                        <Button variant="outline" autoFocus onClick={() => setShowFinishDialog(false)}>
                             إلغاء
                         </Button>
                         <Button

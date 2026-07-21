@@ -1,13 +1,13 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BarChart3, BookOpen, History, Medal, Menu, Play, Search, Trophy } from 'lucide-react';
+import { BarChart3, BookOpen, History, Medal, Menu, Play, Search, Trophy, XIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import AppLogo from '@/components/app-logo';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Breadcrumbs } from '@/components/breadcrumbs';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { GlobalSearch } from '@/components/student/global-search';
 import { ThemeSwitcher } from '@/components/theme-switcher';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -21,8 +21,8 @@ import {
 } from '@/components/ui/navigation-menu';
 import {
     Sheet,
+    SheetClose,
     SheetContent,
-    SheetHeader,
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet';
@@ -91,6 +91,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
         };
 
         window.addEventListener('keydown', handleKeyDown);
+
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
@@ -109,6 +110,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });
+
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
@@ -136,14 +138,18 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                             </SheetTrigger>
                             <SheetContent
                                 side="right"
-                                className="flex h-full w-64 flex-col items-stretch justify-between bg-sidebar"
+                                className="flex h-full w-64 flex-col items-stretch justify-between bg-background [&>button:last-child]:hidden"
                             >
                                 <SheetTitle className="sr-only">
                                     Navigation menu
                                 </SheetTitle>
-                                <SheetHeader className="flex justify-start text-start">
+                                <div className="flex items-center justify-between px-4 pt-4">
                                     <AppLogoIcon className="h-6 w-6 fill-current text-black dark:text-white" />
-                                </SheetHeader>
+                                    <SheetClose className="rounded-xs opacity-70 transition-opacity hover:opacity-100">
+                                        <XIcon className="size-4" />
+                                        <span className="sr-only">إغلاق</span>
+                                    </SheetClose>
+                                </div>
                                 <div className="flex h-full flex-1 flex-col space-y-4 p-4">
                                     <div className="flex h-full flex-col justify-between text-sm">
                                         <div className="flex flex-col space-y-4">

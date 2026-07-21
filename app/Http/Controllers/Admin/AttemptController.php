@@ -11,6 +11,8 @@ use Inertia\Response;
 
 class AttemptController extends Controller
 {
+    private const PAGINATION = 20;
+
     public function index(Request $request): Response
     {
         $search = $request->query('search', '');

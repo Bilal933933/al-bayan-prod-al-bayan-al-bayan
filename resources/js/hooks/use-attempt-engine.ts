@@ -29,6 +29,10 @@ export function useAttemptEngine(attempt: Attempt) {
         ls(id, 'locked'),
         [],
     );
+    const [flaggedArray, setFlaggedArray] = useLocalStorage<string[]>(
+        ls(id, 'flagged'),
+        [],
+    );
     const [sectionsData, setSectionsData] = useState<
         Map<number, AttemptSection>
     >(new Map());
@@ -45,7 +49,24 @@ export function useAttemptEngine(attempt: Attempt) {
         setLockedArray([...next]);
     };
 
+    const flaggedQuestions = new Set(flaggedArray);
+    const toggleFlag = useCallback((key: string) => {
+        setFlaggedArray((prev) => {
+            const set = new Set(prev);
+
+            if (set.has(key)) {
+                set.delete(key);
+            } else {
+                set.add(key);
+            }
+
+            return [...set];
+        });
+    }, [setFlaggedArray]);
+
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    const abortRef = useRef<AbortController | null>(null);
+    const submitSectionRef = useRef<() => void>(() => {});
 
     const isSimulation = attempt.type === 'exam';
     const sections = attempt.sections ?? [];
@@ -94,11 +115,15 @@ return;
             return;
         }
 
+        abortRef.current?.abort();
+        abortRef.current = new AbortController();
+
         setIsLoadingSection(true);
 
         fetch(
             attempts.sections.show({ attempt: attempt.id, section: section.id })
                 .url,
+            { signal: abortRef.current.signal },
         )
             .then((res) => {
                 if (!res.ok) {
@@ -116,7 +141,11 @@ throw new Error('Failed to load section');
                 });
                 setIsLoadingSection(false);
             })
-            .catch(() => {
+            .catch((err: unknown) => {
+                if (err instanceof Error && err.name === 'AbortError') {
+return;
+}
+
                 toast.error('فشل تحميل أسئلة القسم. حاول مرة أخرى.');
                 setIsLoadingSection(false);
             });
@@ -150,7 +179,7 @@ throw new Error('Failed to load section');
 clearInterval(timerRef.current);
 }
 
-                        handleSubmitSection();
+                        submitSectionRef.current();
 
                         return prev;
                     }
@@ -229,6 +258,10 @@ return;
 return true;
 }
 
+        if (currentSection?.submitted_at !== null) {
+return false;
+}
+
         const section = sections[targetSectionIdx];
 
         if (!section) {
@@ -284,7 +317,15 @@ return;
         id,
     ]);
 
+    useEffect(() => {
+        submitSectionRef.current = handleSubmitSection;
+    });
+
     function goToNext() {
+        if (isSectionSubmitted) {
+return;
+}
+
         if (isSimulation && currentQuestion) {
             setLockedQuestions((prev) => {
                 const next = new Set(prev);
@@ -398,5 +439,7 @@ return;
         handleFinish,
         sections,
         lockedQuestions,
+        flaggedQuestions,
+        toggleFlag,
     };
 }

@@ -21,9 +21,18 @@ interface LiveSummaryCardProps {
 }
 
 function getDifficultyLabel(slug?: string | null): string {
-    if (slug === 'easy') return 'سهل';
-    if (slug === 'medium') return 'متوسط';
-    if (slug === 'hard') return 'صعب';
+    if (slug === 'easy') {
+return 'سهل';
+}
+
+    if (slug === 'medium') {
+return 'متوسط';
+}
+
+    if (slug === 'hard') {
+return 'صعب';
+}
+
     return 'جميع المستويات';
 }
 

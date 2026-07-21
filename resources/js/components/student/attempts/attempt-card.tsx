@@ -4,18 +4,11 @@ import DateDisplay from '@/components/date-display';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import type { AttemptSection } from '@/types/attempt';
+import type { Attempt, AttemptSection } from '@/types/attempt';
 
-interface AttemptCardAttempt {
-    id: number;
-    type: 'practice' | 'exam';
-    status: 'in_progress' | 'completed' | 'abandoned';
-    subject_name: string;
-    correct_answers: number;
-    total_questions: number;
-    started_at: string;
+type AttemptCardAttempt = Pick<Attempt, 'id' | 'type' | 'status' | 'subject_name' | 'correct_answers' | 'total_questions' | 'started_at'> & {
     sections?: AttemptSection[];
-}
+};
 
 interface AttemptCardProps {
     attempt: AttemptCardAttempt;

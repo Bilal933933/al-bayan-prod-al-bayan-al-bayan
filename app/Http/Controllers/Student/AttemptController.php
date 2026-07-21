@@ -34,7 +34,7 @@ class AttemptController extends Controller
             ->with(['topic:id,name', 'competition:id,name', 'sections' => fn ($q) => $q->select(['id', 'attempt_id', 'submitted_at', 'order', 'questions_count'])])
             ->when($request->filled('type'), fn ($q) => $q->where('type', $request->string('type')))
             ->latest()
-            ->paginate(15)
+            ->paginate(Attempt::PAGINATION)
             ->withQueryString();
 
         $allUserAttempts = Attempt::where('user_id', $userId);

@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -11,28 +12,40 @@ interface OptionCardProps {
 
 export function OptionCard({ text, letter, isSelected, isLocked, onSelect }: OptionCardProps) {
     return (
-        <button
+        <motion.button
             type="button"
             disabled={isLocked}
             onClick={onSelect}
+            role="radio"
+            aria-checked={isSelected}
+            whileTap={isLocked ? {} : { scale: 0.98 }}
+            animate={isSelected ? { scale: [1, 1.03, 1] } : {}}
+            transition={{ duration: 0.25 }}
             className={cn(
-                'flex w-full items-center gap-4 rounded-xl border p-4 text-right transition-all duration-200',
+                'flex w-full items-center gap-4 rounded-xl border-2 p-4 text-right transition-all duration-200',
                 isSelected
-                    ? 'border-primary bg-primary/10 ring-2 ring-primary/20 text-primary-foreground shadow-sm'
-                    : 'border-border hover:border-muted-foreground/25 hover:bg-muted hover:scale-[1.01] active:scale-[0.99] text-muted-foreground',
+                    ? 'border-primary bg-primary/10 ring-2 ring-primary/20 text-primary shadow-sm'
+                    : 'border-border text-muted-foreground hover:border-muted-foreground/25 hover:bg-muted hover:scale-[1.01] active:scale-[0.99]',
+                isSelected && !isLocked && 'hover:bg-primary/15 hover:border-primary/80',
                 isLocked && 'cursor-not-allowed opacity-80',
                 !isLocked && 'cursor-pointer',
             )}
         >
             <span className={cn(
-                'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sm font-bold border transition-colors',
+                'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sm font-bold border-2 transition-colors duration-200',
                 isSelected
                     ? 'bg-primary border-primary text-primary-foreground'
                     : 'bg-muted border-border text-muted-foreground',
             )}>
                 {isSelected ? <Check className="h-4 w-4" /> : letter}
             </span>
-            <span className="text-base font-medium leading-relaxed">{text}</span>
-        </button>
+            <span className={cn(
+                'text-base font-medium leading-relaxed',
+                isSelected && 'text-primary',
+                !isSelected && 'text-muted-foreground',
+            )}>
+                {text}
+            </span>
+        </motion.button>
     );
 }

@@ -1,11 +1,13 @@
-import { ArrowLeft, ArrowRight, CheckCircle, Flag, LoaderCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle, Flag, LayoutGrid, LoaderCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 
 interface NavigationFooterProps {
     currentIndex: number;
     totalQuestions: number;
     answeredQuestions: Set<string>;
+    flaggedQuestions: Set<string>;
     currentKey: string;
     isLastQuestion: boolean;
     isLastQuestionInSection: boolean;
@@ -16,13 +18,73 @@ interface NavigationFooterProps {
     onNext: () => void;
     onFinish: () => void;
     onSubmitSection: () => void;
+    onToggleFlag: () => void;
+    onJumpToQuestion: (index: number) => void;
     isSubmittingSection: boolean;
+}
+
+function QuestionGrid({
+    totalQuestions,
+    currentIndex,
+    answeredQuestions,
+    flaggedQuestions,
+    sectionKey,
+    onJump,
+}: {
+    totalQuestions: number;
+    currentIndex: number;
+    answeredQuestions: Set<string>;
+    flaggedQuestions: Set<string>;
+    sectionKey: string;
+    onJump: (index: number) => void;
+}) {
+    return (
+        <div className="w-72">
+            <div className="mb-3 flex items-center justify-between">
+                <h4 className="text-sm font-semibold">أسئلة القسم</h4>
+                <span className="text-xs text-muted-foreground">{answeredQuestions.size} من {totalQuestions} مُجاب</span>
+            </div>
+            <div className="grid grid-cols-5 gap-2">
+                {Array.from({ length: totalQuestions }, (_, i) => {
+                    const key = `${sectionKey}:${i}`;
+                    const isAnswered = answeredQuestions.has(key);
+                    const isFlagged = flaggedQuestions.has(key);
+                    const isCurrent = i === currentIndex;
+
+                    return (
+                        <button
+                            key={i}
+                            type="button"
+                            onClick={() => onJump(i)}
+                            className={cn(
+                                'relative h-9 w-9 rounded-lg text-sm font-medium transition-all',
+                                isCurrent && 'ring-2 ring-primary ring-offset-2',
+                                isAnswered && !isCurrent && 'bg-primary text-primary-foreground',
+                                !isAnswered && !isCurrent && 'bg-muted text-muted-foreground hover:bg-muted/80',
+                                isCurrent && isAnswered && 'bg-primary text-primary-foreground',
+                                isCurrent && !isAnswered && 'bg-primary/20 text-primary',
+                            )}
+                            aria-label={`سؤال ${i + 1}${isAnswered ? '، مُجاب' : ''}${isFlagged ? '، مُعلَّم' : ''}${isCurrent ? '، الحالي' : ''}`}
+                        >
+                            {i + 1}
+                            {isFlagged && (
+                                <span className="absolute -right-0.5 -top-0.5 flex h-3 w-3 items-center justify-center rounded-full bg-warning">
+                                    <Flag className="h-2 w-2 fill-warning-foreground text-warning-foreground" />
+                                </span>
+                            )}
+                        </button>
+                    );
+                })}
+            </div>
+        </div>
+    );
 }
 
 export function NavigationFooter({
     currentIndex,
     totalQuestions,
     answeredQuestions,
+    flaggedQuestions,
     currentKey,
     isLastQuestion,
     isLastQuestionInSection,
@@ -33,9 +95,13 @@ export function NavigationFooter({
     onNext,
     onFinish,
     onSubmitSection,
+    onToggleFlag,
+    onJumpToQuestion,
     isSubmittingSection,
 }: NavigationFooterProps) {
     const sectionKey = currentKey.split(':')[0];
+    const isFlagged = flaggedQuestions.has(currentKey);
+    const remaining = totalQuestions - currentIndex - 1;
 
     function renderNextButton() {
         if (isLastQuestion) {
@@ -83,27 +149,58 @@ export function NavigationFooter({
         );
     }
 
-    const remaining = totalQuestions - currentIndex - 1;
-
     return (
         <footer className="sticky bottom-0 z-50 border-t bg-background shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
             <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-4 py-3">
-                <div>
-                    {!isSimulation && (
+                <div className="flex items-center gap-2">
+                    {(!isSimulation || canGoBack) && (
                         <Button
                             variant="outline"
                             size="sm"
                             disabled={currentIndex === 0 || !canGoBack}
                             onClick={onPrevious}
+                            aria-label="السؤال السابق"
                         >
                             <ArrowRight className="ml-1.5 h-4 w-4" />
                             السابق
                         </Button>
                     )}
+
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={onToggleFlag}
+                        className={cn('gap-1.5', isFlagged && 'text-warning hover:text-warning/80')}
+                        aria-label={isFlagged ? 'إزالة العلم من هذا السؤال' : 'تحديد هذا السؤال للمراجعة'}
+                    >
+                        <Flag className={cn('h-4 w-4', isFlagged && 'fill-warning')} />
+                        <span className="hidden sm:inline">{isFlagged ? 'مُعلَّم' : 'علّم'}</span>
+                    </Button>
+
+                    {!isSimulation && (
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button variant="ghost" size="sm" className="gap-1.5" aria-label="فتح لوحة المراجعة">
+                                    <LayoutGrid className="h-4 w-4" />
+                                    <span className="hidden sm:inline text-xs">{currentIndex + 1}/{totalQuestions}</span>
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent align="center" className="w-auto p-4">
+                                <QuestionGrid
+                                    totalQuestions={totalQuestions}
+                                    currentIndex={currentIndex}
+                                    answeredQuestions={answeredQuestions}
+                                    flaggedQuestions={flaggedQuestions}
+                                    sectionKey={sectionKey}
+                                    onJump={onJumpToQuestion}
+                                />
+                            </PopoverContent>
+                        </Popover>
+                    )}
                 </div>
 
-                <div className="flex items-center gap-1.5">
-                    {Array.from({ length: Math.min(totalQuestions, 15) }, (_, i) => {
+                <div className="flex flex-1 items-center gap-1.5 overflow-x-auto px-4">
+                    {Array.from({ length: totalQuestions }, (_, i) => {
                         const key = `${sectionKey}:${i}`;
                         const isCurrent = i === currentIndex;
                         const isAnswered = answeredQuestions.has(key);

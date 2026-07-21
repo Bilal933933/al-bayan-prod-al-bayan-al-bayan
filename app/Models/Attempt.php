@@ -27,6 +27,8 @@ class Attempt extends Model
 
     const STATUS_ABANDONED = 'abandoned';
 
+    const PAGINATION = 15;
+
     protected $appends = ['subject_name'];
 
     protected $fillable = [

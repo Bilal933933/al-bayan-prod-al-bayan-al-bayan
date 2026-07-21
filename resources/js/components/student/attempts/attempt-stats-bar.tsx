@@ -16,9 +16,9 @@ return null;
         { icon: BarChart3, label: 'إجمالي المحاولات', value: stats.total },
         { icon: BookCheck, label: 'مكتملة', value: stats.completed },
         { icon: Play, label: 'قيد التنفيذ', value: stats.in_progress },
-        ...(stats.average_percentage !== null
-            ? [{ icon: Clock, label: 'متوسط النتيجة', value: `${stats.average_percentage}%` }]
-            : []),
+    ...(stats.average_percentage !== null
+        ? [{ icon: Clock, label: 'متوسط النتيجة', value: `${Math.round(stats.average_percentage)}%` }]
+        : []),
     ];
 
     return (

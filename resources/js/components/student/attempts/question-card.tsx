@@ -32,7 +32,7 @@ export function QuestionCard({ question, questionIndex, totalQuestions, isLocked
 
     if (isLoading || !question) {
         return (
-            <div ref={containerRef} className="space-y-6">
+            <div ref={containerRef} className="space-y-6" aria-label="جاري تحميل السؤال">
                 <div className="flex items-center gap-2">
                     <Skeleton className="h-5 w-24" />
                     <Skeleton className="h-5 w-14" />
@@ -50,7 +50,12 @@ export function QuestionCard({ question, questionIndex, totalQuestions, isLocked
     const difficultyInfo = difficultyStyles[question.question.difficulty] ?? { label: question.question.difficulty, class: '' };
 
     return (
-        <div ref={containerRef} className="space-y-6">
+        <div
+            ref={containerRef}
+            className="space-y-6"
+            role="region"
+            aria-label={`سؤال ${questionIndex + 1} من ${totalQuestions}`}
+        >
             <div className="flex flex-wrap items-center gap-2">
                 <Badge variant="outline" className="shrink-0">
                     سؤال {questionIndex + 1} من {totalQuestions}
@@ -69,7 +74,7 @@ export function QuestionCard({ question, questionIndex, totalQuestions, isLocked
                 {question.question.text}
             </p>
 
-            <div className="space-y-3">
+            <div className="space-y-3" role="radiogroup" aria-label="اختر الإجابة الصحيحة">
                 {question.question.options?.map((option, index) => (
                     <OptionCard
                         key={option.id}
