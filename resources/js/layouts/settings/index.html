@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المحور - الرياضيات</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; background: #f8fafc; }
+        .diff-bar { transition: width 0.6s ease; }
+    </style>
+</head>
+<body>
+
+<div class="max-w-5xl mx-auto p-4 md:p-8">
+
+    <!-- Breadcrumb -->
+    <div class="flex items-center gap-2 text-sm text-gray-400 mb-6">
+        <span>الرئيسية</span>
+        <span>‹</span>
+        <span>التدريب الحر</span>
+        <span>‹</span>
+        <span class="text-gray-700 font-bold">المحور: الأعداد والعمليات الحسابية</span>
+    </div>
+
+    <!-- Header Card -->
+    <div class="bg-white rounded-2xl p-6 md:p-8 border border-gray-100 shadow-sm mb-6">
+        <div class="flex items-start justify-between mb-4">
+            <div class="flex items-center gap-3">
+                <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-bold">نشط</span>
+                <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-bold">عام</span>
+            </div>
+            <div class="w-9 h-9 bg-gray-50 rounded-xl flex items-center justify-center">
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+            </div>
+        </div>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-gray-800 mb-3">المحور: الأعداد والعمليات الحسابية</h1>
+        <p class="text-gray-500 leading-relaxed">
+            يغطي هذا المحور المفاهيم الأساسية للأعداد الصحيحة والكسور والنسب المئوية، بالإضافة إلى العمليات الحسابية الأربع وتطبيقاتها في المسائل الكمية.
+        </p>
+        <div class="flex items-center gap-5 mt-5">
+            <div class="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg">
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span class="font-semibold">30 دقيقة</span>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg">
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                <span class="font-semibold">30 سؤال</span>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-amber-600 bg-amber-50 px-3 py-1.5 rounded-lg">
+                <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+                <span class="font-semibold">أفضل نتيجة: 10/20 (50%)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Stats (موجودة بالفعل) -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-2xl p-5 text-center border border-gray-100 shadow-sm">
+            <p class="text-2xl font-extrabold text-gray-800">50%</p>
+            <p class="text-xs text-gray-500 font-medium mt-1">متوسط النتيجة</p>
+        </div>
+        <div class="bg-white rounded-2xl p-5 text-center border border-gray-100 shadow-sm">
+            <p class="text-2xl font-extrabold text-gray-800">10/20</p>
+            <p class="text-xs text-gray-500 font-medium mt-1">أفضل نتيجة</p>
+        </div>
+        <div class="bg-white rounded-2xl p-5 text-center border border-gray-100 shadow-sm">
+            <p class="text-lg font-extrabold text-gray-800">قبل 7 ساعات</p>
+            <p class="text-xs text-gray-500 font-medium mt-1">آخر تدريب</p>
+        </div>
+        <div class="bg-white rounded-2xl p-5 text-center border border-gray-100 shadow-sm">
+            <p class="text-2xl font-extrabold text-gray-800">1</p>
+            <p class="text-xs text-gray-500 font-medium mt-1">إجمالي المحاولات</p>
+        </div>
+    </div>
+
+    <!-- 🆕 محتوى تفصيلي عن المحور -->
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6 p-6 md:p-8">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            المهارات المستهدفة
+        </h2>
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+            <li class="flex items-start gap-2 text-gray-600 text-sm">
+                <span class="w-2 h-2 bg-emerald-500 rounded-full mt-1.5 flex-shrink-0"></span>
+                إجراء العمليات الحسابية الأربع على الأعداد الصحيحة والكسور
+            </li>
+            <li class="flex items-start gap-2 text-gray-600 text-sm">
+                <span class="w-2 h-2 bg-emerald-500 rounded-full mt-1.5 flex-shrink-0"></span>
+                التعامل مع النسب المئوية وتطبيقاتها العملية
+            </li>
+            <li class="flex items-start gap-2 text-gray-600 text-sm">
+                <span class="w-2 h-2 bg-emerald-500 rounded-full mt-1.5 flex-shrink-0"></span>
+                حل المسائل الكمية بخطوات منطقية متسلسلة
+            </li>
+            <li class="flex items-start gap-2 text-gray-600 text-sm">
+                <span class="w-2 h-2 bg-emerald-500 rounded-full mt-1.5 flex-shrink-0"></span>
+                إدارة الوقت أثناء حل الأسئلة تحت الضغط
+            </li>
+        </ul>
+
+        <h3 class="text-base font-bold text-gray-700 mb-3">💡 نصائح مذاكرة سريعة</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">
+            راجع القواعد الأساسية للكسور والنسب أولاً قبل الانتقال للمسائل المركبة، وتدرّب على حل الأسئلة بدون آلة حاسبة لتحسين سرعتك، مع التركيز على الأسئلة متوسطة الصعوبة لأنها الأكثر تكرارًا في الاختبار الفعلي.
+        </p>
+    </div>
+
+    <!-- 🆕 توزيع الصعوبة -->
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6 p-6 md:p-8">
+        <h2 class="text-xl font-bold text-gray-800 mb-5">توزيع الصعوبة</h2>
+        <div class="space-y-4">
+            <div>
+                <div class="flex justify-between text-sm mb-1.5">
+                    <span class="font-semibold text-gray-600">سهل</span>
+                    <span class="font-bold text-emerald-600">40%</span>
+                </div>
+                <div class="w-full bg-gray-100 rounded-full h-3">
+                    <div class="diff-bar bg-emerald-500 h-3 rounded-full" style="width: 40%"></div>
+                </div>
+            </div>
+            <div>
+                <div class="flex justify-between text-sm mb-1.5">
+                    <span class="font-semibold text-gray-600">متوسط</span>
+                    <span class="font-bold text-amber-600">40%</span>
+                </div>
+                <div class="w-full bg-gray-100 rounded-full h-3">
+                    <div class="diff-bar bg-amber-500 h-3 rounded-full" style="width: 40%"></div>
+                </div>
+            </div>
+            <div>
+                <div class="flex justify-between text-sm mb-1.5">
+                    <span class="font-semibold text-gray-600">صعب</span>
+                    <span class="font-bold text-red-500">20%</span>
+                </div>
+                <div class="w-full bg-gray-100 rounded-full h-3">
+                    <div class="diff-bar bg-red-500 h-3 rounded-full" style="width: 20%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- آخر المحاولات (موجودة بالفعل) -->
+    <div class="mb-6">
+        <h2 class="text-lg font-bold text-gray-700 mb-3">آخر المحاولات:</h2>
+        <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
+                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <span class="text-sm font-bold text-gray-700">مكتمل</span>
+                <span class="text-sm text-gray-500">قبل 7 ساعات</span>
+            </div>
+            <span class="text-sm font-bold text-gray-700">(50%) 10/20</span>
+        </div>
+    </div>
+
+    <!-- Action Button -->
+    <div class="text-center pb-8">
+        <button class="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-700 to-teal-700 hover:from-emerald-800 hover:to-teal-800 text-white font-bold text-lg px-10 py-4 rounded-2xl shadow-xl transition-all transform hover:-translate-y-0.5">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+            <span>بدء التدريب</span>
+        </button>
+    </div>
+
+</div>
+
+</body>
+</html>

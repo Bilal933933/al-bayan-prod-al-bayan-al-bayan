@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use App\Models\Attempt;
 use App\Observers\AttemptObserver;
-use Carbon\CarbonImmutable;
 use App\Policies\AttemptPolicy;
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;

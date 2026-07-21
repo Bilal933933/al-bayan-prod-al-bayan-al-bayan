@@ -59,6 +59,8 @@ class CompetitionController extends Controller
         $topics = collect();
         $totalQuestions = 0;
         $totalMinutes = 0;
+        $avgScorePercentage = null;
+        $usersCount = 0;
 
         if ($competition->isContainer()) {
             $children = $competition->children()
@@ -98,6 +100,17 @@ class CompetitionController extends Controller
 
             $totalQuestions = $topics->sum(fn ($t) => $t->pivot->questions_count);
             $totalMinutes = $topics->sum(fn ($t) => $t->pivot->duration_minutes);
+
+            $avgScorePercentage = Attempt::where('competition_id', $competition->id)
+                ->where('type', Attempt::TYPE_EXAM)
+                ->where('status', Attempt::STATUS_COMPLETED)
+                ->avg('score_percentage');
+            $avgScorePercentage = $avgScorePercentage !== null ? round($avgScorePercentage, 1) : null;
+
+            $usersCount = Competition::where('id', $competition->getRootId())
+                ->withCount('users')
+                ->first()
+                ?->users_count ?? 0;
         }
 
         $isJoined = auth()->user()->competitions()
@@ -111,6 +124,8 @@ class CompetitionController extends Controller
             'is_joined' => $isJoined,
             'total_questions' => $totalQuestions,
             'total_minutes' => $totalMinutes,
+            'users_count' => $usersCount,
+            'avg_score_percentage' => $avgScorePercentage,
         ]);
     }
 }

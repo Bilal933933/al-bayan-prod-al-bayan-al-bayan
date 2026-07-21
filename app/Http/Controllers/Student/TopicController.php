@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attempt;
+use App\Models\Question;
 use App\Models\Topic;
 use Inertia\Response;
 
@@ -88,12 +89,37 @@ class TopicController extends Controller
                 'created_at' => $a->created_at,
             ]);
 
+        $difficultyCounts = $topic->questions()
+            ->active()
+            ->selectRaw('difficulty, count(*) as count')
+            ->groupBy('difficulty')
+            ->pluck('count', 'difficulty');
+
+        $totalDifficultyQuestions = $difficultyCounts->sum();
+        $difficulties = [
+            Question::DIFFICULTY_EASY,
+            Question::DIFFICULTY_MEDIUM,
+            Question::DIFFICULTY_HARD,
+        ];
+        $difficultyDistribution = [];
+        foreach ($difficulties as $difficulty) {
+            $count = $difficultyCounts->get($difficulty, 0);
+            $difficultyDistribution[$difficulty] = [
+                'count' => $count,
+                'percentage' => $totalDifficultyQuestions > 0
+                    ? round(($count / $totalDifficultyQuestions) * 100)
+                    : 0,
+            ];
+        }
+
         return inertia('student/topics/show', [
             'topic' => $topic,
             'userStats' => $userStats,
             'hasInProgress' => $inProgress !== null,
             'inProgressAttemptId' => $inProgress?->id,
             'recentAttempts' => $recentAttempts,
+            'difficultyDistribution' => $difficultyDistribution,
+            'questionsCount' => $totalDifficultyQuestions,
         ]);
     }
 }

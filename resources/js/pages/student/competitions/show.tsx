@@ -1,13 +1,15 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { BookOpen, Calendar, ChevronLeft, Folder, House, Play, Loader2 } from 'lucide-react';
+import { BookOpen, ChevronLeft, Folder, House, Play, Loader2 } from 'lucide-react';
 import { useState } from 'react';
-import CompetitionCard from '@/components/student/competitions/competition-card';
-import CompetitionShowHero from '@/components/student/competitions/competition-show-hero';
-import TopicCard from '@/components/student/topics/topic-card';
-import { show as topicShow } from '@/routes/student/topics';
 import { start as startCompetitionAttempt } from '@/routes/student/competitions/attempts';
 import competitions from '@/routes/student/competitions';
+import { show as topicShow } from '@/routes/student/topics';
+import CompetitionCard from '@/components/student/competitions/competition-card';
+import CompetitionInfoTabs from '@/components/student/competitions/competition-info-tabs';
+import CompetitionShowHero from '@/components/student/competitions/competition-show-hero';
+import CompetitionShowStats from '@/components/student/competitions/competition-show-stats';
+import TopicCard from '@/components/student/topics/topic-card';
 import type { Competition } from '@/types/competition';
 import type { TopicWithPivot } from '@/types/topic';
 
@@ -16,6 +18,10 @@ interface ShowProps {
     children: Competition[];
     topics: TopicWithPivot[];
     is_joined: boolean;
+    total_questions: number;
+    total_minutes: number;
+    users_count: number;
+    avg_score_percentage: number | null;
 }
 
 const containerVariants = {
@@ -35,7 +41,7 @@ const itemVariants = {
     },
 };
 
-export default function Show({ competition, children, topics, is_joined }: ShowProps) {
+export default function Show({ competition, children, topics, is_joined, total_questions, total_minutes, users_count, avg_score_percentage }: ShowProps) {
     const [starting, setStarting] = useState(false);
     const sectionTitleClass = 'flex items-center gap-2 border-r-4 border-primary pr-3';
     const sectionIconClass = 'h-5 w-5 text-primary';
@@ -86,28 +92,14 @@ export default function Show({ competition, children, topics, is_joined }: ShowP
                 {/* Hero */}
                 <CompetitionShowHero competition={competition} />
 
-                {/* Stats Bar */}
+                {/* Stats Cards */}
                 {competition.classification !== 'container' && topics.length > 0 && (
-                    <div className="mx-auto max-w-7xl px-4 sm:px-6">
-                        <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 rounded-2xl border bg-card px-6 py-4 text-sm">
-                            <span className="flex items-center gap-2 font-medium text-foreground">
-                                <BookOpen className="h-4 w-4 text-primary" />
-                                {topics.length} محاور
-                            </span>
-                            {competition.start_date && (
-                                <span className="flex items-center gap-2 text-muted-foreground">
-                                    <Calendar className="h-4 w-4" />
-                                    يبدأ: {new Date(competition.start_date).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' })}
-                                </span>
-                            )}
-                            {competition.end_date && (
-                                <span className="flex items-center gap-2 text-muted-foreground">
-                                    <Calendar className="h-4 w-4" />
-                                    ينتهي: {new Date(competition.end_date).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' })}
-                                </span>
-                            )}
-                        </div>
-                    </div>
+                    <CompetitionShowStats
+                        totalMinutes={total_minutes}
+                        totalQuestions={total_questions}
+                        usersCount={users_count}
+                        avgScorePercentage={avg_score_percentage}
+                    />
                 )}
 
                 {/* Content */}
@@ -169,6 +161,19 @@ export default function Show({ competition, children, topics, is_joined }: ShowP
                                         لم يتم ربط أي محاور بهذه المسابقة بعد.
                                     </div>
                                 )}
+                            </div>
+
+                            {/* Info Tabs */}
+                            <div className="mt-12">
+                                <div className="mb-5 flex items-center gap-3">
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-100">
+                                        <svg className="h-5 w-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                    <h2 className="text-lg font-bold text-foreground">معلومات عامة</h2>
+                                </div>
+                                <CompetitionInfoTabs />
                             </div>
 
                             <div className="mt-10 flex justify-center">
