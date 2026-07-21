@@ -24,7 +24,7 @@ class AttemptCreationService
         $finalCount = $questionsCount ?? $topic->default_questions_count;
         $duration = $withTimer ? ($topic->default_duration_minutes ?? 15) : null;
 
-        return DB::transaction(function () use ($user, $topic, $difficulty, $finalCount, $duration) {
+        return DB::transaction(function () use ($user, $topic, $difficulty, $finalCount, $duration, $withTimer) {
             $query = $topic->questions()->active();
 
             if ($difficulty !== null) {
@@ -40,7 +40,9 @@ class AttemptCreationService
                 'type' => Attempt::TYPE_PRACTICE,
                 'topic_id' => $topic->id,
                 'status' => Attempt::STATUS_IN_PROGRESS,
+                'with_timer' => $withTimer,
                 'total_questions' => $questions->count(),
+                'started_at' => now(),
             ]);
 
             $section = AttemptSection::create([
@@ -49,6 +51,7 @@ class AttemptCreationService
                 'questions_count' => $questions->count(),
                 'duration_minutes' => $duration,
                 'order' => 0,
+                'started_at' => now(),
             ]);
 
             $this->insertAttemptQuestions($section, $questions);
@@ -69,6 +72,8 @@ class AttemptCreationService
                 'type' => Attempt::TYPE_EXAM,
                 'competition_id' => $competition->id,
                 'status' => Attempt::STATUS_IN_PROGRESS,
+                'with_timer' => true,
+                'started_at' => now(),
             ]);
 
             $totalQuestions = 0;
@@ -92,6 +97,7 @@ class AttemptCreationService
                     'questions_count' => $topicQuestions->count(),
                     'duration_minutes' => $topic->pivot->duration_minutes,
                     'order' => $order,
+                    'started_at' => $order === 0 ? now() : null,
                 ]);
 
                 $this->insertAttemptQuestions($section, $topicQuestions);

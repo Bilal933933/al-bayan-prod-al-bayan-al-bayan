@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
@@ -104,10 +105,22 @@ export default function DateDisplay({
     showTooltip = false,
     className,
 }: DateDisplayProps) {
+    const [hydrated, setHydrated] = useState(false);
+
+    useEffect(() => {
+        setHydrated(true);
+    }, []);
+
     const parsed = parseDate(date);
 
     if (!parsed) {
         return <span className={cn('text-muted-foreground', className)}>{fallback}</span>;
+    }
+
+    if (!hydrated && format === 'relative') {
+        const fullDate = formatFull(parsed);
+
+        return <span className={className} suppressHydrationWarning>{fullDate}</span>;
     }
 
     const formatted = formatters[format](parsed);

@@ -14,6 +14,7 @@ class AttemptSection extends Model
         'questions_count',
         'duration_minutes',
         'order',
+        'started_at',
         'submitted_at',
     ];
 
@@ -23,6 +24,7 @@ class AttemptSection extends Model
             'questions_count' => 'integer',
             'duration_minutes' => 'integer',
             'order' => 'integer',
+            'started_at' => 'datetime',
             'submitted_at' => 'datetime',
         ];
     }
@@ -30,6 +32,19 @@ class AttemptSection extends Model
     public function isSubmitted(): bool
     {
         return $this->submitted_at !== null;
+    }
+
+    public function isExpired(): bool
+    {
+        if ($this->duration_minutes === null) {
+            return false;
+        }
+
+        if ($this->started_at === null) {
+            return false;
+        }
+
+        return $this->started_at->copy()->addMinutes($this->duration_minutes)->isPast();
     }
 
     /** @return BelongsTo<Attempt, $this> */

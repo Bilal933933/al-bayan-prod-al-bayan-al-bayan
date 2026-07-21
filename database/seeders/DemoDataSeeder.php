@@ -44,8 +44,6 @@ class DemoDataSeeder extends Seeder
         ['الكلّي', 'الجزئي', 'العام', 'الخاص'],
     ];
 
-    private const TRUE_OPTIONS = ['صواب', 'خطأ'];
-
     public function run(): void
     {
         Cache::forget('leaderboard_weekly');
@@ -89,61 +87,95 @@ class DemoDataSeeder extends Seeder
         return $users;
     }
 
+    private const QUESTIONS_PER_DIFFICULTY = 20;
+
     private function createQuestionsForAllTopics(): void
     {
         $topics = Topic::all();
+        $now = now();
 
         foreach ($topics as $topic) {
-            $this->createMCQQuestions($topic, 3);
-            $this->createTrueFalseQuestions($topic, 2);
-        }
-    }
+            $this->command->info("  إنشاء 60 سؤالاً لـ {$topic->name}...");
 
-    private function createMCQQuestions(Topic $topic, int $count): void
-    {
-        for ($i = 0; $i < $count; $i++) {
-            $options = self::MCQ_OPTIONS[array_rand(self::MCQ_OPTIONS)];
-            $correctIndex = array_rand($options);
+            $questions = [];
+            $mcqIndex = 0;
+            $tfIndex = 0;
 
-            $question = Question::create([
-                'topic_id' => $topic->id,
-                'type' => Question::TYPE_MCQ,
-                'text' => 'سؤال اختيار من متعدد رقم '.($i + 1)." في {$topic->name}: ".fake()->sentence(8).'؟',
-                'difficulty' => ['easy', 'medium', 'hard'][array_rand(['easy', 'medium', 'hard'])],
-                'is_active' => true,
-            ]);
+            foreach (['easy', 'medium', 'hard'] as $difficulty) {
+                for ($i = 0; $i < self::QUESTIONS_PER_DIFFICULTY; $i++) {
+                    $isMCQ = $i % 3 !== 1;
 
-            foreach ($options as $index => $optionText) {
-                QuestionOption::create([
-                    'question_id' => $question->id,
-                    'text' => $optionText,
-                    'is_correct' => $index === $correctIndex,
-                    'order' => $index + 1,
-                ]);
+                    $questions[] = [
+                        'topic_id' => $topic->id,
+                        'type' => $isMCQ ? Question::TYPE_MCQ : Question::TYPE_TRUE_FALSE,
+                        'text' => $isMCQ
+                            ? 'سؤال اختيار من متعدد '.($mcqIndex + 1)." ({$topic->name}): ".fake()->sentence(8).'؟'
+                            : 'سؤال صح/خطأ '.($tfIndex + 1)." ({$topic->name}): ".fake()->sentence(10).'؟',
+                        'difficulty' => $difficulty,
+                        'is_active' => true,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
+
+                    if ($isMCQ) {
+                        $mcqIndex++;
+                    } else {
+                        $tfIndex++;
+                    }
+                }
             }
-        }
-    }
 
-    private function createTrueFalseQuestions(Topic $topic, int $count): void
-    {
-        for ($i = 0; $i < $count; $i++) {
-            $correctIndex = array_rand([0, 1]);
+            Question::insert($questions);
 
-            $question = Question::create([
-                'topic_id' => $topic->id,
-                'type' => Question::TYPE_TRUE_FALSE,
-                'text' => 'سؤال صح/خطأ رقم '.($i + 1)." في {$topic->name}: ".fake()->sentence(10).'؟',
-                'difficulty' => ['easy', 'medium', 'hard'][array_rand(['easy', 'medium', 'hard'])],
-                'is_active' => true,
-            ]);
+            $inserted = Question::where('topic_id', $topic->id)
+                ->orderBy('id', 'desc')
+                ->take(count($questions))
+                ->get()
+                ->reverse();
 
-            foreach (self::TRUE_OPTIONS as $index => $optionText) {
-                QuestionOption::create([
-                    'question_id' => $question->id,
-                    'text' => $optionText,
-                    'is_correct' => $index === $correctIndex,
-                    'order' => $index + 1,
-                ]);
+            $options = [];
+            $mcqSetIndex = 0;
+
+            foreach ($inserted as $q) {
+                if ($q->type === Question::TYPE_MCQ) {
+                    $optionSet = self::MCQ_OPTIONS[$mcqSetIndex % count(self::MCQ_OPTIONS)];
+                    $mcqSetIndex++;
+                    $correctIndex = array_rand($optionSet);
+
+                    foreach ($optionSet as $idx => $text) {
+                        $options[] = [
+                            'question_id' => $q->id,
+                            'text' => $text,
+                            'is_correct' => $idx === $correctIndex,
+                            'order' => $idx + 1,
+                            'created_at' => $now,
+                            'updated_at' => $now,
+                        ];
+                    }
+                } else {
+                    $correctIndex = random_int(0, 1);
+
+                    $options[] = [
+                        'question_id' => $q->id,
+                        'text' => 'صواب',
+                        'is_correct' => $correctIndex === 0,
+                        'order' => 1,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
+                    $options[] = [
+                        'question_id' => $q->id,
+                        'text' => 'خطأ',
+                        'is_correct' => $correctIndex === 1,
+                        'order' => 2,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
+                }
+            }
+
+            foreach (array_chunk($options, 200) as $chunk) {
+                QuestionOption::insert($chunk);
             }
         }
     }

@@ -2,15 +2,15 @@ import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, History } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { EmptyState } from '@/components/empty-state';
 import { AttemptCard } from '@/components/student/attempts/attempt-card';
 import { AttemptStatsBar } from '@/components/student/attempts/attempt-stats-bar';
-import { EmptyState } from '@/components/empty-state';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 import attempts from '@/routes/student/attempts';
 import type { Attempt } from '@/types/attempt';
 import type { PaginationLink, PaginationMeta } from '@/types/pagination';
-import { cn } from '@/lib/utils';
 
 interface AttemptStats {
     total: number;
@@ -56,10 +56,21 @@ function getGroupKey(dateStr: string): string {
     const now = new Date();
     const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
 
-    if (diffDays === 0) return 'اليوم';
-    if (diffDays <= 7) return 'هذا الأسبوع';
-    if (diffDays <= 30) return 'هذا الشهر';
-    if (diffDays <= 60) return 'الشهر الماضي';
+    if (diffDays === 0) {
+return 'اليوم';
+}
+
+    if (diffDays <= 7) {
+return 'هذا الأسبوع';
+}
+
+    if (diffDays <= 30) {
+return 'هذا الشهر';
+}
+
+    if (diffDays <= 60) {
+return 'الشهر الماضي';
+}
 
     return 'أقدم';
 }
@@ -71,15 +82,24 @@ export default function Index({ attempts: paginated, filters, stats }: IndexProp
 
     const grouped = useMemo(() => {
         const filtered = paginated.data.filter((a) => {
-            if (!search.trim()) return true;
+            if (!search.trim()) {
+return true;
+}
+
             const q = search.trim().toLowerCase();
+
             return a.subject_name.toLowerCase().includes(q);
         });
 
         const groups: Record<string, Attempt[]> = {};
+
         for (const attempt of filtered) {
             const key = getGroupKey(attempt.started_at);
-            if (!groups[key]) groups[key] = [];
+
+            if (!groups[key]) {
+groups[key] = [];
+}
+
             groups[key].push(attempt);
         }
 
@@ -130,6 +150,7 @@ export default function Index({ attempts: paginated, filters, stats }: IndexProp
                     <div className="flex gap-1 rounded-lg bg-muted p-1">
                         {filterTabs.map((tab) => {
                             const isActive = filters.type === tab.key;
+
                             return (
                                 <Button
                                     key={tab.key ?? 'all'}
@@ -193,7 +214,11 @@ export default function Index({ attempts: paginated, filters, stats }: IndexProp
                                 const completedToday = groupAttempts.filter(
                                     (a) => a.status !== 'in_progress',
                                 );
-                                if (completedToday.length === 0) return null;
+
+                                if (completedToday.length === 0) {
+return null;
+}
+
                                 return (
                                     <section key={groupName}>
                                         <h2 className="mb-3 text-sm font-semibold text-muted-foreground">

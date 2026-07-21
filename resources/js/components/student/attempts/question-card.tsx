@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
+import { OptionCard } from '@/components/student/attempts/option-card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { OptionCard } from '@/components/student/attempts/option-card';
 import type { AttemptQuestion } from '@/types/attempt';
 
 const difficultyStyles: Record<string, { label: string; class: string }> = {

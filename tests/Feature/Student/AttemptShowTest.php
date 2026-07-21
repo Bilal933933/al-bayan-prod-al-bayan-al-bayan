@@ -18,7 +18,7 @@ function createPracticeAttemptData($testCase, User $user, int $questionCount = 3
         QuestionOption::factory(3)->for($q)->create(['order' => 1]);
     });
 
-    $testCase->actingAs($user)->post(route('student.topics.attempts.start', $topic));
+    $testCase->actingAs($user)->post(route('student.topics.attempts.start', $topic), ['with_timer' => true]);
 
     return Attempt::where('user_id', $user->id)->latest('id')->with('sections.questions')->first();
 }
@@ -132,7 +132,7 @@ it('section endpoint returns 404 for section not belonging to attempt', function
         QuestionOption::factory()->for($q)->correct()->create(['order' => 0]);
     });
 
-    $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic));
+    $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic), ['with_timer' => true]);
     $attemptB = Attempt::where('user_id', $this->user->id)->latest('id')->with('sections')->first();
 
     $sectionB = $attemptB->sections->first();

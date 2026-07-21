@@ -21,6 +21,7 @@ export interface AttemptSection {
     order: number;
     questions: AttemptQuestion[];
     submitted_at?: string | null;
+    started_at?: string | null;
 }
 
 export interface Attempt {

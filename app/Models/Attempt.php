@@ -35,10 +35,13 @@ class Attempt extends Model
         'topic_id',
         'competition_id',
         'status',
+        'with_timer',
         'started_at',
         'finished_at',
         'total_questions',
+        'answered_count',
         'correct_answers',
+        'score_percentage',
     ];
 
     /** @return array<string, string> */
@@ -48,7 +51,10 @@ class Attempt extends Model
             'started_at' => 'datetime',
             'finished_at' => 'datetime',
             'total_questions' => 'integer',
+            'answered_count' => 'integer',
             'correct_answers' => 'integer',
+            'with_timer' => 'boolean',
+            'score_percentage' => 'float',
         ];
     }
 

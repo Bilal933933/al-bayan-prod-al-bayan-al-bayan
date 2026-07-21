@@ -11,6 +11,7 @@ use App\Models\AttemptSection;
 use App\Models\Competition;
 use App\Models\QuestionOption;
 use App\Models\Topic;
+use App\Models\UserScore;
 use App\Services\AttemptCreationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -41,17 +42,10 @@ class AttemptController extends Controller
             'total' => (clone $allUserAttempts)->count(),
             'completed' => (clone $allUserAttempts)->where('status', Attempt::STATUS_COMPLETED)->count(),
             'in_progress' => (clone $allUserAttempts)->where('status', Attempt::STATUS_IN_PROGRESS)->count(),
-            'average_percentage' => (function () use ($allUserAttempts) {
-                $completed = (clone $allUserAttempts)->where('status', Attempt::STATUS_COMPLETED)->get();
-
-                if ($completed->isEmpty()) {
-                    return null;
-                }
-
-                return round(
-                    $completed->sum('correct_answers') / max($completed->sum('total_questions'), 1) * 100,
-                );
-            })(),
+            'average_percentage' => (clone $allUserAttempts)
+                ->where('status', Attempt::STATUS_COMPLETED)
+                ->whereNotNull('score_percentage')
+                ->avg('score_percentage'),
         ];
 
         return inertia('student/attempts/index', [
@@ -81,6 +75,8 @@ class AttemptController extends Controller
     public function show(Attempt $attempt): Response
     {
         abort_unless($attempt->user_id === auth()->id(), 403);
+
+        $this->handleExpiredSections($attempt);
 
         if ($attempt->isCompleted()) {
             $attempt->load([
@@ -114,6 +110,12 @@ class AttemptController extends Controller
         abort_unless($attempt->user_id === auth()->id(), 403);
         abort_unless($section->attempt_id === $attempt->id, 404);
 
+        $this->handleExpiredSections($attempt);
+
+        if ($section->started_at === null) {
+            $section->updateQuietly(['started_at' => now()]);
+        }
+
         $section->load([
             'topic:id,name',
             'questions.question.options',
@@ -130,7 +132,7 @@ class AttemptController extends Controller
             $topic,
             $request->validated('difficulty'),
             $request->validated('questions_count'),
-            $request->validated('with_timer'),
+            $request->validated('with_timer') ?? true,
         );
 
         return redirect()->route('student.attempts.show', $attempt);
@@ -179,10 +181,16 @@ class AttemptController extends Controller
 
         $option = QuestionOption::findOrFail((int) $request->validated('selected_option_id'));
 
+        $isNewAnswer = $attemptQuestion->selected_option_id === null;
+
         $attemptQuestion->update([
             'selected_option_id' => $option->id,
             'is_correct' => $option->is_correct,
         ]);
+
+        if ($isNewAnswer) {
+            $attempt->increment('answered_count');
+        }
 
         return back();
     }
@@ -192,7 +200,10 @@ class AttemptController extends Controller
         abort_unless($attempt->user_id === auth()->id(), 403);
         abort_unless($section->attempt_id === $attempt->id, 404);
         abort_unless($attempt->isInProgress(), 422);
-        abort_if($section->isSubmitted(), 422);
+
+        $this->handleExpiredSections($attempt);
+
+        abort_if($section->isSubmitted(), 422, 'هذا القسم تم تسليمه بالفعل أو انتهى وقته.');
 
         $section->update(['submitted_at' => now()]);
 
@@ -203,10 +214,21 @@ class AttemptController extends Controller
                 ->where('is_correct', true)
                 ->count();
 
+            $total = $attempt->total_questions;
+            $percentage = $total > 0 ? round($correctCount / $total * 100, 2) : 0;
+
             $attempt->update([
                 'status' => Attempt::STATUS_COMPLETED,
                 'finished_at' => now(),
                 'correct_answers' => $correctCount,
+                'score_percentage' => $percentage,
+            ]);
+
+            UserScore::create([
+                'user_id' => $attempt->user_id,
+                'attempt_id' => $attempt->id,
+                'points' => $correctCount,
+                'type' => $attempt->type,
             ]);
         }
 
@@ -218,14 +240,31 @@ class AttemptController extends Controller
         abort_unless($attempt->user_id === auth()->id(), 403);
         abort_unless($attempt->isInProgress(), 422);
 
+        $this->handleExpiredSections($attempt);
+
+        if ($attempt->isCompleted()) {
+            return redirect()->route('student.attempts.show', $attempt);
+        }
+
         $correctCount = AttemptQuestion::whereHas('section', fn ($q) => $q->where('attempt_id', $attempt->id))
             ->where('is_correct', true)
             ->count();
+
+        $total = $attempt->total_questions;
+        $percentage = $total > 0 ? round($correctCount / $total * 100, 2) : 0;
 
         $attempt->update([
             'status' => Attempt::STATUS_COMPLETED,
             'finished_at' => now(),
             'correct_answers' => $correctCount,
+            'score_percentage' => $percentage,
+        ]);
+
+        UserScore::create([
+            'user_id' => $attempt->user_id,
+            'attempt_id' => $attempt->id,
+            'points' => $correctCount,
+            'type' => $attempt->type,
         ]);
 
         if ($attempt->isExam()) {
@@ -233,5 +272,47 @@ class AttemptController extends Controller
         }
 
         return redirect()->route('student.attempts.show', $attempt);
+    }
+
+    private function handleExpiredSections(Attempt $attempt): void
+    {
+        $expiredIds = $attempt->sections()
+            ->whereNull('submitted_at')
+            ->get()
+            ->filter(fn (AttemptSection $section) => $section->isExpired())
+            ->pluck('id');
+
+        if ($expiredIds->isEmpty()) {
+            return;
+        }
+
+        if ($expiredIds->isNotEmpty()) {
+            AttemptSection::whereIn('id', $expiredIds)->update(['submitted_at' => now()]);
+        }
+
+        $allSubmitted = $attempt->sections()->whereNull('submitted_at')->doesntExist();
+
+        if ($allSubmitted) {
+            $correctCount = AttemptQuestion::whereHas('section', fn ($q) => $q->where('attempt_id', $attempt->id))
+                ->where('is_correct', true)
+                ->count();
+
+            $total = $attempt->total_questions;
+            $percentage = $total > 0 ? round($correctCount / $total * 100, 2) : 0;
+
+            $attempt->update([
+                'status' => Attempt::STATUS_COMPLETED,
+                'finished_at' => now(),
+                'correct_answers' => $correctCount,
+                'score_percentage' => $percentage,
+            ]);
+
+            UserScore::create([
+                'user_id' => $attempt->user_id,
+                'attempt_id' => $attempt->id,
+                'points' => $correctCount,
+                'type' => $attempt->type,
+            ]);
+        }
     }
 }

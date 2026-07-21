@@ -19,7 +19,7 @@ function createPracticeAttempt($testCase, User $user): Attempt
         QuestionOption::factory(3)->for($q)->create(['order' => 1]);
     });
 
-    $testCase->actingAs($user)->post(route('student.topics.attempts.start', $topic));
+    $testCase->actingAs($user)->post(route('student.topics.attempts.start', $topic), ['with_timer' => true]);
 
     return Attempt::where('user_id', $user->id)->with('sections.questions.question.options')->first();
 }
@@ -71,6 +71,7 @@ it('student cannot change answer in exam mode', function () {
     $question = Question::factory()->active()->for($topic)->create();
     $correctOption = QuestionOption::factory()->for($question)->correct()->create(['order' => 0]);
     $wrongOption = QuestionOption::factory()->for($question)->create(['order' => 1]);
+    $this->user->competitions()->attach($competition, ['joined_at' => now()]);
 
     $this->actingAs($this->user)->post(route('student.competitions.attempts.start', $competition));
     $attempt = Attempt::where('user_id', $this->user->id)->first();

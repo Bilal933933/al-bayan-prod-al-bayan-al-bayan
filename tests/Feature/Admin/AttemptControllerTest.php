@@ -15,7 +15,7 @@ it('lists all attempts with filters', function () {
     $topic = Topic::factory()->active()->create(['default_questions_count' => 1]);
     Question::factory(1)->active()->for($topic)->create()->each(fn ($q) => QuestionOption::factory()->for($q)->correct()->create(['order' => 0]));
 
-    $this->actingAs($user)->post(route('student.topics.attempts.start', $topic));
+    $this->actingAs($user)->post(route('student.topics.attempts.start', $topic), ['with_timer' => true]);
 
     $response = $this->actingAs($this->admin)->get(route('admin.attempts.index'));
 
@@ -30,7 +30,7 @@ it('admin can view any attempt details', function () {
     $topic = Topic::factory()->active()->create(['default_questions_count' => 1]);
     Question::factory(1)->active()->for($topic)->create()->each(fn ($q) => QuestionOption::factory()->for($q)->correct()->create(['order' => 0]));
 
-    $this->actingAs($user)->post(route('student.topics.attempts.start', $topic));
+    $this->actingAs($user)->post(route('student.topics.attempts.start', $topic), ['with_timer' => true]);
     $attempt = Attempt::where('user_id', $user->id)->first();
 
     $response = $this->actingAs($this->admin)->get(route('admin.attempts.show', $attempt));

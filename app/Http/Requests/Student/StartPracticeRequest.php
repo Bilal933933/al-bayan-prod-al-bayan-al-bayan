@@ -26,7 +26,7 @@ class StartPracticeRequest extends FormRequest
                 Rule::in([Question::DIFFICULTY_EASY, Question::DIFFICULTY_MEDIUM, Question::DIFFICULTY_HARD]),
             ],
             'questions_count' => ['nullable', 'integer', 'min:5', 'max:50'],
-            'with_timer' => ['required', 'boolean'],
+            'with_timer' => ['nullable', 'boolean'],
         ];
     }
 
@@ -51,6 +51,25 @@ class StartPracticeRequest extends FormRequest
 
             if ($topic->questions()->active()->doesntExist()) {
                 $validator->errors()->add('topic', 'لا توجد أسئلة متاحة في هذا المحور.');
+
+                return;
+            }
+
+            $requestedCount = (int) ($this->input('questions_count') ?? $topic->default_questions_count);
+            $difficulty = $this->input('difficulty');
+
+            $availableQuery = $topic->questions()->active();
+
+            if ($difficulty !== null) {
+                $availableQuery->where('difficulty', $difficulty);
+            }
+
+            $availableCount = $availableQuery->count();
+
+            if ($availableCount < $requestedCount) {
+                $validator->errors()->add('questions_count',
+                    "عدد الأسئلة المتاحة ($availableCount) أقل من العدد المطلوب ($requestedCount). اختر عدداً أقل أو غيّر مستوى الصعوبة.",
+                );
 
                 return;
             }

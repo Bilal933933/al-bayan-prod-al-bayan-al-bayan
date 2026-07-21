@@ -16,7 +16,7 @@ it('student can start a practice attempt', function () {
     $topic = Topic::factory()->active()->create(['default_questions_count' => 5]);
     Question::factory(5)->active()->for($topic)->create();
 
-    $response = $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic));
+    $response = $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic), ['with_timer' => true]);
 
     $response->assertRedirect();
 
@@ -33,7 +33,7 @@ it('student can start a practice attempt', function () {
 it('prevents practice on inactive topic', function () {
     $topic = Topic::factory()->inactive()->create();
 
-    $response = $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic));
+    $response = $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic), ['with_timer' => true]);
 
     $response->assertNotFound();
 });
@@ -41,7 +41,7 @@ it('prevents practice on inactive topic', function () {
 it('prevents practice on topic with no questions', function () {
     $topic = Topic::factory()->active()->create(['default_questions_count' => 5]);
 
-    $response = $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic));
+    $response = $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic), ['with_timer' => true]);
 
     $response->assertSessionHasErrors('topic');
 });
@@ -50,7 +50,7 @@ it('prevents practice on topic with default_questions_count of zero', function (
     $topic = Topic::factory()->active()->create(['default_questions_count' => 0]);
     Question::factory(3)->active()->for($topic)->create();
 
-    $response = $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic));
+    $response = $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic), ['with_timer' => true]);
 
     $response->assertSessionHasErrors('topic');
 });
@@ -61,7 +61,7 @@ it('rejects invalid difficulty value for practice', function () {
 
     $response = $this->actingAs($this->user)->post(
         route('student.topics.attempts.start', $topic),
-        ['difficulty' => 'invalid'],
+        ['difficulty' => 'invalid', 'with_timer' => true],
     );
 
     $response->assertSessionHasErrors('difficulty');
@@ -71,22 +71,19 @@ it('prevents starting a practice when one is already in progress', function () {
     $topic = Topic::factory()->active()->create(['default_questions_count' => 5]);
     Question::factory(5)->active()->for($topic)->create();
 
-    $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic));
-    $response = $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic));
+    $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic), ['with_timer' => true]);
+    $response = $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic), ['with_timer' => true]);
 
     $response->assertSessionHasErrors('attempt');
 });
 
-it('practice with fewer active questions than default count still succeeds', function () {
+it('prevents practice when fewer active questions than requested', function () {
     $topic = Topic::factory()->active()->create(['default_questions_count' => 10]);
     Question::factory(3)->active()->for($topic)->create();
 
-    $response = $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic));
+    $response = $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic), ['with_timer' => true]);
 
-    $response->assertRedirect();
-
-    $attempt = Attempt::where('user_id', $this->user->id)->first();
-    expect($attempt->total_questions)->toBe(3);
+    $response->assertSessionHasErrors('questions_count');
 });
 
 // ─── Exam Attempts ───────────────────────────────────────────
@@ -234,7 +231,7 @@ it('practice respects difficulty filter', function () {
 
     $response = $this->actingAs($this->user)->post(
         route('student.topics.attempts.start', $topic),
-        ['difficulty' => 'easy'],
+        ['difficulty' => 'easy', 'questions_count' => 5, 'with_timer' => true],
     );
 
     $response->assertRedirect();

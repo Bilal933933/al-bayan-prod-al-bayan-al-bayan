@@ -18,6 +18,7 @@ it('submits a section and marks submitted_at', function () {
     $topic = Topic::factory()->active()->create();
     $competition->topics()->attach($topic, ['questions_count' => 1, 'duration_minutes' => 10, 'difficulty_distribution' => null]);
     Question::factory(1)->active()->for($topic)->create()->each(fn ($q) => QuestionOption::factory()->for($q)->correct()->create(['order' => 0]));
+    $this->user->competitions()->attach($competition, ['joined_at' => now()]);
 
     $this->actingAs($this->user)->post(route('student.competitions.attempts.start', $competition));
     $attempt = Attempt::where('user_id', $this->user->id)->first();
@@ -43,6 +44,7 @@ it('auto-completes attempt when all sections are submitted', function () {
     $competition->topics()->attach($topicB, ['questions_count' => 1, 'duration_minutes' => 10, 'difficulty_distribution' => null]);
     Question::factory(1)->active()->for($topicA)->create()->each(fn ($q) => QuestionOption::factory()->for($q)->correct()->create(['order' => 0]));
     Question::factory(1)->active()->for($topicB)->create()->each(fn ($q) => QuestionOption::factory()->for($q)->correct()->create(['order' => 0]));
+    $this->user->competitions()->attach($competition, ['joined_at' => now()]);
 
     $this->actingAs($this->user)->post(route('student.competitions.attempts.start', $competition));
     $attempt = Attempt::where('user_id', $this->user->id)->first();
@@ -78,6 +80,7 @@ it('calculates correct_answers on auto-complete', function () {
     QuestionOption::factory(2)->for($question1)->create(['order' => 1]);
     QuestionOption::factory(2)->for($question2)->create(['order' => 1]);
     QuestionOption::factory(2)->for($question3)->create(['order' => 1]);
+    $this->user->competitions()->attach($competition, ['joined_at' => now()]);
 
     $this->actingAs($this->user)->post(route('student.competitions.attempts.start', $competition));
     $attempt = Attempt::where('user_id', $this->user->id)->first();
@@ -104,6 +107,7 @@ it('prevents submitting another users section', function () {
     $competition->topics()->attach($topic, ['questions_count' => 1, 'duration_minutes' => 10, 'difficulty_distribution' => null]);
     Question::factory(1)->active()->for($topic)->create()->each(fn ($q) => QuestionOption::factory()->for($q)->correct()->create(['order' => 0]));
 
+    $other->competitions()->attach($competition, ['joined_at' => now()]);
     $this->actingAs($other)->post(route('student.competitions.attempts.start', $competition));
     $otherAttempt = Attempt::where('user_id', $other->id)->first();
     $section = $otherAttempt->sections->first();
@@ -120,6 +124,7 @@ it('prevents submitting a section twice', function () {
     $topic = Topic::factory()->active()->create();
     $competition->topics()->attach($topic, ['questions_count' => 1, 'duration_minutes' => 10, 'difficulty_distribution' => null]);
     Question::factory(1)->active()->for($topic)->create()->each(fn ($q) => QuestionOption::factory()->for($q)->correct()->create(['order' => 0]));
+    $this->user->competitions()->attach($competition, ['joined_at' => now()]);
 
     $this->actingAs($this->user)->post(route('student.competitions.attempts.start', $competition));
     $attempt = Attempt::where('user_id', $this->user->id)->first();
@@ -141,6 +146,7 @@ it('prevents submitting section of a completed attempt', function () {
     $topic = Topic::factory()->active()->create();
     $competition->topics()->attach($topic, ['questions_count' => 1, 'duration_minutes' => 10, 'difficulty_distribution' => null]);
     Question::factory(1)->active()->for($topic)->create()->each(fn ($q) => QuestionOption::factory()->for($q)->correct()->create(['order' => 0]));
+    $this->user->competitions()->attach($competition, ['joined_at' => now()]);
 
     $this->actingAs($this->user)->post(route('student.competitions.attempts.start', $competition));
     $attempt = Attempt::where('user_id', $this->user->id)->first();
@@ -163,6 +169,7 @@ it('finish submits all unsubmitted sections for exam', function () {
     $competition->topics()->attach($topicB, ['questions_count' => 1, 'duration_minutes' => 10, 'difficulty_distribution' => null]);
     Question::factory(1)->active()->for($topicA)->create()->each(fn ($q) => QuestionOption::factory()->for($q)->correct()->create(['order' => 0]));
     Question::factory(1)->active()->for($topicB)->create()->each(fn ($q) => QuestionOption::factory()->for($q)->correct()->create(['order' => 0]));
+    $this->user->competitions()->attach($competition, ['joined_at' => now()]);
 
     $this->actingAs($this->user)->post(route('student.competitions.attempts.start', $competition));
     $attempt = Attempt::where('user_id', $this->user->id)->first();
@@ -185,7 +192,7 @@ it('does not mark sections as submitted on finish for practice', function () {
     $topic = Topic::factory()->active()->create(['default_questions_count' => 1]);
     Question::factory(1)->active()->for($topic)->create()->each(fn ($q) => QuestionOption::factory()->for($q)->correct()->create(['order' => 0]));
 
-    $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic));
+    $this->actingAs($this->user)->post(route('student.topics.attempts.start', $topic), ['with_timer' => true]);
     $attempt = Attempt::where('user_id', $this->user->id)->first();
 
     $this->actingAs($this->user)->post(route('student.attempts.finish', $attempt));

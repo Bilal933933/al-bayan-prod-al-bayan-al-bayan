@@ -1,15 +1,14 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { BookOpen, ChartNoAxesColumn, ChevronLeft, Clock, House, Play, RotateCcw, Trophy } from 'lucide-react';
-import { useState } from 'react';
 import VisibilityBadge from '@/components/admin/topics/visibility-badge';
 import { AttemptTimeline } from '@/components/student/topics/attempt-timeline';
-import { DifficultySelector } from '@/components/student/topics/difficulty-selector';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { getColor } from '@/components/student/topics/topic-colors';
 import competitions from '@/routes/student/competitions';
 import topics from '@/routes/student/topics';
+import attempts from '@/routes/student/attempts';
 import type { Topic } from '@/types/topic';
 import DateDisplay from '@/components/date-display';
 import { cn } from '@/lib/utils';
@@ -47,8 +46,6 @@ const pageVariants = {
 };
 
 export default function Show({ topic, userStats, hasInProgress, inProgressAttemptId, recentAttempts }: ShowProps) {
-    const [difficulty, setDifficulty] = useState<string | null>(null);
-    const [isStarting, setIsStarting] = useState(false);
     const color = getColor(topic.id);
 
     const bestScorePercent = userStats.best_score
@@ -56,18 +53,7 @@ export default function Show({ topic, userStats, hasInProgress, inProgressAttemp
         : null;
 
     function handleStart() {
-        if (isStarting) return;
-        setIsStarting(true);
-
-        const options = difficulty
-            ? { query: { difficulty } }
-            : {};
-
-        router.post(
-            topics.attempts.start({ topic: topic.id }).url,
-            {},
-            { ...options, preserveScroll: true },
-        );
+        router.visit(attempts.create.url({ query: { topic: topic.id } }));
     }
 
     function handleResume() {
@@ -194,11 +180,6 @@ export default function Show({ topic, userStats, hasInProgress, inProgressAttemp
                 {/* Recent Attempts */}
                 <AttemptTimeline attempts={recentAttempts} hasInProgress={hasInProgress} />
 
-                {/* Difficulty Selector */}
-                <div className="rounded-xl border bg-card p-5 shadow-sm">
-                    <DifficultySelector value={difficulty} onChange={setDifficulty} />
-                </div>
-
                 {/* Actions */}
                 <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
                     {hasInProgress ? (
@@ -213,9 +194,9 @@ export default function Show({ topic, userStats, hasInProgress, inProgressAttemp
                             </Button>
                         </>
                     ) : (
-                        <Button onClick={handleStart} disabled={isStarting} size="lg" className="gap-2 text-base">
+                        <Button onClick={handleStart} size="lg" className="gap-2 text-base">
                             <Play className="h-5 w-5" />
-                            {isStarting ? 'جاري البدء...' : 'بدء التدريب'}
+                            بدء التدريب
                         </Button>
                     )}
                 </div>

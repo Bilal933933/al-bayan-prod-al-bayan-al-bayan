@@ -1,14 +1,15 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { useCallback, useMemo, useState } from 'react';
 import { ArrowRight, BookOpen, GraduationCap } from 'lucide-react';
-import type { Competition } from '@/types/competition';
-import { dashboard } from '@/routes/student';
-import studentTopics from '@/routes/student/topics';
-import studentCompetitions from '@/routes/student/competitions';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 import LiveSummaryCard from '@/components/student/attempts/live-summary-card';
 import TrainingConfig from '@/components/student/attempts/training-config';
 import { cn } from '@/lib/utils';
+import { dashboard } from '@/routes/student';
+import studentCompetitions from '@/routes/student/competitions';
+import studentTopics from '@/routes/student/topics';
+import type { Competition } from '@/types/competition';
 
 interface TopicItem {
     id: number;
@@ -32,6 +33,15 @@ export default function Create({ topics, competitions }: CreateProps) {
     const [withTimer, setWithTimer] = useState<boolean>(true);
 
     const [selectedComp, setSelectedComp] = useState<Competition | null>(null);
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const topicId = params.get('topic');
+        if (topicId && topics.find((t) => t.id === Number(topicId))) {
+            handleTopicChange(Number(topicId));
+            setMode('training');
+        }
+    }, []);
 
     const currentTopic = useMemo(
         () => topics.find((t) => t.id === selectedTopic),
@@ -64,6 +74,7 @@ export default function Create({ topics, competitions }: CreateProps) {
     const handleTopicChange = useCallback((id: number) => {
         setSelectedTopic(id);
         const topic = topics.find((t) => t.id === id);
+
         if (topic) {
             setQuestionsCount(topic.default_questions_count);
             setWithTimer(true);
@@ -72,6 +83,7 @@ export default function Create({ topics, competitions }: CreateProps) {
 
     const handleModeChange = useCallback((newMode: 'training' | 'simulation') => {
         setMode(newMode);
+
         if (newMode === 'training') {
             setSelectedComp(null);
         } else {
@@ -85,11 +97,20 @@ export default function Create({ topics, competitions }: CreateProps) {
             router.post(
                 studentTopics.attempts.start({ topic: selectedTopic }).url,
                 {
-                    difficulty: difficulty ?? '',
+                    difficulty: difficulty,
                     questions_count: questionsCount,
                     with_timer: withTimer,
                 },
-                { onFinish: () => setLoading(false) },
+                {
+                    onFinish: () => setLoading(false),
+                    onError: (errors) => {
+                        const messages = Object.values(errors);
+
+                        if (messages.length > 0) {
+                            toast.error(messages[0]);
+                        }
+                    },
+                },
             );
         } else if (mode === 'simulation' && selectedComp) {
             router.visit(studentCompetitions.show({ competition: selectedComp.slug }).url);

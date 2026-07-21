@@ -15,7 +15,9 @@ interface SectionProgressProps {
 }
 
 export function SectionProgress({ sections, currentIndex, completedIndices }: SectionProgressProps) {
-    if (sections.length <= 1) return null;
+    if (sections.length <= 1) {
+return null;
+}
 
     return (
         <div className="mx-auto w-full max-w-4xl px-4 pt-4">
