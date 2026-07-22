@@ -1,6 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Eye, FileQuestion, MoreHorizontal, Pencil, Search, SearchX, Trash2 } from 'lucide-react';
+import { Download, Eye, FileQuestion, MoreHorizontal, Pencil, Search, SearchX, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import DifficultyBadge from '@/components/admin/questions/difficulty-badge';
 import DeleteDialog from '@/components/delete-dialog';
@@ -123,9 +123,17 @@ return;
                 {/* رأس الصفحة */}
                 <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                     <Heading title="الأسئلة" description="إدارة بنك الأسئلة" />
-                    <Link href={questions.create().url} className="shrink-0">
-                        <Button>إضافة سؤال</Button>
-                    </Link>
+                    <div className="flex shrink-0 gap-2">
+                        <Link href={questions.importFile().url}>
+                            <Button variant="outline">
+                                <Download className="h-4 w-4" />
+                                استيراد
+                            </Button>
+                        </Link>
+                        <Link href={questions.create().url}>
+                            <Button>إضافة سؤال</Button>
+                        </Link>
+                    </div>
                 </div>
 
                 {/* شريط التصفية والبحث */}

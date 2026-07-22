@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AttemptController;
 use App\Http\Controllers\Admin\CompetitionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\QuestionController;
+use App\Http\Controllers\Admin\QuestionImportController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TopicController;
@@ -53,6 +54,11 @@ Route::middleware(['auth', 'verified', 'admin'])
                 'actionLabel' => 'المسابقات',
                 'actionHref' => route('admin.competitions.index'),
             ]));
+
+        Route::get('questions/import', [QuestionImportController::class, 'index'])
+            ->name('questions.import-file');
+        Route::post('questions/import', [QuestionImportController::class, 'store'])
+            ->name('questions.import-file.store');
 
         Route::resource('questions', QuestionController::class)
             ->missing(fn () => Inertia::render('ErrorPage', [
