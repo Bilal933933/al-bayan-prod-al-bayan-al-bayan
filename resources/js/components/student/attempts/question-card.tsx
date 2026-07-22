@@ -1,5 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { Flag } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { OptionCard } from '@/components/student/attempts/option-card';
+import { ReportDialog } from '@/components/student/attempts/report-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { AttemptQuestion } from '@/types/attempt';
@@ -23,6 +25,7 @@ interface QuestionCardProps {
 
 export function QuestionCard({ question, questionIndex, totalQuestions, isLocked, isLoading, onSelectOption }: QuestionCardProps) {
     const containerRef = useRef<HTMLDivElement>(null);
+    const [showReport, setShowReport] = useState(false);
 
     useEffect(() => {
         if (question && containerRef.current) {
@@ -74,6 +77,16 @@ export function QuestionCard({ question, questionIndex, totalQuestions, isLocked
                 {question.question.text}
             </p>
 
+            <button
+                type="button"
+                onClick={() => setShowReport(true)}
+                className="flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-destructive"
+                aria-label="الإبلاغ عن مشكلة في هذا السؤال"
+            >
+                <Flag className="h-3 w-3" />
+                إبلاغ عن مشكلة
+            </button>
+
             <div className="space-y-3" role="radiogroup" aria-label="اختر الإجابة الصحيحة">
                 {question.question.options?.map((option, index) => (
                     <OptionCard
@@ -86,6 +99,13 @@ export function QuestionCard({ question, questionIndex, totalQuestions, isLocked
                     />
                 ))}
             </div>
+
+            <ReportDialog
+                open={showReport}
+                onOpenChange={setShowReport}
+                questionId={question.question.id!}
+                questionText={question.question.text}
+            />
         </div>
     );
 }

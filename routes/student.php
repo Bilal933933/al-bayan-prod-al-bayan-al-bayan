@@ -24,6 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Student report route
     Route::get('report', [ReportController::class, 'index'])->name('student.report');
+    Route::post('report', [ReportController::class, 'store'])->name('student.report.store');
 
     // Student onboarding route
     Route::get('onboarding', [OnboardingController::class, 'index'])->name('student.onboarding');
