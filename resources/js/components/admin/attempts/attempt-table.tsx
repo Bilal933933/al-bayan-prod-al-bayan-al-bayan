@@ -1,9 +1,9 @@
 import { Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { Eye, History } from 'lucide-react';
-import DateDisplay from '@/components/date-display';
 import AttemptStatusBadge from '@/components/admin/attempts/attempt-status-badge';
 import AttemptTypeBadge from '@/components/admin/attempts/attempt-type-badge';
+import DateDisplay from '@/components/date-display';
 import { LaravelPagination } from '@/components/laravel-pagination';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

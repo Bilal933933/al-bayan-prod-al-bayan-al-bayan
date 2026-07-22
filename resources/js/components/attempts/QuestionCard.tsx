@@ -1,8 +1,8 @@
 import { Check, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import OptionCard from './OptionCard';
 import type { Attempt, AttemptQuestion } from '@/types/attempt';
 import { difficultyColors, difficultyLabels } from './AttemptHelpers';
+import OptionCard from './OptionCard';
 
 interface QuestionCardProps {
     question: AttemptQuestion;
@@ -50,11 +50,9 @@ export default function QuestionCard({ question, attempt, questionId }: Question
                     const isLong = textLen > 30;
 
                     return (
-                        <div key={option.id} className={isLong ? 'sm:col-span-2' : ''}>
+                        <div key={option.id!} className={isLong ? 'sm:col-span-2' : ''}>
                             <OptionCard
-                                option={option}
-                                isSelected={question.selected_option_id === option.id}
-                                isCorrectOption={option.is_correct}
+                                option={option as { id: number; text: string; is_correct: boolean }}
                                 isCompleted={isCompleted}
                                 showCorrect={isCompleted && option.is_correct === true}
                                 showWrong={isCompleted && question.selected_option_id === option.id && option.is_correct === false}

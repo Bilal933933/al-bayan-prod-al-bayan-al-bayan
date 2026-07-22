@@ -43,6 +43,7 @@ export function DifficultySelector({ value, onChange }: DifficultySelectorProps)
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {difficulties.map((d) => {
                     const isSelected = value === d.key;
+
                     return (
                         <button
                             key={d.key ?? 'all'}

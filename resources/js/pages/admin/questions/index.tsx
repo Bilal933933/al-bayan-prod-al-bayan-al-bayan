@@ -2,8 +2,8 @@ import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { Eye, FileQuestion, MoreHorizontal, Pencil, Search, SearchX, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import DeleteDialog from '@/components/delete-dialog';
 import DifficultyBadge from '@/components/admin/questions/difficulty-badge';
+import DeleteDialog from '@/components/delete-dialog';
 import Heading from '@/components/heading';
 import { LaravelPagination } from '@/components/laravel-pagination';
 import { Badge } from '@/components/ui/badge';
@@ -78,13 +78,9 @@ export default function Index({
     filter = 'all',
     filters = {},
 }: IndexProps) {
-    const [searchInput, setSearchInput] = useState(currentSearch);
+    const [searchInput, setSearchInput] = useState(currentSearch || '');
     const [deleteTarget, setDeleteTarget] = useState<Question | null>(null);
     const [deleting, setDeleting] = useState(false);
-
-    useEffect(() => {
-        setSearchInput(currentSearch);
-    }, [currentSearch]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -99,7 +95,9 @@ export default function Index({
     const allQuestions = questionsPage.data;
 
     function handleDelete() {
-        if (!deleteTarget) return;
+        if (!deleteTarget) {
+return;
+}
 
         setDeleting(true);
 
@@ -307,7 +305,11 @@ export default function Index({
 
                 <DeleteDialog
                     open={deleteTarget !== null}
-                    onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}
+                    onOpenChange={(open) => {
+ if (!open) {
+setDeleteTarget(null);
+} 
+}}
                     description="هل أنت متأكد من حذف هذا السؤال؟ هذا الإجراء لا يمكن التراجع عنه."
                     onDelete={handleDelete}
                     processing={deleting}

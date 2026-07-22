@@ -2,6 +2,7 @@ import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { Clock, House, List, Map, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import AttemptUserCard from '@/components/admin/attempts/attempt-user-card';
 import {
     FILTERS,
     formatDuration,
@@ -13,15 +14,14 @@ import NavigationGrid from '@/components/attempts/NavigationGrid';
 import ScoreCircle from '@/components/attempts/ScoreCircle';
 import SectionBlock from '@/components/attempts/SectionBlock';
 import StatBadge from '@/components/attempts/StatBadge';
-import AttemptUserCard from '@/components/admin/attempts/attempt-user-card';
 import DateDisplay from '@/components/date-display';
 import DeleteDialog from '@/components/delete-dialog';
 import Heading from '@/components/heading';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes/admin';
 import attempts from '@/routes/admin/attempts';
-import { cn } from '@/lib/utils';
 import type { BreadcrumbItem } from '@/types';
 import type { Attempt } from '@/types/attempt';
 
@@ -57,10 +57,17 @@ export default function Show({ attempt }: ShowProps) {
     const filteredQuestionIds = new Set(
         attempt.sections.flatMap((s) => {
             const qs = s.questions.filter((q) => {
-                if (filter === 'wrong') return q.is_correct === false;
-                if (filter === 'unanswered') return q.is_correct === null;
+                if (filter === 'wrong') {
+return q.is_correct === false;
+}
+
+                if (filter === 'unanswered') {
+return q.is_correct === null;
+}
+
                 return true;
             });
+
             return qs.map((q) => q.question_id);
         }),
     );
@@ -69,7 +76,7 @@ export default function Show({ attempt }: ShowProps) {
 
     function handleDelete() {
         setDeleting(true);
-        router.delete(attempts.destroy({ attempt: attempt.id }).url, {
+        router.delete(`/admin/attempts/${attempt.id}`, {
             preserveScroll: true,
             onFinish: () => {
                 setDeleting(false);
@@ -225,7 +232,11 @@ export default function Show({ attempt }: ShowProps) {
 
             <DeleteDialog
                 open={deleteOpen}
-                onOpenChange={(open) => { if (!open) setDeleteOpen(false); }}
+                onOpenChange={(open) => {
+ if (!open) {
+setDeleteOpen(false);
+} 
+}}
                 description="هل أنت متأكد من حذف هذه المحاولة؟ هذا الإجراء لا يمكن التراجع عنه."
                 onDelete={handleDelete}
                 processing={deleting}

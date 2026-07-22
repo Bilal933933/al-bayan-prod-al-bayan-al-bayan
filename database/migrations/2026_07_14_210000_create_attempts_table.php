@@ -22,7 +22,8 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            $table->index(['user_id', 'type']);
+            $table->index(['user_id', 'type', 'status']);
+            $table->index('competition_id');
             $table->index('status');
         });
     }

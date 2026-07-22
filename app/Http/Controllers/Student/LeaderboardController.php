@@ -13,7 +13,8 @@ class LeaderboardController extends Controller
 {
     public function index(Request $request): Response
     {
-        $period = $request->input('period', 'weekly');
+        $allowed = ['weekly', 'monthly', 'all_time'];
+        $period = in_array($request->input('period'), $allowed) ? $request->input('period') : 'weekly';
 
         $data = Cache::remember("leaderboard_{$period}", 300, function () use ($period) {
             $startDate = match ($period) {

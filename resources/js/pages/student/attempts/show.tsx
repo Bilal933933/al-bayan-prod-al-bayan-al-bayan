@@ -1,7 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, Clock, House, List, Map } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
     FILTERS,
     typeLabels,
@@ -29,36 +29,45 @@ export default function Show({ attempt }: ShowProps) {
     const [navOpen, setNavOpen] = useState(false);
     const statusInfo = statusConfig[attempt.status] ?? { label: attempt.status, classes: 'bg-muted text-muted-foreground' };
 
-    const correctCount = attempt.sections.reduce((acc, s) => acc + s.questions.filter((q) => q.is_correct === true).length, 0);
-    const wrongCount = attempt.sections.reduce((acc, s) => acc + s.questions.filter((q) => q.is_correct === false).length, 0);
-    const unansweredCount = attempt.sections.reduce((acc, s) => acc + s.questions.filter((q) => q.is_correct === null).length, 0);
-    const percentage = attempt.total_questions > 0 ? Math.round((correctCount / attempt.total_questions) * 100) : 0;
+    const { correctCount, wrongCount, unansweredCount, percentage } = useMemo(() => {
+        const correct = attempt.sections.reduce((acc, s) => acc + s.questions.filter((q) => q.is_correct === true).length, 0);
+        const wrong = attempt.sections.reduce((acc, s) => acc + s.questions.filter((q) => q.is_correct === false).length, 0);
+        const unanswered = attempt.sections.reduce((acc, s) => acc + s.questions.filter((q) => q.is_correct === null).length, 0);
+        const pct = attempt.total_questions > 0 ? Math.round((correct / attempt.total_questions) * 100) : 0;
 
-    const durationSeconds = getDurationSeconds(attempt.started_at, attempt.finished_at);
+        return { correctCount: correct, wrongCount: wrong, unansweredCount: unanswered, percentage: pct };
+    }, [attempt.sections, attempt.total_questions]);
 
-    const allQuestions = attempt.sections.flatMap((s) =>
-        s.questions.map((q) => ({ question_id: q.question_id, is_correct: q.is_correct, order: q.order })),
+    const durationSeconds = useMemo(
+        () => getDurationSeconds(attempt.started_at, attempt.finished_at),
+        [attempt.started_at, attempt.finished_at],
     );
 
-    const filteredQuestionIds = new Set(
-        attempt.sections.flatMap((s) => {
-            const qs = s.questions.filter((q) => {
-                if (filter === 'wrong') {
+    const { allQuestions, filteredNavQuestions } = useMemo(() => {
+        const all = attempt.sections.flatMap((s) =>
+            s.questions.map((q) => ({ question_id: q.question_id, is_correct: q.is_correct, order: q.order })),
+        );
+
+        const filteredIds = new Set(
+            attempt.sections.flatMap((s) => {
+                const qs = s.questions.filter((q) => {
+                    if (filter === 'wrong') {
 return q.is_correct === false;
 }
 
-                if (filter === 'unanswered') {
+                    if (filter === 'unanswered') {
 return q.is_correct === null;
 }
 
-                return true;
-            });
+                    return true;
+                });
 
-            return qs.map((q) => q.question_id);
-        }),
-    );
+                return qs.map((q) => q.question_id);
+            }),
+        );
 
-    const filteredNavQuestions = allQuestions.filter((q) => filteredQuestionIds.has(q.question_id));
+        return { allQuestions: all, filteredNavQuestions: all.filter((q) => filteredIds.has(q.question_id)) };
+    }, [attempt.sections, filter]);
 
     const sidebarContent = (
         <>

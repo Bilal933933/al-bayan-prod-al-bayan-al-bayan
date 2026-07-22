@@ -11,6 +11,10 @@ use Illuminate\Validation\Validator;
 
 class StartPracticeRequest extends FormRequest
 {
+    public const MIN_QUESTIONS_COUNT = 5;
+
+    public const MAX_QUESTIONS_COUNT = 50;
+
     public function authorize(): bool
     {
         return true;
@@ -25,7 +29,7 @@ class StartPracticeRequest extends FormRequest
                 'string',
                 Rule::in([Question::DIFFICULTY_EASY, Question::DIFFICULTY_MEDIUM, Question::DIFFICULTY_HARD]),
             ],
-            'questions_count' => ['nullable', 'integer', 'min:5', 'max:50'],
+            'questions_count' => ['nullable', 'integer', 'min:'.self::MIN_QUESTIONS_COUNT, 'max:'.self::MAX_QUESTIONS_COUNT],
             'with_timer' => ['nullable', 'boolean'],
         ];
     }

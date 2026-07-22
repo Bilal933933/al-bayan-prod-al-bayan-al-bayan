@@ -1,6 +1,6 @@
-import DateDisplay from '@/components/date-display';
 import { Link } from '@inertiajs/react';
 import { ArrowLeft, CheckCircle, Clock, XCircle } from 'lucide-react';
+import DateDisplay from '@/components/date-display';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -14,7 +14,7 @@ interface RecentAttempt {
 
 interface AttemptTimelineProps {
     attempts: RecentAttempt[];
-    hasInProgress: boolean;
+    hasInProgress?: boolean;
 }
 
 const statusConfig = {
@@ -23,8 +23,10 @@ const statusConfig = {
     abandoned: { icon: XCircle, class: 'text-destructive', bg: 'bg-destructive/10', label: 'ملغي' },
 };
 
-export function AttemptTimeline({ attempts, hasInProgress }: AttemptTimelineProps) {
-    if (attempts.length === 0) return null;
+export function AttemptTimeline({ attempts }: AttemptTimelineProps) {
+    if (attempts.length === 0) {
+return null;
+}
 
     return (
         <div>

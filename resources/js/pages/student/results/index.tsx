@@ -1,16 +1,16 @@
 import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { BarChart3, Clock, Eye, Play, Trophy } from 'lucide-react';
+import { formatDuration } from '@/components/attempts/AttemptHelpers';
 import DateDisplay from '@/components/date-display';
 import { EvaluationBadge } from '@/components/student/results/evaluation-badge';
 import { ProgressChart } from '@/components/student/results/progress-chart';
 import { ResultStatsCard } from '@/components/student/results/result-stats-card';
 import { TopicBreakdown } from '@/components/student/results/topic-breakdown';
 import { Button } from '@/components/ui/button';
-import { formatDuration } from '@/components/attempts/AttemptHelpers';
+import { cn } from '@/lib/utils';
 import attempts from '@/routes/student/attempts';
 import type { CompetitionBreakdownItem, Evaluation, OverallStats, ProgressPoint, RecentResult, TopicBreakdownItem } from '@/types/result';
-import { cn } from '@/lib/utils';
 
 interface IndexProps {
     overallStats: OverallStats;

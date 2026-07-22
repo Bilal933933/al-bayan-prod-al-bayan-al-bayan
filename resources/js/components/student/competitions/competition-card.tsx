@@ -1,6 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { CheckCircle, Eye, Target, Clock, Ban, Calendar, BookOpen } from 'lucide-react';
+import { Eye, Target, Clock, Ban, Calendar, BookOpen } from 'lucide-react';
 import ClassificationBadge from '@/components/admin/competitions/classification-badge';
 import { COMPETITION_ICONS } from '@/config/competition-icons';
 import { cn } from '@/lib/utils';
@@ -14,7 +14,7 @@ const cardVariants = {
         y: 0,
         transition: { duration: 0.3, ease: 'easeOut' },
     },
-};
+} as const;
 
 const CLASSIFICATION_LABELS: Record<string, string> = {
     container: 'حاوية',
@@ -24,6 +24,7 @@ const CLASSIFICATION_LABELS: Record<string, string> = {
 
 function formatDate(dateStr: string): string {
     const date = new Date(dateStr);
+
     return date.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
@@ -31,9 +32,11 @@ function getStatusBadge(competition: Competition): { label: string; className: s
     if (competition.start_date && new Date(competition.start_date) > new Date()) {
         return { label: 'قريباً', className: 'bg-amber-100 text-amber-700', icon: Clock };
     }
+
     if (competition.end_date && new Date(competition.end_date) < new Date()) {
         return { label: 'منتهية', className: 'bg-red-100 text-red-700', icon: Ban };
     }
+
     return null;
 }
 

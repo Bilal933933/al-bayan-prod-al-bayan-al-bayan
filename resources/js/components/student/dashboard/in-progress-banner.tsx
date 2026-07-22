@@ -1,6 +1,8 @@
 import { router } from '@inertiajs/react';
 import { Clock, Play, RotateCcw } from 'lucide-react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import attempts from '@/routes/student/attempts';
 import type { Attempt } from '@/types/attempt';
 
@@ -12,15 +14,14 @@ interface InProgressBannerProps {
 }
 
 export function InProgressBanner({ attempt }: InProgressBannerProps) {
+    const [confirmOpen, setConfirmOpen] = useState(false);
+
     const handleContinue = () => {
         router.visit(attempts.show({ attempt: attempt.id }).url);
     };
 
     const handleNew = () => {
-        if (!confirm('لديك محاولة جارية. هل تريد بدء محاولة جديدة بدلاً من استئناف الحالية؟')) {
-            return;
-        }
-        router.visit(attempts.show({ attempt: attempt.id }).url);
+        setConfirmOpen(true);
     };
 
     return (
@@ -63,6 +64,28 @@ export function InProgressBanner({ attempt }: InProgressBannerProps) {
                     </Button>
                 </div>
             </div>
+
+            <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>محاولة جديدة</DialogTitle>
+                        <DialogDescription>
+                            لديك محاولة جارية. هل تريد بدء محاولة جديدة بدلاً من استئناف الحالية؟
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setConfirmOpen(false)}>
+                            إلغاء
+                        </Button>
+                        <Button onClick={() => {
+                            setConfirmOpen(false);
+                            router.visit(attempts.show({ attempt: attempt.id }).url);
+                        }}>
+                            بدء محاولة جديدة
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

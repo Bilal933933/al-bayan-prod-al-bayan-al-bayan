@@ -27,6 +27,7 @@ export interface AttemptSection {
 export interface Attempt {
     id: number;
     user_id: number;
+    user?: { id: number; name: string; email: string };
     type: 'practice' | 'exam';
     subject_name: string;
     topic_id: number | null;

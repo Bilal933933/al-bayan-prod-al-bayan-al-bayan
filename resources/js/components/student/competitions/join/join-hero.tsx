@@ -16,7 +16,7 @@ export default function JoinHero({ competition }: { competition: Competition }) 
                     />
                 ) : (
                     <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white/10 text-4xl">
-                        {competition.icon || '🏆'}
+                        <span aria-hidden="true">{competition.icon || '🏆'}</span>
                     </div>
                 )}
                 <div className="text-center md:text-right">

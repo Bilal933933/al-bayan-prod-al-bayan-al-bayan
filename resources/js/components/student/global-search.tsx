@@ -127,9 +127,20 @@ export function GlobalSearch({ open, onOpenChange }: Props) {
             setIsLoading(true);
 
             debounceRef.current = setTimeout(() => {
-                fetch(`/search?q=${encodeURIComponent(query)}`)
-                    .then((res) => res.json())
-                    .then((data: SearchResponse) => {
+                fetch(`/search?q=${encodeURIComponent(query)}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                    },
+                })
+                    .then((res) => {
+                        if (!res.ok) {
+                            throw new Error('Search failed');
+                        }
+
+                        return res.json() as Promise<SearchResponse>;
+                    })
+                    .then((data) => {
                         setResults(data);
                         setSelectedIndex(-1);
                     })

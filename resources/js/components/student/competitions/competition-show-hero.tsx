@@ -1,10 +1,13 @@
 import { Calendar, Layers } from 'lucide-react';
+import { COMPETITION_ICONS } from '@/config/competition-icons';
 import { cn } from '@/lib/utils';
 import type { Competition } from '@/types/competition';
-import { COMPETITION_ICONS } from '@/config/competition-icons';
 
 function formatDate(dateStr: string | null | undefined): string | null {
-    if (!dateStr) return null;
+    if (!dateStr) {
+return null;
+}
+
     const d = new Date(dateStr);
     const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
 
@@ -15,9 +18,11 @@ function getStatusLabel(competition: Competition): { label: string; className: s
     if (competition.start_date && new Date(competition.start_date) > new Date()) {
         return { label: 'قريباً', className: 'bg-amber-400/20 text-amber-300' };
     }
+
     if (competition.end_date && new Date(competition.end_date) < new Date()) {
         return { label: 'منتهية', className: 'bg-red-400/20 text-red-300' };
     }
+
     return null;
 }
 
@@ -26,9 +31,11 @@ function hexToRgba(hex: string, alpha: number): string {
     const r = Number.parseInt(clean.substring(0, 2), 16);
     const g = Number.parseInt(clean.substring(2, 4), 16);
     const b = Number.parseInt(clean.substring(4, 6), 16);
+
     if ([r, g, b].some(isNaN)) {
         return `rgba(128, 128, 128, ${alpha})`;
     }
+
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
@@ -98,7 +105,11 @@ export default function CompetitionShowHero({
                                 </span>
                                 {(() => {
                                     const status = getStatusLabel(competition);
-                                    if (!status) return null;
+
+                                    if (!status) {
+return null;
+}
+
                                     return (
                                         <span className={cn('flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium', status.className)}>
                                             <Calendar className="h-3 w-3" />

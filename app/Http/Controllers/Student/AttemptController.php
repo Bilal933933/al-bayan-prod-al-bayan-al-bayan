@@ -37,17 +37,12 @@ class AttemptController extends Controller
             ->paginate(Attempt::PAGINATION)
             ->withQueryString();
 
-        $allUserAttempts = Attempt::where('user_id', $userId);
-
-        $stats = [
-            'total' => (clone $allUserAttempts)->count(),
-            'completed' => (clone $allUserAttempts)->where('status', Attempt::STATUS_COMPLETED)->count(),
-            'in_progress' => (clone $allUserAttempts)->where('status', Attempt::STATUS_IN_PROGRESS)->count(),
-            'average_percentage' => (clone $allUserAttempts)
-                ->where('status', Attempt::STATUS_COMPLETED)
-                ->whereNotNull('score_percentage')
-                ->avg('score_percentage'),
-        ];
+        $stats = Attempt::where('user_id', $userId)->toBase()
+            ->selectRaw('COUNT(*) as total')
+            ->selectRaw("SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed")
+            ->selectRaw("SUM(CASE WHEN status = 'in_progress' THEN 1 ELSE 0 END) as in_progress")
+            ->selectRaw("AVG(CASE WHEN status = 'completed' AND score_percentage IS NOT NULL THEN score_percentage ELSE NULL END) as average_percentage")
+            ->first();
 
         return inertia('student/attempts/index', [
             'attempts' => $attempts,
@@ -157,15 +152,6 @@ class AttemptController extends Controller
             'يجب عليك الانضمام إلى المسابقة أولاً.',
         );
 
-        abort_if(
-            Attempt::where('user_id', auth()->id())
-                ->where('competition_id', $competition->id)
-                ->where('status', Attempt::STATUS_IN_PROGRESS)
-                ->exists(),
-            422,
-            'You already have an in-progress attempt for this competition.',
-        );
-
         $attempt = $this->attemptCreationService->createExam(
             auth()->user(),
             $competition,
@@ -177,6 +163,7 @@ class AttemptController extends Controller
     public function answerQuestion(AnswerQuestionRequest $request, Attempt $attempt, AttemptQuestion $attemptQuestion): RedirectResponse
     {
         $this->authorize('view', $attempt);
+        $this->handleExpiredSections($attempt);
 
         $option = QuestionOption::findOrFail((int) $request->validated('selected_option_id'));
 
@@ -204,13 +191,15 @@ class AttemptController extends Controller
 
         abort_if($section->isSubmitted(), 422, 'هذا القسم تم تسليمه بالفعل أو انتهى وقته.');
 
-        $section->update(['submitted_at' => now()]);
+        DB::transaction(function () use ($attempt, $section) {
+            $section->update(['submitted_at' => now()]);
 
-        $allSubmitted = $attempt->sections()->whereNull('submitted_at')->doesntExist();
+            $allSubmitted = $attempt->sections()->whereNull('submitted_at')->doesntExist();
 
-        if ($allSubmitted) {
-            $this->finalizeAttempt($attempt);
-        }
+            if ($allSubmitted) {
+                $this->finalizeAttempt($attempt);
+            }
+        });
 
         return redirect()->route('student.attempts.show', $attempt);
     }
@@ -226,63 +215,66 @@ class AttemptController extends Controller
             return redirect()->route('student.attempts.show', $attempt);
         }
 
-        $this->finalizeAttempt($attempt);
+        DB::transaction(function () use ($attempt) {
+            $this->finalizeAttempt($attempt);
 
-        if ($attempt->isExam()) {
-            AttemptSection::where('attempt_id', $attempt->id)
-                ->whereNull('submitted_at')
-                ->update(['submitted_at' => now()]);
-        }
+            if ($attempt->isExam()) {
+                AttemptSection::where('attempt_id', $attempt->id)
+                    ->whereNull('submitted_at')
+                    ->update(['submitted_at' => now()]);
+            }
+        });
 
         return redirect()->route('student.attempts.show', $attempt);
     }
 
     private function finalizeAttempt(Attempt $attempt): void
     {
-        DB::transaction(function () use ($attempt) {
-            $correctCount = AttemptQuestion::whereHas('section', fn ($q) => $q->where('attempt_id', $attempt->id))
-                ->where('is_correct', true)
-                ->count();
+        $correctCount = AttemptQuestion::whereHas('section', fn ($q) => $q->where('attempt_id', $attempt->id))
+            ->where('is_correct', true)
+            ->count();
 
-            $total = $attempt->total_questions;
-            $percentage = $total > 0 ? round($correctCount / $total * 100, 2) : 0;
+        $total = $attempt->total_questions;
+        $percentage = $total > 0 ? round($correctCount / $total * 100, 2) : 0;
 
-            $attempt->update([
-                'status' => Attempt::STATUS_COMPLETED,
-                'finished_at' => now(),
-                'correct_answers' => $correctCount,
-                'score_percentage' => $percentage,
-            ]);
+        $attempt->update([
+            'status' => Attempt::STATUS_COMPLETED,
+            'finished_at' => now(),
+            'correct_answers' => $correctCount,
+            'score_percentage' => $percentage,
+        ]);
 
-            UserScore::firstOrCreate(
-                ['attempt_id' => $attempt->id],
-                [
-                    'user_id' => $attempt->user_id,
-                    'points' => $correctCount,
-                    'type' => $attempt->type,
-                ],
-            );
-        });
+        UserScore::firstOrCreate(
+            ['attempt_id' => $attempt->id],
+            [
+                'user_id' => $attempt->user_id,
+                'points' => $correctCount,
+                'type' => $attempt->type,
+            ],
+        );
     }
 
     private function handleExpiredSections(Attempt $attempt): void
     {
-        $expiredIds = $attempt->sections()
-            ->whereNull('submitted_at')
-            ->get()
-            ->filter(fn (AttemptSection $section) => $section->isExpired())
-            ->pluck('id');
+        DB::transaction(function () use ($attempt) {
+            $expiredIds = $attempt->sections()
+                ->whereNull('submitted_at')
+                ->lockForUpdate()
+                ->get()
+                ->filter(fn (AttemptSection $section) => $section->isExpired())
+                ->pluck('id');
 
-        if ($expiredIds->isEmpty()) {
-            return;
-        }
+            if ($expiredIds->isEmpty()) {
+                return;
+            }
 
-        AttemptSection::whereIn('id', $expiredIds)->update(['submitted_at' => now()]);
+            AttemptSection::whereIn('id', $expiredIds)->update(['submitted_at' => now()]);
 
-        $allSubmitted = $attempt->sections()->whereNull('submitted_at')->doesntExist();
+            $allSubmitted = $attempt->sections()->whereNull('submitted_at')->doesntExist();
 
-        if ($allSubmitted) {
-            $this->finalizeAttempt($attempt);
-        }
+            if ($allSubmitted) {
+                $this->finalizeAttempt($attempt);
+            }
+        });
     }
 }

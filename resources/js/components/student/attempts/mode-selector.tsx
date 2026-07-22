@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils';
 import { BookOpen, GraduationCap } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export type AttemptMode = 'training' | 'simulation';
 

@@ -1,7 +1,7 @@
 import { ChevronDown } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import QuestionCard from './QuestionCard';
 import type { Attempt, AttemptSection } from '@/types/attempt';
+import QuestionCard from './QuestionCard';
 
 interface SectionBlockProps {
     section: AttemptSection;
@@ -15,8 +15,14 @@ export default function SectionBlock({ section, attempt, filter }: SectionBlockP
     const unansweredCount = section.questions.filter((q) => q.is_correct === null).length;
 
     const filteredQuestions = section.questions.filter((q) => {
-        if (filter === 'wrong') return q.is_correct === false;
-        if (filter === 'unanswered') return q.is_correct === null;
+        if (filter === 'wrong') {
+return q.is_correct === false;
+}
+
+        if (filter === 'unanswered') {
+return q.is_correct === null;
+}
+
         return true;
     });
 

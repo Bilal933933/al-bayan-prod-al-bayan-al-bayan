@@ -1,12 +1,12 @@
 import { Head } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import type { DashboardProps } from '@/types/dashboard';
 import Heading from '@/components/heading';
+import type { DashboardProps } from '@/types/dashboard';
+import { CompMonitor } from './components/comp-monitor';
 import { KpiGrid } from './components/kpi-grid';
 import { LiveHub } from './components/live-hub';
-import { TopicAnalyzer } from './components/topic-analyzer';
-import { CompMonitor } from './components/comp-monitor';
 import { QuickSidebar } from './components/quick-sidebar';
+import { TopicAnalyzer } from './components/topic-analyzer';
 
 const breadcrumbs = [{ title: 'لوحة التحكم', href: '#' }];
 

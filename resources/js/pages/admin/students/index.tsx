@@ -10,8 +10,8 @@ import { Input } from '@/components/ui/input';
 import { dashboard } from '@/routes/admin';
 import students from '@/routes/admin/students';
 import type { BreadcrumbItem } from '@/types';
-import type { PaginationMeta } from '@/types/pagination';
 import type { User } from '@/types';
+import type { PaginationMeta } from '@/types/pagination';
 
 interface StudentRow extends User {
     attempts_count?: number;
@@ -80,11 +80,7 @@ export default function Index({
     verifiedFilter = 'all',
     stats,
 }: IndexProps) {
-    const [searchInput, setSearchInput] = useState(currentSearch);
-
-    useEffect(() => {
-        setSearchInput(currentSearch);
-    }, [currentSearch]);
+    const [searchInput, setSearchInput] = useState(currentSearch || '');
 
     useEffect(() => {
         const timer = setTimeout(() => {

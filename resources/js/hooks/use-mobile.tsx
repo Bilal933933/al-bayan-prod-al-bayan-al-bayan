@@ -2,12 +2,17 @@ import { useSyncExternalStore } from 'react';
 
 const MOBILE_BREAKPOINT = 768;
 
-const mql =
-    typeof window === 'undefined'
-        ? undefined
-        : window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+function getMql(): MediaQueryList | undefined {
+    if (typeof window === 'undefined') {
+        return undefined;
+    }
+
+    return window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+}
 
 function mediaQueryListener(callback: (event: MediaQueryListEvent) => void) {
+    const mql = getMql();
+
     if (!mql) {
         return () => {};
     }
@@ -20,7 +25,7 @@ function mediaQueryListener(callback: (event: MediaQueryListEvent) => void) {
 }
 
 function isSmallerThanBreakpoint(): boolean {
-    return mql?.matches ?? false;
+    return getMql()?.matches ?? false;
 }
 
 function getServerSnapshot(): boolean {

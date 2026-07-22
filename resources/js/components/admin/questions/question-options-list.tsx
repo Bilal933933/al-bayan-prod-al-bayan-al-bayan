@@ -12,6 +12,7 @@ export default function QuestionOptionsList({ options }: { options?: QuestionOpt
         <div className="space-y-3">
             {options.map((option, index) => {
                 const isCorrect = option.is_correct;
+
                 return (
                     <div
                         key={option.id ?? index}

@@ -1,5 +1,5 @@
-import type { RecentAttempt } from '@/types/dashboard';
 import { cn } from '@/lib/utils';
+import type { RecentAttempt } from '@/types/dashboard';
 
 interface AttemptRowProps {
     attempt: RecentAttempt;

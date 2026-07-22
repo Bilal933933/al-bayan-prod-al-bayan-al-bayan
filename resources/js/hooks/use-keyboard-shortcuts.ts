@@ -57,11 +57,11 @@ export function useKeyboardShortcuts({
             switch (key) {
                 case 'ArrowRight':
                     e.preventDefault();
-                    onNext();
+                    onPrevious();
                     break;
                 case 'ArrowLeft':
                     e.preventDefault();
-                    onPrevious();
+                    onNext();
                     break;
                 case 'f':
                 case 'F':

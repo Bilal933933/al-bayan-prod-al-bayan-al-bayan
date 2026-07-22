@@ -19,6 +19,7 @@ return new class extends Migration
 
             $table->unique(['attempt_section_id', 'question_id']);
             $table->index('question_id');
+            $table->index(['attempt_section_id', 'is_correct']);
         });
     }
 

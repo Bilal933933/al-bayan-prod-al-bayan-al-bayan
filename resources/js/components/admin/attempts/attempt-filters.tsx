@@ -9,8 +9,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import type { Competition } from '@/types/competition';
-import type { Topic } from '@/types/topic';
 
 interface AttemptFiltersProps {
     filters: {
@@ -43,11 +41,7 @@ function navigateWithParams(overrides: Record<string, string | undefined>) {
 }
 
 export default function AttemptFilters({ filters, topics, competitions }: AttemptFiltersProps) {
-    const [searchInput, setSearchInput] = useState(filters.search);
-
-    useEffect(() => {
-        setSearchInput(filters.search);
-    }, [filters.search]);
+    const [searchInput, setSearchInput] = useState(filters.search || '');
 
     useEffect(() => {
         const timer = setTimeout(() => {

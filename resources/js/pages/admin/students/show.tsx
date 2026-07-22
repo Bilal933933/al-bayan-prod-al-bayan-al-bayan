@@ -6,7 +6,6 @@ import {
     Mail,
     Calendar,
     Trophy,
-    BookOpen,
     Layers,
     History,
     Flame,
@@ -19,8 +18,8 @@ import { dashboard } from '@/routes/admin';
 import students from '@/routes/admin/students';
 import type { BreadcrumbItem } from '@/types';
 import type { User } from '@/types';
-import type { Competition } from '@/types/competition';
 import type { Attempt } from '@/types/attempt';
+import type { Competition } from '@/types/competition';
 
 interface ShowProps {
     student: User & {

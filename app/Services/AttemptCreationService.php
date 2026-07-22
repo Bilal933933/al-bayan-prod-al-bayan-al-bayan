@@ -67,6 +67,14 @@ class AttemptCreationService
             ->get();
 
         $attempt = DB::transaction(function () use ($user, $competition, $topics) {
+            $existing = Attempt::where('user_id', $user->id)
+                ->where('competition_id', $competition->id)
+                ->where('status', Attempt::STATUS_IN_PROGRESS)
+                ->lockForUpdate()
+                ->exists();
+
+            abort_if($existing, 422, 'لديك محاولة جارية لهذه المسابقة بالفعل.');
+
             $attempt = Attempt::create([
                 'user_id' => $user->id,
                 'type' => Attempt::TYPE_EXAM,
@@ -103,6 +111,8 @@ class AttemptCreationService
                 $this->insertAttemptQuestions($section, $topicQuestions);
             }
 
+            abort_if($totalQuestions === 0, 422, 'لا توجد أسئلة متاحة لإنشاء الاختبار.');
+
             $attempt->update(['total_questions' => $totalQuestions]);
 
             return $attempt;
@@ -120,18 +130,18 @@ class AttemptCreationService
         if ($difficultyDistribution) {
             $perDifficulty = $this->calculateDistribution($plannedCount, $difficultyDistribution);
 
-            $questionIds = collect();
+            $questions = new Collection;
             foreach ($perDifficulty as $difficulty => $count) {
-                $questions = (clone $query)
+                $result = (clone $query)
                     ->where('difficulty', $difficulty)
                     ->inRandomOrder()
                     ->limit($count)
-                    ->pluck('id');
+                    ->get();
 
-                $questionIds = $questionIds->concat($questions);
+                $questions = $questions->concat($result);
             }
 
-            return $topic->questions()->active()->whereIn('id', $questionIds)->get();
+            return $questions;
         }
 
         return $query->inRandomOrder()->limit($plannedCount)->get();

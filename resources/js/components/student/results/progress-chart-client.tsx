@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 interface ChartData {
     percentage: number;
     type: string;
@@ -6,21 +8,23 @@ interface ChartData {
 const Y_TICKS = [0, 20, 40, 60, 80, 100];
 const MARGIN = { top: 22, right: 30, bottom: 28, left: 8 };
 
-function cssVar(name: string): string {
-    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-}
-
-function getColor(type: string): string {
-    return type === 'exam' ? cssVar('--warning') || '#fb923c' : cssVar('--info') || '#60a5fa';
-}
-
 export function RechartsBar({ data, height = 240 }: { data: ChartData[]; height?: number }) {
+    const colors = useMemo(() => {
+        function cssVar(name: string): string {
+            return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+        }
+
+        return {
+            practice: cssVar('--info') || '#60a5fa',
+            exam: cssVar('--warning') || '#fb923c',
+        };
+    }, []);
+
+    const { practice: practiceColor, exam: examColor } = colors;
     const pointCount = data.length;
     const w = Math.max(300, pointCount * 56);
     const chartW = w - MARGIN.left - MARGIN.right;
     const chartH = height - MARGIN.top - MARGIN.bottom;
-    const practiceColor = cssVar('--info') || '#60a5fa';
-    const examColor = cssVar('--warning') || '#fb923c';
 
     const points = data.map((d, i) => ({
         x: MARGIN.left + (i / Math.max(pointCount - 1, 1)) * chartW,
@@ -36,6 +40,7 @@ export function RechartsBar({ data, height = 240 }: { data: ChartData[]; height?
             {/* Grid lines + Y-axis labels */}
             {Y_TICKS.map((tick) => {
                 const y = MARGIN.top + chartH - (tick / 100) * chartH;
+
                 return (
                     <g key={tick}>
                         <line

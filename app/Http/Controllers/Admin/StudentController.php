@@ -147,9 +147,7 @@ class StudentController extends Controller
         }
 
         if ($request->has('email_verified_at')) {
-            $validated['email_verified_at'] = now();
-        } else {
-            $validated['email_verified_at'] = null;
+            $validated['email_verified_at'] = $request->boolean('email_verified_at') ? now() : null;
         }
 
         $student->update($validated);

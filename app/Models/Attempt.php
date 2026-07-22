@@ -113,9 +113,9 @@ class Attempt extends Model
     public function getSubjectNameAttribute(): string
     {
         if ($this->isPractice()) {
-            return $this->topic->name ?? '—';
+            return $this->relationLoaded('topic') ? ($this->topic->name ?? '—') : '—';
         }
 
-        return $this->competition->name ?? '—';
+        return $this->relationLoaded('competition') ? ($this->competition->name ?? '—') : '—';
     }
 }

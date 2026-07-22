@@ -11,10 +11,20 @@ return new class extends Migration
         Schema::table('attempt_sections', function (Blueprint $table) {
             $table->timestamp('submitted_at')->nullable()->after('duration_minutes');
         });
+
+        Schema::table('attempt_sections', function (Blueprint $table) {
+            $table->dropIndex(['attempt_id']);
+            $table->index(['attempt_id', 'submitted_at']);
+        });
     }
 
     public function down(): void
     {
+        Schema::table('attempt_sections', function (Blueprint $table) {
+            $table->dropIndex(['attempt_id', 'submitted_at']);
+            $table->index('attempt_id');
+        });
+
         Schema::table('attempt_sections', function (Blueprint $table) {
             $table->dropColumn('submitted_at');
         });

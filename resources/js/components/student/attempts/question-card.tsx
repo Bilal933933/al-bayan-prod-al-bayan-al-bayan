@@ -28,7 +28,7 @@ export function QuestionCard({ question, questionIndex, totalQuestions, isLocked
         if (question && containerRef.current) {
             containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-    }, [question?.id]);
+    }, [question]);
 
     if (isLoading || !question) {
         return (

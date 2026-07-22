@@ -11,7 +11,7 @@ const heroVariants = {
         scale: 1,
         transition: { duration: 0.4, ease: 'easeOut' },
     },
-};
+} as const;
 
 function hexToRgba(hex: string, alpha: number): string {
     const clean = hex.replace('#', '');

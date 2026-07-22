@@ -2,8 +2,8 @@ import { Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { CalendarDays, Clock, Play } from 'lucide-react';
 import { COMPETITION_ICONS } from '@/config/competition-icons';
-import competitions from '@/routes/student/competitions';
 import { cn } from '@/lib/utils';
+import competitions from '@/routes/student/competitions';
 import type { Competition } from '@/types/competition';
 
 const cardVariants = {
@@ -13,24 +13,40 @@ const cardVariants = {
         y: 0,
         transition: { duration: 0.3, ease: 'easeOut' },
     },
-};
+} as const;
 
 function formatDate(dateStr: string): string {
     const date = new Date(dateStr);
+
     return date.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
 function timeAgo(dateStr: string | null | undefined): string {
-    if (!dateStr) return '—';
+    if (!dateStr) {
+return '—';
+}
+
     const now = new Date();
     const date = new Date(dateStr);
     const diffMs = now.getTime() - date.getTime();
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-    if (diffDays === 0) return 'اليوم';
-    if (diffDays === 1) return 'أمس';
-    if (diffDays < 7) return `منذ ${diffDays} أيام`;
-    if (diffDays < 30) return `منذ ${Math.floor(diffDays / 7)} أسابيع`;
+    if (diffDays === 0) {
+return 'اليوم';
+}
+
+    if (diffDays === 1) {
+return 'أمس';
+}
+
+    if (diffDays < 7) {
+return `منذ ${diffDays} أيام`;
+}
+
+    if (diffDays < 30) {
+return `منذ ${Math.floor(diffDays / 7)} أسابيع`;
+}
+
     return formatDate(dateStr);
 }
 

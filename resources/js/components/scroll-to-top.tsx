@@ -11,6 +11,7 @@ export function ScrollToTop() {
         }
 
         window.addEventListener('scroll', onScroll, { passive: true });
+
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 

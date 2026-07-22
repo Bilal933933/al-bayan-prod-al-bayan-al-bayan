@@ -1,4 +1,5 @@
 import { createInertiaApp } from '@inertiajs/react';
+import { ErrorBoundary } from '@/components/error-boundary';
 import { ScrollToTop } from '@/components/scroll-to-top';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -31,11 +32,13 @@ createInertiaApp({
     strictMode: true,
     withApp(app) {
         return (
-            <TooltipProvider delayDuration={0}>
-                {app}
-                <ScrollToTop />
-                <Toaster />
-            </TooltipProvider>
+            <ErrorBoundary>
+                <TooltipProvider delayDuration={0}>
+                    {app}
+                    <ScrollToTop />
+                    <Toaster />
+                </TooltipProvider>
+            </ErrorBoundary>
         );
     },
     progress: {

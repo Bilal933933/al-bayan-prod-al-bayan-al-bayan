@@ -1,6 +1,6 @@
+import { Users, BarChart3, LayoutGrid, Database } from 'lucide-react';
 import type { KpiStats } from '@/types/dashboard';
 import { KpiCard } from './kpi-card';
-import { Users, BarChart3, LayoutGrid, Database } from 'lucide-react';
 
 interface KpiGridProps {
     stats: KpiStats;

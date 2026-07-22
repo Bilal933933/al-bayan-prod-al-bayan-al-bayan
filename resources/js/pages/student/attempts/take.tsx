@@ -105,7 +105,7 @@ export default function Take({ attempt }: TakeProps) {
             />
 
             {isSectionSubmitted && (
-                <div className="mx-auto w-full max-w-3xl px-4 pt-2">
+                <div className="mx-auto w-full max-w-3xl px-4 pt-2" role="alert">
                     <div className="rounded-lg border border-warning/30 bg-warning/10 px-4 py-3 text-sm text-warning">
                         تم تسليم هذا القسم. سيتم نقلك إلى القسم التالي قريباً.
                     </div>

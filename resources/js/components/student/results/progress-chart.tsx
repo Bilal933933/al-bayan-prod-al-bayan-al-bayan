@@ -7,7 +7,9 @@ interface ProgressChartProps {
 }
 
 export function ProgressChart({ data }: ProgressChartProps) {
-    if (data.length === 0) return null;
+    if (data.length === 0) {
+return null;
+}
 
     const allZero = data.every((p) => p.percentage === 0);
 

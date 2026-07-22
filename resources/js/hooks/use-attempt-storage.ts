@@ -3,7 +3,11 @@ import { useCallback, useSyncExternalStore } from 'react';
 function readValue<T>(key: string, defaultValue: T): T {
     try {
         const raw = localStorage.getItem(key);
-        if (raw === null) return defaultValue;
+
+        if (raw === null) {
+return defaultValue;
+}
+
         return JSON.parse(raw) as T;
     } catch {
         return defaultValue;
@@ -20,6 +24,7 @@ function getSnapshot(key: string) {
 
 function subscribe(key: string, onStoreChange: () => void) {
     window.addEventListener('storage', onStoreChange);
+
     return () => window.removeEventListener('storage', onStoreChange);
 }
 

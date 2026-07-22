@@ -65,6 +65,7 @@ class DashboardController extends Controller
             ->where('attempts.status', 'completed')
             ->groupBy('topics.id', 'topics.name')
             ->havingRaw('SUM(attempts.total_questions) > 0')
+            ->toBase()
             ->get()
             ->map(fn ($topic) => [
                 'name' => $topic->name,
@@ -86,6 +87,7 @@ class DashboardController extends Controller
             ->where('competitions.is_active', true)
             ->groupBy('competitions.id', 'competitions.name')
             ->havingRaw('COUNT(attempts.id) > 0 OR COUNT(DISTINCT competition_user.user_id) > 0')
+            ->toBase()
             ->get()
             ->values();
 

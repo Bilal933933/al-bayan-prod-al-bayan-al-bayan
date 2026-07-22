@@ -1,6 +1,6 @@
-import { Search, Tally1 } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
 interface TopicSearchProps {
@@ -34,6 +34,7 @@ export function TopicSearch({ search, onSearchChange, visibilityFilter, onVisibi
                 {tabs.map((tab) => {
                     const isActive = visibilityFilter === tab.key;
                     const count = tab.key === null ? counts.all : counts[tab.key];
+
                     return (
                         <Button
                             key={tab.key ?? 'all'}

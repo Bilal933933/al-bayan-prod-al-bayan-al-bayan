@@ -14,7 +14,7 @@ interface StudentFormData {
 const formVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
-};
+} as const;
 
 export default function StudentForm({
     data,

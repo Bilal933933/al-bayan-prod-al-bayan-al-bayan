@@ -47,7 +47,7 @@ export function DifficultyChart({ distribution }: DifficultyChartProps) {
                         ))}
                     </Pie>
                     <Tooltip
-                        formatter={(value: number) => [value, 'سؤال']}
+                        formatter={(value) => [value, 'سؤال']}
                         contentStyle={{
                             borderRadius: '12px',
                             border: '1px solid #e2e8f0',

@@ -75,13 +75,15 @@ class DemoDataSeeder extends Seeder
         $users = [];
 
         foreach (self::STUDENTS as $data) {
-            $users[] = User::create([
+            $user = new User([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'password' => Hash::make('password'),
                 'email_verified_at' => now(),
-                'role' => 'student',
             ]);
+            $user->role = 'student';
+            $user->save();
+            $users[] = $user;
         }
 
         return $users;

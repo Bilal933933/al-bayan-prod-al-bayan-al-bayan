@@ -1,5 +1,5 @@
-import type { RecentAttempt } from '@/types/dashboard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import type { RecentAttempt } from '@/types/dashboard';
 import { AttemptList } from './attempt-list';
 import { DifficultyChart } from './difficulty-chart';
 

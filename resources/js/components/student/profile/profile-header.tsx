@@ -18,7 +18,7 @@ export function ProfileHeader({ name, email, initial, streakDays, totalPoints }:
                 <div className="mt-2.5 flex flex-wrap gap-2">
                     {streakDays > 0 && (
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
-                            🔥 {streakDays} يوم متتالي
+                            <span aria-hidden="true">🔥</span> {streakDays} يوم متتالي
                         </span>
                     )}
                     {totalPoints > 0 && (

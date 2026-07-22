@@ -1,8 +1,8 @@
 import { Link, router } from '@inertiajs/react';
 import { Award, CheckCircle, Clock, FileText, Play, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { getColor } from './topic-colors';
 import type { BestScore } from '@/types/topic';
+import { getColor } from './topic-colors';
 
 interface TopicCardProps {
     id: number;
@@ -14,7 +14,6 @@ interface TopicCardProps {
     hasInProgress?: boolean;
     inProgressAttemptId?: number | null;
     bestScore?: BestScore | null;
-    competitionId?: number;
     href?: string;
 }
 
@@ -28,7 +27,6 @@ export default function TopicCard({
     hasInProgress = false,
     inProgressAttemptId,
     bestScore,
-    competitionId,
     href,
 }: TopicCardProps) {
     const colors = getColor(id);
@@ -38,14 +36,20 @@ export default function TopicCard({
         : null;
 
     function handleResume(e: React.MouseEvent) {
-        if (!hasInProgress || !inProgressAttemptId) return;
+        if (!hasInProgress || !inProgressAttemptId) {
+return;
+}
+
         e.preventDefault();
         e.stopPropagation();
         router.visit(`/attempts/${inProgressAttemptId}`);
     }
 
     function handleStart(e: React.MouseEvent) {
-        if (hasInProgress) return;
+        if (hasInProgress) {
+return;
+}
+
         e.preventDefault();
         e.stopPropagation();
 
@@ -105,7 +109,7 @@ export default function TopicCard({
                         </div>
                         <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-muted">
                             <div
-                                className={cn('h-full rounded-full transition-all duration-500', colors.primary.split(' ')[0])}
+                                className={cn('h-full rounded-full transition-all duration-500', colors.primaryBg)}
                                 style={{ width: `${scorePercent}%` }}
                             />
                         </div>

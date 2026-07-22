@@ -23,7 +23,7 @@ const formVariants = {
         y: 0,
         transition: { duration: 0.35, ease: 'easeOut' },
     },
-};
+} as const;
 
 export default function CompetitionForm({
     data,

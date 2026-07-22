@@ -22,6 +22,7 @@ export default function Edit({ competition, availableParents }: EditProps) {
     const { data, setData, put, processing, errors } = useForm<CompetitionFormData>({
         parent_id: competition.parent_id,
         classification: competition.classification,
+        order: competition.order,
         code: competition.code,
         name: competition.name,
         slug: competition.slug,

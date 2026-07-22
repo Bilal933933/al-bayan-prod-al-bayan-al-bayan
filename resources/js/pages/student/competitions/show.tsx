@@ -2,14 +2,14 @@ import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { BookOpen, ChevronLeft, Folder, House, Play, Loader2 } from 'lucide-react';
 import { useState } from 'react';
-import { start as startCompetitionAttempt } from '@/routes/student/competitions/attempts';
-import competitions from '@/routes/student/competitions';
-import { show as topicShow } from '@/routes/student/topics';
 import CompetitionCard from '@/components/student/competitions/competition-card';
 import CompetitionInfoTabs from '@/components/student/competitions/competition-info-tabs';
 import CompetitionShowHero from '@/components/student/competitions/competition-show-hero';
 import CompetitionShowStats from '@/components/student/competitions/competition-show-stats';
 import TopicCard from '@/components/student/topics/topic-card';
+import competitions from '@/routes/student/competitions';
+import { start as startCompetitionAttempt } from '@/routes/student/competitions/attempts';
+import { show as topicShow } from '@/routes/student/topics';
 import type { Competition } from '@/types/competition';
 import type { TopicWithPivot } from '@/types/topic';
 
@@ -39,7 +39,7 @@ const itemVariants = {
         y: 0,
         transition: { duration: 0.25, ease: 'easeOut' },
     },
-};
+} as const;
 
 export default function Show({ competition, children, topics, is_joined, total_questions, total_minutes, users_count, avg_score_percentage }: ShowProps) {
     const [starting, setStarting] = useState(false);
@@ -50,7 +50,7 @@ export default function Show({ competition, children, topics, is_joined, total_q
 
     function handleStartExam() {
         setStarting(true);
-        router.post(startCompetitionAttempt.url({ competition }));
+        router.post(startCompetitionAttempt.url({ competition: competition.slug }));
     }
 
     return (

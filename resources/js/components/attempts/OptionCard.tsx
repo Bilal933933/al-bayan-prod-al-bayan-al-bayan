@@ -3,8 +3,6 @@ import { cn } from '@/lib/utils';
 
 interface OptionCardProps {
     option: { id: number; text: string; is_correct: boolean };
-    isSelected: boolean;
-    isCorrectOption: boolean;
     isCompleted: boolean;
     showCorrect: boolean;
     showWrong: boolean;
@@ -12,8 +10,6 @@ interface OptionCardProps {
 
 export default function OptionCard({
     option,
-    isSelected,
-    isCorrectOption,
     isCompleted,
     showCorrect,
     showWrong,

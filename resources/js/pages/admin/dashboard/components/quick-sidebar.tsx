@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link } from '@inertiajs/react';
 import {
     AlertTriangle,
@@ -9,8 +8,9 @@ import {
     ShieldCheck,
     BookOpen,
 } from 'lucide-react';
-import admin from '@/routes/admin';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import admin from '@/routes/admin';
 
 interface QuickSidebarProps {
     systemHealth: number;

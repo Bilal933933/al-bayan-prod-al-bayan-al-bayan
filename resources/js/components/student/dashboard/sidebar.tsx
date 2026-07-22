@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
-import { Sparkles, Calendar } from 'lucide-react';
-import CompetitionCard from '@/components/student/competitions/competition-card';
+import { Sparkles } from 'lucide-react';
 import { SectionHeader } from '@/components/section-header';
+import CompetitionCard from '@/components/student/competitions/competition-card';
 import competitions from '@/routes/student/competitions';
 import type { Competition } from '@/types/competition';
 

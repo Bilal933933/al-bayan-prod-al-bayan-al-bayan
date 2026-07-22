@@ -7,6 +7,42 @@ import topics from '@/routes/admin/topics';
 import type { PaginationMeta } from '@/types/pagination';
 import type { Topic } from '@/types/topic';
 
+function handleSort(sort: string, direction: string, field: string) {
+    const currentUrl = new URL(window.location.href);
+    const params = new URLSearchParams(currentUrl.search);
+
+    if (sort === field && direction === 'asc') {
+        params.set('direction', 'desc');
+    } else {
+        params.set('sort', field);
+        params.set('direction', 'asc');
+    }
+
+    params.set('page', '1');
+
+    router.visit(currentUrl.pathname + '?' + params.toString(), {
+        preserveState: true,
+        preserveScroll: true,
+    });
+}
+
+function SortHeader({ field, label, className, sort, direction }: { field: string; label: string; className?: string; sort: string; direction: string }) {
+    const isActive = sort === field;
+
+    return (
+        <th className={cn('px-4 py-3 font-medium whitespace-nowrap group', className)}>
+            <button
+                onClick={() => handleSort(sort, direction, field)}
+                className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+            >
+                {label}
+                {isActive && direction === 'asc' && <ArrowUp className="h-3 w-3" />}
+                {isActive && direction === 'desc' && <ArrowDown className="h-3 w-3" />}
+            </button>
+        </th>
+    );
+}
+
 export default function TopicTable({
     topics: topicList,
     meta,
@@ -22,42 +58,6 @@ export default function TopicTable({
     sort?: string;
     direction?: string;
 }) {
-    function handleSort(field: string) {
-        const currentUrl = new URL(window.location.href);
-        const params = new URLSearchParams(currentUrl.search);
-
-        if (sort === field && direction === 'asc') {
-            params.set('direction', 'desc');
-        } else {
-            params.set('sort', field);
-            params.set('direction', 'asc');
-        }
-
-        params.set('page', '1');
-
-        router.visit(currentUrl.pathname + '?' + params.toString(), {
-            preserveState: true,
-            preserveScroll: true,
-        });
-    }
-
-    function SortHeader({ field, label, className }: { field: string; label: string; className?: string }) {
-        const isActive = sort === field;
-
-        return (
-            <th className={cn('px-4 py-3 font-medium whitespace-nowrap group', className)}>
-                <button
-                    onClick={() => handleSort(field)}
-                    className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
-                >
-                    {label}
-                    {isActive && direction === 'asc' && <ArrowUp className="h-3 w-3" />}
-                    {isActive && direction === 'desc' && <ArrowDown className="h-3 w-3" />}
-                </button>
-            </th>
-        );
-    }
-
     if (topicList.length === 0) {
         const hasFilters = searchQuery.trim() !== '' || activeFilter !== 'all';
 
@@ -90,11 +90,11 @@ export default function TopicTable({
             <table className="w-full text-sm">
                 <thead className="sticky top-0 z-10">
                     <tr className="border-b bg-muted/80 text-start backdrop-blur-sm">
-                        <SortHeader field="name" label="الاسم" />
-                        <SortHeader field="code" label="الكود" />
-                        <SortHeader field="visibility" label="الرؤية" />
-                        <SortHeader field="default_questions_count" label="عدد الأسئلة" className="text-center" />
-                        <SortHeader field="default_duration_minutes" label="المدة" className="text-center" />
+                        <SortHeader sort={sort} direction={direction} field="name" label="الاسم" />
+                        <SortHeader sort={sort} direction={direction} field="code" label="الكود" />
+                        <SortHeader sort={sort} direction={direction} field="visibility" label="الرؤية" />
+                        <SortHeader sort={sort} direction={direction} field="default_questions_count" label="عدد الأسئلة" className="text-center" />
+                        <SortHeader sort={sort} direction={direction} field="default_duration_minutes" label="المدة" className="text-center" />
                         <th className="px-4 py-3 font-medium whitespace-nowrap text-center">المسابقات</th>
                         <th className="px-4 py-3 font-medium whitespace-nowrap">الإجراءات</th>
                     </tr>

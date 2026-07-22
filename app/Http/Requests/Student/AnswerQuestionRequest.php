@@ -48,6 +48,20 @@ class AnswerQuestionRequest extends FormRequest
                 return;
             }
 
+            $section = $attemptQuestion->section;
+
+            if ($section->submitted_at !== null) {
+                $validator->errors()->add('attempt', 'لا يمكن تعديل إجابة لقسم تم تسليمه.');
+
+                return;
+            }
+
+            if ($section->isExpired()) {
+                $validator->errors()->add('attempt', 'لا يمكن تعديل إجابة لقسم انتهى وقته.');
+
+                return;
+            }
+
             $option = QuestionOption::find((int) $this->input('selected_option_id'));
             if ($option?->getAttribute('question_id') !== $attemptQuestion->getAttribute('question_id')) {
                 $validator->errors()->add('selected_option_id', 'الخيار لا ينتمي لهذا السؤال.');

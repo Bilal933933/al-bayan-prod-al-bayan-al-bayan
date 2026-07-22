@@ -18,6 +18,7 @@ class ResultController extends Controller
         $allAttempts = Attempt::where('user_id', $userId);
         $completed = (clone $allAttempts)->where('status', Attempt::STATUS_COMPLETED)
             ->with(['topic:id,name', 'competition:id,name'])
+            ->limit(500)
             ->get();
 
         $totalAttempts = (clone $allAttempts)->count();

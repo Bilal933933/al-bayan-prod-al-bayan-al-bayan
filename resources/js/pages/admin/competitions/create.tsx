@@ -22,6 +22,7 @@ export default function Create({ availableParents, defaultParentId }: CreateProp
     const { data, setData, post, processing, errors } = useForm<CompetitionFormData>({
         parent_id: defaultParentId ?? null,
         classification: 'standalone',
+        order: 0,
         code: '',
         name: '',
         image: null,

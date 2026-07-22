@@ -11,6 +11,7 @@ use App\Http\Controllers\Student\ReportController;
 use App\Http\Controllers\Student\ResultController;
 use App\Http\Controllers\Student\SearchController;
 use App\Http\Controllers\Student\TopicController;
+use App\Models\Topic;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -80,6 +81,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'actionLabel' => 'التدريب الحر',
             'actionHref' => route('student.topics.index'),
         ]));
+        Route::get('/{topic}/attempts', fn (Topic $topic) => redirect()->route('student.topics.show', $topic))->name('attempts.redirect');
     });
 
     // Student results route

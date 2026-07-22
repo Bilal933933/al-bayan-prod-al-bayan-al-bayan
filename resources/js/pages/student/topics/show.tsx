@@ -50,7 +50,7 @@ const pageVariants = {
         y: 0,
         transition: { duration: 0.3, ease: 'easeOut' },
     },
-};
+} as const;
 
 export default function Show({ topic, userStats, hasInProgress, inProgressAttemptId, recentAttempts, difficultyDistribution, questionsCount }: ShowProps) {
     const color = getColor(topic.id);
@@ -62,13 +62,14 @@ export default function Show({ topic, userStats, hasInProgress, inProgressAttemp
     const hasStats = userStats.total_attempts > 0;
 
     function handleStart() {
-        router.visit(attempts.create.url({ query: { topic: topic.id } }));
+        router.visit(attempts.create({ query: { topic: topic.id } }).url);
     }
 
     function handleResume() {
         if (!inProgressAttemptId) {
             return;
         }
+
         router.visit(`/attempts/${inProgressAttemptId}`);
     }
 
@@ -176,7 +177,7 @@ export default function Show({ topic, userStats, hasInProgress, inProgressAttemp
                         )}
                         {userStats.last_practice_at && (
                             <div className="rounded-2xl border bg-card p-5 text-center shadow-xs">
-                                <p className="text-base font-black text-foreground"><DateDisplay date={userStats.last_practice_at} format="relative" suppressHydrationWarning /></p>
+                                <p className="text-base font-black text-foreground"><DateDisplay date={userStats.last_practice_at} format="relative" /></p>
                                 <p className="mt-1 text-xs font-medium text-muted-foreground">آخر تدريب</p>
                             </div>
                         )}

@@ -8,7 +8,9 @@ interface TopicStatsBarProps {
 }
 
 export function TopicStatsBar({ totalAttempts, uniqueTopics, averageScore, lastPracticeLabel }: TopicStatsBarProps) {
-    if (totalAttempts === 0) return null;
+    if (totalAttempts === 0) {
+return null;
+}
 
     const items = [
         {

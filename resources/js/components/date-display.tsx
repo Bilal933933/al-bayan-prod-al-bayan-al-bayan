@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
@@ -105,11 +105,11 @@ export default function DateDisplay({
     showTooltip = false,
     className,
 }: DateDisplayProps) {
-    const [hydrated, setHydrated] = useState(false);
-
-    useEffect(() => {
-        setHydrated(true);
-    }, []);
+    const hydrated = useSyncExternalStore(
+        () => () => {},
+        () => true,
+        () => false,
+    );
 
     const parsed = parseDate(date);
 

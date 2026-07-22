@@ -12,7 +12,7 @@ export function BadgesGrid({ badges }: BadgesGridProps) {
     return (
         <div>
             <div className="mb-4 flex items-center gap-2">
-                <span className="text-lg">🏅</span>
+                <span className="text-lg" aria-hidden="true">🏅</span>
                 <h3 className="text-sm font-bold">الشارات</h3>
             </div>
             <div className="grid grid-cols-4 gap-2.5 sm:grid-cols-8">

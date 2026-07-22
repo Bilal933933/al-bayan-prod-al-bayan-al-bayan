@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import { Link, router } from '@inertiajs/react';
-import join from '@/routes/student/competitions/join';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import join from '@/routes/student/competitions/join';
 
 interface JoinActionsProps {
     competition: { slug: string };
@@ -22,7 +22,7 @@ export default function JoinActions({ competition, isJoined }: JoinActionsProps)
         return (
             <div className="flex flex-col items-center gap-4 rounded-2xl border border-emerald-100 bg-emerald-50 p-4 sm:flex-row">
                 <p className="grow text-center text-sm font-bold text-emerald-800 sm:text-right">
-                    🎉 أنت منضم بالفعل إلى هذه المسابقة، يمكنك الانتقال مباشرة لبدء الاختبارات!
+                    <span aria-hidden="true">🎉</span> أنت منضم بالفعل إلى هذه المسابقة، يمكنك الانتقال مباشرة لبدء الاختبارات!
                 </p>
                 <Link
                     href={`/student/competitions/${competition.slug}`}

@@ -21,7 +21,7 @@ const pageVariants = {
         y: 0,
         transition: { duration: 0.3, ease: 'easeOut' },
     },
-};
+} as const;
 
 export default function Index({ topics }: IndexProps) {
     const [search, setSearch] = useState('');
@@ -62,7 +62,7 @@ export default function Index({ topics }: IndexProps) {
             ? (scores.reduce((sum, s) => sum + (s.correct / s.total) * 100, 0) / scores.length)
             : null;
 
-        let lastPracticeLabel: string | null = null;
+        const lastPracticeLabel: string | null = null;
 
         return { totalAttempts, uniqueTopics, averageScore, lastPracticeLabel };
     }, [topics]);
@@ -128,9 +128,7 @@ export default function Index({ topics }: IndexProps) {
                             <TopicCard
                                 key={topic.id}
                                 id={topic.id}
-                                code={topic.code}
                                 name={topic.name}
-                                visibility={topic.visibility}
                                 description={topic.description}
                                 questionsCount={topic.default_questions_count}
                                 durationMinutes={topic.default_duration_minutes}

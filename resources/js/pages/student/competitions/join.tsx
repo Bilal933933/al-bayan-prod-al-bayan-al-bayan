@@ -1,12 +1,12 @@
 import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import competitions from '@/routes/student/competitions';
-import JoinHero from '@/components/student/competitions/join/join-hero';
-import StatCards from '@/components/student/competitions/join/stat-cards';
-import PerksList from '@/components/student/competitions/join/perks-list';
 import ChildrenList from '@/components/student/competitions/join/children-list';
 import JoinActions from '@/components/student/competitions/join/join-actions';
+import JoinHero from '@/components/student/competitions/join/join-hero';
+import PerksList from '@/components/student/competitions/join/perks-list';
+import StatCards from '@/components/student/competitions/join/stat-cards';
+import competitions from '@/routes/student/competitions';
 import type { Competition, ChildCompetition } from '@/types/competition';
 
 interface JoinProps {

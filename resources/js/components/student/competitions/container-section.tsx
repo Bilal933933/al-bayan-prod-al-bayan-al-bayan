@@ -12,7 +12,7 @@ const sectionVariants = {
         y: 0,
         transition: { duration: 0.3, ease: 'easeOut' },
     },
-};
+} as const;
 
 export default function ContainerSection({
     title,

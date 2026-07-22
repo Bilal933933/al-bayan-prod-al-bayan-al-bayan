@@ -128,16 +128,12 @@ export function AttemptCard({ attempt, href }: AttemptCardProps) {
                 </div>
             </div>
 
-            <Link href={href} className="shrink-0">
-                <Button
-                    variant={attempt.status === 'in_progress' ? 'default' : 'outline'}
-                    size="sm"
-                    className="gap-1"
-                >
+            <Button variant={attempt.status === 'in_progress' ? 'default' : 'outline'} size="sm" className="gap-1 shrink-0" asChild>
+                <Link href={href}>
                     {attempt.status === 'in_progress' ? 'متابعة' : 'عرض النتيجة'}
                     <ChevronLeft className="h-3.5 w-3.5" />
-                </Button>
-            </Link>
+                </Link>
+            </Button>
         </div>
     );
 }

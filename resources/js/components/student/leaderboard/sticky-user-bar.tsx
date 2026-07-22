@@ -37,7 +37,7 @@ return null;
 
                 <div className="text-right">
                     <span className="flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-600">
-                        🔥 {currentUser.streak_days} يوم متتالي
+                        <span aria-hidden="true">🔥</span> {currentUser.streak_days} يوم متتالي
                     </span>
                 </div>
             </div>

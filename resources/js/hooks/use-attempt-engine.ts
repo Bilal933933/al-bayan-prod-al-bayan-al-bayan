@@ -1,5 +1,5 @@
 import { router } from '@inertiajs/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import {
     removeFromStorage,
@@ -41,15 +41,20 @@ export function useAttemptEngine(attempt: Attempt) {
     const [isFinishing, setIsFinishing] = useState(false);
     const [isSubmittingSection, setIsSubmittingSection] = useState(false);
 
-    const lockedQuestions = new Set(lockedArray);
-    const setLockedQuestions = (
-        fn: Set<string> | ((prev: Set<string>) => Set<string>),
-    ) => {
-        const next = fn instanceof Set ? fn : fn(lockedQuestions);
-        setLockedArray([...next]);
-    };
+    const lockedQuestions = useMemo(() => new Set(lockedArray), [lockedArray]);
+    const setLockedQuestions = useCallback(
+        (fn: Set<string> | ((prev: Set<string>) => Set<string>)) => {
+            setLockedArray((prev) => {
+                const set = new Set(prev);
+                const next = fn instanceof Set ? fn : fn(set);
 
-    const flaggedQuestions = new Set(flaggedArray);
+                return [...next];
+            });
+        },
+        [setLockedArray],
+    );
+
+    const flaggedQuestions = useMemo(() => new Set(flaggedArray), [flaggedArray]);
     const toggleFlag = useCallback((key: string) => {
         setFlaggedArray((prev) => {
             const set = new Set(prev);
@@ -69,7 +74,7 @@ export function useAttemptEngine(attempt: Attempt) {
     const submitSectionRef = useRef<() => void>(() => {});
 
     const isSimulation = attempt.type === 'exam';
-    const sections = attempt.sections ?? [];
+    const sections = useMemo(() => attempt.sections ?? [], [attempt.sections]);
     const currentSection = sections[currentSectionIndex];
     const loadedSection = currentSection
         ? sectionsData.get(currentSection.id)
@@ -87,8 +92,8 @@ export function useAttemptEngine(attempt: Attempt) {
     const isSectionSubmitted = currentSectionSubmitted;
 
     const submittedSectionIndices = sections
-        .map((s, idx) => (s.submitted_at !== null ? idx : -1))
-        .filter((idx) => idx !== -1);
+        .map((s: AttemptSection, idx: number) => (s.submitted_at !== null ? idx : -1))
+        .filter((idx: number) => idx !== -1);
 
     const answeredQuestions = new Set<string>();
 
@@ -100,12 +105,12 @@ export function useAttemptEngine(attempt: Attempt) {
         }
     }
 
-    function loadSection(sectionIndex: number) {
+    const loadSection = useCallback((sectionIndex: number) => {
         const section = sections[sectionIndex];
 
         if (!section) {
-return;
-}
+            return;
+        }
 
         const cached = sectionsData.get(section.id);
 
@@ -127,8 +132,8 @@ return;
         )
             .then((res) => {
                 if (!res.ok) {
-throw new Error('Failed to load section');
-}
+                    throw new Error('Failed to load section');
+                }
 
                 return res.json();
             })
@@ -143,17 +148,19 @@ throw new Error('Failed to load section');
             })
             .catch((err: unknown) => {
                 if (err instanceof Error && err.name === 'AbortError') {
-return;
-}
+                    return;
+                }
 
                 toast.error('فشل تحميل أسئلة القسم. حاول مرة أخرى.');
                 setIsLoadingSection(false);
             });
-    }
+    }, [sections, sectionsData, attempt.id, setIsLoadingSection, setSectionsData]);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         loadSection(currentSectionIndex);
-    }, [currentSectionIndex]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         if (timerRef.current) {
@@ -162,25 +169,9 @@ return;
         }
 
         if (currentSectionDuration > 0 && !currentSectionSubmitted) {
-            if (currentSection?.started_at) {
-                setElapsedSeconds(
-                    Math.floor(
-                        (Date.now() -
-                            new Date(currentSection.started_at).getTime()) /
-                            1000,
-                    ),
-                );
-            }
-
             timerRef.current = setInterval(() => {
                 setElapsedSeconds((prev) => {
                     if (prev >= currentSectionDuration * 60 - 1) {
-                        if (timerRef.current) {
-clearInterval(timerRef.current);
-}
-
-                        submitSectionRef.current();
-
                         return prev;
                     }
 
@@ -191,14 +182,33 @@ clearInterval(timerRef.current);
 
         return () => {
             if (timerRef.current) {
-clearInterval(timerRef.current);
-}
+                clearInterval(timerRef.current);
+            }
         };
     }, [
         currentSectionIndex,
         currentSectionDuration,
         currentSectionSubmitted,
         currentSection?.started_at,
+    ]);
+
+    useEffect(() => {
+        if (
+            currentSectionDuration > 0 &&
+            !currentSectionSubmitted &&
+            elapsedSeconds >= currentSectionDuration * 60 - 1
+        ) {
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+                timerRef.current = null;
+            }
+
+            submitSectionRef.current();
+        }
+    }, [
+        elapsedSeconds,
+        currentSectionDuration,
+        currentSectionSubmitted,
     ]);
 
     function handleSelectOption(optionId: number) {
@@ -250,32 +260,32 @@ return;
         });
     }
 
-    function canGoBackTo(
-        targetSectionIdx: number,
-        targetQuestionIdx: number,
-    ): boolean {
-        if (!isSimulation) {
-return true;
-}
+    const canGoBackTo = useCallback(
+        (targetSectionIdx: number, targetQuestionIdx: number): boolean => {
+            if (!isSimulation) {
+                return true;
+            }
 
-        if (currentSection?.submitted_at !== null) {
-return false;
-}
+            if (currentSection?.submitted_at !== null) {
+                return false;
+            }
 
-        const section = sections[targetSectionIdx];
+            const section = sections[targetSectionIdx];
 
-        if (!section) {
-return false;
-}
+            if (!section) {
+                return false;
+            }
 
-        if (section.submitted_at !== null) {
-return false;
-}
+            if (section.submitted_at !== null) {
+                return false;
+            }
 
-        return !lockedQuestions.has(
-            getCurrentKey(section.id, targetQuestionIdx),
-        );
-    }
+            return !lockedQuestions.has(
+                getCurrentKey(section.id, targetQuestionIdx),
+            );
+        },
+        [isSimulation, currentSection, sections, lockedQuestions],
+    );
 
     const handleSubmitSection = useCallback(() => {
         if (isSubmittingSection || !currentSection || currentSectionSubmitted) {
@@ -321,10 +331,10 @@ return;
         submitSectionRef.current = handleSubmitSection;
     });
 
-    function goToNext() {
+    const goToNext = useCallback(() => {
         if (isSectionSubmitted) {
-return;
-}
+            return;
+        }
 
         if (isSimulation && currentQuestion) {
             setLockedQuestions((prev) => {
@@ -345,15 +355,31 @@ return;
 
         if (!isLastSection) {
             if (isSimulation) {
-handleSubmitSection();
-}
+                handleSubmitSection();
+            }
 
+            const nextSectionIndex = currentSectionIndex + 1;
             setCurrentQuestionIndex(0);
-            setCurrentSectionIndex((prev) => prev + 1);
+            setCurrentSectionIndex(nextSectionIndex);
+            loadSection(nextSectionIndex);
         }
-    }
+    }, [
+        isSectionSubmitted,
+        isSimulation,
+        currentQuestion,
+        currentQuestionIndex,
+        totalQuestionsInSection,
+        isLastSection,
+        currentSection,
+        handleSubmitSection,
+        currentSectionIndex,
+        setCurrentQuestionIndex,
+        setCurrentSectionIndex,
+        loadSection,
+        setLockedQuestions,
+    ]);
 
-    function goToPrevious() {
+    const goToPrevious = useCallback(() => {
         if (currentQuestionIndex > 0) {
             const targetIdx = currentQuestionIndex - 1;
 
@@ -369,17 +395,26 @@ handleSubmitSection();
             const prevSection = sections[prevSectionIdx];
 
             if (!prevSection) {
-return;
-}
+                return;
+            }
 
             const lastQuestionIdx = (prevSection.questions_count ?? 1) - 1;
 
             if (canGoBackTo(prevSectionIdx, lastQuestionIdx)) {
                 setCurrentQuestionIndex(lastQuestionIdx);
                 setCurrentSectionIndex(prevSectionIdx);
+                loadSection(prevSectionIdx);
             }
         }
-    }
+    }, [
+        currentQuestionIndex,
+        canGoBackTo,
+        currentSectionIndex,
+        sections,
+        setCurrentQuestionIndex,
+        setCurrentSectionIndex,
+        loadSection,
+    ]);
 
     function handleFinish() {
         if (isFinishing) {

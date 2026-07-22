@@ -1,6 +1,6 @@
-import type { CompetitionMonitorData } from '@/types/dashboard';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Trophy, Users, XCircle } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import type { CompetitionMonitorData } from '@/types/dashboard';
 
 interface CompMonitorProps {
     data: CompetitionMonitorData[];

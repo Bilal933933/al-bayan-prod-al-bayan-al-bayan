@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import { Layers } from 'lucide-react';
-import { AttemptCard } from '@/components/student/attempts/attempt-card';
 import { EmptyState } from '@/components/empty-state';
 import { SectionHeader } from '@/components/section-header';
+import { AttemptCard } from '@/components/student/attempts/attempt-card';
 import attempts from '@/routes/student/attempts';
 import type { Attempt } from '@/types/attempt';
 

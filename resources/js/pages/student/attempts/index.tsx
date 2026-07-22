@@ -38,7 +38,7 @@ const pageVariants = {
         y: 0,
         transition: { duration: 0.3, ease: 'easeOut' },
     },
-};
+} as const;
 
 const typeLabels: Record<string, string> = {
     practice: 'تدريب',

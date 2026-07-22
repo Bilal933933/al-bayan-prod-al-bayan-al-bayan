@@ -79,11 +79,7 @@ export default function Index({
     filter = 'all',
     stats,
 }: IndexProps) {
-    const [searchInput, setSearchInput] = useState(currentSearch);
-
-    useEffect(() => {
-        setSearchInput(currentSearch);
-    }, [currentSearch]);
+    const [searchInput, setSearchInput] = useState(currentSearch || '');
 
     useEffect(() => {
         const timer = setTimeout(() => {

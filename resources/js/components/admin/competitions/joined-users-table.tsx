@@ -1,10 +1,15 @@
-import { Users, SearchX } from 'lucide-react';
+import { Users } from 'lucide-react';
 import DateDisplay from '@/components/date-display';
 import { Badge } from '@/components/ui/badge';
 import type { PaginationMeta } from '@/types/pagination';
-import type { User } from '@/types/auth';
 
-interface JoinedUser extends User {
+interface JoinedUser {
+    id: number;
+    name: string;
+    email: string;
+    email_verified_at: string | null;
+    created_at?: string;
+    updated_at?: string;
     pivot: {
         joined_at: string;
     };

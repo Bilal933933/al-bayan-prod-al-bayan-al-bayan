@@ -45,7 +45,7 @@ it('subject_name returns topic name for practice', function () {
         'type' => Attempt::TYPE_PRACTICE,
         'topic_id' => $topic->id,
         'status' => Attempt::STATUS_IN_PROGRESS,
-    ]);
+    ])->load('topic');
 
     expect($attempt->subject_name)->toBe('Algebra');
 });
@@ -58,7 +58,7 @@ it('subject_name returns competition name for exam', function () {
         'type' => Attempt::TYPE_EXAM,
         'competition_id' => $competition->id,
         'status' => Attempt::STATUS_IN_PROGRESS,
-    ]);
+    ])->load('competition');
 
     expect($attempt->subject_name)->toBe('Final Exam');
 });

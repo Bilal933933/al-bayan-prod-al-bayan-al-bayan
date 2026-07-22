@@ -1,7 +1,7 @@
-import type { TopicAnalytic } from '@/types/dashboard';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart3 } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import type { TopicAnalytic } from '@/types/dashboard';
 
 interface TopicAnalyzerProps {
     data: TopicAnalytic[];

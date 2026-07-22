@@ -46,6 +46,7 @@ class TopicFactory extends Factory
     {
         return $this->state(fn () => [
             'is_active' => true,
+            'visibility' => 'general',
         ]);
     }
 

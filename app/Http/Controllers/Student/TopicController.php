@@ -55,6 +55,7 @@ class TopicController extends Controller
             ->where('topic_id', $topic->id)
             ->where('type', Attempt::TYPE_PRACTICE)
             ->latest()
+            ->limit(100)
             ->get(['id', 'status', 'correct_answers', 'total_questions', 'created_at', 'finished_at']);
 
         $userStats = [

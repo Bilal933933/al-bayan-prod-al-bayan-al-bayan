@@ -1,11 +1,10 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { FolderOpen, Layers } from 'lucide-react';
 import { useMemo } from 'react';
 import { EmptyState } from '@/components/empty-state';
 import ContainerSection from '@/components/student/competitions/container-section';
 import MyCompetitionsSection from '@/components/student/competitions/my-competitions-section';
-import competitions from '@/routes/student/competitions';
 import type { Competition } from '@/types/competition';
 
 interface IndexProps {
@@ -23,7 +22,7 @@ const pageVariants = {
         y: 0,
         transition: { duration: 0.3, ease: 'easeOut' },
     },
-};
+} as const;
 
 export default function Index({ competitions: items, myCompetitions }: IndexProps) {
     const { containers, standalone } = useMemo(() => {

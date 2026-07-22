@@ -26,7 +26,7 @@ export default function LeaderboardPage({ podium, rankings, currentUser, periods
         router.reload({
             data: { period: key },
             only: ['podium', 'rankings', 'currentUser', 'currentPeriod'],
-            preserveScroll: true,
+            preserveUrl: true,
         });
     }
 

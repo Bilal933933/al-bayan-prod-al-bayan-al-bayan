@@ -70,10 +70,18 @@ const mediaQuery = (): MediaQueryList | null => {
 
 const handleSystemThemeChange = (): void => applyTheme(currentAppearance);
 
+let _themeInitialized = false;
+
 export function initializeTheme(): void {
     if (typeof window === 'undefined') {
         return;
     }
+
+    if (_themeInitialized) {
+        return;
+    }
+
+    _themeInitialized = true;
 
     if (!localStorage.getItem('appearance')) {
         localStorage.setItem('appearance', 'system');
@@ -83,7 +91,6 @@ export function initializeTheme(): void {
     currentAppearance = getStoredAppearance();
     applyTheme(currentAppearance);
 
-    // Set up system theme change listener
     mediaQuery()?.addEventListener('change', handleSystemThemeChange);
 }
 
