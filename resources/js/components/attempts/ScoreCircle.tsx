@@ -1,3 +1,5 @@
+import { SlidingNumber } from '@/components/animate-ui/primitives/texts/sliding-number';
+
 interface ScoreCircleProps {
     percentage: number;
 }
@@ -37,7 +39,7 @@ export default function ScoreCircle({ percentage }: ScoreCircleProps) {
                 />
             </svg>
             <span className="absolute text-3xl font-extrabold" style={{ color: colorVar }}>
-                {percentage}%
+                <SlidingNumber number={percentage} />%
             </span>
         </div>
     );

@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="rtl" @class(['dark' => ($appearance ?? 'system') == 'dark'])>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="rtl" suppressHydrationWarning>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        {{-- Inline script to detect system dark mode preference and apply it immediately --}}
+        {{-- Blocking script to apply theme before any paint --}}
         <script>
             (function() {
-                const appearance = '{{ $appearance ?? "system" }}';
+                try {
+                    var stored = localStorage.getItem('appearance') || 'system';
+                    var isDark = stored === 'dark' || (stored === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-                if (appearance === 'system') {
-                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-                    if (prefersDark) {
+                    if (isDark) {
                         document.documentElement.classList.add('dark');
                     }
-                }
+                } catch (e) {}
             })();
         </script>
 

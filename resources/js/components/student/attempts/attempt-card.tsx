@@ -1,5 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { BookOpen, CheckCircle, ChevronLeft, Clock, GraduationCap, Trophy } from 'lucide-react';
+
+import { SlidingNumber } from '@/components/animate-ui/primitives/texts/sliding-number';
 import DateDisplay from '@/components/date-display';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -74,7 +76,7 @@ export function AttemptCard({ attempt, href }: AttemptCardProps) {
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
                         <span className="inline-flex items-center gap-1">
                             <Trophy className="h-3.5 w-3.5" />
-                            {attempt.correct_answers} / {attempt.total_questions}
+                            <SlidingNumber number={attempt.correct_answers} /> / <SlidingNumber number={attempt.total_questions} />
                         </span>
                         {scorePercent !== null && (
                             <span className="inline-flex items-center gap-1.5">
@@ -87,7 +89,7 @@ export function AttemptCard({ attempt, href }: AttemptCardProps) {
                                         style={{ width: `${scorePercent}%` }}
                                     />
                                 </div>
-                                <span className="text-xs">{scorePercent}%</span>
+                                <span className="text-xs"><SlidingNumber number={scorePercent} />%</span>
                             </span>
                         )}
                         <span className="inline-flex items-center gap-1">

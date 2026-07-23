@@ -1,5 +1,4 @@
-import { Moon, Sun, Monitor } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Monitor, Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -7,33 +6,10 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-
-type Theme = 'light' | 'dark' | 'system';
+import { useAppearance } from '@/hooks/use-appearance';
 
 export function ThemeSwitcher() {
-    const [theme, setTheme] = useState<Theme>(() => {
-        if (typeof window === 'undefined') {
-            return 'system';
-        }
-
-        return (localStorage.getItem('theme') as Theme) ?? 'system';
-    });
-
-    useEffect(() => {
-        const root = window.document.documentElement;
-        root.classList.remove('light', 'dark');
-
-        if (theme === 'system') {
-            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
-                ? 'dark'
-                : 'light';
-            root.classList.add(systemTheme);
-        } else {
-            root.classList.add(theme);
-        }
-
-        localStorage.setItem('theme', theme);
-    }, [theme]);
+    const { appearance, updateAppearance } = useAppearance();
 
     return (
         <DropdownMenu>
@@ -45,24 +21,24 @@ export function ThemeSwitcher() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setTheme('light')}>
+                <DropdownMenuItem onClick={() => updateAppearance('light')}>
                     <Sun className="mr-2 h-4 w-4" />
                     <span>فاتح</span>
-                    {theme === 'light' && (
+                    {appearance === 'light' && (
                         <span className="mr-auto ml-2 h-4 w-4 rounded-full bg-primary" />
                     )}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme('dark')}>
+                <DropdownMenuItem onClick={() => updateAppearance('dark')}>
                     <Moon className="mr-2 h-4 w-4" />
                     <span>داكن</span>
-                    {theme === 'dark' && (
+                    {appearance === 'dark' && (
                         <span className="mr-auto ml-2 h-4 w-4 rounded-full bg-primary" />
                     )}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme('system')}>
+                <DropdownMenuItem onClick={() => updateAppearance('system')}>
                     <Monitor className="mr-2 h-4 w-4" />
                     <span>النظام</span>
-                    {theme === 'system' && (
+                    {appearance === 'system' && (
                         <span className="mr-auto ml-2 h-4 w-4 rounded-full bg-primary" />
                     )}
                 </DropdownMenuItem>

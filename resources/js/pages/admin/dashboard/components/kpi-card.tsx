@@ -1,3 +1,4 @@
+import { SlidingNumber } from '@/components/animate-ui/primitives/texts/sliding-number';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
@@ -43,7 +44,9 @@ export function KpiCard({
                 <div className="flex items-start justify-between">
                     <div className="min-w-0 flex-1">
                         <p className="text-sm font-medium text-muted-foreground truncate">{label}</p>
-                        <p className="mt-1 text-2xl font-bold tracking-tight">{value}</p>
+                        <p className="mt-1 text-2xl font-bold tracking-tight">
+                            {typeof value === 'number' ? <SlidingNumber number={value} inView /> : value}
+                        </p>
 
                         {subText && (
                             <p className="mt-1.5 text-xs text-muted-foreground/80 leading-relaxed">{subText}</p>

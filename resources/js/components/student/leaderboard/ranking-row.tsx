@@ -1,3 +1,4 @@
+import { SlidingNumber } from '@/components/animate-ui/primitives/texts/sliding-number';
 import type { LeaderboardEntry } from '@/types/leaderboard';
 
 interface RankingRowProps {
@@ -36,13 +37,13 @@ return null;
             <div className="flex items-center gap-4">
                 <div className="text-right">
                     <span className="block text-sm font-extrabold text-slate-700">
-                        {entry.points_formatted}
+                        <SlidingNumber number={entry.points} thousandSeparator="," inView />
                     </span>
                 </div>
 
                 {entry.streak_days > 0 && (
                     <span className="flex items-center gap-0.5 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-600">
-                        {fireEmoji} {entry.streak_days}
+                        {fireEmoji} <SlidingNumber number={entry.streak_days} inView />
                     </span>
                 )}
 

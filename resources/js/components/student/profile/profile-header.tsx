@@ -1,3 +1,5 @@
+import { SlidingNumber } from '@/components/animate-ui/primitives/texts/sliding-number';
+
 interface ProfileHeaderProps {
     name: string;
     email: string;
@@ -18,12 +20,12 @@ export function ProfileHeader({ name, email, initial, streakDays, totalPoints }:
                 <div className="mt-2.5 flex flex-wrap gap-2">
                     {streakDays > 0 && (
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
-                            <span aria-hidden="true">🔥</span> {streakDays} يوم متتالي
+                            <span aria-hidden="true">🔥</span> <SlidingNumber number={streakDays} /> يوم متتالي
                         </span>
                     )}
                     {totalPoints > 0 && (
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800">
-                            ⭐ {totalPoints.toLocaleString()} نقطة
+                            ⭐ <SlidingNumber number={totalPoints} thousandSeparator="," /> نقطة
                         </span>
                     )}
                 </div>

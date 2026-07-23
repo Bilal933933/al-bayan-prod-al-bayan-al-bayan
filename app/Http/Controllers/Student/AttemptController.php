@@ -201,7 +201,7 @@ class AttemptController extends Controller
             }
         });
 
-        return redirect()->route('student.attempts.show', $attempt);
+        return back();
     }
 
     public function finish(Attempt $attempt): RedirectResponse

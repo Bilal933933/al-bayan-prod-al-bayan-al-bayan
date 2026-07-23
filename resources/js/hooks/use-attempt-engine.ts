@@ -160,7 +160,7 @@ export function useAttemptEngine(attempt: Attempt) {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         loadSection(currentSectionIndex);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [currentSectionIndex]);
 
     useEffect(() => {
         if (timerRef.current) {
@@ -332,11 +332,7 @@ return;
     });
 
     const goToNext = useCallback(() => {
-        if (isSectionSubmitted) {
-            return;
-        }
-
-        if (isSimulation && currentQuestion) {
+        if (isSimulation && currentQuestion && !isSectionSubmitted) {
             setLockedQuestions((prev) => {
                 const next = new Set(prev);
                 next.add(
@@ -354,29 +350,53 @@ return;
         }
 
         if (!isLastSection) {
-            if (isSimulation) {
-                handleSubmitSection();
-            }
-
             const nextSectionIndex = currentSectionIndex + 1;
             setCurrentQuestionIndex(0);
             setCurrentSectionIndex(nextSectionIndex);
             loadSection(nextSectionIndex);
+
+            if (isSimulation && !isSectionSubmitted) {
+                const xsrfMatch = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]*)/);
+
+                fetch(
+                    attempts.sections.submit({
+                        attempt: attempt.id,
+                        section: currentSection.id,
+                    }).url,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'X-XSRF-TOKEN': xsrfMatch ? decodeURIComponent(xsrfMatch[1]) : '',
+                        },
+                        body: '{}',
+                    },
+                );
+            }
+
+            return;
+        }
+
+        if (isSimulation && !isSectionSubmitted) {
+            handleSubmitSection();
         }
     }, [
-        isSectionSubmitted,
         isSimulation,
+        isSectionSubmitted,
         currentQuestion,
+        currentSection,
+        attempt.id,
         currentQuestionIndex,
         totalQuestionsInSection,
         isLastSection,
-        currentSection,
-        handleSubmitSection,
         currentSectionIndex,
         setCurrentQuestionIndex,
         setCurrentSectionIndex,
         loadSection,
         setLockedQuestions,
+        handleSubmitSection,
     ]);
 
     const goToPrevious = useCallback(() => {

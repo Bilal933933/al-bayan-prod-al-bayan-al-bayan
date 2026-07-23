@@ -1,5 +1,7 @@
 import { Sparkles, Trophy } from 'lucide-react';
 
+import { SlidingNumber } from '@/components/animate-ui/primitives/texts/sliding-number';
+
 interface WelcomeSectionProps {
     user: { name: string };
     stats: {
@@ -26,13 +28,13 @@ export function WelcomeSection({ user, stats }: WelcomeSectionProps) {
                     <h1 className="text-3xl font-bold sm:text-4xl mb-3">لوحة التحكم</h1>
                     <p className="text-lg text-white/80 max-w-lg leading-relaxed">
                         {stats.total_attempts > 0
-                            ? `أكملت ${stats.completed_attempts} من ${stats.total_attempts} محاولة. استمر في التقدم!`
+                            ? <>أكملت <SlidingNumber number={stats.completed_attempts} /> من <SlidingNumber number={stats.total_attempts} /> محاولة. استمر في التقدم!</>
                             : 'ابدأ رحلتك التعليمية بالتدريب الحر والمسابقات'}
                     </p>
                     {showAverage && (
                         <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-medium backdrop-blur-sm">
                             <Trophy className="h-4 w-4 text-yellow-300" />
-                            <span>متوسط النتيجة: {stats.average_percentage}%</span>
+                            <span>متوسط النتيجة: <SlidingNumber number={stats.average_percentage ?? 0} />%</span>
                         </div>
                     )}
                 </div>

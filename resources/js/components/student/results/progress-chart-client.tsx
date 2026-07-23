@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useState } from 'react';
 
 interface ChartData {
     percentage: number;
@@ -8,17 +8,15 @@ interface ChartData {
 const Y_TICKS = [0, 20, 40, 60, 80, 100];
 const MARGIN = { top: 22, right: 30, bottom: 28, left: 8 };
 
-export function RechartsBar({ data, height = 240 }: { data: ChartData[]; height?: number }) {
-    const colors = useMemo(() => {
-        function cssVar(name: string): string {
-            return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-        }
+function cssVar(name: string): string {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
 
-        return {
-            practice: cssVar('--info') || '#60a5fa',
-            exam: cssVar('--warning') || '#fb923c',
-        };
-    }, []);
+export function RechartsBar({ data, height = 240 }: { data: ChartData[]; height?: number }) {
+    const [colors] = useState(() => ({
+        practice: cssVar('--info') || '#60a5fa',
+        exam: cssVar('--warning') || '#fb923c',
+    }));
 
     const { practice: practiceColor, exam: examColor } = colors;
     const pointCount = data.length;
@@ -124,7 +122,7 @@ export function RechartsBar({ data, height = 240 }: { data: ChartData[]; height?
             {/* Dots */}
             {points.map((p, i) => (
                 <g key={i}>
-                    <title>{p.percentage}%</title>
+                    <title>{`${p.percentage}%`}</title>
                     <text x={p.x} y={p.y - 8} textAnchor="middle" fontSize={9} className="fill-muted-foreground/70">
                         {p.percentage}%
                     </text>

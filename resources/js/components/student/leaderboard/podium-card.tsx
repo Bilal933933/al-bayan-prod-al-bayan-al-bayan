@@ -1,3 +1,4 @@
+import { SlidingNumber } from '@/components/animate-ui/primitives/texts/sliding-number';
 import { cn } from '@/lib/utils';
 import type { LeaderboardEntry } from '@/types/leaderboard';
 
@@ -73,12 +74,12 @@ return null;
 
             <h3 className="mt-4 text-base font-bold text-slate-800">{entry.user.name}</h3>
             <p className={cn('mt-1 text-sm font-extrabold', rank === 1 ? 'text-amber-600' : 'text-slate-600')}>
-                {entry.points_formatted} نقطة
+                <SlidingNumber number={entry.points} thousandSeparator="," inView /> نقطة
             </p>
 
             {entry.streak_days > 0 && (
                 <span className="mt-2 flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-600">
-                    {fireEmoji} {entry.streak_days} يوم متتالي
+                    {fireEmoji} <SlidingNumber number={entry.streak_days} inView /> يوم متتالي
                 </span>
             )}
         </div>
