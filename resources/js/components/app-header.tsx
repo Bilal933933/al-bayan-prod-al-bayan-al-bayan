@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BarChart3, BookOpen, History, Medal, Menu, Play, Search, Trophy, XIcon } from 'lucide-react';
+import { BarChart3, BookOpen, History, Library, Medal, Menu, Play, Search, Trophy, XIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import AppLogo from '@/components/app-logo';
 import AppLogoIcon from '@/components/app-logo-icon';
@@ -66,6 +66,11 @@ const mainNavItems: NavItem[] = [
         title: 'المتصدرين',
         href: leaderboard(),
         icon: Medal,
+    },
+    {
+        title: 'مركز المعرفة',
+        href: '/guide/journey',
+        icon: Library,
     },
 ];
 

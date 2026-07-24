@@ -1,6 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { BookOpen, ChevronLeft, Folder, House, Play, Loader2 } from 'lucide-react';
+import { BookOpen, ChevronLeft, Folder, House, Library, Play, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import CompetitionCard from '@/components/student/competitions/competition-card';
 import CompetitionInfoTabs from '@/components/student/competitions/competition-info-tabs';
@@ -174,6 +174,26 @@ export default function Show({ competition, children, topics, is_joined, total_q
                                     <h2 className="text-lg font-bold text-foreground">معلومات عامة</h2>
                                 </div>
                                 <CompetitionInfoTabs />
+                            </div>
+
+                            <div className="mt-8 rounded-xl border border-primary/20 bg-primary/[0.03] p-4">
+                                <div className="flex items-start gap-3">
+                                    <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                                        <Library className="size-5" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-sm font-bold">📘 قبل أن تبدأ</h4>
+                                        <p className="mt-1 text-xs text-muted-foreground">
+                                            اقرأ دليل يوم الاختبار لتعرف ما ينتظرك — من تجهيز المستندات إلى داخل القاعة.
+                                        </p>
+                                        <Link
+                                            href="/guide/exam-day"
+                                            className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary underline underline-offset-2"
+                                        >
+                                            اقرأ الدليل
+                                        </Link>
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="mt-10 flex justify-center">

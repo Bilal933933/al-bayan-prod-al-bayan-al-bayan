@@ -161,6 +161,19 @@ export default function Create({ topics, competitions }: CreateProps) {
 
                 <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 items-start">
                     <div className="lg:col-span-6 space-y-8 bg-card p-6 rounded-3xl border border-border shadow-xs">
+                        <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-3 text-sm dark:border-blue-900 dark:bg-blue-950/20">
+                            <p>
+                                <span className="font-semibold">📘 أول مرة تخوض الاختبار؟</span>{' '}
+                                <Link
+                                    href="/guide/exam-day"
+                                    className="text-primary underline underline-offset-2"
+                                >
+                                    اقرأ دليل يوم الاختبار
+                                </Link>
+                                {' '}— تعرف على ترتيب القاعة، المستندات المطلوبة، وآلية الامتحان.
+                            </p>
+                        </div>
+
                         <div>
                             <label className="block text-sm font-black text-foreground mb-3">اختر مسار التقييم:</label>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

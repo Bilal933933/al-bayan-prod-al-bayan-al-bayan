@@ -1,5 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { BookOpen, GraduationCap, LineChart } from 'lucide-react';
+import { BookOpen, GraduationCap, Library, LineChart, Map, Monitor } from 'lucide-react';
 
 import { Tilt, TiltContent } from '@/components/animate-ui/primitives/effects/tilt';
 import { MorphingText } from '@/components/animate-ui/primitives/texts/morphing';
@@ -129,6 +129,37 @@ export default function Welcome() {
                                 </TiltContent>
                             </Tilt>
                         ))}
+                    </div>
+
+                    {/* Guide section */}
+                    <div className="mt-20 w-full max-w-5xl">
+                        <div className="mb-6 flex items-center gap-2">
+                            <Library className="h-5 w-5 text-primary" />
+                            <h2 className="text-xl font-bold">ابدأ رحلتك مع دليل البيان</h2>
+                        </div>
+                        <div className="grid gap-4 sm:grid-cols-3">
+                            <Link href="/guide/journey" className="group rounded-xl border bg-card p-5 text-right transition-all hover:border-primary/30 hover:shadow-sm">
+                                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                                    <Map className="h-5 w-5" />
+                                </div>
+                                <h3 className="mb-1 text-sm font-bold">رحلة المتقدم</h3>
+                                <p className="text-xs text-muted-foreground">من الإعلان إلى التعيين — خطوة بخطوة</p>
+                            </Link>
+                            <Link href="/guide/exam-format" className="group rounded-xl border bg-card p-5 text-right transition-all hover:border-primary/30 hover:shadow-sm">
+                                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                                    <Monitor className="h-5 w-5" />
+                                </div>
+                                <h3 className="mb-1 text-sm font-bold">كيف يعمل الامتحان</h3>
+                                <p className="text-xs text-muted-foreground">المحاور، التصحيح، النظام</p>
+                            </Link>
+                            <Link href="/guide/exam-day" className="group rounded-xl border bg-card p-5 text-right transition-all hover:border-primary/30 hover:shadow-sm">
+                                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                                    <BookOpen className="h-5 w-5" />
+                                </div>
+                                <h3 className="mb-1 text-sm font-bold">دليل يوم الاختبار</h3>
+                                <p className="text-xs text-muted-foreground">من البيت إلى اللجنة — خطوة بخطوة</p>
+                            </Link>
+                        </div>
                     </div>
                 </main>
             </div>

@@ -1,6 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { BarChart3, Clock, Eye, Play, Trophy } from 'lucide-react';
+import { BarChart3, Clock, Eye, Library, Play, Trophy } from 'lucide-react';
 import { formatDuration } from '@/components/attempts/AttemptHelpers';
 import DateDisplay from '@/components/date-display';
 import { EvaluationBadge } from '@/components/student/results/evaluation-badge';
@@ -93,7 +93,29 @@ export default function Index({ overallStats, evaluation, topicBreakdown, compet
                     </div>
                 )}
 
-                {recentResults.length > 0 && (
+                {overallStats.total_attempts > 0 && (
+                        <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4 dark:border-emerald-900 dark:bg-emerald-950/20">
+                            <div className="flex items-start gap-3">
+                                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
+                                    <Library className="size-5" />
+                                </div>
+                                <div>
+                                    <h4 className="text-sm font-bold">ماذا بعد إعلان النتيجة؟</h4>
+                                    <p className="mt-1 text-xs text-muted-foreground">
+                                        التظلم، الفحص الطبي، استكمال المستندات، التعيين — كل ما تحتاج معرفته بعد ظهور النتيجة.
+                                    </p>
+                                    <Link
+                                        href="/guide/after-results"
+                                        className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary underline underline-offset-2"
+                                    >
+                                        اقرأ الدليل
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {recentResults.length > 0 && (
                     <div>
                         <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">آخر النتائج</h2>
                         <div className="divide-y rounded-xl border">
