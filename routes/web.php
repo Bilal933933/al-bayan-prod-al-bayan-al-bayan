@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
+// 1. مسار خاص بالـ Health Check لمنصة النشر
+Route::get('/up', function () {
+    return response('OK', 200);
+});
+
+// 2. باقي المسارات الخاصة بمشروعك
 Route::inertia('/', 'welcome')->name('home');
 
 Route::prefix('guide')->group(function () {
@@ -10,9 +16,7 @@ Route::prefix('guide')->group(function () {
     Route::inertia('exam-format', 'guide/exam-format')->name('guide.exam-format');
     Route::inertia('getting-started', 'guide/getting-started')->name('guide.getting-started');
     Route::inertia('after-results', 'guide/after-results')->name('guide.after-results');
-
     Route::inertia('faq', 'guide/faq')->name('guide.faq');
-
     Route::inertia('resources', 'guide/resources')->name('guide.resources');
 });
 
