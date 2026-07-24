@@ -2,13 +2,16 @@
 
 use Illuminate\Support\Facades\Route;
 
-// 1. مسار خاص بالـ Health Check لمنصة النشر
-Route::get('/up', function () {
-    return response('OK', 200);
-});
+// المسار الرئيسي الذي تفحصه المنصة دائماً (يجب أن يعيد 200 OK مباشرة)
+Route::get('/', function () {
+    // إذا كان الطلب من منصة الفحص أو بدون طلب Inertia معقد، أرجع نص أو استجابة صريحة
+    if (request()->header('X-Inertia') === null && !request()->expectsJson()) {
+        return response('OK', 200);
+    }
 
-// 2. باقي المسارات الخاصة بمشروعك
-Route::inertia('/', 'welcome')->name('home');
+    // غير ذلك اعرض صفحة الترحيب العادية
+    return inertia('welcome');
+})->name('home');
 
 Route::prefix('guide')->group(function () {
     Route::inertia('journey', 'guide/journey')->name('guide.journey');
@@ -23,4 +26,4 @@ Route::prefix('guide')->group(function () {
 Route::inertia('faq', 'faq')->name('faq');
 Route::inertia('resources', 'resources')->name('resources');
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';
