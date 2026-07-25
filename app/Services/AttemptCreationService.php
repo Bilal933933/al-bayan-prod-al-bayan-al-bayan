@@ -11,6 +11,7 @@ use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class AttemptCreationService
 {
@@ -111,7 +112,11 @@ class AttemptCreationService
                 $this->insertAttemptQuestions($section, $topicQuestions);
             }
 
-            abort_if($totalQuestions === 0, 422, 'لا توجد أسئلة متاحة لإنشاء الاختبار.');
+            if ($totalQuestions === 0) {
+                throw ValidationException::withMessages([
+                    'competition' => 'لا توجد أسئلة متاحة لإنشاء الاختبار.',
+                ]);
+            }
 
             $attempt->update(['total_questions' => $totalQuestions]);
 
