@@ -13,24 +13,22 @@ class ThirtyKTeachersSeeder extends Seeder
 
     public function run(): void
     {
-        DB::statement('SET session_replication_role = replica');
+        DB::transaction(function () {
+            $this->clearAll();
 
-        $this->clearAll();
+            $this->command->info('جاري إنشاء المسابقات...');
+            $container = $this->createContainer();
+            $children = $this->createChildren($container);
 
-        $this->command->info('جاري إنشاء المسابقات...');
-        $container = $this->createContainer();
-        $children = $this->createChildren($container);
+            $this->command->info('جاري إنشاء المحاور العامة...');
+            $generalTopics = $this->createGeneralTopics();
 
-        $this->command->info('جاري إنشاء المحاور العامة...');
-        $generalTopics = $this->createGeneralTopics();
+            $this->command->info('جاري إنشاء المحاور التخصصية...');
+            $specializedTopics = $this->createSpecializedTopics();
 
-        $this->command->info('جاري إنشاء المحاور التخصصية...');
-        $specializedTopics = $this->createSpecializedTopics();
-
-        $this->command->info('جاري ربط المحاور بالمسابقات...');
-        $this->linkTopics($children, $generalTopics, $specializedTopics);
-
-        DB::statement('SET session_replication_role = DEFAULT');
+            $this->command->info('جاري ربط المحاور بالمسابقات...');
+            $this->linkTopics($children, $generalTopics, $specializedTopics);
+        });
 
         $this->command->info('تم إنشاء بيانات مسابقة 30 ألف معلم بنجاح!');
     }
@@ -41,11 +39,13 @@ class ThirtyKTeachersSeeder extends Seeder
         DB::table('attempt_questions')->delete();
         DB::table('attempt_sections')->delete();
         DB::table('attempts')->delete();
+        DB::table('competition_user')->delete();
         DB::table('competition_topic')->delete();
         DB::table('question_options')->delete();
         DB::table('questions')->delete();
-        DB::table('topics')->delete();
+        DB::table('competitions')->whereNotNull('parent_id')->delete();
         DB::table('competitions')->delete();
+        DB::table('topics')->delete();
     }
 
     private function createContainer(): Competition
