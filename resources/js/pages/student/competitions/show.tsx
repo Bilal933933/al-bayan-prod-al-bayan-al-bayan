@@ -2,6 +2,7 @@ import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { BookOpen, ChevronLeft, Folder, House, Library, Play, Loader2 } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import CompetitionCard from '@/components/student/competitions/competition-card';
 import CompetitionInfoTabs from '@/components/student/competitions/competition-info-tabs';
 import CompetitionShowHero from '@/components/student/competitions/competition-show-hero';
@@ -50,7 +51,16 @@ export default function Show({ competition, children, topics, is_joined, total_q
 
     function handleStartExam() {
         setStarting(true);
-        router.post(startCompetitionAttempt.url({ competition: competition.slug }));
+        router.post(startCompetitionAttempt.url({ competition: competition.slug }), {}, {
+            onError: (errors) => {
+                const messages = Object.values(errors);
+                if (messages.length > 0) {
+                    toast.error(messages[0]);
+                }
+                setStarting(false);
+            },
+            onFinish: () => setStarting(false),
+        });
     }
 
     return (

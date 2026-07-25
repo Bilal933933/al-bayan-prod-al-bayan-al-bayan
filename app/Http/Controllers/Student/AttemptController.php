@@ -54,7 +54,6 @@ class AttemptController extends Controller
     public function create(Request $request): Response
     {
         $topics = Topic::active()
-            ->whereHas('questions')
             ->get(['id', 'name', 'default_questions_count', 'default_duration_minutes']);
 
         $competitions = Competition::active()
