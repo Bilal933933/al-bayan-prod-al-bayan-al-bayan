@@ -17,6 +17,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Inertia\Response;
 
 class AttemptController extends Controller
@@ -140,8 +141,24 @@ class AttemptController extends Controller
         abort_unless(
             $competition->topics()->where('topics.is_active', true)->exists(),
             422,
-            'No active topics available for this competition.',
+            'لا توجد محاور مفعلة لهذه المسابقة.',
         );
+
+        $competition->load(['topics' => fn ($q) => $q->where('topics.is_active', true)]);
+        $insufficientTopics = $competition->topics->filter(function ($topic) {
+            $expected = $topic->pivot->questions_count;
+            $available = $topic->questions()->active()->count();
+
+            return $available < $expected;
+        });
+
+        if ($insufficientTopics->isNotEmpty()) {
+            $details = $insufficientTopics->map(fn ($t) => "{$t->name} (متاح {$t->questions()->active()->count()} من {$t->pivot->questions_count})")->join('، ');
+
+            throw ValidationException::withMessages([
+                'competition' => "المحاور التالية لا تحتوي على عدد كافٍ من الأسئلة: {$details}.",
+            ]);
+        }
 
         abort_unless(
             auth()->user()->competitions()
