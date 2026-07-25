@@ -1,4 +1,5 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
+import type { Errors as InertiaErrors } from '@inertiajs/core';
 import { motion } from 'framer-motion';
 import { FileSpreadsheet, FileUp, Loader2 } from 'lucide-react';
 import { useRef, useState } from 'react';
@@ -52,9 +53,11 @@ export default function Import() {
                 setFile(null);
                 setLoading(false);
             },
-            onError: () => {
+            onError: (errors: InertiaErrors) => {
                 setLoading(false);
-                toast.error('فشل الاستيراد. تحقق من الملف وحاول مرة أخرى.');
+                const err = errors.import ?? errors.file;
+                const msg = Array.isArray(err) ? err[0] : err || 'فشل الاستيراد. تحقق من الملف وحاول مرة أخرى.';
+                toast.error(msg);
             },
         });
     };

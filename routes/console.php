@@ -12,3 +12,7 @@ Schedule::command('app:cache-leaderboard-snapshot')
     ->weekly()
     ->fridays()
     ->at('23:59');
+
+Schedule::command('app:clean-import-files')
+    ->daily()
+    ->at('03:00');

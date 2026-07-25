@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\QuestionImportValidationException;
 use App\Imports\QuestionsFileReader;
 use App\Jobs\ImportQuestionsJob;
+use App\Models\Question;
 use App\Models\Topic;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
@@ -18,13 +19,10 @@ class QuestionImportService
     /** @var string[] */
     private const VALID_DIFFICULTIES = ['easy', 'medium', 'hard'];
 
-    /** @var array<string, int>|null */
-    private ?array $topicCodeMap = null;
-
     /**
      * قراءة ملف Excel/CSV وإرجاع البيانات الخام.
      *
-     * @return Collection<int, array{topic_code: string, type: string, text: string, difficulty: string, explanation: string|null, options: string[], correct_order: int}>
+     * @return Collection<int, array{row: int, topic_code: string, type: string, text: string, difficulty: string, explanation: string|null, options: string[], correct_order: int}>
      */
     public function read(string $filePath): Collection
     {
@@ -34,18 +32,18 @@ class QuestionImportService
 
         $allRows = $rows[0] ?? [];
 
-        // تخطي صف الرأس (أول صف)
-        for ($index = 1; $index < count($allRows); $index++) {
-            $values = array_values($allRows[$index]);
-            $rowNumber = $index + 1;
+        foreach ($allRows as $index => $values) {
+            if ($index === 0) {
+                continue;
+            }
 
-            // العثور على آخر عمود غير فارغ (قد يكون هناك أعمدة فارغة في النهاية)
+            $values = array_values((array) $values);
+
             $lastNonEmpty = count($values) - 1;
-            while ($lastNonEmpty >= 5 && (!isset($values[$lastNonEmpty]) || trim((string) $values[$lastNonEmpty]) === '')) {
+            while ($lastNonEmpty >= 5 && (! isset($values[$lastNonEmpty]) || trim((string) $values[$lastNonEmpty]) === '')) {
                 $lastNonEmpty--;
             }
 
-            // الخيارات: من العمود 5 إلى ما قبل آخر عمود غير فارغ
             $options = [];
             for ($i = 5; $i < $lastNonEmpty; $i++) {
                 if (isset($values[$i]) && trim((string) $values[$i]) !== '') {
@@ -54,7 +52,7 @@ class QuestionImportService
             }
 
             $data->push([
-                'row' => $rowNumber,
+                'row' => $index + 1,
                 'topic_code' => trim((string) ($values[0] ?? '')),
                 'type' => trim((string) ($values[1] ?? 'mcq')),
                 'text' => trim((string) ($values[2] ?? '')),
@@ -71,47 +69,63 @@ class QuestionImportService
     /**
      * التحقق من صحة جميع الصفوف.
      *
-     * @param  Collection<int, array>  $rows
-     * @return Collection<int, array{topic_id: int, type: string, text: string, difficulty: string, explanation: string|null, options: array{text: string, is_correct: bool, order: int}[]}>
+     * @param  array<int, array{row: int, topic_code: string, type: string, text: string, difficulty: string, explanation: string|null, options: string[], correct_order: int}>  $rows
+     * @return array<int, array{topic_id: int, type: string, text: string, difficulty: string, explanation: string|null, is_active: bool, options: list<array{text: string, is_correct: bool, order: int}>}>
      *
      * @throws QuestionImportValidationException
      */
-    public function validate(Collection $rows): Collection
+    public function validate(array $rows): array
     {
         $errors = [];
         $seenTexts = [];
-        $this->topicCodeMap = Topic::pluck('id', 'code')->toArray();
+        $codeMap = [];
+        foreach (Topic::select('id', 'code')->get() as $topic) {
+            $codeMap[strtolower($topic->code)] = $topic->id;
+        }
 
-        $validated = $rows->map(function (array $row) use (&$errors, &$seenTexts) {
+        $topicIds = array_values($codeMap);
+        $existingTexts = [];
+        if ($topicIds !== []) {
+            $existing = Question::whereIn('topic_id', $topicIds)
+                ->select('topic_id', 'text')
+                ->get();
+            foreach ($existing as $q) {
+                $existingTexts[$q->topic_id][$q->text] = true;
+            }
+        }
+
+        $validated = [];
+        foreach ($rows as $row) {
             $rowNum = $row['row'];
+            $topicCode = strtolower(trim($row['topic_code']));
+            $topicId = isset($codeMap[$topicCode]) ? $codeMap[$topicCode] : null;
 
-            // topic_code
             if (empty($row['topic_code'])) {
                 $errors[] = "الصف {$rowNum}: كود الموضوع مطلوب";
-            } elseif (!isset($this->topicCodeMap[$row['topic_code']])) {
+            } elseif ($topicId === null) {
                 $errors[] = "الصف {$rowNum}: كود الموضوع '{$row['topic_code']}' غير موجود";
             }
 
-            // type
-            if (!in_array($row['type'], self::VALID_TYPES, true)) {
+            if (! in_array($row['type'], self::VALID_TYPES, true)) {
                 $errors[] = "الصف {$rowNum}: نوع السؤال غير صالح '{$row['type']}' (القيم المسموحة: mcq, true_false)";
             }
 
-            // text
             if (empty($row['text'])) {
                 $errors[] = "الصف {$rowNum}: نص السؤال مطلوب";
             } elseif (isset($seenTexts[$row['text']])) {
-                $errors[] = "الصف {$rowNum}: نص السؤال مكرر (موجود أيضاً في الصف {$seenTexts[$row['text']]})";
+                $errors[] = "الصف {$rowNum}: نص السؤال مكرر في نفس الملف (موجود أيضاً في الصف {$seenTexts[$row['text']]})";
             } else {
                 $seenTexts[$row['text']] = $rowNum;
             }
 
-            // difficulty
-            if (!in_array($row['difficulty'], self::VALID_DIFFICULTIES, true)) {
+            if ($topicId !== null && ! empty($row['text']) && isset($existingTexts[$topicId][$row['text']])) {
+                $errors[] = "الصف {$rowNum}: السؤال '{$row['text']}' موجود مسبقاً في نفس الموضوع";
+            }
+
+            if (! in_array($row['difficulty'], self::VALID_DIFFICULTIES, true)) {
                 $errors[] = "الصف {$rowNum}: مستوى الصعوبة غير صالح '{$row['difficulty']}' (القيم المسموحة: easy, medium, hard)";
             }
 
-            // options
             if ($row['type'] === 'true_false') {
                 if (count($row['options']) < 2) {
                     $errors[] = "الصف {$rowNum}: أسئلة صح/خطأ تتطلب خيارين على الأقل";
@@ -120,20 +134,20 @@ class QuestionImportService
                 $errors[] = "الصف {$rowNum}: يجب أن يحتوي السؤال على خيارين على الأقل";
             }
 
-            // correct_order
             $maxOrder = count($row['options']);
             if ($row['correct_order'] < 1 || $row['correct_order'] > $maxOrder) {
                 $errors[] = "الصف {$rowNum}: رقم الإجابة الصحيحة غير صالح (يجب أن يكون بين 1 و {$maxOrder})";
             }
 
-            return $row;
-        });
+            $validated[] = $row;
+        }
 
-        if (!empty($errors)) {
+        if ($errors !== []) {
             throw new QuestionImportValidationException($errors);
         }
 
-        return $validated->map(function (array $row) {
+        $questions = [];
+        foreach ($validated as $row) {
             $options = [];
             foreach ($row['options'] as $i => $optText) {
                 $options[] = [
@@ -143,8 +157,8 @@ class QuestionImportService
                 ];
             }
 
-            return [
-                'topic_id' => $this->topicCodeMap[$row['topic_code']],
+            $questions[] = [
+                'topic_id' => $codeMap[strtolower($row['topic_code'])],
                 'type' => $row['type'],
                 'text' => $row['text'],
                 'difficulty' => $row['difficulty'],
@@ -152,7 +166,9 @@ class QuestionImportService
                 'is_active' => true,
                 'options' => $options,
             ];
-        });
+        }
+
+        return $questions;
     }
 
     /**
@@ -163,12 +179,12 @@ class QuestionImportService
     public function process(string $filePath): array
     {
         $rows = $this->read($filePath);
-        $validated = $this->validate($rows);
+        $validated = $this->validate($rows->all());
 
-        Bus::dispatchSync(new ImportQuestionsJob($validated->toArray()));
+        Bus::dispatchSync(new ImportQuestionsJob($validated));
 
         return [
-            'total' => $validated->count(),
+            'total' => count($validated),
             'errors' => [],
         ];
     }

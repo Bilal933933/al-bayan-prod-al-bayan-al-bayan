@@ -19,4 +19,4 @@ Route::prefix('guide')->group(function () {
 Route::inertia('faq', 'faq')->name('faq');
 Route::inertia('resources', 'resources')->name('resources');
 
-require __DIR__ . '/settings.php';
+require __DIR__.'/settings.php';

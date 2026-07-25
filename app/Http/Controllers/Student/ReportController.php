@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
-use App\Models\Attempt;
 use App\Models\AttemptQuestion;
 use App\Models\Report;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
@@ -14,7 +14,7 @@ class ReportController extends Controller
 {
     public function index(): Response
     {
-        /** @var \App\Models\User */
+        /** @var User */
         $user = auth()->user();
 
         $reports = Report::query()
@@ -64,7 +64,7 @@ class ReportController extends Controller
             'description' => ['required', 'string', 'min:10', 'max:2000'],
         ]);
 
-        /** @var \App\Models\User */
+        /** @var User */
         $user = auth()->user();
 
         Report::create([

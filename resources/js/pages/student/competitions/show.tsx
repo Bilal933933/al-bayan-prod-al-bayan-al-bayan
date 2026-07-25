@@ -54,9 +54,11 @@ export default function Show({ competition, children, topics, is_joined, total_q
         router.post(startCompetitionAttempt.url({ competition: competition.slug }), {}, {
             onError: (errors) => {
                 const messages = Object.values(errors);
+
                 if (messages.length > 0) {
                     toast.error(messages[0]);
                 }
+
                 setStarting(false);
             },
             onFinish: () => setStarting(false),

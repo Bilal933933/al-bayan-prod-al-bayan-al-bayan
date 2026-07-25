@@ -140,6 +140,7 @@ export function GuideLayout({ title, description, progressSections, children, la
                             { href: '/guide/resources', label: 'المصادر الرسمية' },
                         ].map((item) => {
                             const isActive = pathname === item.href;
+
                             return (
                                 <Link
                                     key={item.href}

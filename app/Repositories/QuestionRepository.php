@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Models\Question;
 use App\Models\QuestionOption;
-use Illuminate\Support\Collection;
 
 class QuestionRepository
 {
