@@ -2,10 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Contracts\Repositories\QuestionRepositoryInterface;
 use App\Models\Question;
 use App\Models\QuestionOption;
 
-class QuestionRepository
+class QuestionRepository implements QuestionRepositoryInterface
 {
     /**
      * @param  array{topic_id: int, type: string, text: string, difficulty: string, explanation: string|null, is_active: bool}  $data

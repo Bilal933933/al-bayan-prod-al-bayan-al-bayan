@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Student;
 
+use App\Contracts\Services\AttemptCreationServiceInterface;
+use App\Contracts\Services\ExamGradingServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\AnswerQuestionRequest;
 use App\Http\Requests\Student\StartPracticeRequest;
@@ -11,8 +13,6 @@ use App\Models\AttemptSection;
 use App\Models\Competition;
 use App\Models\QuestionOption;
 use App\Models\Topic;
-use App\Models\UserScore;
-use App\Services\AttemptCreationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,7 +23,8 @@ use Inertia\Response;
 class AttemptController extends Controller
 {
     public function __construct(
-        private readonly AttemptCreationService $attemptCreationService,
+        private readonly AttemptCreationServiceInterface $attemptCreationService,
+        private readonly ExamGradingServiceInterface $gradingService,
     ) {}
 
     public function index(Request $request): Response
@@ -80,7 +81,7 @@ class AttemptController extends Controller
     public function show(Attempt $attempt): Response
     {
         $this->authorize('view', $attempt);
-        $this->handleExpiredSections($attempt);
+        $this->gradingService->handleExpiredSections($attempt);
 
         if ($attempt->isCompleted()) {
             $attempt->load([
@@ -114,7 +115,7 @@ class AttemptController extends Controller
         $this->authorize('view', $attempt);
         abort_unless($section->attempt_id === $attempt->id, 404);
 
-        $this->handleExpiredSections($attempt);
+        $this->gradingService->handleExpiredSections($attempt);
 
         if ($section->started_at === null) {
             $section->updateQuietly(['started_at' => now()]);
@@ -188,7 +189,7 @@ class AttemptController extends Controller
     public function answerQuestion(AnswerQuestionRequest $request, Attempt $attempt, AttemptQuestion $attemptQuestion): RedirectResponse
     {
         $this->authorize('view', $attempt);
-        $this->handleExpiredSections($attempt);
+        $this->gradingService->handleExpiredSections($attempt);
 
         $option = QuestionOption::findOrFail((int) $request->validated('selected_option_id'));
 
@@ -212,7 +213,7 @@ class AttemptController extends Controller
         abort_unless($section->attempt_id === $attempt->id, 404);
         abort_unless($attempt->isInProgress(), 422);
 
-        $this->handleExpiredSections($attempt);
+        $this->gradingService->handleExpiredSections($attempt);
 
         abort_if($section->isSubmitted(), 422, 'هذا القسم تم تسليمه بالفعل أو انتهى وقته.');
 
@@ -222,7 +223,7 @@ class AttemptController extends Controller
             $allSubmitted = $attempt->sections()->whereNull('submitted_at')->doesntExist();
 
             if ($allSubmitted) {
-                $this->finalizeAttempt($attempt);
+                $this->gradingService->finalizeAttempt($attempt);
             }
         });
 
@@ -234,14 +235,14 @@ class AttemptController extends Controller
         $this->authorize('view', $attempt);
         abort_unless($attempt->isInProgress(), 422);
 
-        $this->handleExpiredSections($attempt);
+        $this->gradingService->handleExpiredSections($attempt);
 
         if ($attempt->isCompleted()) {
             return redirect()->route('student.attempts.show', $attempt);
         }
 
         DB::transaction(function () use ($attempt) {
-            $this->finalizeAttempt($attempt);
+            $this->gradingService->finalizeAttempt($attempt);
 
             if ($attempt->isExam()) {
                 AttemptSection::where('attempt_id', $attempt->id)
@@ -251,55 +252,5 @@ class AttemptController extends Controller
         });
 
         return redirect()->route('student.attempts.show', $attempt);
-    }
-
-    private function finalizeAttempt(Attempt $attempt): void
-    {
-        $correctCount = AttemptQuestion::whereHas('section', fn ($q) => $q->where('attempt_id', $attempt->id))
-            ->where('is_correct', true)
-            ->count();
-
-        $total = $attempt->total_questions;
-        $percentage = $total > 0 ? round($correctCount / $total * 100, 2) : 0;
-
-        $attempt->update([
-            'status' => Attempt::STATUS_COMPLETED,
-            'finished_at' => now(),
-            'correct_answers' => $correctCount,
-            'score_percentage' => $percentage,
-        ]);
-
-        UserScore::firstOrCreate(
-            ['attempt_id' => $attempt->id],
-            [
-                'user_id' => $attempt->user_id,
-                'points' => $correctCount,
-                'type' => $attempt->type,
-            ],
-        );
-    }
-
-    private function handleExpiredSections(Attempt $attempt): void
-    {
-        DB::transaction(function () use ($attempt) {
-            $expiredIds = $attempt->sections()
-                ->whereNull('submitted_at')
-                ->lockForUpdate()
-                ->get()
-                ->filter(fn (AttemptSection $section) => $section->isExpired())
-                ->pluck('id');
-
-            if ($expiredIds->isEmpty()) {
-                return;
-            }
-
-            AttemptSection::whereIn('id', $expiredIds)->update(['submitted_at' => now()]);
-
-            $allSubmitted = $attempt->sections()->whereNull('submitted_at')->doesntExist();
-
-            if ($allSubmitted) {
-                $this->finalizeAttempt($attempt);
-            }
-        });
     }
 }

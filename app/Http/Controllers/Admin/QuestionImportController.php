@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Contracts\Services\QuestionImportServiceInterface;
 use App\Exceptions\QuestionImportValidationException;
 use App\Http\Controllers\Controller;
-use App\Services\QuestionImportService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -15,7 +15,7 @@ use Inertia\Response;
 class QuestionImportController extends Controller
 {
     public function __construct(
-        private readonly QuestionImportService $importService,
+        private readonly QuestionImportServiceInterface $importService,
     ) {
         //
     }

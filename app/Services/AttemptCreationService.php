@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Contracts\Services\AttemptCreationServiceInterface;
 use App\Models\Attempt;
 use App\Models\AttemptQuestion;
 use App\Models\AttemptSection;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
-class AttemptCreationService
+class AttemptCreationService implements AttemptCreationServiceInterface
 {
     public function createPractice(
         User $user,

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Contracts\Services\QuestionImportServiceInterface;
 use App\Exceptions\QuestionImportValidationException;
 use App\Imports\QuestionsFileReader;
 use App\Jobs\ImportQuestionsJob;
@@ -11,7 +12,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
 use Maatwebsite\Excel\Facades\Excel;
 
-class QuestionImportService
+class QuestionImportService implements QuestionImportServiceInterface
 {
     /** @var string[] */
     private const VALID_TYPES = ['mcq', 'true_false'];

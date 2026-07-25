@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Repositories\QuestionRepository;
+use App\Contracts\Repositories\QuestionRepositoryInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -23,7 +23,7 @@ class ImportQuestionsJob implements ShouldQueue
         //
     }
 
-    public function handle(QuestionRepository $repository): void
+    public function handle(QuestionRepositoryInterface $repository): void
     {
         DB::transaction(function () use ($repository) {
             foreach ($this->questions as $questionData) {

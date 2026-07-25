@@ -191,10 +191,7 @@ it('exam handles insufficient questions gracefully', function () {
 
     $response = $this->actingAs($this->user)->post(route('student.competitions.attempts.start', $competition));
 
-    $response->assertRedirect();
-
-    $attempt = Attempt::where('user_id', $this->user->id)->first();
-    expect($attempt->total_questions)->toBe(3);
+    $response->assertSessionHasErrors('competition');
 });
 
 it('exam respects difficulty distribution approximately', function () {

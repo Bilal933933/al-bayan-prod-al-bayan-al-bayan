@@ -2,9 +2,16 @@
 
 namespace App\Providers;
 
+use App\Contracts\Repositories\QuestionRepositoryInterface;
+use App\Contracts\Services\AttemptCreationServiceInterface;
+use App\Contracts\Services\ExamGradingServiceInterface;
+use App\Contracts\Services\QuestionImportServiceInterface;
 use App\Models\Attempt;
-use App\Observers\AttemptObserver;
 use App\Policies\AttemptPolicy;
+use App\Repositories\QuestionRepository;
+use App\Services\AttemptCreationService;
+use App\Services\ExamGradingService;
+use App\Services\QuestionImportService;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +28,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(ExamGradingServiceInterface::class, ExamGradingService::class);
+        $this->app->bind(AttemptCreationServiceInterface::class, AttemptCreationService::class);
+        $this->app->bind(QuestionRepositoryInterface::class, QuestionRepository::class);
+        $this->app->bind(QuestionImportServiceInterface::class, QuestionImportService::class);
     }
 
     /**
@@ -29,7 +39,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Attempt::observe(AttemptObserver::class);
         Gate::policy(Attempt::class, AttemptPolicy::class);
 
         $this->configureDefaults();
