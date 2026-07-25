@@ -12,6 +12,7 @@ import type { BreadcrumbItem } from '@/types';
 
 interface Errors {
     import?: string[];
+    file?: string[];
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -32,7 +33,9 @@ export default function Import() {
     const inputRef = useRef<HTMLInputElement>(null);
     const { errors } = usePage<{ errors: Errors }>().props;
 
-    const importErrors = errors?.import;
+    const importErrors = Array.isArray(errors?.import) ? errors.import : [];
+    const fileErrors = Array.isArray(errors?.file) ? errors.file : [];
+    const allErrors = [...importErrors, ...fileErrors];
 
     const handleSubmit = () => {
         if (!file) {
@@ -41,10 +44,8 @@ export default function Import() {
 
         setLoading(true);
 
-        const formData = new FormData();
-        formData.append('file', file);
-
-        router.post(questions.importFile.store().url, formData, {
+        router.post(questions.importFile.store().url, { file }, {
+            forceFormData: true,
             preserveState: true,
             onSuccess: () => {
                 toast.success('تم إرسال الأسئلة للمعالجة');
@@ -53,6 +54,7 @@ export default function Import() {
             },
             onError: () => {
                 setLoading(false);
+                toast.error('فشل الاستيراد. تحقق من الملف وحاول مرة أخرى.');
             },
         });
     };
@@ -99,12 +101,12 @@ export default function Import() {
                     </AlertDescription>
                 </Alert>
 
-                {importErrors && importErrors.length > 0 && (
+                {allErrors.length > 0 && (
                     <Alert variant="destructive">
-                        <AlertTitle>أخطاء في ملف الاستيراد</AlertTitle>
+                        <AlertTitle>خطأ</AlertTitle>
                         <AlertDescription>
                             <ul className="mt-2 list-inside list-disc space-y-1 text-sm">
-                                {importErrors.map((err, i) => (
+                                {allErrors.map((err, i) => (
                                     <li key={i}>{err}</li>
                                 ))}
                             </ul>

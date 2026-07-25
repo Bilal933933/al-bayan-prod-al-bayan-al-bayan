@@ -7,6 +7,7 @@ use App\Imports\QuestionsFileReader;
 use App\Jobs\ImportQuestionsJob;
 use App\Models\Topic;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Bus;
 use Maatwebsite\Excel\Facades\Excel;
 
 class QuestionImportService
@@ -38,9 +39,15 @@ class QuestionImportService
             $values = array_values($allRows[$index]);
             $rowNumber = $index + 1;
 
-            // الخيارات: من العمود 5 إلى ما قبل الأخير
+            // العثور على آخر عمود غير فارغ (قد يكون هناك أعمدة فارغة في النهاية)
+            $lastNonEmpty = count($values) - 1;
+            while ($lastNonEmpty >= 5 && (!isset($values[$lastNonEmpty]) || trim((string) $values[$lastNonEmpty]) === '')) {
+                $lastNonEmpty--;
+            }
+
+            // الخيارات: من العمود 5 إلى ما قبل آخر عمود غير فارغ
             $options = [];
-            for ($i = 5; $i < count($values) - 1; $i++) {
+            for ($i = 5; $i < $lastNonEmpty; $i++) {
                 if (isset($values[$i]) && trim((string) $values[$i]) !== '') {
                     $options[] = trim((string) $values[$i]);
                 }
@@ -54,7 +61,7 @@ class QuestionImportService
                 'difficulty' => trim((string) ($values[3] ?? 'medium')),
                 'explanation' => isset($values[4]) ? trim((string) $values[4]) ?: null : null,
                 'options' => $options,
-                'correct_order' => isset($values[count($values) - 1]) ? (int) $values[count($values) - 1] : 0,
+                'correct_order' => isset($values[$lastNonEmpty]) ? (int) $values[$lastNonEmpty] : 0,
             ]);
         }
 
@@ -158,7 +165,7 @@ class QuestionImportService
         $rows = $this->read($filePath);
         $validated = $this->validate($rows);
 
-        ImportQuestionsJob::dispatch($validated->toArray());
+        Bus::dispatchSync(new ImportQuestionsJob($validated->toArray()));
 
         return [
             'total' => $validated->count(),

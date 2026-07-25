@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Services\QuestionImportService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Response;
 
 class QuestionImportController extends Controller
@@ -34,7 +35,7 @@ class QuestionImportController extends Controller
         $stored = $file->storeAs('imports', 'questions_'.time().'.'.$ext);
 
         try {
-            $result = $this->importService->process(storage_path('app/'.$stored));
+            $result = $this->importService->process(Storage::disk('local')->path($stored));
 
             return redirect()
                 ->route('admin.questions.index')
