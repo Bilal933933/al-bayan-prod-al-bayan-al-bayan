@@ -28,8 +28,13 @@ class QuestionImportController extends Controller
             'file' => ['required', 'file', 'mimes:xlsx,xls,csv', 'max:20480'],
         ]);
 
+        /** @var \Illuminate\Http\UploadedFile $file */
+        $file = $validated['file'];
+        $ext = $file->getClientOriginalExtension();
+        $stored = $file->storeAs('imports', 'questions_'.time().'.'.$ext);
+
         try {
-            $result = $this->importService->process($validated['file']->path());
+            $result = $this->importService->process(storage_path('app/'.$stored));
 
             return redirect()
                 ->route('admin.questions.index')
