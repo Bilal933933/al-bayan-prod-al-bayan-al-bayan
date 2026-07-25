@@ -41,6 +41,8 @@ class QuestionImportController extends Controller
                 ->with('success', "تم استيراد {$result['total']} سؤال بنجاح.");
         } catch (QuestionImportValidationException $e) {
             return back()->withErrors(['import' => $e->errors]);
+        } catch (\Throwable $e) {
+            return back()->withErrors(['import' => ['حدث خطأ غير متوقع أثناء معالجة الملف: '.$e->getMessage()]]);
         }
     }
 }
