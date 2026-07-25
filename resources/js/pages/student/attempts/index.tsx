@@ -195,7 +195,7 @@ groups[key] = [];
                                     <span className="h-2 w-2 rounded-full bg-warning animate-pulse" />
                                     نشط
                                 </h2>
-                                <div className="space-y-2">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                                     {paginated.data
                                         .filter((a) => a.status === 'in_progress')
                                         .map((attempt) => (
@@ -224,7 +224,7 @@ return null;
                                         <h2 className="mb-3 text-sm font-semibold text-muted-foreground">
                                             {groupName}
                                         </h2>
-                                        <div className="space-y-2">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                                             {completedToday.map((attempt) => (
                                                 <AttemptCard
                                                     key={attempt.id}
@@ -242,7 +242,7 @@ return null;
                                     <h2 className="mb-3 text-sm font-semibold text-muted-foreground">
                                         {groupName}
                                     </h2>
-                                    <div className="space-y-2">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                                         {groupAttempts.map((attempt) => (
                                             <AttemptCard
                                                 key={attempt.id}

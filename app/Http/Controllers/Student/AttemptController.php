@@ -62,9 +62,18 @@ class AttemptController extends Controller
             ->with(['children' => fn ($q) => $q->active()])
             ->get(['id', 'name', 'slug', 'classification', 'description']);
 
+        $topicId = $request->query('topic');
+
+        if ($topicId && $topics->contains('id', (int) $topicId)) {
+            $topicId = (int) $topicId;
+        } else {
+            $topicId = null;
+        }
+
         return inertia('student/attempts/create', [
             'topics' => $topics,
             'competitions' => $competitions,
+            'topicId' => $topicId,
         ]);
     }
 

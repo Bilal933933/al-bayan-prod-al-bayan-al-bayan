@@ -26,30 +26,20 @@ interface TopicItem {
 interface CreateProps {
     topics: TopicItem[];
     competitions: (Competition & { children?: Competition[] })[];
+    topicId?: number | null;
 }
 
-export default function Create({ topics, competitions }: CreateProps) {
-    const initialTopicId = (() => {
-        const params = new URLSearchParams(window.location.search);
-        const topicId = params.get('topic');
-
-        if (topicId && topics.find((t) => t.id === Number(topicId))) {
-            return Number(topicId);
-        }
-
-        return null;
-    })();
-
-    const initialTopic = initialTopicId
-        ? topics.find((t) => t.id === initialTopicId)
+export default function Create({ topics, competitions, topicId }: CreateProps) {
+    const initialTopic = topicId
+        ? topics.find((t) => t.id === topicId)
         : undefined;
 
     const [mode, setMode] = useState<'training' | 'simulation' | null>(
-        initialTopicId ? 'training' : null,
+        topicId ? 'training' : null,
     );
     const [loading, setLoading] = useState(false);
 
-    const [selectedTopic, setSelectedTopic] = useState<number | null>(initialTopicId);
+    const [selectedTopic, setSelectedTopic] = useState<number | null>(topicId ?? null);
     const [difficulty, setDifficulty] = useState<string | null>(null);
     const [questionsCount, setQuestionsCount] = useState<number>(
         initialTopic?.default_questions_count ?? DEFAULT_QUESTIONS_COUNT,
