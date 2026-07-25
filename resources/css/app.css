@@ -181,6 +181,7 @@
   --sidebar-accent-foreground: var(--brand-surface);
   --sidebar-border: var(--brand-border-dark);
   --sidebar-ring: var(--brand-teal);
+  --progress-color: var(--brand-teal);
 }
 
 /* ==========================================================================
@@ -233,6 +234,7 @@
   --sidebar-accent-foreground: var(--brand-surface);
   --sidebar-border: var(--brand-border-dark);
   --sidebar-ring: var(--brand-teal-soft);
+  --progress-color: var(--brand-gold-soft);
 }
 
 /* ==========================================================================
