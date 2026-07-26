@@ -9,6 +9,7 @@ const Y_TICKS = [0, 20, 40, 60, 80, 100];
 const MARGIN = { top: 22, right: 30, bottom: 28, left: 8 };
 
 function cssVar(name: string): string {
+    if (typeof document === 'undefined') return '';
     return getComputedStyle(document.documentElement)
         .getPropertyValue(name)
         .trim();
