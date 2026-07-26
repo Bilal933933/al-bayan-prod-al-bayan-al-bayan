@@ -21,7 +21,7 @@ export default function AttemptStatusBadge({ status }: { status: string }) {
     return (
         <Badge variant="secondary" className={config.className}>
             {status === 'in_progress' && (
-                <span className="ml-1.5 inline-block h-1.5 w-1.5 rounded-full bg-warning animate-pulse" />
+                <span className="ml-1.5 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-warning" />
             )}
             {config.label}
         </Badge>

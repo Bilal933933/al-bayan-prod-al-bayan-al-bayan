@@ -10,10 +10,10 @@ beforeEach(function () {
 
 // ─── Index ────────────────────────────────────────────────────
 
-it('guest cannot access topics index', function () {
+it('guest can access topics index', function () {
     $response = $this->get(route('student.topics.index'));
 
-    $response->assertRedirect(route('login'));
+    $response->assertOk();
 });
 
 it('shows empty state when no topics exist', function () {
@@ -178,12 +178,12 @@ it('ignores exam type attempts in topic stats', function () {
 
 // ─── Show ─────────────────────────────────────────────────────
 
-it('guest cannot access topic show', function () {
+it('guest can access topic show', function () {
     $topic = Topic::factory()->active()->create();
 
     $response = $this->get(route('student.topics.show', $topic));
 
-    $response->assertRedirect(route('login'));
+    $response->assertOk();
 });
 
 it('returns 404 for inactive topic', function () {

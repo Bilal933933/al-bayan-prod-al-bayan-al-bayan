@@ -19,15 +19,24 @@ const topicEmojis: Record<string, string> = {
     الحديث: '📚',
 };
 
-export function StepTopics({ topics, selectedIds, onToggle, onNext, onPrev }: StepTopicsProps) {
+export function StepTopics({
+    topics,
+    selectedIds,
+    onToggle,
+    onNext,
+    onPrev,
+}: StepTopicsProps) {
     return (
-        <div className="flex flex-1 flex-col px-4 pb-10 pt-6">
+        <div className="flex flex-1 flex-col px-4 pt-6 pb-10">
             <div className="mb-2 text-center">
                 <span className="text-4xl">🎯</span>
             </div>
-            <h2 className="mb-1 text-center text-2xl font-black">ما مجالات اهتمامك؟</h2>
+            <h2 className="mb-1 text-center text-2xl font-black">
+                ما مجالات اهتمامك؟
+            </h2>
             <p className="mb-8 text-center text-sm text-muted-foreground">
-                اختر المواضيع التي تريد التركيز عليها. يمكنك تغييرها لاحقاً من الإعدادات.
+                اختر المواضيع التي تريد التركيز عليها. يمكنك تغييرها لاحقاً من
+                الإعدادات.
             </p>
 
             <div className="mb-6 grid grid-cols-2 gap-3">
@@ -43,18 +52,20 @@ export function StepTopics({ topics, selectedIds, onToggle, onNext, onPrev }: St
                                 'group relative overflow-hidden rounded-xl border-2 p-4 text-center transition-all',
                                 selected
                                     ? 'border-primary bg-primary/5 shadow-[0_0_0_3px_var(--primary-light)]'
-                                    : 'border-border bg-card hover:border-primary hover:-translate-y-0.5 hover:shadow-lg',
+                                    : 'border-border bg-card hover:-translate-y-0.5 hover:border-primary hover:shadow-lg',
                             )}
                         >
                             {selected && (
-                                <span className="absolute left-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground transition-all">
+                                <span className="absolute top-2 left-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground transition-all">
                                     <Check className="h-3 w-3" />
                                 </span>
                             )}
                             <span className="mb-2 block text-3xl">
                                 {topicEmojis[topic.name] || '📚'}
                             </span>
-                            <span className="text-sm font-bold">{topic.name}</span>
+                            <span className="text-sm font-bold">
+                                {topic.name}
+                            </span>
                         </button>
                     );
                 })}

@@ -28,7 +28,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'المحاولات', href: '#' },
 ];
 
-export default function Index({ attempts: paginated, filters, topics, competitions }: IndexProps) {
+export default function Index({
+    attempts: paginated,
+    filters,
+    topics,
+    competitions,
+}: IndexProps) {
     return (
         <>
             <Head title="إدارة المحاولات" />
@@ -39,7 +44,10 @@ export default function Index({ attempts: paginated, filters, topics, competitio
                 transition={{ duration: 0.3 }}
                 className="flex flex-1 flex-col gap-5 p-6"
             >
-                <Heading title="المحاولات" description="عرض وإدارة محاولات المستخدمين" />
+                <Heading
+                    title="المحاولات"
+                    description="عرض وإدارة محاولات المستخدمين"
+                />
 
                 <AttemptFilters
                     filters={filters}

@@ -1,9 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap');
 
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -16,114 +16,124 @@
    الدلالية (bg-primary, text-accent-foreground...) في 95% من الحالات.
    ========================================================================== */
 :root {
-  --font-body: "IBM Plex Sans Arabic", sans-serif;
-  --font-display: "El Messiri", sans-serif;
-  --font-mono-num: "IBM Plex Mono", monospace;
+    --font-body: 'IBM Plex Sans Arabic', sans-serif;
+    --font-display: 'El Messiri', sans-serif;
+    --font-mono-num: 'IBM Plex Mono', monospace;
 
-  /* عائلة التيل الغامق — الخلفيات الرسمية الداكنة (Hero, CTA, Stats band) */
-  --brand-ink: oklch(0.2494 0.0287 172.60);       /* #122620 */
-  --brand-ink-soft: oklch(0.3018 0.0346 171.36);  /* #1B342C */
-  --brand-ink-deep: oklch(0.1921 0.0183 176.73);  /* #0B1714 */
+    /* عائلة التيل الغامق — الخلفيات الرسمية الداكنة (Hero, CTA, Stats band) */
+    --brand-ink: oklch(0.2494 0.0287 172.6); /* #122620 */
+    --brand-ink-soft: oklch(0.3018 0.0346 171.36); /* #1B342C */
+    --brand-ink-deep: oklch(0.1921 0.0183 176.73); /* #0B1714 */
 
-  /* عائلة الورقة — الخلفيات الفاتحة */
-  --brand-surface: oklch(0.9845 0.0026 106.45);     /* #FAFAF8 */
-  --brand-surface-alt: oklch(0.9605 0.0073 132.42); /* #F0F3EE */
+    /* عائلة الورقة — الخلفيات الفاتحة */
+    --brand-surface: oklch(0.9845 0.0026 106.45); /* #FAFAF8 */
+    --brand-surface-alt: oklch(0.9605 0.0073 132.42); /* #F0F3EE */
 
-  /* التيل — اللون الأساسي للماركة (أزرار، روابط، تفاعل) */
-  --brand-teal: oklch(0.4888 0.0819 173.48);      /* #1F6F5C */
-  --brand-teal-deep: oklch(0.4217 0.0711 173.31); /* #175A4A */
-  --brand-teal-soft: oklch(0.6242 0.0949 173.10); /* #3E9A82 — لاستخدامها فقط في الوضع الداكن */
+    /* التيل — اللون الأساسي للماركة (أزرار، روابط، تفاعل) */
+    --brand-teal: oklch(0.4888 0.0819 173.48); /* #1F6F5C */
+    --brand-teal-deep: oklch(0.4217 0.0711 173.31); /* #175A4A */
+    --brand-teal-soft: oklch(
+        0.6242 0.0949 173.1
+    ); /* #3E9A82 — لاستخدامها فقط في الوضع الداكن */
 
-  /* الذهبي — لون التمييز/الختم/الإنجاز، يُستخدم بحرص وبكثافة منخفضة */
-  --brand-gold: oklch(0.7135 0.1220 81.37);      /* #C99A3D */
-  --brand-gold-soft: oklch(0.8225 0.0926 83.28); /* #E2C07E — لاستخدامها فقط في الوضع الداكن */
+    /* الذهبي — لون التمييز/الختم/الإنجاز، يُستخدم بحرص وبكثافة منخفضة */
+    --brand-gold: oklch(0.7135 0.122 81.37); /* #C99A3D */
+    --brand-gold-soft: oklch(
+        0.8225 0.0926 83.28
+    ); /* #E2C07E — لاستخدامها فقط في الوضع الداكن */
 
-  /* الأحمر الطوبي — حالات الخطأ/الإجابة الخاطئة، ليس أحمرًا صارخًا */
-  --brand-brick: oklch(0.5459 0.1437 27.51);      /* #B5483F */
-  --brand-brick-soft: oklch(0.6706 0.1285 28.03); /* #D97468 — لاستخدامها فقط في الوضع الداكن */
+    /* الأحمر الطوبي — حالات الخطأ/الإجابة الخاطئة، ليس أحمرًا صارخًا */
+    --brand-brick: oklch(0.5459 0.1437 27.51); /* #B5483F */
+    --brand-brick-soft: oklch(
+        0.6706 0.1285 28.03
+    ); /* #D97468 — لاستخدامها فقط في الوضع الداكن */
 
-  /* نص ثانوي محايد بدرجة من الأخضر (ليس رمادي محايد تمامًا) */
-  --brand-muted: oklch(0.5119 0.0230 163.90);      /* #5B6B63 */
-  --brand-muted-soft: oklch(0.7416 0.0221 165.87); /* #9FB0A8 — لاستخدامها فقط في الوضع الداكن */
+    /* نص ثانوي محايد بدرجة من الأخضر (ليس رمادي محايد تمامًا) */
+    --brand-muted: oklch(0.5119 0.023 163.9); /* #5B6B63 */
+    --brand-muted-soft: oklch(
+        0.7416 0.0221 165.87
+    ); /* #9FB0A8 — لاستخدامها فقط في الوضع الداكن */
 
-  /* أزرق سماوي — المعلومات والإرشادات */
-  --brand-sky: oklch(0.5 0.13 250);                 /* #3A6FBF */
-  --brand-sky-soft: oklch(0.65 0.11 250);           /* #6FA3E0 — لاستخدامها فقط في الوضع الداكن */
+    /* أزرق سماوي — المعلومات والإرشادات */
+    --brand-sky: oklch(0.5 0.13 250); /* #3A6FBF */
+    --brand-sky-soft: oklch(
+        0.65 0.11 250
+    ); /* #6FA3E0 — لاستخدامها فقط في الوضع الداكن */
 
-  /* حدود */
-  --brand-border-light: oklch(0.9243 0.0074 132.42); /* #E4E7E2 */
-  --brand-border-dark: oklch(0.3472 0.0301 168.91);  /* #2A3F37 */
-  --brand-card-dark: oklch(0.2578 0.0295 161.64);    /* #16281F */
+    /* حدود */
+    --brand-border-light: oklch(0.9243 0.0074 132.42); /* #E4E7E2 */
+    --brand-border-dark: oklch(0.3472 0.0301 168.91); /* #2A3F37 */
+    --brand-card-dark: oklch(0.2578 0.0295 161.64); /* #16281F */
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: "IBM Plex Sans Arabic", sans-serif;
-  --font-mono: "IBM Plex Mono", monospace;
-  --font-heading: "El Messiri", sans-serif;
-  --font-display: "El Messiri", sans-serif;
-  --font-mono-num: "IBM Plex Mono", monospace;
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --font-sans: 'IBM Plex Sans Arabic', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+    --font-heading: 'El Messiri', sans-serif;
+    --font-display: 'El Messiri', sans-serif;
+    --font-mono-num: 'IBM Plex Mono', monospace;
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
 
-  /* تعريض اللوحة الخام كـ utilities محدودة (bg-brand-gold, text-brand-teal...)
+    /* تعريض اللوحة الخام كـ utilities محدودة (bg-brand-gold, text-brand-teal...)
      هذه هي القائمة الكاملة المسموح بها — لا توجد ألوان أخرى متاحة عمدًا. */
-  --color-brand-ink: var(--brand-ink);
-  --color-brand-ink-soft: var(--brand-ink-soft);
-  --color-brand-ink-deep: var(--brand-ink-deep);
-  --color-brand-surface: var(--brand-surface);
-  --color-brand-surface-alt: var(--brand-surface-alt);
-  --color-brand-teal: var(--brand-teal);
-  --color-brand-teal-deep: var(--brand-teal-deep);
-  --color-brand-teal-soft: var(--brand-teal-soft);
-  --color-brand-gold: var(--brand-gold);
-  --color-brand-gold-soft: var(--brand-gold-soft);
-  --color-brand-brick: var(--brand-brick);
-  --color-brand-brick-soft: var(--brand-brick-soft);
-  --color-brand-muted: var(--brand-muted);
-  --color-brand-muted-soft: var(--brand-muted-soft);
-  --color-brand-sky: var(--brand-sky);
-  --color-brand-sky-soft: var(--brand-sky-soft);
+    --color-brand-ink: var(--brand-ink);
+    --color-brand-ink-soft: var(--brand-ink-soft);
+    --color-brand-ink-deep: var(--brand-ink-deep);
+    --color-brand-surface: var(--brand-surface);
+    --color-brand-surface-alt: var(--brand-surface-alt);
+    --color-brand-teal: var(--brand-teal);
+    --color-brand-teal-deep: var(--brand-teal-deep);
+    --color-brand-teal-soft: var(--brand-teal-soft);
+    --color-brand-gold: var(--brand-gold);
+    --color-brand-gold-soft: var(--brand-gold-soft);
+    --color-brand-brick: var(--brand-brick);
+    --color-brand-brick-soft: var(--brand-brick-soft);
+    --color-brand-muted: var(--brand-muted);
+    --color-brand-muted-soft: var(--brand-muted-soft);
+    --color-brand-sky: var(--brand-sky);
+    --color-brand-sky-soft: var(--brand-sky-soft);
 
-  /* ألوان الحالة الدلالية */
-  --color-success: var(--success);
-  --color-warning: var(--warning);
-  --color-info: var(--info);
+    /* ألوان الحالة الدلالية */
+    --color-success: var(--success);
+    --color-warning: var(--warning);
+    --color-info: var(--info);
 }
 
 /* ==========================================================================
@@ -133,55 +143,55 @@
    عليه استخدام التوكن الدلالي الأقرب لمعناه، لا قيمة hex جديدة.
    ========================================================================== */
 :root {
-  --background: var(--brand-surface);
-  --foreground: var(--brand-ink);
+    --background: var(--brand-surface);
+    --foreground: var(--brand-ink);
 
-  --card: oklch(1 0 0);
-  --card-foreground: var(--brand-ink);
-  --popover: oklch(1 0 0);
-  --popover-foreground: var(--brand-ink);
+    --card: oklch(1 0 0);
+    --card-foreground: var(--brand-ink);
+    --popover: oklch(1 0 0);
+    --popover-foreground: var(--brand-ink);
 
-  --primary: var(--brand-teal);
-  --primary-foreground: var(--brand-surface);
+    --primary: var(--brand-teal);
+    --primary-foreground: var(--brand-surface);
 
-  --secondary: var(--brand-surface-alt);
-  --secondary-foreground: var(--brand-ink);
+    --secondary: var(--brand-surface-alt);
+    --secondary-foreground: var(--brand-ink);
 
-  --muted: var(--brand-surface-alt);
-  --muted-foreground: var(--brand-muted);
+    --muted: var(--brand-surface-alt);
+    --muted-foreground: var(--brand-muted);
 
-  --accent: var(--brand-gold);
-  --accent-foreground: var(--brand-ink);
+    --accent: var(--brand-gold);
+    --accent-foreground: var(--brand-ink);
 
-  --destructive: var(--brand-brick);
+    --destructive: var(--brand-brick);
 
-  --success: var(--brand-teal);
-  --warning: var(--brand-gold);
-  --info: var(--brand-sky);
+    --success: var(--brand-teal);
+    --warning: var(--brand-gold);
+    --info: var(--brand-sky);
 
-  --border: var(--brand-border-light);
-  --input: var(--brand-border-light);
-  --ring: var(--brand-teal);
+    --border: var(--brand-border-light);
+    --input: var(--brand-border-light);
+    --ring: var(--brand-teal);
 
-  /* الشارت مبني على نفس اللوحة — أي رسم بياني للأداء يبقى متماسكًا بصريًا */
-  --chart-1: var(--brand-gold);
-  --chart-2: var(--brand-teal);
-  --chart-3: var(--brand-teal-deep);
-  --chart-4: var(--brand-brick);
-  --chart-5: var(--brand-ink-soft);
+    /* الشارت مبني على نفس اللوحة — أي رسم بياني للأداء يبقى متماسكًا بصريًا */
+    --chart-1: var(--brand-gold);
+    --chart-2: var(--brand-teal);
+    --chart-3: var(--brand-teal-deep);
+    --chart-4: var(--brand-brick);
+    --chart-5: var(--brand-ink-soft);
 
-  --radius: 0.625rem;
+    --radius: 0.625rem;
 
-  /* Sidebar غامقة دائمًا (نمط لوحة تحكم) لخلق تباين واضح مع المحتوى */
-  --sidebar: var(--brand-ink-soft);
-  --sidebar-foreground: var(--brand-surface);
-  --sidebar-primary: var(--brand-gold);
-  --sidebar-primary-foreground: var(--brand-ink);
-  --sidebar-accent: var(--brand-teal-deep);
-  --sidebar-accent-foreground: var(--brand-surface);
-  --sidebar-border: var(--brand-border-dark);
-  --sidebar-ring: var(--brand-teal);
-  --progress-color: var(--brand-teal);
+    /* Sidebar غامقة دائمًا (نمط لوحة تحكم) لخلق تباين واضح مع المحتوى */
+    --sidebar: var(--brand-ink-soft);
+    --sidebar-foreground: var(--brand-surface);
+    --sidebar-primary: var(--brand-gold);
+    --sidebar-primary-foreground: var(--brand-ink);
+    --sidebar-accent: var(--brand-teal-deep);
+    --sidebar-accent-foreground: var(--brand-surface);
+    --sidebar-border: var(--brand-border-dark);
+    --sidebar-ring: var(--brand-teal);
+    --progress-color: var(--brand-teal);
 }
 
 /* ==========================================================================
@@ -190,86 +200,96 @@
    أصلاً للوضوح والتباين الكافي على خلفية داكنة (WCAG AA تقريبًا).
    ========================================================================== */
 .dark {
-  --background: var(--brand-ink-deep);
-  --foreground: var(--brand-surface);
+    --background: var(--brand-ink-deep);
+    --foreground: var(--brand-surface);
 
-  --card: var(--brand-card-dark);
-  --card-foreground: var(--brand-surface);
-  --popover: var(--brand-card-dark);
-  --popover-foreground: var(--brand-surface);
+    --card: var(--brand-card-dark);
+    --card-foreground: var(--brand-surface);
+    --popover: var(--brand-card-dark);
+    --popover-foreground: var(--brand-surface);
 
-  --primary: var(--brand-teal-soft);
-  --primary-foreground: var(--brand-ink-deep);
+    --primary: var(--brand-teal-soft);
+    --primary-foreground: var(--brand-ink-deep);
 
-  --secondary: var(--brand-border-dark);
-  --secondary-foreground: var(--brand-surface);
+    --secondary: var(--brand-border-dark);
+    --secondary-foreground: var(--brand-surface);
 
-  --muted: var(--brand-border-dark);
-  --muted-foreground: var(--brand-muted-soft);
+    --muted: var(--brand-border-dark);
+    --muted-foreground: var(--brand-muted-soft);
 
-  --accent: var(--brand-gold-soft);
-  --accent-foreground: var(--brand-ink-deep);
+    --accent: var(--brand-gold-soft);
+    --accent-foreground: var(--brand-ink-deep);
 
-  --destructive: var(--brand-brick-soft);
+    --destructive: var(--brand-brick-soft);
 
-  --success: var(--brand-teal-soft);
-  --warning: var(--brand-gold-soft);
-  --info: var(--brand-sky-soft);
+    --success: var(--brand-teal-soft);
+    --warning: var(--brand-gold-soft);
+    --info: var(--brand-sky-soft);
 
-  --border: var(--brand-border-dark);
-  --input: var(--brand-border-dark);
-  --ring: var(--brand-teal-soft);
+    --border: var(--brand-border-dark);
+    --input: var(--brand-border-dark);
+    --ring: var(--brand-teal-soft);
 
-  --chart-1: var(--brand-gold-soft);
-  --chart-2: var(--brand-teal-soft);
-  --chart-3: var(--brand-teal);
-  --chart-4: var(--brand-brick-soft);
-  --chart-5: var(--brand-muted-soft);
+    --chart-1: var(--brand-gold-soft);
+    --chart-2: var(--brand-teal-soft);
+    --chart-3: var(--brand-teal);
+    --chart-4: var(--brand-brick-soft);
+    --chart-5: var(--brand-muted-soft);
 
-  --sidebar: var(--brand-ink-deep);
-  --sidebar-foreground: var(--brand-surface);
-  --sidebar-primary: var(--brand-gold-soft);
-  --sidebar-primary-foreground: var(--brand-ink-deep);
-  --sidebar-accent: var(--brand-border-dark);
-  --sidebar-accent-foreground: var(--brand-surface);
-  --sidebar-border: var(--brand-border-dark);
-  --sidebar-ring: var(--brand-teal-soft);
-  --progress-color: var(--brand-gold-soft);
+    --sidebar: var(--brand-ink-deep);
+    --sidebar-foreground: var(--brand-surface);
+    --sidebar-primary: var(--brand-gold-soft);
+    --sidebar-primary-foreground: var(--brand-ink-deep);
+    --sidebar-accent: var(--brand-border-dark);
+    --sidebar-accent-foreground: var(--brand-surface);
+    --sidebar-border: var(--brand-border-dark);
+    --sidebar-ring: var(--brand-teal-soft);
+    --progress-color: var(--brand-gold-soft);
 }
 
 /* ==========================================================================
    CSS ANIMATIONS — بديل خفيف لـ Framer Motion في المكونات البسيطة
    ========================================================================== */
 @keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .animate-fade-in-up {
-  animation: fade-in-up 0.5s ease-out forwards;
+    animation: fade-in-up 0.5s ease-out forwards;
 }
 .animate-fade-in {
-  animation: fade-in 0.4s ease-out forwards;
+    animation: fade-in 0.4s ease-out forwards;
 }
 
 .stagger-fade-up > * {
-  opacity: 0;
-  animation: fade-in-up 0.5s ease-out forwards;
-  animation-delay: calc(0.06s * var(--i, 0));
+    opacity: 0;
+    animation: fade-in-up 0.5s ease-out forwards;
+    animation-delay: calc(0.06s * var(--i, 0));
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-  html {
-    @apply font-sans;
-  }
+    * {
+        @apply border-border outline-ring/50;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
+    html {
+        @apply font-sans;
+    }
 }

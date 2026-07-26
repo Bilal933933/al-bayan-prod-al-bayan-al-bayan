@@ -8,9 +8,5 @@ export default function AppLayout({
     breadcrumbs?: BreadcrumbItem[];
     children: React.ReactNode;
 }) {
-    return (
-        <AdminLayout breadcrumbs={breadcrumbs}>
-            {children}
-        </AdminLayout>
-    );
+    return <AdminLayout breadcrumbs={breadcrumbs}>{children}</AdminLayout>;
 }

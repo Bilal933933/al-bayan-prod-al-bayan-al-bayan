@@ -9,8 +9,6 @@ export default function StudentLayout({
     children: React.ReactNode;
 }) {
     return (
-        <AppHeaderLayout breadcrumbs={breadcrumbs}>
-            {children}
-        </AppHeaderLayout>
+        <AppHeaderLayout breadcrumbs={breadcrumbs}>{children}</AppHeaderLayout>
     );
 }

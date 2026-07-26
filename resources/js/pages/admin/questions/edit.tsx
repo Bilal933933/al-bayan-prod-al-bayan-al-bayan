@@ -19,21 +19,22 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Edit({ question, topics }: EditProps) {
-    const { data, setData, put, processing, errors } = useForm<QuestionFormData>({
-        topic_id: question.topic_id,
-        type: question.type,
-        text: question.text,
-        difficulty: question.difficulty,
-        explanation: question.explanation,
-        is_active: question.is_active,
-        options: question.options?.map((opt) => ({
-            text: opt.text,
-            is_correct: opt.is_correct,
-        })) ?? [
-            { text: '', is_correct: false },
-            { text: '', is_correct: false },
-        ],
-    });
+    const { data, setData, put, processing, errors } =
+        useForm<QuestionFormData>({
+            topic_id: question.topic_id,
+            type: question.type,
+            text: question.text,
+            difficulty: question.difficulty,
+            explanation: question.explanation,
+            is_active: question.is_active,
+            options: question.options?.map((opt) => ({
+                text: opt.text,
+                is_correct: opt.is_correct,
+            })) ?? [
+                { text: '', is_correct: false },
+                { text: '', is_correct: false },
+            ],
+        });
 
     function submit(e: React.FormEvent) {
         e.preventDefault();
@@ -49,7 +50,10 @@ export default function Edit({ question, topics }: EditProps) {
                 transition={{ duration: 0.3 }}
                 className="flex flex-1 flex-col gap-4 p-6"
             >
-                <Heading title="تعديل السؤال" description="تحديث بيانات السؤال" />
+                <Heading
+                    title="تعديل السؤال"
+                    description="تحديث بيانات السؤال"
+                />
                 <div className="max-w-2xl">
                     <QuestionForm
                         data={data}

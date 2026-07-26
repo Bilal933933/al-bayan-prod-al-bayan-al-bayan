@@ -2,8 +2,16 @@ import { useCallback } from 'react';
 import { cn } from '@/lib/utils';
 
 interface NavigationGridProps {
-    questions: { question_id: number; is_correct: boolean | null; order: number }[];
-    allQuestions: { question_id: number; is_correct: boolean | null; order: number }[];
+    questions: {
+        question_id: number;
+        is_correct: boolean | null;
+        order: number;
+    }[];
+    allQuestions: {
+        question_id: number;
+        is_correct: boolean | null;
+        order: number;
+    }[];
     onQuestionClick?: () => void;
 }
 
@@ -12,22 +20,29 @@ export default function NavigationGrid({
     allQuestions,
     onQuestionClick,
 }: NavigationGridProps) {
-    const handleClick = useCallback((questionId: number) => {
-        const el = document.getElementById(`question-${questionId}`);
+    const handleClick = useCallback(
+        (questionId: number) => {
+            const el = document.getElementById(`question-${questionId}`);
 
-        if (el) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
 
-        onQuestionClick?.();
-    }, [onQuestionClick]);
+            onQuestionClick?.();
+        },
+        [onQuestionClick],
+    );
 
     return (
         <div className="rounded-2xl bg-card p-4 shadow-sm ring-border/50">
-            <div className="mb-3 text-xs font-medium text-muted-foreground">خريطة الأسئلة</div>
+            <div className="mb-3 text-xs font-medium text-muted-foreground">
+                خريطة الأسئلة
+            </div>
             <div className="grid grid-cols-5 gap-1.5" dir="rtl">
                 {allQuestions.map((q, i) => {
-                    const isVisible = questions.some((fq) => fq.question_id === q.question_id);
+                    const isVisible = questions.some(
+                        (fq) => fq.question_id === q.question_id,
+                    );
                     const isCorrect = q.is_correct === true;
                     const isWrong = q.is_correct === false;
 
@@ -37,9 +52,12 @@ export default function NavigationGrid({
                             onClick={() => handleClick(q.question_id)}
                             className={cn(
                                 'flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold transition-all hover:scale-110 hover:shadow-md',
-                                isCorrect && 'bg-success/20 text-success hover:bg-success/30',
-                                isWrong && 'bg-destructive/20 text-destructive hover:bg-destructive/30',
-                                q.is_correct === null && 'bg-muted text-muted-foreground hover:bg-muted/80',
+                                isCorrect &&
+                                    'bg-success/20 text-success hover:bg-success/30',
+                                isWrong &&
+                                    'bg-destructive/20 text-destructive hover:bg-destructive/30',
+                                q.is_correct === null &&
+                                    'bg-muted text-muted-foreground hover:bg-muted/80',
                                 !isVisible && 'opacity-30',
                             )}
                             title={`سؤال ${i + 1}`}

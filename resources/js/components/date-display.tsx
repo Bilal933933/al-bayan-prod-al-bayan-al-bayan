@@ -1,5 +1,9 @@
 import { useSyncExternalStore } from 'react';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
 type DateFormat = 'relative' | 'short' | 'full';
@@ -114,13 +118,21 @@ export default function DateDisplay({
     const parsed = parseDate(date);
 
     if (!parsed) {
-        return <span className={cn('text-muted-foreground', className)}>{fallback}</span>;
+        return (
+            <span className={cn('text-muted-foreground', className)}>
+                {fallback}
+            </span>
+        );
     }
 
     if (!hydrated && format === 'relative') {
         const fullDate = formatFull(parsed);
 
-        return <span className={className} suppressHydrationWarning>{fullDate}</span>;
+        return (
+            <span className={className} suppressHydrationWarning>
+                {fullDate}
+            </span>
+        );
     }
 
     const formatted = formatters[format](parsed);
@@ -137,7 +149,9 @@ export default function DateDisplay({
                 <span className={className}>{formatted}</span>
             </TooltipTrigger>
             <TooltipContent>
-                <p dir="ltr" className="text-xs">{fullDate}</p>
+                <p dir="ltr" className="text-xs">
+                    {fullDate}
+                </p>
             </TooltipContent>
         </Tooltip>
     );

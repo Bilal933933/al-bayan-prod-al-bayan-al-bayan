@@ -20,7 +20,10 @@ interface ShowProps {
 
 const TYPE_CONFIG: Record<string, { label: string; className: string }> = {
     mcq: { label: 'اختيار من متعدد', className: 'bg-info/20 text-info' },
-    true_false: { label: 'صح/خطأ', className: 'bg-palette-3/20 text-palette-3' },
+    true_false: {
+        label: 'صح/خطأ',
+        className: 'bg-palette-3/20 text-palette-3',
+    },
 };
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -33,7 +36,10 @@ export default function Show({ question }: ShowProps) {
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [deleting, setDeleting] = useState(false);
 
-    const typeConfig = TYPE_CONFIG[question.type] ?? { label: question.type, className: '' };
+    const typeConfig = TYPE_CONFIG[question.type] ?? {
+        label: question.type,
+        className: '',
+    };
 
     function handleDelete() {
         setDeleting(true);
@@ -48,7 +54,9 @@ export default function Show({ question }: ShowProps) {
 
     return (
         <>
-            <Head title={`عرض السؤال - ${question.text.length > 50 ? question.text.slice(0, 50) + '...' : question.text}`} />
+            <Head
+                title={`عرض السؤال - ${question.text.length > 50 ? question.text.slice(0, 50) + '...' : question.text}`}
+            />
 
             <motion.div
                 initial={{ opacity: 0, y: 15 }}
@@ -57,15 +65,24 @@ export default function Show({ question }: ShowProps) {
                 className="flex flex-1 flex-col gap-6 p-6"
             >
                 <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                    <Heading title="عرض السؤال" description={`${typeConfig.label} - ${question.topic?.name ?? 'بدون محور'}`} />
+                    <Heading
+                        title="عرض السؤال"
+                        description={`${typeConfig.label} - ${question.topic?.name ?? 'بدون محور'}`}
+                    />
                     <div className="flex items-center gap-2">
-                        <Link href={questions.edit({ question: question.id }).url}>
+                        <Link
+                            href={questions.edit({ question: question.id }).url}
+                        >
                             <Button variant="outline" size="sm">
                                 <Pencil className="h-4 w-4" />
                                 تعديل
                             </Button>
                         </Link>
-                        <Button variant="destructive" size="sm" onClick={() => setDeleteOpen(true)}>
+                        <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => setDeleteOpen(true)}
+                        >
                             <Trash2 className="h-4 w-4" />
                             حذف
                         </Button>
@@ -79,7 +96,9 @@ export default function Show({ question }: ShowProps) {
                         <CardTitle className="text-base">نص السؤال</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-lg leading-relaxed">{question.text}</p>
+                        <p className="text-lg leading-relaxed">
+                            {question.text}
+                        </p>
                     </CardContent>
                 </Card>
 
@@ -93,17 +112,19 @@ export default function Show({ question }: ShowProps) {
                 </Card>
 
                 {question.explanation && (
-                    <QuestionExplanationCard explanation={question.explanation} />
+                    <QuestionExplanationCard
+                        explanation={question.explanation}
+                    />
                 )}
             </motion.div>
 
             <DeleteDialog
                 open={deleteOpen}
                 onOpenChange={(open) => {
- if (!open) {
-setDeleteOpen(false);
-} 
-}}
+                    if (!open) {
+                        setDeleteOpen(false);
+                    }
+                }}
                 description="هل أنت متأكد من حذف هذا السؤال؟ هذا الإجراء لا يمكن التراجع عنه."
                 onDelete={handleDelete}
                 processing={deleting}

@@ -10,7 +10,13 @@ interface OptionCardProps {
     onSelect: () => void;
 }
 
-export function OptionCard({ text, letter, isSelected, isLocked, onSelect }: OptionCardProps) {
+export function OptionCard({
+    text,
+    letter,
+    isSelected,
+    isLocked,
+    onSelect,
+}: OptionCardProps) {
     return (
         <motion.button
             type="button"
@@ -24,26 +30,32 @@ export function OptionCard({ text, letter, isSelected, isLocked, onSelect }: Opt
             className={cn(
                 'flex w-full items-center gap-4 rounded-xl border-2 p-4 text-right transition-all duration-200',
                 isSelected
-                    ? 'border-primary bg-primary/10 ring-2 ring-primary/20 text-primary shadow-sm'
-                    : 'border-border text-muted-foreground hover:border-muted-foreground/25 hover:bg-muted hover:scale-[1.01] active:scale-[0.99]',
-                isSelected && !isLocked && 'hover:bg-primary/15 hover:border-primary/80',
+                    ? 'border-primary bg-primary/10 text-primary shadow-sm ring-2 ring-primary/20'
+                    : 'border-border text-muted-foreground hover:scale-[1.01] hover:border-muted-foreground/25 hover:bg-muted active:scale-[0.99]',
+                isSelected &&
+                    !isLocked &&
+                    'hover:border-primary/80 hover:bg-primary/15',
                 isLocked && 'cursor-not-allowed opacity-80',
                 !isLocked && 'cursor-pointer',
             )}
         >
-            <span className={cn(
-                'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sm font-bold border-2 transition-colors duration-200',
-                isSelected
-                    ? 'bg-primary border-primary text-primary-foreground'
-                    : 'bg-muted border-border text-muted-foreground',
-            )}>
+            <span
+                className={cn(
+                    'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border-2 text-sm font-bold transition-colors duration-200',
+                    isSelected
+                        ? 'border-primary bg-primary text-primary-foreground'
+                        : 'border-border bg-muted text-muted-foreground',
+                )}
+            >
                 {isSelected ? <Check className="h-4 w-4" /> : letter}
             </span>
-            <span className={cn(
-                'text-base font-medium leading-relaxed',
-                isSelected && 'text-primary',
-                !isSelected && 'text-muted-foreground',
-            )}>
+            <span
+                className={cn(
+                    'text-base leading-relaxed font-medium',
+                    isSelected && 'text-primary',
+                    !isSelected && 'text-muted-foreground',
+                )}
+            >
                 {text}
             </span>
         </motion.button>

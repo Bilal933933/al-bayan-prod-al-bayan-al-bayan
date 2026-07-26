@@ -20,12 +20,14 @@ interface CreateFormData {
 }
 
 export default function Create() {
-    const { data, setData, post, processing, errors } = useForm<CreateFormData>({
-        name: '',
-        email: '',
-        password: '',
-        email_verified_at: null,
-    });
+    const { data, setData, post, processing, errors } = useForm<CreateFormData>(
+        {
+            name: '',
+            email: '',
+            password: '',
+            email_verified_at: null,
+        },
+    );
 
     function submit(e: React.FormEvent) {
         e.preventDefault();

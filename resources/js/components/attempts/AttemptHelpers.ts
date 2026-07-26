@@ -3,11 +3,21 @@ export const typeLabels: Record<string, string> = {
     exam: 'محاكاة اختبار',
 };
 
-export const statusConfig: Record<string, { label: string; classes: string }> = {
-    in_progress: { label: 'قيد التنفيذ', classes: 'bg-info/20 text-info border-info/30' },
-    completed: { label: 'مكتمل', classes: 'bg-success/20 text-success border-success/30' },
-    abandoned: { label: 'ملغي', classes: 'bg-muted text-muted-foreground border-border' },
-};
+export const statusConfig: Record<string, { label: string; classes: string }> =
+    {
+        in_progress: {
+            label: 'قيد التنفيذ',
+            classes: 'bg-info/20 text-info border-info/30',
+        },
+        completed: {
+            label: 'مكتمل',
+            classes: 'bg-success/20 text-success border-success/30',
+        },
+        abandoned: {
+            label: 'ملغي',
+            classes: 'bg-muted text-muted-foreground border-border',
+        },
+    };
 
 export const difficultyLabels: Record<string, string> = {
     easy: 'سهل',
@@ -28,22 +38,31 @@ export function formatDuration(seconds: number): string {
     const s = Math.floor(abs % 60);
 
     if (h > 0) {
-return `${h}س ${m}د`;
-}
+        return `${h}س ${m}د`;
+    }
 
     if (m > 0) {
-return `${m}د ${s}ث`;
-}
+        return `${m}د ${s}ث`;
+    }
 
     return `${s}ث`;
 }
 
-export function getDurationSeconds(startedAt: string, finishedAt: string | null): number {
+export function getDurationSeconds(
+    startedAt: string,
+    finishedAt: string | null,
+): number {
     if (!finishedAt) {
-return 0;
-}
+        return 0;
+    }
 
-    return Math.max(0, Math.round((new Date(finishedAt).getTime() - new Date(startedAt).getTime()) / 1000));
+    return Math.max(
+        0,
+        Math.round(
+            (new Date(finishedAt).getTime() - new Date(startedAt).getTime()) /
+                1000,
+        ),
+    );
 }
 
 export const FILTERS = [

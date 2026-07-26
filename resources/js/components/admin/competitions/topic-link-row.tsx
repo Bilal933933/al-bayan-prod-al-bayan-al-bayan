@@ -33,11 +33,13 @@ export default function TopicLinkRow({
         >
             <td className="px-4 py-2">
                 <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium md:text-sm">{topic.name}</span>
+                    <span className="text-xs font-medium md:text-sm">
+                        {topic.name}
+                    </span>
                     <VisibilityBadge visibility={topic.visibility} />
                 </div>
             </td>
-            <td className="whitespace-nowrap px-4 py-2 font-mono text-xs text-muted-foreground">
+            <td className="px-4 py-2 font-mono text-xs whitespace-nowrap text-muted-foreground">
                 {topic.code}
             </td>
             <td className="px-4 py-2">
@@ -47,7 +49,11 @@ export default function TopicLinkRow({
                         type="number"
                         min={1}
                         value={topic.pivot.questions_count}
-                        onChange={(e) => onChange({ questions_count: Number(e.target.value) })}
+                        onChange={(e) =>
+                            onChange({
+                                questions_count: Number(e.target.value),
+                            })
+                        }
                         className="h-7 w-16 text-center text-xs sm:w-20 sm:text-sm"
                     />
                 </div>
@@ -59,7 +65,11 @@ export default function TopicLinkRow({
                         type="number"
                         min={1}
                         value={topic.pivot.duration_minutes}
-                        onChange={(e) => onChange({ duration_minutes: Number(e.target.value) })}
+                        onChange={(e) =>
+                            onChange({
+                                duration_minutes: Number(e.target.value),
+                            })
+                        }
                         className="h-7 w-16 text-center text-xs sm:w-20 sm:text-sm"
                     />
                 </div>

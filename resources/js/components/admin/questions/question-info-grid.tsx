@@ -7,11 +7,17 @@ import type { Question } from '@/types/question';
 
 const TYPE_CONFIG: Record<string, { label: string; className: string }> = {
     mcq: { label: 'اختيار من متعدد', className: 'bg-info/20 text-info' },
-    true_false: { label: 'صح/خطأ', className: 'bg-palette-3/20 text-palette-3' },
+    true_false: {
+        label: 'صح/خطأ',
+        className: 'bg-palette-3/20 text-palette-3',
+    },
 };
 
 export default function QuestionInfoGrid({ question }: { question: Question }) {
-    const typeConfig = TYPE_CONFIG[question.type] ?? { label: question.type, className: '' };
+    const typeConfig = TYPE_CONFIG[question.type] ?? {
+        label: question.type,
+        className: '',
+    };
 
     return (
         <>
@@ -19,20 +25,29 @@ export default function QuestionInfoGrid({ question }: { question: Question }) {
                 <Card>
                     <CardHeader className="flex flex-row items-center gap-2 pb-2">
                         <BookOpen className="h-4 w-4 text-muted-foreground" />
-                        <CardTitle className="text-sm font-medium text-muted-foreground">المحور</CardTitle>
+                        <CardTitle className="text-sm font-medium text-muted-foreground">
+                            المحور
+                        </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-base font-semibold">{question.topic?.name ?? '—'}</p>
+                        <p className="text-base font-semibold">
+                            {question.topic?.name ?? '—'}
+                        </p>
                     </CardContent>
                 </Card>
 
                 <Card>
                     <CardHeader className="flex flex-row items-center gap-2 pb-2">
                         <FileQuestion className="h-4 w-4 text-muted-foreground" />
-                        <CardTitle className="text-sm font-medium text-muted-foreground">النوع</CardTitle>
+                        <CardTitle className="text-sm font-medium text-muted-foreground">
+                            النوع
+                        </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <Badge variant="secondary" className={typeConfig.className}>
+                        <Badge
+                            variant="secondary"
+                            className={typeConfig.className}
+                        >
                             {typeConfig.label}
                         </Badge>
                     </CardContent>
@@ -41,7 +56,9 @@ export default function QuestionInfoGrid({ question }: { question: Question }) {
                 <Card>
                     <CardHeader className="flex flex-row items-center gap-2 pb-2">
                         <Award className="h-4 w-4 text-muted-foreground" />
-                        <CardTitle className="text-sm font-medium text-muted-foreground">المستوى</CardTitle>
+                        <CardTitle className="text-sm font-medium text-muted-foreground">
+                            المستوى
+                        </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <DifficultyBadge difficulty={question.difficulty} />
@@ -51,10 +68,16 @@ export default function QuestionInfoGrid({ question }: { question: Question }) {
                 <Card>
                     <CardHeader className="flex flex-row items-center gap-2 pb-2">
                         <Eye className="h-4 w-4 text-muted-foreground" />
-                        <CardTitle className="text-sm font-medium text-muted-foreground">الحالة</CardTitle>
+                        <CardTitle className="text-sm font-medium text-muted-foreground">
+                            الحالة
+                        </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <Badge variant={question.is_active ? 'default' : 'secondary'}>
+                        <Badge
+                            variant={
+                                question.is_active ? 'default' : 'secondary'
+                            }
+                        >
                             {question.is_active ? 'نشط' : 'غير نشط'}
                         </Badge>
                     </CardContent>
@@ -64,11 +87,13 @@ export default function QuestionInfoGrid({ question }: { question: Question }) {
             <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
                 <span className="inline-flex items-center gap-1.5">
                     <Calendar className="h-3.5 w-3.5" />
-                    تاريخ الإنشاء: <DateDisplay date={question.created_at} format="full" />
+                    تاريخ الإنشاء:{' '}
+                    <DateDisplay date={question.created_at} format="full" />
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                     <Calendar className="h-3.5 w-3.5" />
-                    آخر تحديث: <DateDisplay date={question.updated_at} format="full" />
+                    آخر تحديث:{' '}
+                    <DateDisplay date={question.updated_at} format="full" />
                 </span>
             </div>
         </>

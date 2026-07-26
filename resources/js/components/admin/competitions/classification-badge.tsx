@@ -7,8 +7,14 @@ const CLASSIFICATION_CONFIG = {
     child: { label: 'ابن', variant: 'outline' },
 } as const;
 
-export default function ClassificationBadge({ classification }: { classification: string }) {
-    const config = CLASSIFICATION_CONFIG[classification as keyof typeof CLASSIFICATION_CONFIG] ?? {
+export default function ClassificationBadge({
+    classification,
+}: {
+    classification: string;
+}) {
+    const config = CLASSIFICATION_CONFIG[
+        classification as keyof typeof CLASSIFICATION_CONFIG
+    ] ?? {
         label: classification,
         variant: 'secondary',
     };
@@ -19,7 +25,9 @@ export default function ClassificationBadge({ classification }: { classification
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.2 }}
         >
-            <Badge variant={config.variant as 'default' | 'secondary' | 'outline'}>
+            <Badge
+                variant={config.variant as 'default' | 'secondary' | 'outline'}
+            >
                 {config.label}
             </Badge>
         </motion.span>

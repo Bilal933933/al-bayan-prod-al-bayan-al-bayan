@@ -7,6 +7,7 @@ use App\Contracts\Services\ExamGradingServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\AnswerQuestionRequest;
 use App\Http\Requests\Student\StartPracticeRequest;
+use App\Http\Resources\QuestionOptionsResource;
 use App\Models\Attempt;
 use App\Models\AttemptQuestion;
 use App\Models\AttemptSection;
@@ -127,7 +128,16 @@ class AttemptController extends Controller
             'questions.selectedOption',
         ]);
 
-        return response()->json($section);
+        $data = $section->toArray();
+
+        foreach ($data['questions'] as $i => $aq) {
+            $question = $section->questions[$i]->question;
+            $data['questions'][$i]['question']['options'] = QuestionOptionsResource::collection(
+                $question->options,
+            )->resolve();
+        }
+
+        return response()->json($data);
     }
 
     public function startPractice(StartPracticeRequest $request, Topic $topic): RedirectResponse
@@ -189,9 +199,12 @@ class AttemptController extends Controller
     public function answerQuestion(AnswerQuestionRequest $request, Attempt $attempt, AttemptQuestion $attemptQuestion): RedirectResponse
     {
         $this->authorize('view', $attempt);
+        abort_unless($attemptQuestion->section->attempt_id === $attempt->id, 404);
+
         $this->gradingService->handleExpiredSections($attempt);
 
         $option = QuestionOption::findOrFail((int) $request->validated('selected_option_id'));
+        abort_unless($option->question_id === $attemptQuestion->question_id, 422);
 
         $isNewAnswer = $attemptQuestion->selected_option_id === null;
 

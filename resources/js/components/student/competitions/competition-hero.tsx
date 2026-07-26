@@ -20,8 +20,8 @@ function hexToRgba(hex: string, alpha: number): string {
     const b = Number.parseInt(clean.substring(4, 6), 16);
 
     if ([r, g, b].some(isNaN)) {
-return `rgba(128, 128, 128, ${alpha})`;
-}
+        return `rgba(128, 128, 128, ${alpha})`;
+    }
 
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
@@ -66,8 +66,8 @@ export default function CompetitionHero({
         >
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_60%)]" />
 
-            <div className="absolute -top-20 -end-20 h-64 w-64 rounded-full bg-white/5 blur-2xl" />
-            <div className="absolute -bottom-16 -start-16 h-48 w-48 rounded-full bg-white/5 blur-2xl" />
+            <div className="absolute -end-20 -top-20 h-64 w-64 rounded-full bg-white/5 blur-2xl" />
+            <div className="absolute -start-16 -bottom-16 h-48 w-48 rounded-full bg-white/5 blur-2xl" />
 
             <div className="relative p-6 sm:p-8">
                 <div className="flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
@@ -80,19 +80,36 @@ export default function CompetitionHero({
 
                         <div className="min-w-0">
                             <div className="flex flex-wrap items-center gap-3">
-                                <h1 className={cn('text-2xl font-bold sm:text-3xl', textClass)}>
+                                <h1
+                                    className={cn(
+                                        'text-2xl font-bold sm:text-3xl',
+                                        textClass,
+                                    )}
+                                >
                                     {competition.name}
                                 </h1>
-                                <ClassificationBadge classification={competition.classification} />
+                                <ClassificationBadge
+                                    classification={competition.classification}
+                                />
                             </div>
 
                             {competition.description && (
-                                <p className={cn('mt-2 text-sm sm:text-base', mutedClass)}>
+                                <p
+                                    className={cn(
+                                        'mt-2 text-sm sm:text-base',
+                                        mutedClass,
+                                    )}
+                                >
                                     {competition.description}
                                 </p>
                             )}
 
-                            <div className={cn('mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs', mutedClass)}>
+                            <div
+                                className={cn(
+                                    'mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs',
+                                    mutedClass,
+                                )}
+                            >
                                 <span className="font-mono" dir="ltr">
                                     #{competition.code}
                                 </span>
@@ -103,15 +120,28 @@ export default function CompetitionHero({
                     <div className="flex flex-wrap items-center gap-4 md:gap-6">
                         {childrenCount !== undefined && childrenCount > 0 && (
                             <div className="text-center">
-                                <div className={cn('text-2xl font-bold', textClass)}>{childrenCount}</div>
-                                <div className={cn('text-xs', mutedClass)}>مسابقة فرعية</div>
+                                <div
+                                    className={cn(
+                                        'text-2xl font-bold',
+                                        textClass,
+                                    )}
+                                >
+                                    {childrenCount}
+                                </div>
+                                <div className={cn('text-xs', mutedClass)}>
+                                    مسابقة فرعية
+                                </div>
                             </div>
                         )}
 
-                        <div className={cn(
-                            'rounded-full px-4 py-2 text-sm font-medium backdrop-blur-sm',
-                            competition.is_active ? 'bg-white/20' : 'bg-black/10'
-                        )}>
+                        <div
+                            className={cn(
+                                'rounded-full px-4 py-2 text-sm font-medium backdrop-blur-sm',
+                                competition.is_active
+                                    ? 'bg-white/20'
+                                    : 'bg-black/10',
+                            )}
+                        >
                             {competition.is_active ? 'نشط' : 'غير نشط'}
                         </div>
                     </div>

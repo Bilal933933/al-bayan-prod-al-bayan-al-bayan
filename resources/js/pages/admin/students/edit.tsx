@@ -46,7 +46,10 @@ export default function Edit({ student }: EditProps) {
                 transition={{ duration: 0.3 }}
                 className="flex flex-1 flex-col gap-4 p-6"
             >
-                <Heading title={`تعديل: ${student.name}`} description="تحديث بيانات الطالب" />
+                <Heading
+                    title={`تعديل: ${student.name}`}
+                    description="تحديث بيانات الطالب"
+                />
                 <div className="max-w-2xl">
                     <StudentForm
                         data={data}

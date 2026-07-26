@@ -54,7 +54,12 @@ export function InfoBox({ type, title, message, className }: InfoBoxProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.3 }}
-            className={cn('flex gap-3 rounded-xl border p-4', config.bg, config.border, className)}
+            className={cn(
+                'flex gap-3 rounded-xl border p-4',
+                config.bg,
+                config.border,
+                className,
+            )}
         >
             <Icon className={cn('mt-0.5 size-5 shrink-0', config.iconColor)} />
             <div className={cn('space-y-1', config.text)}>

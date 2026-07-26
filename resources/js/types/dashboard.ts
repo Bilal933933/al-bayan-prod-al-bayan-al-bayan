@@ -24,7 +24,12 @@ export interface RecentAttempt {
     total_questions: number;
     created_at: string;
     user: { id: number; name: string; streak_days: number };
-    competition?: { id: number; name: string; color: string; icon: string } | null;
+    competition?: {
+        id: number;
+        name: string;
+        color: string;
+        icon: string;
+    } | null;
     topic?: { id: number; name: string } | null;
     score?: { points: number } | null;
 }

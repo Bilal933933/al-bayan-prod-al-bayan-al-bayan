@@ -51,8 +51,8 @@ export default function CompetitionForm({
     useEffect(() => {
         return () => {
             if (previewUrl) {
-URL.revokeObjectURL(previewUrl);
-}
+                URL.revokeObjectURL(previewUrl);
+            }
         };
     }, [previewUrl]);
 
@@ -60,8 +60,8 @@ URL.revokeObjectURL(previewUrl);
         const file = e.target.files?.[0] ?? null;
 
         if (previewUrl) {
-URL.revokeObjectURL(previewUrl);
-}
+            URL.revokeObjectURL(previewUrl);
+        }
 
         if (file) {
             setPreviewUrl(URL.createObjectURL(file));
@@ -74,16 +74,16 @@ URL.revokeObjectURL(previewUrl);
 
     function handleRemoveImage() {
         if (previewUrl) {
-URL.revokeObjectURL(previewUrl);
-}
+            URL.revokeObjectURL(previewUrl);
+        }
 
         setPreviewUrl(null);
         setData('image_file', null);
         setData('image', null);
 
         if (!fileInputRef.current) {
-return;
-}
+            return;
+        }
 
         fileInputRef.current.value = '';
     }
@@ -125,7 +125,9 @@ return;
             <div className="grid gap-2">
                 <Label htmlFor="slug">
                     الرابط المختصر
-                    <span className="text-xs text-muted-foreground me-1">(اختياري)</span>
+                    <span className="me-1 text-xs text-muted-foreground">
+                        (اختياري)
+                    </span>
                 </Label>
                 <Input
                     id="slug"
@@ -146,7 +148,7 @@ return;
                     <Label>التصنيف</Label>
                     <ClassificationBadge classification={data.classification} />
                     <div className="mt-1 flex items-center gap-6">
-                        <label className="flex items-center gap-2 cursor-pointer">
+                        <label className="flex cursor-pointer items-center gap-2">
                             <input
                                 type="radio"
                                 name="classification"
@@ -159,7 +161,7 @@ return;
                             />
                             <span className="text-sm">حاوية</span>
                         </label>
-                        <label className="flex items-center gap-2 cursor-pointer">
+                        <label className="flex cursor-pointer items-center gap-2">
                             <input
                                 type="radio"
                                 name="classification"
@@ -172,12 +174,14 @@ return;
                             />
                             <span className="text-sm">مستقلة</span>
                         </label>
-                        <label className="flex items-center gap-2 cursor-pointer">
+                        <label className="flex cursor-pointer items-center gap-2">
                             <input
                                 type="radio"
                                 name="classification"
                                 checked={data.classification === 'child'}
-                                onChange={() => setData('classification', 'child')}
+                                onChange={() =>
+                                    setData('classification', 'child')
+                                }
                                 className="h-4 w-4 border-border text-primary"
                             />
                             <span className="text-sm">ابن</span>
@@ -187,8 +191,8 @@ return;
                         {data.classification === 'container'
                             ? 'الحاوية تُستخدم كتصنيف ولا تُربط بمحاور'
                             : data.classification === 'child'
-                                ? 'الابن يتبع حاوية ويُربط بمحاور وأسئلة'
-                                : 'المستقلة لا تتبع أحد وتُربط مباشرة بالمحاور والأسئلة'}
+                              ? 'الابن يتبع حاوية ويُربط بمحاور وأسئلة'
+                              : 'المستقلة لا تتبع أحد وتُربط مباشرة بالمحاور والأسئلة'}
                     </p>
                     <InputError message={errors.classification} />
                 </div>
@@ -215,8 +219,10 @@ return;
                     <select
                         id="is_active"
                         value={data.is_active ? '1' : '0'}
-                        onChange={(e) => setData('is_active', e.target.value === '1')}
-                        className="border-input placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] md:text-sm"
+                        onChange={(e) =>
+                            setData('is_active', e.target.value === '1')
+                        }
+                        className="flex h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 md:text-sm"
                     >
                         <option value="1">نشط</option>
                         <option value="0">غير نشط</option>
@@ -237,7 +243,7 @@ return;
                                 <button
                                     type="button"
                                     onClick={handleRemoveImage}
-                                    className="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white text-xs hover:bg-black/80"
+                                    className="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-xs text-white hover:bg-black/80"
                                 >
                                     ✕
                                 </button>
@@ -254,7 +260,9 @@ return;
                                 size="sm"
                                 onClick={() => fileInputRef.current?.click()}
                             >
-                                {displayPreview ? 'تغيير الصورة' : 'اختيار صورة'}
+                                {displayPreview
+                                    ? 'تغيير الصورة'
+                                    : 'اختيار صورة'}
                             </Button>
                         </div>
                         <input
@@ -284,7 +292,7 @@ return;
                             onChange={(e) => setData('color', e.target.value)}
                             className="h-9 w-14 cursor-pointer p-1"
                         />
-                        <span className="text-xs text-muted-foreground font-mono">
+                        <span className="font-mono text-xs text-muted-foreground">
                             {data.color ?? '—'}
                         </span>
                     </div>
@@ -295,14 +303,18 @@ return;
                     <Label htmlFor="icon">الأيقونة</Label>
                     <Select
                         value={data.icon ?? 'null'}
-                        onValueChange={(val) => setData('icon', val === 'null' ? null : val)}
+                        onValueChange={(val) =>
+                            setData('icon', val === 'null' ? null : val)
+                        }
                     >
                         <SelectTrigger id="icon" className="w-full">
                             <SelectValue placeholder="اختر أيقونة">
                                 {data.icon && COMPETITION_ICONS[data.icon] && (
                                     <span className="flex items-center gap-2">
                                         {(() => {
-                                            const Icon = COMPETITION_ICONS[data.icon].icon;
+                                            const Icon =
+                                                COMPETITION_ICONS[data.icon]
+                                                    .icon;
 
                                             return <Icon className="h-4 w-4" />;
                                         })()}
@@ -344,10 +356,13 @@ return;
                         id="start_date"
                         type="datetime-local"
                         value={data.start_date ?? ''}
-                        onChange={(e) => setData('start_date', e.target.value || null)}
+                        onChange={(e) =>
+                            setData('start_date', e.target.value || null)
+                        }
                     />
                     <p className="text-xs text-muted-foreground">
-                        اترك فارغاً لبدء فوري. قبل هذا التاريخ تظهر المسابقة كـ "قريباً".
+                        اترك فارغاً لبدء فوري. قبل هذا التاريخ تظهر المسابقة كـ
+                        "قريباً".
                     </p>
                     <InputError message={errors.start_date} />
                 </div>
@@ -358,10 +373,13 @@ return;
                         id="end_date"
                         type="datetime-local"
                         value={data.end_date ?? ''}
-                        onChange={(e) => setData('end_date', e.target.value || null)}
+                        onChange={(e) =>
+                            setData('end_date', e.target.value || null)
+                        }
                     />
                     <p className="text-xs text-muted-foreground">
-                        اترك فارغاً لمسابقة مفتوحة. بعد هذا التاريخ تظهر كـ "منتهية".
+                        اترك فارغاً لمسابقة مفتوحة. بعد هذا التاريخ تظهر كـ
+                        "منتهية".
                     </p>
                     <InputError message={errors.end_date} />
                 </div>
@@ -372,17 +390,21 @@ return;
                 <Label htmlFor="description">الوصف</Label>
                 <textarea
                     id="description"
-                    className="border-input placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground flex h-20 w-full min-w-0 rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] md:text-sm"
+                    className="flex h-20 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 md:text-sm"
                     value={data.description ?? ''}
-                    onChange={(e) => setData('description', e.target.value || null)}
+                    onChange={(e) =>
+                        setData('description', e.target.value || null)
+                    }
                 />
                 <InputError message={errors.description} />
             </div>
 
             {/* أزرار الإرسال */}
-            <div className="flex flex-col items-center gap-4 pt-4 border-t sm:flex-row sm:justify-between">
+            <div className="flex flex-col items-center gap-4 border-t pt-4 sm:flex-row sm:justify-between">
                 <span className="text-sm text-muted-foreground">
-                    {submitLabel === 'إنشاء المسابقة' ? 'إضافة مسابقة جديدة' : 'تحديث بيانات المسابقة'}
+                    {submitLabel === 'إنشاء المسابقة'
+                        ? 'إضافة مسابقة جديدة'
+                        : 'تحديث بيانات المسابقة'}
                 </span>
                 <div className="flex w-full gap-3 sm:w-auto">
                     <Button

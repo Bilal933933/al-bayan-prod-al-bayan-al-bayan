@@ -5,17 +5,35 @@ import type { Competition } from '@/types/competition';
 
 function formatDate(dateStr: string | null | undefined): string | null {
     if (!dateStr) {
-return null;
-}
+        return null;
+    }
 
     const d = new Date(dateStr);
-    const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+    const months = [
+        'يناير',
+        'فبراير',
+        'مارس',
+        'أبريل',
+        'مايو',
+        'يونيو',
+        'يوليو',
+        'أغسطس',
+        'سبتمبر',
+        'أكتوبر',
+        'نوفمبر',
+        'ديسمبر',
+    ];
 
     return `${d.getUTCDate()} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
 }
 
-function getStatusLabel(competition: Competition): { label: string; className: string } | null {
-    if (competition.start_date && new Date(competition.start_date) > new Date()) {
+function getStatusLabel(
+    competition: Competition,
+): { label: string; className: string } | null {
+    if (
+        competition.start_date &&
+        new Date(competition.start_date) > new Date()
+    ) {
         return { label: 'قريباً', className: 'bg-amber-400/20 text-amber-300' };
     }
 
@@ -45,11 +63,14 @@ export default function CompetitionShowHero({
     competition: Competition;
 }) {
     const themeColor = competition.color ?? '#4f46e5';
-    const iconEntry = competition.icon ? COMPETITION_ICONS[competition.icon] : null;
+    const iconEntry = competition.icon
+        ? COMPETITION_ICONS[competition.icon]
+        : null;
     const Icon = iconEntry?.icon;
 
     return (
-        <div className="relative overflow-hidden bg-foreground py-12 sm:py-16"
+        <div
+            className="relative overflow-hidden bg-foreground py-12 sm:py-16"
             style={{
                 background: `linear-gradient(160deg, ${hexToRgba(themeColor, 0.35)}, ${hexToRgba(themeColor, 0.08)} 60%, transparent 100%), linear-gradient(180deg, var(--brand-ink) 0%, var(--brand-ink-deep) 100%)`,
             }}
@@ -61,7 +82,8 @@ export default function CompetitionShowHero({
                 }}
             />
 
-            <div className="absolute -top-20 -end-20 h-64 w-64 rounded-full opacity-10 blur-3xl"
+            <div
+                className="absolute -end-20 -top-20 h-64 w-64 rounded-full opacity-10 blur-3xl"
                 style={{ background: themeColor }}
             />
 
@@ -75,9 +97,7 @@ export default function CompetitionShowHero({
                                 className="h-20 w-20 shrink-0 rounded-2xl border-2 border-white/20 object-cover shadow-lg sm:h-24 sm:w-24"
                             />
                         ) : (
-                            <div
-                                className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-white/90 shadow-xl backdrop-blur-sm ring-1 ring-white/10 sm:h-24 sm:w-24"
-                            >
+                            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-white/90 shadow-xl ring-1 ring-white/10 backdrop-blur-sm sm:h-24 sm:w-24">
                                 {Icon ? (
                                     <Icon className="h-10 w-10" />
                                 ) : (
@@ -91,27 +111,41 @@ export default function CompetitionShowHero({
                                 {competition.name}
                             </h1>
                             {competition.description && (
-                                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/60 line-clamp-2 sm:line-clamp-none">
+                                <p className="mt-2 line-clamp-2 max-w-2xl text-sm leading-relaxed text-white/60 sm:line-clamp-none">
                                     {competition.description}
                                 </p>
                             )}
                             <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
-                                <span className="font-mono text-white/60" dir="ltr">#{competition.code}</span>
-                                <span className={cn(
-                                    'rounded-full px-2 py-0.5 text-[10px] font-medium',
-                                    competition.is_active ? 'bg-white/15 text-white/80' : 'bg-white/10 text-white/50',
-                                )}>
+                                <span
+                                    className="font-mono text-white/60"
+                                    dir="ltr"
+                                >
+                                    #{competition.code}
+                                </span>
+                                <span
+                                    className={cn(
+                                        'rounded-full px-2 py-0.5 text-[10px] font-medium',
+                                        competition.is_active
+                                            ? 'bg-white/15 text-white/80'
+                                            : 'bg-white/10 text-white/50',
+                                    )}
+                                >
                                     {competition.is_active ? 'نشط' : 'غير نشط'}
                                 </span>
                                 {(() => {
                                     const status = getStatusLabel(competition);
 
                                     if (!status) {
-return null;
-}
+                                        return null;
+                                    }
 
                                     return (
-                                        <span className={cn('flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium', status.className)}>
+                                        <span
+                                            className={cn(
+                                                'flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium',
+                                                status.className,
+                                            )}
+                                        >
                                             <Calendar className="h-3 w-3" />
                                             {status.label}
                                         </span>

@@ -18,21 +18,25 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'إنشاء', href: competitions.create() },
 ];
 
-export default function Create({ availableParents, defaultParentId }: CreateProps) {
-    const { data, setData, post, processing, errors } = useForm<CompetitionFormData>({
-        parent_id: defaultParentId ?? null,
-        classification: 'standalone',
-        order: 0,
-        code: '',
-        name: '',
-        image: null,
-        color: null,
-        icon: null,
-        description: null,
-        is_active: true,
-        start_date: null,
-        end_date: null,
-    });
+export default function Create({
+    availableParents,
+    defaultParentId,
+}: CreateProps) {
+    const { data, setData, post, processing, errors } =
+        useForm<CompetitionFormData>({
+            parent_id: defaultParentId ?? null,
+            classification: 'standalone',
+            order: 0,
+            code: '',
+            name: '',
+            image: null,
+            color: null,
+            icon: null,
+            description: null,
+            is_active: true,
+            start_date: null,
+            end_date: null,
+        });
 
     function submit(e: React.FormEvent) {
         e.preventDefault();

@@ -7,9 +7,18 @@ import { Skeleton } from '@/components/ui/skeleton';
 import type { AttemptQuestion } from '@/types/attempt';
 
 const difficultyStyles: Record<string, { label: string; class: string }> = {
-    easy: { label: 'سهل', class: 'bg-success/10 text-success border-success/30' },
-    medium: { label: 'متوسط', class: 'bg-warning/10 text-warning border-warning/30' },
-    hard: { label: 'صعب', class: 'bg-destructive/10 text-destructive border-destructive/30' },
+    easy: {
+        label: 'سهل',
+        class: 'bg-success/10 text-success border-success/30',
+    },
+    medium: {
+        label: 'متوسط',
+        class: 'bg-warning/10 text-warning border-warning/30',
+    },
+    hard: {
+        label: 'صعب',
+        class: 'bg-destructive/10 text-destructive border-destructive/30',
+    },
 };
 
 const optionLetters = ['أ', 'ب', 'ج', 'د', 'ه', 'و'];
@@ -23,19 +32,33 @@ interface QuestionCardProps {
     onSelectOption: (optionId: number) => void;
 }
 
-export function QuestionCard({ question, questionIndex, totalQuestions, isLocked, isLoading, onSelectOption }: QuestionCardProps) {
+export function QuestionCard({
+    question,
+    questionIndex,
+    totalQuestions,
+    isLocked,
+    isLoading,
+    onSelectOption,
+}: QuestionCardProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [showReport, setShowReport] = useState(false);
 
     useEffect(() => {
         if (question && containerRef.current) {
-            containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            containerRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+            });
         }
     }, [question]);
 
     if (isLoading || !question) {
         return (
-            <div ref={containerRef} className="space-y-6" aria-label="جاري تحميل السؤال">
+            <div
+                ref={containerRef}
+                className="space-y-6"
+                aria-label="جاري تحميل السؤال"
+            >
                 <div className="flex items-center gap-2">
                     <Skeleton className="h-5 w-24" />
                     <Skeleton className="h-5 w-14" />
@@ -50,7 +73,10 @@ export function QuestionCard({ question, questionIndex, totalQuestions, isLocked
         );
     }
 
-    const difficultyInfo = difficultyStyles[question.question.difficulty] ?? { label: question.question.difficulty, class: '' };
+    const difficultyInfo = difficultyStyles[question.question.difficulty] ?? {
+        label: question.question.difficulty,
+        class: '',
+    };
 
     return (
         <div
@@ -63,7 +89,10 @@ export function QuestionCard({ question, questionIndex, totalQuestions, isLocked
                 <Badge variant="outline" className="shrink-0">
                     سؤال {questionIndex + 1} من {totalQuestions}
                 </Badge>
-                <Badge variant="outline" className={`shrink-0 ${difficultyInfo.class}`}>
+                <Badge
+                    variant="outline"
+                    className={`shrink-0 ${difficultyInfo.class}`}
+                >
                     {difficultyInfo.label}
                 </Badge>
                 {isLocked && (
@@ -87,7 +116,11 @@ export function QuestionCard({ question, questionIndex, totalQuestions, isLocked
                 إبلاغ عن مشكلة
             </button>
 
-            <div className="space-y-3" role="radiogroup" aria-label="اختر الإجابة الصحيحة">
+            <div
+                className="space-y-3"
+                role="radiogroup"
+                aria-label="اختر الإجابة الصحيحة"
+            >
                 {question.question.options?.map((option, index) => (
                     <OptionCard
                         key={option.id}

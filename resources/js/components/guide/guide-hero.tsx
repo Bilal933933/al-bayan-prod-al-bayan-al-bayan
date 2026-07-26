@@ -37,14 +37,19 @@ export function GuideHero({
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
-            className={cn('relative overflow-hidden rounded-2xl border bg-gradient-to-br from-card via-card to-primary/5 p-8 shadow-sm md:p-12', className)}
+            className={cn(
+                'relative overflow-hidden rounded-2xl border bg-gradient-to-br from-card via-card to-primary/5 p-8 shadow-sm md:p-12',
+                className,
+            )}
         >
-            <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
+            <div className="absolute -top-20 -right-20 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
             <div className="absolute -bottom-20 -left-20 h-32 w-32 rounded-full bg-primary/5 blur-3xl" />
 
             <div className="relative space-y-6">
                 <div className="space-y-2">
-                    <h1 className="text-3xl font-bold tracking-tight md:text-4xl">{title}</h1>
+                    <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
+                        {title}
+                    </h1>
                     <p className="max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
                         {description}
                     </p>
@@ -53,19 +58,28 @@ export function GuideHero({
                 {(stepsCount || readTime || lastReviewed) && (
                     <div className="flex flex-wrap items-center gap-3">
                         {stepsCount && (
-                            <Badge variant="secondary" className="gap-1.5 px-3 py-1">
+                            <Badge
+                                variant="secondary"
+                                className="gap-1.5 px-3 py-1"
+                            >
                                 <FileText className="size-3.5" />
                                 {stepsCount} مرحلة
                             </Badge>
                         )}
                         {readTime && (
-                            <Badge variant="secondary" className="gap-1.5 px-3 py-1">
+                            <Badge
+                                variant="secondary"
+                                className="gap-1.5 px-3 py-1"
+                            >
                                 <Clock className="size-3.5" />
                                 {readTime}
                             </Badge>
                         )}
                         {lastReviewed && (
-                            <Badge variant="outline" className="gap-1.5 px-3 py-1">
+                            <Badge
+                                variant="outline"
+                                className="gap-1.5 px-3 py-1"
+                            >
                                 <Calendar className="size-3.5" />
                                 آخر مراجعة {lastReviewed}
                             </Badge>
@@ -82,7 +96,9 @@ export function GuideHero({
                         )}
                         {secondaryCta && (
                             <Button asChild variant="outline">
-                                <a href={secondaryCta.href}>{secondaryCta.label}</a>
+                                <a href={secondaryCta.href}>
+                                    {secondaryCta.label}
+                                </a>
                             </Button>
                         )}
                     </div>

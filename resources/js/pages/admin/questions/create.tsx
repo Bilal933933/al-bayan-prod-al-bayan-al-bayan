@@ -18,18 +18,19 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Create({ topics }: CreateProps) {
-    const { data, setData, post, processing, errors } = useForm<QuestionFormData>({
-        topic_id: '',
-        type: 'mcq',
-        text: '',
-        difficulty: 'medium',
-        explanation: null,
-        is_active: true,
-        options: [
-            { text: '', is_correct: false },
-            { text: '', is_correct: false },
-        ],
-    });
+    const { data, setData, post, processing, errors } =
+        useForm<QuestionFormData>({
+            topic_id: '',
+            type: 'mcq',
+            text: '',
+            difficulty: 'medium',
+            explanation: null,
+            is_active: true,
+            options: [
+                { text: '', is_correct: false },
+                { text: '', is_correct: false },
+            ],
+        });
 
     function submit(e: React.FormEvent) {
         e.preventDefault();

@@ -33,16 +33,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Student profile route
     Route::get('profile', [ProfileController::class, 'index'])->name('student.profile');
 
-    // Student competition routes
+    // Student competition routes (POST actions only — GET routes are public in web.php)
     Route::prefix('competitions')->name('student.competitions.')->group(function () {
-        Route::get('/', [CompetitionController::class, 'index'])->name('index');
-        Route::get('/{competition}', [CompetitionController::class, 'show'])->name('show')->missing(fn () => Inertia::render('ErrorPage', [
-            'status' => 404,
-            'title' => 'المسابقة غير موجودة',
-            'description' => 'عذراً، المسابقة التي تبحث عنها غير متوفرة أو قد تم حذفها',
-            'actionLabel' => 'تصفح المسابقات',
-            'actionHref' => route('student.competitions.index'),
-        ]));
         Route::get('/{competition}/join', [JoinCompetitionController::class, 'index'])->name('join')->missing(fn () => Inertia::render('ErrorPage', [
             'status' => 404,
             'title' => 'المسابقة غير موجودة',
@@ -66,16 +58,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ]));
     });
 
-    // Student topic routes (free training hub)
+    // Student topic routes (POST actions only — GET routes are public in web.php)
     Route::prefix('topics')->name('student.topics.')->group(function () {
-        Route::get('/', [TopicController::class, 'index'])->name('index');
-        Route::get('/{topic}', [TopicController::class, 'show'])->name('show')->missing(fn () => Inertia::render('ErrorPage', [
-            'status' => 404,
-            'title' => 'المحور غير موجود',
-            'description' => 'عذراً، المحور التدريبي الذي تبحث عنه غير متوفر',
-            'actionLabel' => 'التدريب الحر',
-            'actionHref' => route('student.topics.index'),
-        ]));
         Route::post('/{topic}/attempts', [AttemptController::class, 'startPractice'])->name('attempts.start')->missing(fn () => Inertia::render('ErrorPage', [
             'status' => 404,
             'title' => 'المحور غير موجود',

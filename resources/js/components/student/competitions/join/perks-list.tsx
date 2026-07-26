@@ -16,7 +16,10 @@ export default function PerksList() {
             </h3>
             <ul className="space-y-3">
                 {PERKS.map((perk, idx) => (
-                    <li key={idx} className="flex items-start gap-3 text-sm font-medium text-slate-600">
+                    <li
+                        key={idx}
+                        className="flex items-start gap-3 text-sm font-medium text-slate-600"
+                    >
                         <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
                         <span>{perk}</span>
                     </li>

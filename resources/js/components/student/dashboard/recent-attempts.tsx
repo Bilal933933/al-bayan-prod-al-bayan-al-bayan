@@ -18,7 +18,10 @@ export function RecentAttempts({ attempts: items }: RecentAttemptsProps) {
             transition={{ duration: 0.5, delay: 0.2 }}
         >
             {items.length > 0 && (
-                <SectionHeader title="آخر المحاولات" href={attempts.index().url} />
+                <SectionHeader
+                    title="آخر المحاولات"
+                    href={attempts.index().url}
+                />
             )}
 
             {items.length > 0 ? (
@@ -32,13 +35,19 @@ export function RecentAttempts({ attempts: items }: RecentAttemptsProps) {
                         >
                             <AttemptCard
                                 attempt={attempt}
-                                href={attempts.show({ attempt: attempt.id }).url}
+                                href={
+                                    attempts.show({ attempt: attempt.id }).url
+                                }
                             />
                         </motion.div>
                     ))}
                 </div>
             ) : (
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.4 }}>
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.4 }}
+                >
                     <EmptyState
                         icon={Layers}
                         title="لا توجد محاولات سابقة"

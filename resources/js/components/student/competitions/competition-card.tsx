@@ -25,16 +25,33 @@ const CLASSIFICATION_LABELS: Record<string, string> = {
 function formatDate(dateStr: string): string {
     const date = new Date(dateStr);
 
-    return date.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+    return date.toLocaleDateString('ar-EG', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
 }
 
-function getStatusBadge(competition: Competition): { label: string; className: string; icon: typeof Clock } | null {
-    if (competition.start_date && new Date(competition.start_date) > new Date()) {
-        return { label: 'قريباً', className: 'bg-amber-100 text-amber-700', icon: Clock };
+function getStatusBadge(
+    competition: Competition,
+): { label: string; className: string; icon: typeof Clock } | null {
+    if (
+        competition.start_date &&
+        new Date(competition.start_date) > new Date()
+    ) {
+        return {
+            label: 'قريباً',
+            className: 'bg-amber-100 text-amber-700',
+            icon: Clock,
+        };
     }
 
     if (competition.end_date && new Date(competition.end_date) < new Date()) {
-        return { label: 'منتهية', className: 'bg-red-100 text-red-700', icon: Ban };
+        return {
+            label: 'منتهية',
+            className: 'bg-red-100 text-red-700',
+            icon: Ban,
+        };
     }
 
     return null;
@@ -57,15 +74,22 @@ export default function CompetitionCard({
     const content = (
         <motion.div
             variants={cardVariants}
-            whileHover={isBlocked ? undefined : { y: -6, transition: { duration: 0.2, ease: 'easeOut' } }}
+            whileHover={
+                isBlocked
+                    ? undefined
+                    : { y: -6, transition: { duration: 0.2, ease: 'easeOut' } }
+            }
         >
             <div
                 className={cn(
                     'group relative block overflow-hidden rounded-xl border bg-card shadow-sm transition-all duration-300',
                     !isBlocked && 'hover:shadow-lg',
-                    competition.classification === 'container' && 'border-primary/20 hover:border-primary/40 hover:shadow-primary/10',
-                    competition.classification === 'standalone' && 'border-secondary/20 hover:border-secondary/40 hover:shadow-secondary/10',
-                    competition.classification === 'child' && 'border-muted/20 hover:border-muted-foreground/30',
+                    competition.classification === 'container' &&
+                        'border-primary/20 hover:border-primary/40 hover:shadow-primary/10',
+                    competition.classification === 'standalone' &&
+                        'border-secondary/20 hover:border-secondary/40 hover:shadow-secondary/10',
+                    competition.classification === 'child' &&
+                        'border-muted/20 hover:border-muted-foreground/30',
                     isBlocked && 'opacity-60',
                 )}
             >
@@ -91,12 +115,16 @@ export default function CompetitionCard({
                     <div className="flex items-start gap-4">
                         <div
                             className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
-                            style={competition.color ? {
-                                backgroundColor: `${competition.color}18`,
-                                color: competition.color,
-                            } : {
-                                backgroundColor: 'hsl(var(--muted))',
-                            }}
+                            style={
+                                competition.color
+                                    ? {
+                                          backgroundColor: `${competition.color}18`,
+                                          color: competition.color,
+                                      }
+                                    : {
+                                          backgroundColor: 'hsl(var(--muted))',
+                                      }
+                            }
                         >
                             {Icon ? (
                                 <Icon className="h-6 w-6 transition-transform duration-300 group-hover:rotate-6" />
@@ -110,9 +138,14 @@ export default function CompetitionCard({
                                 <h3 className="truncate text-base font-semibold transition-colors group-hover:text-primary">
                                     {competition.name}
                                 </h3>
-                                <ClassificationBadge classification={competition.classification} />
+                                <ClassificationBadge
+                                    classification={competition.classification}
+                                />
                             </div>
-                            <p className="mt-1 font-mono text-xs text-muted-foreground" dir="ltr">
+                            <p
+                                className="mt-1 font-mono text-xs text-muted-foreground"
+                                dir="ltr"
+                            >
                                 {competition.code}
                             </p>
                         </div>
@@ -128,31 +161,39 @@ export default function CompetitionCard({
                         <span className="flex items-center gap-1.5">
                             <span
                                 className="inline-block h-2.5 w-2.5 rounded-full"
-                                style={{ backgroundColor: competition.color || 'currentColor' }}
+                                style={{
+                                    backgroundColor:
+                                        competition.color || 'currentColor',
+                                }}
                             />
-                            {CLASSIFICATION_LABELS[competition.classification] ?? competition.classification}
+                            {CLASSIFICATION_LABELS[
+                                competition.classification
+                            ] ?? competition.classification}
                         </span>
 
-                        {competition.topics_count !== undefined && competition.topics_count > 0 && (
-                            <span className="flex items-center gap-1.5">
-                                <BookOpen className="h-4 w-4" />
-                                {competition.topics_count} محاور
-                            </span>
-                        )}
+                        {competition.topics_count !== undefined &&
+                            competition.topics_count > 0 && (
+                                <span className="flex items-center gap-1.5">
+                                    <BookOpen className="h-4 w-4" />
+                                    {competition.topics_count} محاور
+                                </span>
+                            )}
 
-                        {competition.users_count !== undefined && competition.users_count > 0 && (
-                            <span className="flex items-center gap-1.5">
-                                <Eye className="h-4 w-4" />
-                                {competition.users_count} طالب
-                            </span>
-                        )}
+                        {competition.users_count !== undefined &&
+                            competition.users_count > 0 && (
+                                <span className="flex items-center gap-1.5">
+                                    <Eye className="h-4 w-4" />
+                                    {competition.users_count} طالب
+                                </span>
+                            )}
 
-                        {competition.children_count !== undefined && competition.children_count > 0 && (
-                            <span className="flex items-center gap-1.5">
-                                <Eye className="h-4 w-4" />
-                                {competition.children_count}
-                            </span>
-                        )}
+                        {competition.children_count !== undefined &&
+                            competition.children_count > 0 && (
+                                <span className="flex items-center gap-1.5">
+                                    <Eye className="h-4 w-4" />
+                                    {competition.children_count}
+                                </span>
+                            )}
 
                         {competition.start_date && (
                             <span className="flex items-center gap-1.5">
@@ -162,7 +203,12 @@ export default function CompetitionCard({
                         )}
 
                         {statusBadge && (
-                            <span className={cn('mr-auto flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium', statusBadge.className)}>
+                            <span
+                                className={cn(
+                                    'mr-auto flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium',
+                                    statusBadge.className,
+                                )}
+                            >
                                 <statusBadge.icon className="h-3.5 w-3.5" />
                                 {statusBadge.label}
                             </span>

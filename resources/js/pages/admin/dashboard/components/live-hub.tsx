@@ -14,11 +14,13 @@ interface LiveHubProps {
 
 export function LiveHub({ attempts, distribution }: LiveHubProps) {
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
             <div className="lg:col-span-7">
                 <Card className="h-full">
                     <CardHeader>
-                        <CardTitle className="text-base">آخر المحاولات الحية</CardTitle>
+                        <CardTitle className="text-base">
+                            آخر المحاولات الحية
+                        </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <AttemptList attempts={attempts} />
@@ -29,7 +31,9 @@ export function LiveHub({ attempts, distribution }: LiveHubProps) {
             <div className="lg:col-span-5">
                 <Card className="h-full">
                     <CardHeader>
-                        <CardTitle className="text-base">توزيع صعوبة الأسئلة</CardTitle>
+                        <CardTitle className="text-base">
+                            توزيع صعوبة الأسئلة
+                        </CardTitle>
                     </CardHeader>
                     <CardContent className="flex items-center justify-center">
                         <DifficultyChart distribution={distribution} />

@@ -15,7 +15,11 @@ interface GuideChecklistProps {
     className?: string;
 }
 
-export function GuideChecklist({ items, onChange, className }: GuideChecklistProps) {
+export function GuideChecklist({
+    items,
+    onChange,
+    className,
+}: GuideChecklistProps) {
     return (
         <div className={cn('space-y-2', className)}>
             {items.map((item, index) => (
@@ -44,7 +48,13 @@ export function GuideChecklist({ items, onChange, className }: GuideChecklistPro
                     >
                         {item.checked && <Check className="size-3" />}
                     </span>
-                    <span className={cn(item.checked && 'line-through opacity-70')}>{item.text}</span>
+                    <span
+                        className={cn(
+                            item.checked && 'line-through opacity-70',
+                        )}
+                    >
+                        {item.text}
+                    </span>
                 </motion.button>
             ))}
         </div>

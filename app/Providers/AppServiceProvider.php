@@ -5,14 +5,19 @@ namespace App\Providers;
 use App\Contracts\Repositories\QuestionRepositoryInterface;
 use App\Contracts\Services\AttemptCreationServiceInterface;
 use App\Contracts\Services\ExamGradingServiceInterface;
+use App\Contracts\Services\LeaderboardServiceInterface;
+use App\Contracts\Services\PlatformInsightsServiceInterface;
 use App\Contracts\Services\QuestionImportServiceInterface;
 use App\Models\Attempt;
 use App\Policies\AttemptPolicy;
 use App\Repositories\QuestionRepository;
 use App\Services\AttemptCreationService;
 use App\Services\ExamGradingService;
+use App\Services\LeaderboardService;
+use App\Services\PlatformInsightsService;
 use App\Services\QuestionImportService;
 use Carbon\CarbonImmutable;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -30,6 +35,8 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(ExamGradingServiceInterface::class, ExamGradingService::class);
         $this->app->bind(AttemptCreationServiceInterface::class, AttemptCreationService::class);
+        $this->app->bind(LeaderboardServiceInterface::class, LeaderboardService::class);
+        $this->app->bind(PlatformInsightsServiceInterface::class, PlatformInsightsService::class);
         $this->app->bind(QuestionRepositoryInterface::class, QuestionRepository::class);
         $this->app->bind(QuestionImportServiceInterface::class, QuestionImportService::class);
     }
@@ -39,6 +46,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        JsonResource::withoutWrapping();
+
         Gate::policy(Attempt::class, AttemptPolicy::class);
 
         $this->configureDefaults();

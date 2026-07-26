@@ -10,7 +10,11 @@ import type { LeaderboardPageProps } from '@/types/leaderboard';
 
 const pageVariants = {
     hidden: { opacity: 0, y: 15 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0, 0, 0.2, 1] as const } },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.4, ease: [0, 0, 0.2, 1] as const },
+    },
 };
 
 const containerVariants = {
@@ -21,7 +25,13 @@ const containerVariants = {
     },
 };
 
-export default function LeaderboardPage({ podium, rankings, currentUser, periods, currentPeriod }: LeaderboardPageProps) {
+export default function LeaderboardPage({
+    podium,
+    rankings,
+    currentUser,
+    periods,
+    currentPeriod,
+}: LeaderboardPageProps) {
     function handlePeriodChange(key: string) {
         router.reload({
             data: { period: key },
@@ -43,13 +53,21 @@ export default function LeaderboardPage({ podium, rankings, currentUser, periods
                 <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2">
                         <Medal className="h-6 w-6 text-amber-500" />
-                        <h1 className="text-2xl font-bold text-foreground">المتصدرين</h1>
+                        <h1 className="text-2xl font-bold text-foreground">
+                            المتصدرين
+                        </h1>
                     </div>
-                    <p className="text-sm text-muted-foreground">ترتيب الطلاب في المسابقات</p>
+                    <p className="text-sm text-muted-foreground">
+                        ترتيب الطلاب في المسابقات
+                    </p>
                 </div>
 
                 {/* Period Filter */}
-                <FilterTabs periods={periods} currentPeriod={currentPeriod} onChange={handlePeriodChange} />
+                <FilterTabs
+                    periods={periods}
+                    currentPeriod={currentPeriod}
+                    onChange={handlePeriodChange}
+                />
 
                 {/* Podium Section */}
                 {podium.length > 0 && (
@@ -58,7 +76,11 @@ export default function LeaderboardPage({ podium, rankings, currentUser, periods
                             <PodiumCard entry={podium[1] ?? null} rank={2} />
                         </div>
                         <div className="order-2 w-full md:order-2 md:max-w-[220px]">
-                            <PodiumCard entry={podium[0] ?? null} rank={1} isFirst />
+                            <PodiumCard
+                                entry={podium[0] ?? null}
+                                rank={1}
+                                isFirst
+                            />
                         </div>
                         <div className="order-3 w-full md:max-w-[200px]">
                             <PodiumCard entry={podium[2] ?? null} rank={3} />
@@ -68,13 +90,25 @@ export default function LeaderboardPage({ podium, rankings, currentUser, periods
 
                 {/* Rankings List */}
                 {rankings.length > 0 ? (
-                    <motion.div variants={containerVariants} initial="hidden" animate="visible" className="flex flex-col gap-3">
+                    <motion.div
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                        className="flex flex-col gap-3"
+                    >
                         {rankings.map((entry) => (
                             <motion.div
                                 key={entry.rank}
                                 variants={{
                                     hidden: { opacity: 0, y: 12 },
-                                    visible: { opacity: 1, y: 0, transition: { duration: 0.25, ease: 'easeOut' } },
+                                    visible: {
+                                        opacity: 1,
+                                        y: 0,
+                                        transition: {
+                                            duration: 0.25,
+                                            ease: 'easeOut',
+                                        },
+                                    },
                                 }}
                             >
                                 <RankingRow entry={entry} />
@@ -84,7 +118,9 @@ export default function LeaderboardPage({ podium, rankings, currentUser, periods
                 ) : (
                     <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed py-12 text-center">
                         <Medal className="h-10 w-10 text-muted-foreground/30" />
-                        <p className="text-muted-foreground">لا توجد نتائج بعد</p>
+                        <p className="text-muted-foreground">
+                            لا توجد نتائج بعد
+                        </p>
                         <p className="max-w-xs text-sm text-muted-foreground/60">
                             ابدأ بحل الاختبارات لتظهر في لوحة المتصدرين
                         </p>
@@ -98,7 +134,5 @@ export default function LeaderboardPage({ podium, rankings, currentUser, periods
 }
 
 LeaderboardPage.layout = {
-    breadcrumbs: [
-        { title: 'المتصدرين', href: leaderboard() },
-    ],
+    breadcrumbs: [{ title: 'المتصدرين', href: leaderboard() }],
 };

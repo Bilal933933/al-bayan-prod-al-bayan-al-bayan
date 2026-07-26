@@ -18,15 +18,20 @@ interface ReportDialogProps {
     questionText: string;
 }
 
-export function ReportDialog({ open, onOpenChange, questionId, questionText }: ReportDialogProps) {
+export function ReportDialog({
+    open,
+    onOpenChange,
+    questionId,
+    questionText,
+}: ReportDialogProps) {
     const [type, setType] = useState<string | null>(null);
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = () => {
         if (!type || description.length < 10) {
-return;
-}
+            return;
+        }
 
         setLoading(true);
         router.post(
@@ -44,8 +49,8 @@ return;
                     const messages = Object.values(errors);
 
                     if (messages.length > 0) {
-toast.error(messages[0]);
-}
+                        toast.error(messages[0]);
+                    }
 
                     setLoading(false);
                 },
@@ -56,7 +61,11 @@ toast.error(messages[0]);
     const typeOptions = [
         { value: 'wrong_answer', emoji: '❌', label: 'خطأ في الإجابة' },
         { value: 'text_error', emoji: '✏️', label: 'مشكلة في النص' },
-        { value: 'inappropriate_content', emoji: '🚫', label: 'محتوى غير مناسب' },
+        {
+            value: 'inappropriate_content',
+            emoji: '🚫',
+            label: 'محتوى غير مناسب',
+        },
         { value: 'technical', emoji: '🐛', label: 'مشكلة تقنية' },
         { value: 'suggestion', emoji: '💡', label: 'اقتراح تحسين' },
         { value: 'other', emoji: '📝', label: 'أخرى' },
@@ -81,7 +90,8 @@ toast.error(messages[0]);
 
                     <div>
                         <label className="mb-1.5 block text-xs font-bold text-muted-foreground">
-                            نوع المشكلة <span className="text-destructive">*</span>
+                            نوع المشكلة{' '}
+                            <span className="text-destructive">*</span>
                         </label>
                         <div className="grid grid-cols-2 gap-2">
                             {typeOptions.map((opt) => (
@@ -104,14 +114,15 @@ toast.error(messages[0]);
 
                     <div>
                         <label className="mb-1.5 block text-xs font-bold text-muted-foreground">
-                            وصف المشكلة <span className="text-destructive">*</span>
+                            وصف المشكلة{' '}
+                            <span className="text-destructive">*</span>
                         </label>
                         <textarea
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="اشرح المشكلة بالتفصيل..."
                             rows={3}
-                            className="w-full resize-none rounded-xl border border-border bg-muted p-3 text-sm text-foreground outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary"
+                            className="w-full resize-none rounded-xl border border-border bg-muted p-3 text-sm text-foreground transition-all outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                         />
                         <div className="mt-1 text-left text-xs text-muted-foreground">
                             {description.length} / 2000

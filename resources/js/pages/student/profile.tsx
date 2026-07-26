@@ -17,12 +17,25 @@ interface ProfilePageProps {
 
 const pageVariants = {
     hidden: { opacity: 0, y: 15 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0, 0, 0.2, 1] as const } },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.4, ease: [0, 0, 0.2, 1] as const },
+    },
 };
 
 export default function ProfilePage({ profileData }: ProfilePageProps) {
     const [activeTab, setActiveTab] = useState('overview');
-    const { user, stats, streak_days, total_points, monthly_scores, topic_progress, badges, achievements } = profileData;
+    const {
+        user,
+        stats,
+        streak_days,
+        total_points,
+        monthly_scores,
+        topic_progress,
+        badges,
+        achievements,
+    } = profileData;
 
     return (
         <>
@@ -72,7 +85,9 @@ export default function ProfilePage({ profileData }: ProfilePageProps) {
                     <div className="rounded-2xl border bg-card p-12 shadow-xs">
                         <div className="text-center text-muted-foreground">
                             <div className="mb-3 text-5xl">📅</div>
-                            <div className="mb-1 font-semibold">سجل النشاطات</div>
+                            <div className="mb-1 font-semibold">
+                                سجل النشاطات
+                            </div>
                             <div className="text-sm">قريباً</div>
                         </div>
                     </div>
@@ -83,7 +98,5 @@ export default function ProfilePage({ profileData }: ProfilePageProps) {
 }
 
 ProfilePage.layout = {
-    breadcrumbs: [
-        { title: 'الملف الشخصي', href: profile() },
-    ],
+    breadcrumbs: [{ title: 'الملف الشخصي', href: profile() }],
 };

@@ -1,6 +1,13 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Search, Layers, FolderOpen, FileText, Trophy, GraduationCap } from 'lucide-react';
+import {
+    Search,
+    Layers,
+    FolderOpen,
+    FileText,
+    Trophy,
+    GraduationCap,
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 import CompetitionTable from '@/components/admin/competitions/competition-table';
 import Heading from '@/components/heading';
@@ -44,15 +51,34 @@ const pageVariants = {
 
 const statVariants = {
     hidden: { opacity: 0, y: 10 },
-    visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.05, duration: 0.25 } }),
+    visible: (i: number) => ({
+        opacity: 1,
+        y: 0,
+        transition: { delay: i * 0.05, duration: 0.25 },
+    }),
 };
 
 const statCards = [
     { icon: Trophy, label: 'إجمالي', key: 'total' as const, color: '#3b82f6' },
     { icon: FileText, label: 'نشط', key: 'active' as const, color: '#22c55e' },
-    { icon: FolderOpen, label: 'حاويات', key: 'containers' as const, color: '#f59e0b' },
-    { icon: Layers, label: 'مستقلة', key: 'standalone' as const, color: '#8b5cf6' },
-    { icon: GraduationCap, label: 'أبناء', key: 'children' as const, color: '#f43f5e' },
+    {
+        icon: FolderOpen,
+        label: 'حاويات',
+        key: 'containers' as const,
+        color: '#f59e0b',
+    },
+    {
+        icon: Layers,
+        label: 'مستقلة',
+        key: 'standalone' as const,
+        color: '#8b5cf6',
+    },
+    {
+        icon: GraduationCap,
+        label: 'أبناء',
+        key: 'children' as const,
+        color: '#f43f5e',
+    },
 ];
 
 function navigateWithParams(overrides: Record<string, string | undefined>) {
@@ -86,7 +112,10 @@ export default function Index({
     useEffect(() => {
         const timer = setTimeout(() => {
             if (searchInput !== currentSearch) {
-                navigateWithParams({ search: searchInput || undefined, page: '1' });
+                navigateWithParams({
+                    search: searchInput || undefined,
+                    page: '1',
+                });
             }
         }, 400);
 
@@ -113,7 +142,10 @@ export default function Index({
             >
                 {/* رأس الصفحة */}
                 <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                    <Heading title="المسابقات" description="إدارة المسابقات والفروع" />
+                    <Heading
+                        title="المسابقات"
+                        description="إدارة المسابقات والفروع"
+                    />
                     <Link href={competitions.create().url} className="shrink-0">
                         <Button>إضافة مسابقة</Button>
                     </Link>
@@ -129,13 +161,20 @@ export default function Index({
                             initial="hidden"
                             animate="visible"
                             className="rounded-lg border bg-card p-3"
-                            style={{ borderInlineStart: `3px solid ${stat.color}` }}
+                            style={{
+                                borderInlineStart: `3px solid ${stat.color}`,
+                            }}
                         >
                             <div className="flex items-center gap-2 text-muted-foreground">
-                                <stat.icon className="h-4 w-4" style={{ color: stat.color }} />
+                                <stat.icon
+                                    className="h-4 w-4"
+                                    style={{ color: stat.color }}
+                                />
                                 <span className="text-xs">{stat.label}</span>
                             </div>
-                            <p className="mt-1 text-2xl font-bold">{stats?.[stat.key] ?? competitionsPage.total}</p>
+                            <p className="mt-1 text-2xl font-bold">
+                                {stats?.[stat.key] ?? competitionsPage.total}
+                            </p>
                         </motion.div>
                     ))}
                 </div>
@@ -155,9 +194,19 @@ export default function Index({
                         {filterTabs.map((tab) => (
                             <Button
                                 key={tab.value}
-                                variant={filter === tab.value ? 'default' : 'outline'}
+                                variant={
+                                    filter === tab.value ? 'default' : 'outline'
+                                }
                                 size="sm"
-                                onClick={() => navigateWithParams({ filter: tab.value === 'all' ? undefined : tab.value, page: '1' })}
+                                onClick={() =>
+                                    navigateWithParams({
+                                        filter:
+                                            tab.value === 'all'
+                                                ? undefined
+                                                : tab.value,
+                                        page: '1',
+                                    })
+                                }
                             >
                                 {tab.label}
                             </Button>
@@ -174,7 +223,9 @@ export default function Index({
                     sort={sort}
                     direction={direction}
                 />
-                {allCompetitions.length > 0 && <LaravelPagination meta={competitionsPage} />}
+                {allCompetitions.length > 0 && (
+                    <LaravelPagination meta={competitionsPage} />
+                )}
             </motion.div>
         </>
     );

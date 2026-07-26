@@ -39,7 +39,13 @@ export default function RowActions({ items }: RowActionsProps) {
                         return <DropdownMenuSeparator key={`sep${i}`} />;
                     }
 
-                    const { label, icon: Icon, href, onClick, variant = 'default' } = entry;
+                    const {
+                        label,
+                        icon: Icon,
+                        href,
+                        onClick,
+                        variant = 'default',
+                    } = entry;
 
                     if (href) {
                         return (

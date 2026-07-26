@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -108,6 +109,12 @@ class Attempt extends Model
     public function isCompleted(): bool
     {
         return $this->status === self::STATUS_COMPLETED;
+    }
+
+    /** @param Builder<self> $query */
+    public function scopeCompleted(Builder $query): void
+    {
+        $query->where('status', self::STATUS_COMPLETED);
     }
 
     public function getSubjectNameAttribute(): string

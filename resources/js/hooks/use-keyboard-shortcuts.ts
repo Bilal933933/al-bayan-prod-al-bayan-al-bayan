@@ -11,11 +11,13 @@ interface KeyboardShortcutsOptions {
 }
 
 const arabicMap: Record<string, number> = {
-    'أ': 0, 'ا': 0,
-    'ب': 1,
-    'ج': 2,
-    'د': 3,
-    'ه': 4, 'ة': 4,
+    أ: 0,
+    ا: 0,
+    ب: 1,
+    ج: 2,
+    د: 3,
+    ه: 4,
+    ة: 4,
 };
 
 export function useKeyboardShortcuts({
@@ -29,7 +31,10 @@ export function useKeyboardShortcuts({
 }: KeyboardShortcutsOptions) {
     const handler = useCallback(
         (e: KeyboardEvent) => {
-            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+            if (
+                e.target instanceof HTMLInputElement ||
+                e.target instanceof HTMLTextAreaElement
+            ) {
                 return;
             }
 

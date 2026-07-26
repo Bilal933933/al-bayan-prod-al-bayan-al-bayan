@@ -17,7 +17,11 @@ interface GuideTimelineProps {
     className?: string;
 }
 
-export function GuideTimeline({ steps, onStepClick, className }: GuideTimelineProps) {
+export function GuideTimeline({
+    steps,
+    onStepClick,
+    className,
+}: GuideTimelineProps) {
     const [expandedStep, setExpandedStep] = useState<string | null>(null);
 
     const handleClick = (id: string) => {
@@ -65,13 +69,15 @@ export function GuideTimeline({ steps, onStepClick, className }: GuideTimelinePr
                                 <h3
                                     className={cn(
                                         'text-sm font-semibold transition-colors',
-                                        step.isActive ? 'text-primary' : 'text-foreground group-hover:text-primary',
+                                        step.isActive
+                                            ? 'text-primary'
+                                            : 'text-foreground group-hover:text-primary',
                                     )}
                                 >
                                     {step.title}
                                 </h3>
                                 {step.description && (
-                                    <p className="mt-0.5 text-xs text-muted-foreground line-clamp-1">
+                                    <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
                                         {step.description}
                                     </p>
                                 )}
@@ -90,7 +96,7 @@ export function GuideTimeline({ steps, onStepClick, className }: GuideTimelinePr
                                 initial={{ height: 0, opacity: 0 }}
                                 animate={{ height: 'auto', opacity: 1 }}
                                 transition={{ duration: 0.2 }}
-                                className="overflow-hidden rounded-b-xl border border-t-0 bg-card/30 px-5 pb-4 pr-[3.75rem] text-sm leading-relaxed text-muted-foreground"
+                                className="overflow-hidden rounded-b-xl border border-t-0 bg-card/30 px-5 pr-[3.75rem] pb-4 text-sm leading-relaxed text-muted-foreground"
                             >
                                 <p>{step.description}</p>
                             </motion.div>

@@ -33,8 +33,8 @@ function useScrollSpy(sectionIds: string[], offset = 120): string {
                 const el = document.getElementById(id);
 
                 if (el && el.offsetTop <= scrollY) {
-current = id;
-}
+                    current = id;
+                }
             }
 
             setActiveId(current);
@@ -48,7 +48,13 @@ current = id;
     return activeId;
 }
 
-export function GuideLayout({ title, description, progressSections, children, lastReviewed }: GuideLayoutProps) {
+export function GuideLayout({
+    title,
+    description,
+    progressSections,
+    children,
+    lastReviewed,
+}: GuideLayoutProps) {
     const { auth } = usePage().props;
     const { url: pathname } = usePage();
     const printRef = useRef<HTMLDivElement>(null);
@@ -96,7 +102,10 @@ export function GuideLayout({ title, description, progressSections, children, la
                     </header>
                 )}
 
-                <main ref={printRef} className={`mx-auto w-full max-w-6xl px-4 pb-20 md:px-8 print:max-w-full print:px-0 ${auth.user ? 'pt-20' : 'pt-6'}`}>
+                <main
+                    ref={printRef}
+                    className={`mx-auto w-full max-w-6xl px-4 pb-20 md:px-8 print:max-w-full print:px-0 ${auth.user ? 'pt-20' : 'pt-6'}`}
+                >
                     {/* Breadcrumb */}
                     <motion.nav
                         initial={{ opacity: 0, y: -10 }}
@@ -104,11 +113,23 @@ export function GuideLayout({ title, description, progressSections, children, la
                         transition={{ duration: 0.4 }}
                         className="mb-6 flex items-center gap-2 text-sm text-muted-foreground print:hidden"
                     >
-                        <Link href="/" className="transition-colors hover:text-foreground">الرئيسية</Link>
+                        <Link
+                            href="/"
+                            className="transition-colors hover:text-foreground"
+                        >
+                            الرئيسية
+                        </Link>
                         <span className="text-xs">&gt;</span>
-                        <Link href="/guide/journey" className="transition-colors hover:text-foreground">مركز المعرفة</Link>
+                        <Link
+                            href="/guide/journey"
+                            className="transition-colors hover:text-foreground"
+                        >
+                            مركز المعرفة
+                        </Link>
                         <span className="text-xs">&gt;</span>
-                        <span className="font-medium text-foreground">{title}</span>
+                        <span className="font-medium text-foreground">
+                            {title}
+                        </span>
                     </motion.nav>
 
                     {/* Identity badge */}
@@ -129,15 +150,33 @@ export function GuideLayout({ title, description, progressSections, children, la
                     </motion.div>
 
                     {/* Guide-to-guide navigation */}
-                    <nav className="mb-6 flex flex-wrap gap-x-1 gap-y-0.5 print:hidden" dir="rtl">
+                    <nav
+                        className="mb-6 flex flex-wrap gap-x-1 gap-y-0.5 print:hidden"
+                        dir="rtl"
+                    >
                         {[
                             { href: '/guide/journey', label: 'رحلة المتقدم' },
-                            { href: '/guide/exam-day', label: 'دليل يوم الاختبار' },
-                            { href: '/guide/exam-format', label: 'كيف يعمل الامتحان' },
-                            { href: '/guide/getting-started', label: 'كيف تبدأ الاستعداد' },
-                            { href: '/guide/after-results', label: 'بعد إعلان النتيجة' },
+                            {
+                                href: '/guide/exam-day',
+                                label: 'دليل يوم الاختبار',
+                            },
+                            {
+                                href: '/guide/exam-format',
+                                label: 'كيف يعمل الامتحان',
+                            },
+                            {
+                                href: '/guide/getting-started',
+                                label: 'كيف تبدأ الاستعداد',
+                            },
+                            {
+                                href: '/guide/after-results',
+                                label: 'بعد إعلان النتيجة',
+                            },
                             { href: '/guide/faq', label: 'الأسئلة الشائعة' },
-                            { href: '/guide/resources', label: 'المصادر الرسمية' },
+                            {
+                                href: '/guide/resources',
+                                label: 'المصادر الرسمية',
+                            },
                         ].map((item) => {
                             const isActive = pathname === item.href;
 

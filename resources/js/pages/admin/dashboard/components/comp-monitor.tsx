@@ -23,13 +23,13 @@ export function CompMonitor({ data }: CompMonitorProps) {
                         {data.map((comp) => (
                             <div
                                 key={comp.name}
-                                className="flex items-center justify-between p-2.5 rounded-lg border border-slate-100 hover:bg-slate-50 transition-colors"
+                                className="flex items-center justify-between rounded-lg border border-slate-100 p-2.5 transition-colors hover:bg-slate-50"
                             >
-                                <span className="text-sm font-medium text-slate-700 truncate min-w-0">
+                                <span className="min-w-0 truncate text-sm font-medium text-slate-700">
                                     {comp.name}
                                 </span>
 
-                                <div className="flex items-center gap-3 shrink-0">
+                                <div className="flex shrink-0 items-center gap-3">
                                     <div className="flex items-center gap-1 text-xs text-slate-500">
                                         <Users className="h-3 w-3" />
                                         <span>{comp.students_count}</span>

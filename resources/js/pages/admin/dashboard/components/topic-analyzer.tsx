@@ -8,7 +8,7 @@ interface TopicAnalyzerProps {
 }
 
 export function TopicAnalyzer({ data }: TopicAnalyzerProps) {
-    const maxFailRate = Math.max(...data.map(d => d.fail_rate), 1);
+    const maxFailRate = Math.max(...data.map((d) => d.fail_rate), 1);
 
     return (
         <Card className="h-full">
@@ -30,26 +30,36 @@ export function TopicAnalyzer({ data }: TopicAnalyzerProps) {
 
                             return (
                                 <div key={topic.name}>
-                                    <div className="flex items-center justify-between mb-1.5">
-                                        <span className="text-xs font-medium text-slate-700 truncate">
+                                    <div className="mb-1.5 flex items-center justify-between">
+                                        <span className="truncate text-xs font-medium text-slate-700">
                                             {topic.name}
                                         </span>
-                                        <span className={cn(
-                                            'text-xs font-bold',
-                                            isHigh && 'text-red-600',
-                                            isMid && !isHigh && 'text-amber-600',
-                                            !isMid && !isHigh && 'text-emerald-600',
-                                        )}>
+                                        <span
+                                            className={cn(
+                                                'text-xs font-bold',
+                                                isHigh && 'text-red-600',
+                                                isMid &&
+                                                    !isHigh &&
+                                                    'text-amber-600',
+                                                !isMid &&
+                                                    !isHigh &&
+                                                    'text-emerald-600',
+                                            )}
+                                        >
                                             {topic.fail_rate}%
                                         </span>
                                     </div>
-                                    <div className="h-1.5 w-full rounded-full bg-slate-100 overflow-hidden">
+                                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
                                         <div
                                             className={cn(
                                                 'h-full rounded-full transition-all',
                                                 isHigh && 'bg-red-400',
-                                                isMid && !isHigh && 'bg-amber-400',
-                                                !isMid && !isHigh && 'bg-emerald-400',
+                                                isMid &&
+                                                    !isHigh &&
+                                                    'bg-amber-400',
+                                                !isMid &&
+                                                    !isHigh &&
+                                                    'bg-emerald-400',
                                             )}
                                             style={{ width: `${pct}%` }}
                                         />

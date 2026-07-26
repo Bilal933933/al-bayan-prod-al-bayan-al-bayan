@@ -13,16 +13,16 @@ export function TopicProgressList({ data }: TopicProgressListProps) {
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
- if (entry.isIntersecting) {
-setVisible(true);
-} 
-},
+                if (entry.isIntersecting) {
+                    setVisible(true);
+                }
+            },
             { threshold: 0.1 },
         );
 
         if (ref.current) {
-observer.observe(ref.current);
-}
+            observer.observe(ref.current);
+        }
 
         return () => observer.disconnect();
     }, []);
@@ -42,12 +42,18 @@ observer.observe(ref.current);
                     <div key={i}>
                         <div className="mb-1.5 flex justify-between text-sm">
                             <span className="font-medium">{item.name}</span>
-                            <span className="text-muted-foreground">{item.percentage}%</span>
+                            <span className="text-muted-foreground">
+                                {item.percentage}%
+                            </span>
                         </div>
                         <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
                             <div
-                                className="h-full rounded-full bg-gradient-to-l from-primary to-primary-dark transition-all duration-1000"
-                                style={{ width: visible ? `${item.percentage}%` : '0%' }}
+                                className="to-primary-dark h-full rounded-full bg-gradient-to-l from-primary transition-all duration-1000"
+                                style={{
+                                    width: visible
+                                        ? `${item.percentage}%`
+                                        : '0%',
+                                }}
                             />
                         </div>
                     </div>

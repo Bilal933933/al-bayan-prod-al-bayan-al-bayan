@@ -13,7 +13,11 @@ interface StudentFormData {
 
 const formVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.35, ease: 'easeOut' },
+    },
 } as const;
 
 export default function StudentForm({
@@ -71,7 +75,11 @@ export default function StudentForm({
                 <div className="grid gap-2">
                     <Label htmlFor="password">
                         كلمة المرور
-                        {isEditing && <span className="text-xs text-muted-foreground me-1">(اترك فارغاً لعدم التغيير)</span>}
+                        {isEditing && (
+                            <span className="me-1 text-xs text-muted-foreground">
+                                (اترك فارغاً لعدم التغيير)
+                            </span>
+                        )}
                     </Label>
                     <Input
                         id="password"
@@ -89,8 +97,15 @@ export default function StudentForm({
                     <select
                         id="email_verified_at"
                         value={data.email_verified_at ? '1' : '0'}
-                        onChange={(e) => setData('email_verified_at', e.target.value === '1' ? new Date().toISOString() : null)}
-                        className="border-input placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] md:text-sm"
+                        onChange={(e) =>
+                            setData(
+                                'email_verified_at',
+                                e.target.value === '1'
+                                    ? new Date().toISOString()
+                                    : null,
+                            )
+                        }
+                        className="flex h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 md:text-sm"
                     >
                         <option value="1">مفعل</option>
                         <option value="0">غير مفعل</option>
@@ -99,7 +114,7 @@ export default function StudentForm({
                 </div>
             </div>
 
-            <div className="flex flex-col items-center gap-4 pt-4 border-t sm:flex-row sm:justify-between">
+            <div className="flex flex-col items-center gap-4 border-t pt-4 sm:flex-row sm:justify-between">
                 <span className="text-sm text-muted-foreground">
                     {isEditing ? 'تحديث بيانات الطالب' : 'إضافة طالب جديد'}
                 </span>
@@ -112,7 +127,10 @@ export default function StudentForm({
                     >
                         إلغاء
                     </Button>
-                    <Button disabled={processing} className="flex-1 sm:flex-none">
+                    <Button
+                        disabled={processing}
+                        className="flex-1 sm:flex-none"
+                    >
                         {processing ? 'جاري الحفظ...' : submitLabel}
                     </Button>
                 </div>

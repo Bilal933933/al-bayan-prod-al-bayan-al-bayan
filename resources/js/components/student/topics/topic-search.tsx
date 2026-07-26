@@ -17,11 +17,17 @@ const tabs = [
     { key: 'private', label: 'خاصة' },
 ] as const;
 
-export function TopicSearch({ search, onSearchChange, visibilityFilter, onVisibilityChange, counts }: TopicSearchProps) {
+export function TopicSearch({
+    search,
+    onSearchChange,
+    visibilityFilter,
+    onVisibilityChange,
+    counts,
+}: TopicSearchProps) {
     return (
         <div className="flex flex-col gap-4">
             <div className="relative">
-                <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Search className="absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                     value={search}
                     onChange={(e) => onSearchChange(e.target.value)}
@@ -33,7 +39,8 @@ export function TopicSearch({ search, onSearchChange, visibilityFilter, onVisibi
             <div className="flex items-center gap-1 rounded-lg bg-muted p-1">
                 {tabs.map((tab) => {
                     const isActive = visibilityFilter === tab.key;
-                    const count = tab.key === null ? counts.all : counts[tab.key];
+                    const count =
+                        tab.key === null ? counts.all : counts[tab.key];
 
                     return (
                         <Button
@@ -47,7 +54,9 @@ export function TopicSearch({ search, onSearchChange, visibilityFilter, onVisibi
                             )}
                         >
                             {tab.label}
-                            <span className="text-xs text-muted-foreground">({count})</span>
+                            <span className="text-xs text-muted-foreground">
+                                ({count})
+                            </span>
                         </Button>
                     );
                 })}

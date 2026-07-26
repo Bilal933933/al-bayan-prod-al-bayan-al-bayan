@@ -12,15 +12,33 @@ interface EmptyStateProps {
     className?: string;
 }
 
-export function EmptyState({ icon: Icon, title, description, actionLabel, actionHref, className }: EmptyStateProps) {
+export function EmptyState({
+    icon: Icon,
+    title,
+    description,
+    actionLabel,
+    actionHref,
+    className,
+}: EmptyStateProps) {
     return (
-        <div className={cn('flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed py-12 text-center', className)}>
+        <div
+            className={cn(
+                'flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed py-12 text-center',
+                className,
+            )}
+        >
             <Icon className="h-10 w-10 text-muted-foreground/30" />
             <p className="text-muted-foreground">{title}</p>
-            <p className="text-sm text-muted-foreground/60 max-w-xs">{description}</p>
+            <p className="max-w-xs text-sm text-muted-foreground/60">
+                {description}
+            </p>
             {actionLabel && actionHref && (
                 <Link href={actionHref}>
-                    <Button variant="outline" size="sm" className="mt-2 gap-1.5">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="mt-2 gap-1.5"
+                    >
                         {actionLabel}
                         <ChevronRight className="h-3.5 w-3.5" />
                     </Button>

@@ -36,13 +36,21 @@ const notifItems = [
     },
 ];
 
-export function StepNotifications({ notifs, onToggle, onPrev, onFinish, loading }: StepNotificationsProps) {
+export function StepNotifications({
+    notifs,
+    onToggle,
+    onPrev,
+    onFinish,
+    loading,
+}: StepNotificationsProps) {
     return (
-        <div className="flex flex-1 flex-col px-4 pb-10 pt-6">
+        <div className="flex flex-1 flex-col px-4 pt-6 pb-10">
             <div className="mb-2 text-center">
                 <span className="text-4xl">🔔</span>
             </div>
-            <h2 className="mb-1 text-center text-2xl font-black">البقاء على تواصل</h2>
+            <h2 className="mb-1 text-center text-2xl font-black">
+                البقاء على تواصل
+            </h2>
             <p className="mb-8 text-center text-sm text-muted-foreground">
                 فعّل الإشعارات لتصلك تحديات يومية وتذكيرات بالمسابقات القادمة.
             </p>
@@ -63,10 +71,16 @@ export function StepNotifications({ notifs, onToggle, onPrev, onFinish, loading 
                                     : 'border-border bg-card hover:border-primary',
                             )}
                         >
-                            <span className="shrink-0 text-2xl">{item.emoji}</span>
+                            <span className="shrink-0 text-2xl">
+                                {item.emoji}
+                            </span>
                             <div className="flex-1">
-                                <div className="text-sm font-bold">{item.title}</div>
-                                <div className="text-xs text-muted-foreground">{item.desc}</div>
+                                <div className="text-sm font-bold">
+                                    {item.title}
+                                </div>
+                                <div className="text-xs text-muted-foreground">
+                                    {item.desc}
+                                </div>
                             </div>
                             <div
                                 className={cn(
@@ -98,7 +112,7 @@ export function StepNotifications({ notifs, onToggle, onPrev, onFinish, loading 
                     type="button"
                     onClick={onFinish}
                     disabled={loading}
-                    className="flex-1 rounded-xl bg-gradient-to-l from-primary to-primary-dark px-6 py-4 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/30 transition-all hover:brightness-90 disabled:opacity-50 disabled:shadow-none"
+                    className="to-primary-dark flex-1 rounded-xl bg-gradient-to-l from-primary px-6 py-4 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/30 transition-all hover:brightness-90 disabled:opacity-50 disabled:shadow-none"
                 >
                     {loading ? 'جاري الحفظ...' : 'إنهاء'}
                 </button>

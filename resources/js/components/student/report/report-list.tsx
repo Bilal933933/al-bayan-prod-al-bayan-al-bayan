@@ -19,8 +19,12 @@ export function ReportList({ reports }: ReportListProps) {
                 <div className="flex flex-col items-center gap-3 py-10 text-center">
                     <Inbox className="h-10 w-10 text-muted-foreground/50" />
                     <div>
-                        <div className="text-sm font-bold text-muted-foreground">لا توجد بلاغات سابقة</div>
-                        <div className="mt-1 text-xs text-muted-foreground/70">استخدم النموذج أعلاه لإرسال أول بلاغ</div>
+                        <div className="text-sm font-bold text-muted-foreground">
+                            لا توجد بلاغات سابقة
+                        </div>
+                        <div className="mt-1 text-xs text-muted-foreground/70">
+                            استخدم النموذج أعلاه لإرسال أول بلاغ
+                        </div>
                     </div>
                 </div>
             ) : (
@@ -35,21 +39,38 @@ export function ReportList({ reports }: ReportListProps) {
                                 className="rounded-xl bg-muted p-3.5 transition-all hover:bg-muted/80"
                             >
                                 <div className="flex items-start gap-3">
-                                    <span className="mt-0.5 text-lg">{typeMeta?.emoji || '📝'}</span>
+                                    <span className="mt-0.5 text-lg">
+                                        {typeMeta?.emoji || '📝'}
+                                    </span>
                                     <div className="min-w-0 flex-1">
                                         <div className="flex items-center gap-2">
-                                            <span className={cn('text-sm font-bold', typeMeta?.color)}>
+                                            <span
+                                                className={cn(
+                                                    'text-sm font-bold',
+                                                    typeMeta?.color,
+                                                )}
+                                            >
                                                 {typeMeta?.label || report.type}
                                             </span>
-                                            <span className={cn('mr-auto rounded-full px-2.5 py-0.5 text-[10px] font-bold', statusMeta?.bgClass)}>
-                                                {statusMeta?.label || report.status}
+                                            <span
+                                                className={cn(
+                                                    'mr-auto rounded-full px-2.5 py-0.5 text-[10px] font-bold',
+                                                    statusMeta?.bgClass,
+                                                )}
+                                            >
+                                                {statusMeta?.label ||
+                                                    report.status}
                                             </span>
                                         </div>
                                         <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
                                             {report.description}
                                         </p>
                                         <div className="mt-1.5 flex items-center gap-3 text-[10px] text-muted-foreground/70">
-                                            <span>{new Date(report.created_at).toLocaleDateString('ar-SA')}</span>
+                                            <span>
+                                                {new Date(
+                                                    report.created_at,
+                                                ).toLocaleDateString('ar-SA')}
+                                            </span>
                                             {report.question && (
                                                 <span className="flex items-center gap-1">
                                                     <FileText className="h-3 w-3" />

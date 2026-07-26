@@ -12,14 +12,23 @@ interface LegalReferenceProps {
     className?: string;
 }
 
-export function LegalReference({ law, article, summary, link, className }: LegalReferenceProps) {
+export function LegalReference({
+    law,
+    article,
+    summary,
+    link,
+    className,
+}: LegalReferenceProps) {
     return (
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.3 }}
-            className={cn('flex gap-4 rounded-xl border border-blue-200 bg-blue-50/50 p-5 dark:border-blue-900 dark:bg-blue-950/20', className)}
+            className={cn(
+                'flex gap-4 rounded-xl border border-blue-200 bg-blue-50/50 p-5 dark:border-blue-900 dark:bg-blue-950/20',
+                className,
+            )}
         >
             <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
                 <BookOpen className="size-5" />
@@ -34,10 +43,21 @@ export function LegalReference({ law, article, summary, link, className }: Legal
                         المادة {article}
                     </span>
                 </div>
-                <p className="text-sm leading-relaxed text-muted-foreground">{summary}</p>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                    {summary}
+                </p>
                 {link && (
-                    <Button variant="ghost" size="xs" className="gap-1 text-xs text-blue-600 dark:text-blue-400" asChild>
-                        <a href={link} target="_blank" rel="noopener noreferrer">
+                    <Button
+                        variant="ghost"
+                        size="xs"
+                        className="gap-1 text-xs text-blue-600 dark:text-blue-400"
+                        asChild
+                    >
+                        <a
+                            href={link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
                             قراءة النص الكامل
                             <ExternalLink className="size-3" />
                         </a>

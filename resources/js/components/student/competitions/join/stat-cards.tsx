@@ -6,7 +6,11 @@ interface StatCardsProps {
     usersCount: number;
 }
 
-export default function StatCards({ totalQuestions, topicsCount, usersCount }: StatCardsProps) {
+export default function StatCards({
+    totalQuestions,
+    topicsCount,
+    usersCount,
+}: StatCardsProps) {
     const stats = [
         {
             icon: HelpCircle,
@@ -42,8 +46,12 @@ export default function StatCards({ totalQuestions, topicsCount, usersCount }: S
                         <stat.icon className="h-6 w-6" />
                     </div>
                     <div>
-                        <span className="block text-xs font-medium text-slate-400">{stat.label}</span>
-                        <span className="text-lg font-black text-slate-700">{stat.value}</span>
+                        <span className="block text-xs font-medium text-slate-400">
+                            {stat.label}
+                        </span>
+                        <span className="text-lg font-black text-slate-700">
+                            {stat.value}
+                        </span>
                     </div>
                 </div>
             ))}

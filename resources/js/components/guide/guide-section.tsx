@@ -13,7 +13,14 @@ interface GuideSectionProps {
     className?: string;
 }
 
-export function GuideSection({ id, title, icon: Icon, number, children, className }: GuideSectionProps) {
+export function GuideSection({
+    id,
+    title,
+    icon: Icon,
+    number,
+    children,
+    className,
+}: GuideSectionProps) {
     return (
         <motion.section
             id={id}
@@ -36,7 +43,9 @@ export function GuideSection({ id, title, icon: Icon, number, children, classNam
                                 {number}
                             </span>
                         )}
-                        {title && <h2 className="text-xl font-bold">{title}</h2>}
+                        {title && (
+                            <h2 className="text-xl font-bold">{title}</h2>
+                        )}
                     </div>
                 )}
                 <div className="space-y-4 text-sm leading-relaxed text-muted-foreground [&_p]:leading-relaxed">

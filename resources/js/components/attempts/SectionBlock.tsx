@@ -1,5 +1,9 @@
 import { ChevronDown } from 'lucide-react';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import type { Attempt, AttemptSection } from '@/types/attempt';
 import QuestionCard from './QuestionCard';
 
@@ -9,19 +13,29 @@ interface SectionBlockProps {
     filter: string;
 }
 
-export default function SectionBlock({ section, attempt, filter }: SectionBlockProps) {
-    const correctCount = section.questions.filter((q) => q.is_correct === true).length;
-    const wrongCount = section.questions.filter((q) => q.is_correct === false).length;
-    const unansweredCount = section.questions.filter((q) => q.is_correct === null).length;
+export default function SectionBlock({
+    section,
+    attempt,
+    filter,
+}: SectionBlockProps) {
+    const correctCount = section.questions.filter(
+        (q) => q.is_correct === true,
+    ).length;
+    const wrongCount = section.questions.filter(
+        (q) => q.is_correct === false,
+    ).length;
+    const unansweredCount = section.questions.filter(
+        (q) => q.is_correct === null,
+    ).length;
 
     const filteredQuestions = section.questions.filter((q) => {
         if (filter === 'wrong') {
-return q.is_correct === false;
-}
+            return q.is_correct === false;
+        }
 
         if (filter === 'unanswered') {
-return q.is_correct === null;
-}
+            return q.is_correct === null;
+        }
 
         return true;
     });
@@ -34,7 +48,10 @@ return q.is_correct === null;
                 </div>
                 <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                        <span className="font-semibold">{section.topic?.name ?? `القسم ${section.order + 1}`}</span>
+                        <span className="font-semibold">
+                            {section.topic?.name ??
+                                `القسم ${section.order + 1}`}
+                        </span>
                         {section.submitted_at && (
                             <span className="rounded-full bg-success/10 px-2 py-0.5 text-[10px] font-medium text-success ring-success/30">
                                 تم التسليم
@@ -42,20 +59,44 @@ return q.is_correct === null;
                         )}
                         {filter !== 'all' && (
                             <span className="text-xs text-muted-foreground">
-                                ({filteredQuestions.length} من {section.questions.length})
+                                ({filteredQuestions.length} من{' '}
+                                {section.questions.length})
                             </span>
                         )}
                     </div>
                     <div className="mt-1 flex items-center gap-1.5 text-xs leading-relaxed">
-                        <span className="text-muted-foreground">{section.questions.length} أسئلة</span>
-                        <span className="text-muted-foreground/50" aria-hidden="true">•</span>
-                        <span className="font-medium text-success">{correctCount} صحيح</span>
-                        <span className="text-muted-foreground/50" aria-hidden="true">•</span>
-                        <span className="font-medium text-destructive">{wrongCount} خطأ</span>
+                        <span className="text-muted-foreground">
+                            {section.questions.length} أسئلة
+                        </span>
+                        <span
+                            className="text-muted-foreground/50"
+                            aria-hidden="true"
+                        >
+                            •
+                        </span>
+                        <span className="font-medium text-success">
+                            {correctCount} صحيح
+                        </span>
+                        <span
+                            className="text-muted-foreground/50"
+                            aria-hidden="true"
+                        >
+                            •
+                        </span>
+                        <span className="font-medium text-destructive">
+                            {wrongCount} خطأ
+                        </span>
                         {unansweredCount > 0 && (
                             <>
-                                <span className="text-muted-foreground/50" aria-hidden="true">•</span>
-                                <span className="font-medium text-muted-foreground">{unansweredCount} لم يُجب</span>
+                                <span
+                                    className="text-muted-foreground/50"
+                                    aria-hidden="true"
+                                >
+                                    •
+                                </span>
+                                <span className="font-medium text-muted-foreground">
+                                    {unansweredCount} لم يُجب
+                                </span>
                             </>
                         )}
                     </div>
@@ -72,7 +113,9 @@ return q.is_correct === null;
                         />
                     ))
                 ) : (
-                    <p className="py-6 text-center text-sm text-muted-foreground">لا توجد أسئلة في هذا التصنيف</p>
+                    <p className="py-6 text-center text-sm text-muted-foreground">
+                        لا توجد أسئلة في هذا التصنيف
+                    </p>
                 )}
             </CollapsibleContent>
         </Collapsible>

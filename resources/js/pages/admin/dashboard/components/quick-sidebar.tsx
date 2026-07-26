@@ -42,21 +42,31 @@ export function QuickSidebar({ systemHealth }: QuickSidebarProps) {
         <Card className="h-full">
             <CardHeader className="flex flex-row items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-muted-foreground" />
-                <CardTitle className="text-base">الإجراءات السريعة والصحة</CardTitle>
+                <CardTitle className="text-base">
+                    الإجراءات السريعة والصحة
+                </CardTitle>
             </CardHeader>
             <CardContent className="space-y-5">
-                <div className={cn(
-                    'flex items-center gap-3 p-3 rounded-xl border',
-                    systemHealth > 0
-                        ? 'bg-red-50 border-red-200'
-                        : 'bg-emerald-50 border-emerald-200',
-                )}>
-                    <AlertTriangle className={cn(
-                        'h-5 w-5 shrink-0',
-                        systemHealth > 0 ? 'text-red-500' : 'text-emerald-500',
-                    )} />
+                <div
+                    className={cn(
+                        'flex items-center gap-3 rounded-xl border p-3',
+                        systemHealth > 0
+                            ? 'border-red-200 bg-red-50'
+                            : 'border-emerald-200 bg-emerald-50',
+                    )}
+                >
+                    <AlertTriangle
+                        className={cn(
+                            'h-5 w-5 shrink-0',
+                            systemHealth > 0
+                                ? 'text-red-500'
+                                : 'text-emerald-500',
+                        )}
+                    />
                     <div>
-                        <p className="text-xs font-bold text-slate-700">سلامة بنك الأسئلة</p>
+                        <p className="text-xs font-bold text-slate-700">
+                            سلامة بنك الأسئلة
+                        </p>
                         <p className="text-[11px] text-slate-500">
                             {systemHealth > 0
                                 ? `${systemHealth} سؤال (أسئلة) بدون إجابة صحيحة`
@@ -71,7 +81,7 @@ export function QuickSidebar({ systemHealth }: QuickSidebarProps) {
                             key={action.label}
                             href={action.href}
                             className={cn(
-                                'flex items-center gap-3 w-full p-2.5 rounded-xl transition-all text-sm font-medium',
+                                'flex w-full items-center gap-3 rounded-xl p-2.5 text-sm font-medium transition-all',
                                 action.color,
                             )}
                         >
@@ -81,18 +91,18 @@ export function QuickSidebar({ systemHealth }: QuickSidebarProps) {
                     ))}
                 </div>
 
-                <div className="pt-2 border-t border-slate-100 space-y-2">
+                <div className="space-y-2 border-t border-slate-100 pt-2">
                     <button
                         type="button"
                         onClick={() => window.location.reload()}
-                        className="flex items-center gap-2 w-full p-2.5 rounded-xl text-xs font-medium text-slate-500 hover:bg-slate-50 transition-colors"
+                        className="flex w-full items-center gap-2 rounded-xl p-2.5 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-50"
                     >
                         <RefreshCw className="h-3.5 w-3.5" />
                         تحديث البيانات
                     </button>
                     <button
                         type="button"
-                        className="flex items-center gap-2 w-full p-2.5 rounded-xl text-xs font-medium text-slate-500 hover:bg-slate-50 transition-colors"
+                        className="flex w-full items-center gap-2 rounded-xl p-2.5 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-50"
                     >
                         <Download className="h-3.5 w-3.5" />
                         تصدير التقرير

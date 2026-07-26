@@ -24,7 +24,10 @@ const pageVariants = {
     },
 } as const;
 
-export default function Index({ competitions: items, myCompetitions }: IndexProps) {
+export default function Index({
+    competitions: items,
+    myCompetitions,
+}: IndexProps) {
     const { containers, standalone } = useMemo(() => {
         const containers: Competition[] = [];
         const standalone: Competition[] = [];

@@ -28,8 +28,8 @@ export default function ContainerSection({
     accentColor?: string;
 }) {
     if (competitions.length === 0) {
-return null;
-}
+        return null;
+    }
 
     return (
         <motion.section
@@ -38,17 +38,24 @@ return null;
             animate="visible"
             className="relative rounded-xl border bg-card p-4 md:p-6"
         >
-            <div className={cn('absolute inset-y-0 start-0 w-1 rounded-s-xl', accentColor)} />
+            <div
+                className={cn(
+                    'absolute inset-y-0 start-0 w-1 rounded-s-xl',
+                    accentColor,
+                )}
+            />
 
-            <div className="ms-3 flex items-center gap-3 mb-4">
+            <div className="ms-3 mb-4 flex items-center gap-3">
                 <Icon className="h-5 w-5 text-muted-foreground" />
                 <div>
                     <h2 className="text-lg font-semibold">{title}</h2>
                     {subtitle && (
-                        <p className="text-sm text-muted-foreground">{subtitle}</p>
+                        <p className="text-sm text-muted-foreground">
+                            {subtitle}
+                        </p>
                     )}
                 </div>
-                <span className="text-sm text-muted-foreground me-auto">
+                <span className="me-auto text-sm text-muted-foreground">
                     ({competitions.length})
                 </span>
             </div>

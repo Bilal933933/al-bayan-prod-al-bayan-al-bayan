@@ -17,7 +17,9 @@ interface AttemptTableProps {
     } & PaginationMeta;
 }
 
-export default function AttemptTable({ attempts: paginated }: AttemptTableProps) {
+export default function AttemptTable({
+    attempts: paginated,
+}: AttemptTableProps) {
     const allAttempts = paginated.data;
 
     if (allAttempts.length === 0) {
@@ -38,59 +40,91 @@ export default function AttemptTable({ attempts: paginated }: AttemptTableProps)
                 <table className="w-full text-sm">
                     <thead className="sticky top-0 z-10">
                         <tr className="border-b bg-muted/80 text-start backdrop-blur-sm">
-                            <th className="px-4 py-3 font-medium whitespace-nowrap">#</th>
-                            <th className="px-4 py-3 font-medium whitespace-nowrap">الطالب</th>
-                            <th className="px-4 py-3 font-medium whitespace-nowrap">النوع</th>
-                            <th className="px-4 py-3 font-medium whitespace-nowrap">الموضوع</th>
-                            <th className="px-4 py-3 font-medium whitespace-nowrap">الحالة</th>
-                            <th className="px-4 py-3 font-medium whitespace-nowrap">الدرجة</th>
-                            <th className="px-4 py-3 font-medium whitespace-nowrap">التاريخ</th>
-                            <th className="px-4 py-3 font-medium whitespace-nowrap">الإجراءات</th>
+                            <th className="px-4 py-3 font-medium whitespace-nowrap">
+                                #
+                            </th>
+                            <th className="px-4 py-3 font-medium whitespace-nowrap">
+                                الطالب
+                            </th>
+                            <th className="px-4 py-3 font-medium whitespace-nowrap">
+                                النوع
+                            </th>
+                            <th className="px-4 py-3 font-medium whitespace-nowrap">
+                                الموضوع
+                            </th>
+                            <th className="px-4 py-3 font-medium whitespace-nowrap">
+                                الحالة
+                            </th>
+                            <th className="px-4 py-3 font-medium whitespace-nowrap">
+                                الدرجة
+                            </th>
+                            <th className="px-4 py-3 font-medium whitespace-nowrap">
+                                التاريخ
+                            </th>
+                            <th className="px-4 py-3 font-medium whitespace-nowrap">
+                                الإجراءات
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         {allAttempts.map((attempt, i) => {
-                            const scorePercent = attempt.total_questions > 0
-                                ? Math.round((attempt.correct_answers / attempt.total_questions) * 100)
-                                : null;
+                            const scorePercent =
+                                attempt.total_questions > 0
+                                    ? Math.round(
+                                          (attempt.correct_answers /
+                                              attempt.total_questions) *
+                                              100,
+                                      )
+                                    : null;
 
                             return (
                                 <motion.tr
                                     key={attempt.id}
                                     initial={{ opacity: 0, y: -8 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.2, delay: i * 0.03 }}
+                                    transition={{
+                                        duration: 0.2,
+                                        delay: i * 0.03,
+                                    }}
                                     className="border-b transition-colors hover:bg-muted/50"
                                 >
-                                    <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
+                                    <td className="px-4 py-3 whitespace-nowrap text-muted-foreground">
                                         {attempt.id}
                                     </td>
-                                    <td className="whitespace-nowrap px-4 py-3">
-                                        <p className="font-medium">{attempt.user?.name}</p>
-                                        <p className="text-xs text-muted-foreground">{attempt.user?.email}</p>
+                                    <td className="px-4 py-3 whitespace-nowrap">
+                                        <p className="font-medium">
+                                            {attempt.user?.name}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground">
+                                            {attempt.user?.email}
+                                        </p>
                                     </td>
-                                    <td className="whitespace-nowrap px-4 py-3">
+                                    <td className="px-4 py-3 whitespace-nowrap">
                                         <AttemptTypeBadge type={attempt.type} />
                                     </td>
-                                    <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
+                                    <td className="px-4 py-3 whitespace-nowrap text-muted-foreground">
                                         {attempt.subject_name}
                                     </td>
-                                    <td className="whitespace-nowrap px-4 py-3">
-                                        <AttemptStatusBadge status={attempt.status} />
+                                    <td className="px-4 py-3 whitespace-nowrap">
+                                        <AttemptStatusBadge
+                                            status={attempt.status}
+                                        />
                                     </td>
-                                    <td className="whitespace-nowrap px-4 py-3">
+                                    <td className="px-4 py-3 whitespace-nowrap">
                                         {attempt.status === 'completed' ? (
                                             <span className="inline-flex items-center gap-1.5 font-medium">
-                                                {attempt.correct_answers}/{attempt.total_questions}
+                                                {attempt.correct_answers}/
+                                                {attempt.total_questions}
                                                 {scorePercent !== null && (
                                                     <Badge
                                                         variant="outline"
                                                         className={
                                                             scorePercent >= 70
-                                                                 ? 'border-success/30 text-success'
-                                                                 : scorePercent >= 40
-                                                                     ? 'border-warning/30 text-warning'
-                                                                     : 'border-destructive/30 text-destructive'
+                                                                ? 'border-success/30 text-success'
+                                                                : scorePercent >=
+                                                                    40
+                                                                  ? 'border-warning/30 text-warning'
+                                                                  : 'border-destructive/30 text-destructive'
                                                         }
                                                     >
                                                         {scorePercent}%
@@ -98,14 +132,25 @@ export default function AttemptTable({ attempts: paginated }: AttemptTableProps)
                                                 )}
                                             </span>
                                         ) : (
-                                            <span className="text-muted-foreground">—</span>
+                                            <span className="text-muted-foreground">
+                                                —
+                                            </span>
                                         )}
                                     </td>
-                                    <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
-                                        <DateDisplay date={attempt.created_at} format="short" />
+                                    <td className="px-4 py-3 whitespace-nowrap text-muted-foreground">
+                                        <DateDisplay
+                                            date={attempt.created_at}
+                                            format="short"
+                                        />
                                     </td>
-                                    <td className="whitespace-nowrap px-4 py-3">
-                                        <Link href={attempts.show({ attempt: attempt.id }).url}>
+                                    <td className="px-4 py-3 whitespace-nowrap">
+                                        <Link
+                                            href={
+                                                attempts.show({
+                                                    attempt: attempt.id,
+                                                }).url
+                                            }
+                                        >
                                             <Button variant="ghost" size="sm">
                                                 <Eye className="h-4 w-4" />
                                                 عرض

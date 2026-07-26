@@ -35,14 +35,19 @@ export default function ParentSelect({
             <Label htmlFor="parent_id">المسابقة الأب</Label>
             <Select
                 value={value?.toString() ?? 'null'}
-                onValueChange={(val) => onChange(val === 'null' ? null : Number(val))}
+                onValueChange={(val) =>
+                    onChange(val === 'null' ? null : Number(val))
+                }
             >
                 <SelectTrigger id="parent_id">
                     <SelectValue placeholder="بدون أب (مسابقة مستقلة)">
                         {selectedParent && (
                             <span className="flex items-center gap-2">
                                 {selectedParent.name}
-                                <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+                                <Badge
+                                    variant="outline"
+                                    className="px-1.5 py-0 text-[10px]"
+                                >
                                     حاوية
                                 </Badge>
                             </span>
@@ -51,13 +56,21 @@ export default function ParentSelect({
                 </SelectTrigger>
                 <SelectContent>
                     <SelectItem value="null">
-                        <span className="text-muted-foreground">بدون أب (مسابقة مستقلة)</span>
+                        <span className="text-muted-foreground">
+                            بدون أب (مسابقة مستقلة)
+                        </span>
                     </SelectItem>
                     {availableParents.map((parent) => (
-                        <SelectItem key={parent.id} value={parent.id.toString()}>
+                        <SelectItem
+                            key={parent.id}
+                            value={parent.id.toString()}
+                        >
                             <span className="flex items-center gap-2">
                                 {parent.name}
-                                <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+                                <Badge
+                                    variant="outline"
+                                    className="px-1.5 py-0 text-[10px]"
+                                >
                                     حاوية
                                 </Badge>
                             </span>

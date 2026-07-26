@@ -19,21 +19,22 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Edit({ competition, availableParents }: EditProps) {
-    const { data, setData, put, processing, errors } = useForm<CompetitionFormData>({
-        parent_id: competition.parent_id,
-        classification: competition.classification,
-        order: competition.order,
-        code: competition.code,
-        name: competition.name,
-        slug: competition.slug,
-        image: competition.image,
-        color: competition.color,
-        icon: competition.icon,
-        description: competition.description,
-        is_active: competition.is_active,
-        start_date: competition.start_date ?? null,
-        end_date: competition.end_date ?? null,
-    });
+    const { data, setData, put, processing, errors } =
+        useForm<CompetitionFormData>({
+            parent_id: competition.parent_id,
+            classification: competition.classification,
+            order: competition.order,
+            code: competition.code,
+            name: competition.name,
+            slug: competition.slug,
+            image: competition.image,
+            color: competition.color,
+            icon: competition.icon,
+            description: competition.description,
+            is_active: competition.is_active,
+            start_date: competition.start_date ?? null,
+            end_date: competition.end_date ?? null,
+        });
 
     function submit(e: React.FormEvent) {
         e.preventDefault();

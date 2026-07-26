@@ -9,10 +9,12 @@ const fireEmoji = '\uD83D\uDD25';
 
 export function RankingRow({ entry }: RankingRowProps) {
     if (!entry.user) {
-return null;
-}
+        return null;
+    }
 
-    const avatarUrl = entry.user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(entry.user.name)}&background=random&size=44`;
+    const avatarUrl =
+        entry.user.avatar ||
+        `https://ui-avatars.com/api/?name=${encodeURIComponent(entry.user.name)}&background=random&size=44`;
 
     return (
         <div className="group flex items-center justify-between rounded-2xl border border-slate-100 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-200 hover:shadow-md">
@@ -23,7 +25,11 @@ return null;
 
                 <div className="relative">
                     <div className="h-11 w-11 overflow-hidden rounded-full ring-2 ring-slate-100">
-                        <img src={avatarUrl} alt={entry.user.name} className="h-full w-full object-cover" />
+                        <img
+                            src={avatarUrl}
+                            alt={entry.user.name}
+                            className="h-full w-full object-cover"
+                        />
                     </div>
                 </div>
 
@@ -37,13 +43,18 @@ return null;
             <div className="flex items-center gap-4">
                 <div className="text-right">
                     <span className="block text-sm font-extrabold text-slate-700">
-                        <SlidingNumber number={entry.points} thousandSeparator="," inView />
+                        <SlidingNumber
+                            number={entry.points}
+                            thousandSeparator=","
+                            inView
+                        />
                     </span>
                 </div>
 
                 {entry.streak_days > 0 && (
                     <span className="flex items-center gap-0.5 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-600">
-                        {fireEmoji} <SlidingNumber number={entry.streak_days} inView />
+                        {fireEmoji}{' '}
+                        <SlidingNumber number={entry.streak_days} inView />
                     </span>
                 )}
 

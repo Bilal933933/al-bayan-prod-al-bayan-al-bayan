@@ -1,5 +1,9 @@
 import { Link } from '@inertiajs/react';
-import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from 'lucide-react';
+import {
+    ChevronLeftIcon,
+    ChevronRightIcon,
+    MoreHorizontalIcon,
+} from 'lucide-react';
 
 import { buttonVariants } from '@/components/ui/button';
 import {
@@ -16,8 +20,8 @@ interface LaravelPaginationProps {
 
 export function LaravelPagination({ meta }: LaravelPaginationProps) {
     if (meta.last_page <= 1) {
-return null;
-}
+        return null;
+    }
 
     const pageLinks = meta.links.slice(1, -1);
 
@@ -28,9 +32,13 @@ return null;
                     <Link
                         href={meta.prev_page_url ?? '#'}
                         className={cn(
-                            buttonVariants({ variant: 'ghost', size: 'default' }),
+                            buttonVariants({
+                                variant: 'ghost',
+                                size: 'default',
+                            }),
                             'gap-1 px-2.5 sm:pl-2.5',
-                            !meta.prev_page_url && 'pointer-events-none opacity-50',
+                            !meta.prev_page_url &&
+                                'pointer-events-none opacity-50',
                         )}
                         preserveState
                         disabled={!meta.prev_page_url}
@@ -74,9 +82,13 @@ return null;
                     <Link
                         href={meta.next_page_url ?? '#'}
                         className={cn(
-                            buttonVariants({ variant: 'ghost', size: 'default' }),
+                            buttonVariants({
+                                variant: 'ghost',
+                                size: 'default',
+                            }),
                             'gap-1 px-2.5 sm:pr-2.5',
-                            !meta.next_page_url && 'pointer-events-none opacity-50',
+                            !meta.next_page_url &&
+                                'pointer-events-none opacity-50',
                         )}
                         preserveState
                         disabled={!meta.next_page_url}

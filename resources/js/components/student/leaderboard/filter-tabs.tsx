@@ -7,7 +7,11 @@ interface FilterTabsProps {
     onChange: (key: string) => void;
 }
 
-export function FilterTabs({ periods, currentPeriod, onChange }: FilterTabsProps) {
+export function FilterTabs({
+    periods,
+    currentPeriod,
+    onChange,
+}: FilterTabsProps) {
     return (
         <div className="flex flex-wrap gap-2">
             {periods.map((period) => (

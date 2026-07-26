@@ -41,29 +41,38 @@ export default function StudentTableRow({
             <td className="px-4 py-3 font-medium">
                 <Link
                     href={students.show({ student: student.id }).url}
-                    className="hover:text-primary transition-colors"
+                    className="transition-colors hover:text-primary"
                 >
                     {student.name}
                 </Link>
             </td>
-            <td className="px-4 py-3 text-muted-foreground font-mono text-xs" dir="ltr">
+            <td
+                className="px-4 py-3 font-mono text-xs text-muted-foreground"
+                dir="ltr"
+            >
                 {student.email}
             </td>
-            <td className="whitespace-nowrap px-4 py-3">
+            <td className="px-4 py-3 whitespace-nowrap">
                 {student.email_verified_at ? (
-                    <Badge variant="default" className="bg-success/15 text-success border-success/30 text-[10px] px-1.5 py-0">
+                    <Badge
+                        variant="default"
+                        className="border-success/30 bg-success/15 px-1.5 py-0 text-[10px] text-success"
+                    >
                         مفعل
                     </Badge>
                 ) : (
-                    <Badge variant="outline" className="text-muted-foreground text-[10px] px-1.5 py-0">
+                    <Badge
+                        variant="outline"
+                        className="px-1.5 py-0 text-[10px] text-muted-foreground"
+                    >
                         غير مفعل
                     </Badge>
                 )}
             </td>
-            <td className="whitespace-nowrap px-4 py-3 text-sm text-muted-foreground">
+            <td className="px-4 py-3 text-sm whitespace-nowrap text-muted-foreground">
                 <DateDisplay date={student.created_at} format="short" />
             </td>
-            <td className="whitespace-nowrap px-4 py-3 text-center text-sm">
+            <td className="px-4 py-3 text-center text-sm whitespace-nowrap">
                 {student.attempts_count ?? 0}
             </td>
             <td className="px-4 py-3">

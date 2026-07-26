@@ -6,8 +6,14 @@ const VISIBILITY_CONFIG = {
     private: { label: 'خاص', variant: 'secondary' },
 } as const;
 
-export default function VisibilityBadge({ visibility }: { visibility: string }) {
-    const config = VISIBILITY_CONFIG[visibility as keyof typeof VISIBILITY_CONFIG] ?? {
+export default function VisibilityBadge({
+    visibility,
+}: {
+    visibility: string;
+}) {
+    const config = VISIBILITY_CONFIG[
+        visibility as keyof typeof VISIBILITY_CONFIG
+    ] ?? {
         label: visibility,
         variant: 'secondary',
     };

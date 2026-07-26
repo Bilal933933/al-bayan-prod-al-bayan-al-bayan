@@ -28,9 +28,13 @@ function inlineToReact(text: string): ReactNode {
 
         if (linkMatch) {
             parts.push(
-                <a key={key++} href={linkMatch[2]} className="text-primary underline">
+                <a
+                    key={key++}
+                    href={linkMatch[2]}
+                    className="text-primary underline"
+                >
                     {linkMatch[1]}
-                </a>
+                </a>,
             );
             remaining = remaining.slice(linkMatch[0].length);
             continue;
@@ -39,7 +43,11 @@ function inlineToReact(text: string): ReactNode {
         const codeMatch = remaining.match(/^`([^`]+)`/);
 
         if (codeMatch) {
-            parts.push(<code key={key++} className="rounded bg-muted px-1 text-sm">{codeMatch[1]}</code>);
+            parts.push(
+                <code key={key++} className="rounded bg-muted px-1 text-sm">
+                    {codeMatch[1]}
+                </code>,
+            );
             remaining = remaining.slice(codeMatch[0].length);
             continue;
         }
@@ -59,18 +67,25 @@ function renderContentSection(section: ParsedSection): ReactNode {
 
     // Paragraphs
     for (const para of section.paragraphs || []) {
-        elements.push(<p key={key++} className="text-sm leading-relaxed">{inlineToReact(para)}</p>);
+        elements.push(
+            <p key={key++} className="text-sm leading-relaxed">
+                {inlineToReact(para)}
+            </p>,
+        );
     }
 
     // Lists
     for (const list of section.lists || []) {
         const Tag = list.ordered ? 'ol' : 'ul';
         elements.push(
-            <Tag key={key++} className={`list-inside space-y-1 text-sm ${list.ordered ? 'list-decimal' : 'list-disc'}`}>
+            <Tag
+                key={key++}
+                className={`list-inside space-y-1 text-sm ${list.ordered ? 'list-decimal' : 'list-disc'}`}
+            >
                 {list.items.map((item, i) => (
                     <li key={i}>{inlineToReact(item)}</li>
                 ))}
-            </Tag>
+            </Tag>,
         );
     }
 
@@ -80,23 +95,35 @@ function renderContentSection(section: ParsedSection): ReactNode {
             <div key={key++} className="overflow-hidden rounded-lg border">
                 <table className="w-full text-sm">
                     {table.headers.length > 0 && (
-                        <thead><tr className="bg-muted/50">
-                            {table.headers.map((h, i) => (
-                                <th key={i} className="p-3 text-right font-semibold text-foreground">{h}</th>
-                            ))}
-                        </tr></thead>
+                        <thead>
+                            <tr className="bg-muted/50">
+                                {table.headers.map((h, i) => (
+                                    <th
+                                        key={i}
+                                        className="p-3 text-right font-semibold text-foreground"
+                                    >
+                                        {h}
+                                    </th>
+                                ))}
+                            </tr>
+                        </thead>
                     )}
                     <tbody className="divide-y">
                         {table.rows.map((row, ri) => (
                             <tr key={ri}>
                                 {row.map((cell, ci) => (
-                                    <td key={ci} className="p-3 text-muted-foreground">{inlineToReact(cell)}</td>
+                                    <td
+                                        key={ci}
+                                        className="p-3 text-muted-foreground"
+                                    >
+                                        {inlineToReact(cell)}
+                                    </td>
                                 ))}
                             </tr>
                         ))}
                     </tbody>
                 </table>
-            </div>
+            </div>,
         );
     }
 
@@ -109,14 +136,35 @@ function renderContentSection(section: ParsedSection): ReactNode {
                     law={callout.title}
                     article={callout.article || ''}
                     summary={callout.message}
-                />
+                />,
             );
         } else if (callout.type === 'tip') {
-            elements.push(<InfoBox key={key++} type="tip" title={callout.title} message={callout.message} />);
+            elements.push(
+                <InfoBox
+                    key={key++}
+                    type="tip"
+                    title={callout.title}
+                    message={callout.message}
+                />,
+            );
         } else if (callout.type === 'warning') {
-            elements.push(<InfoBox key={key++} type="warning" title={callout.title} message={callout.message} />);
+            elements.push(
+                <InfoBox
+                    key={key++}
+                    type="warning"
+                    title={callout.title}
+                    message={callout.message}
+                />,
+            );
         } else if (callout.type === 'info') {
-            elements.push(<InfoBox key={key++} type="info" title={callout.title} message={callout.message} />);
+            elements.push(
+                <InfoBox
+                    key={key++}
+                    type="info"
+                    title={callout.title}
+                    message={callout.message}
+                />,
+            );
         }
     }
 
@@ -144,7 +192,12 @@ function renderSection(section: ParsedSection): ReactNode {
             return (
                 <div className="grid gap-3 md:grid-cols-2">
                     {(section.tipItems || []).map((item, i) => (
-                        <InfoBox key={i} type="tip" title="نصيحة" message={item} />
+                        <InfoBox
+                            key={i}
+                            type="tip"
+                            title="نصيحة"
+                            message={item}
+                        />
                     ))}
                 </div>
             );
@@ -153,7 +206,12 @@ function renderSection(section: ParsedSection): ReactNode {
             return (
                 <div className="grid gap-3">
                     {(section.warningItems || []).map((item, i) => (
-                        <InfoBox key={i} type="warning" title="تنبيه" message={item} />
+                        <InfoBox
+                            key={i}
+                            type="warning"
+                            title="تنبيه"
+                            message={item}
+                        />
                     ))}
                 </div>
             );
@@ -162,7 +220,12 @@ function renderSection(section: ParsedSection): ReactNode {
             return (
                 <div className="grid gap-3">
                     {(section.faqItems || []).map((item, i) => (
-                        <InfoBox key={i} type="info" title={item.question} message={item.answer} />
+                        <InfoBox
+                            key={i}
+                            type="info"
+                            title={item.question}
+                            message={item.answer}
+                        />
                     ))}
                 </div>
             );
@@ -170,9 +233,13 @@ function renderSection(section: ParsedSection): ReactNode {
         case 'cta':
             return (
                 <div className="rounded-xl border bg-card p-6 text-center">
-                    <h3 className="mb-2 text-lg font-bold">{section.cta?.heading}</h3>
+                    <h3 className="mb-2 text-lg font-bold">
+                        {section.cta?.heading}
+                    </h3>
                     {section.cta?.description && (
-                        <p className="mb-4 text-sm text-muted-foreground">{section.cta.description}</p>
+                        <p className="mb-4 text-sm text-muted-foreground">
+                            {section.cta.description}
+                        </p>
                     )}
                     <Link
                         href={section.cta?.buttonHref || '/student/topics'}
@@ -187,20 +254,35 @@ function renderSection(section: ParsedSection): ReactNode {
             return (
                 <>
                     {(section.tables || []).map((table, ti) => (
-                        <div key={ti} className="overflow-hidden rounded-lg border">
+                        <div
+                            key={ti}
+                            className="overflow-hidden rounded-lg border"
+                        >
                             <table className="w-full text-sm">
                                 {table.headers.length > 0 && (
-                                    <thead><tr className="bg-muted/50">
-                                        {table.headers.map((h, i) => (
-                                            <th key={i} className="p-3 text-right font-semibold text-foreground">{h}</th>
-                                        ))}
-                                    </tr></thead>
+                                    <thead>
+                                        <tr className="bg-muted/50">
+                                            {table.headers.map((h, i) => (
+                                                <th
+                                                    key={i}
+                                                    className="p-3 text-right font-semibold text-foreground"
+                                                >
+                                                    {h}
+                                                </th>
+                                            ))}
+                                        </tr>
+                                    </thead>
                                 )}
                                 <tbody className="divide-y">
                                     {table.rows.map((row, ri) => (
                                         <tr key={ri}>
                                             {row.map((cell, ci) => (
-                                                <td key={ci} className="p-3 text-muted-foreground">{inlineToReact(cell)}</td>
+                                                <td
+                                                    key={ci}
+                                                    className="p-3 text-muted-foreground"
+                                                >
+                                                    {inlineToReact(cell)}
+                                                </td>
                                             ))}
                                         </tr>
                                     ))}
@@ -237,10 +319,13 @@ interface GuideRendererProps {
 }
 
 export function GuideRenderer({ document }: GuideRendererProps) {
-    const { frontmatter, hero, timeline, sections, relatedArticles, sources } = document;
+    const { frontmatter, hero, timeline, sections, relatedArticles, sources } =
+        document;
 
     const sidebarSteps = sections.map((s) => ({ id: s.id, label: s.title }));
-    const progressSections = sections.slice(0, 5).map((s) => ({ id: s.id, title: s.title }));
+    const progressSections = sections
+        .slice(0, 5)
+        .map((s) => ({ id: s.id, title: s.title }));
 
     return (
         <GuideLayout
@@ -266,7 +351,7 @@ export function GuideRenderer({ document }: GuideRendererProps) {
                     title: section.title,
                     icon: section.icon,
                     number: section.number,
-                    readTime: `${Math.max(1, ((section.paragraphs?.length || 0) + (section.tipItems?.length || 0) + (section.warningItems?.length || 0)) * 2 )} دقائق`,
+                    readTime: `${Math.max(1, ((section.paragraphs?.length || 0) + (section.tipItems?.length || 0) + (section.warningItems?.length || 0)) * 2)} دقائق`,
                     content: renderSection(section),
                 }))}
                 relatedArticles={relatedArticles}

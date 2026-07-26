@@ -20,7 +20,9 @@ export function GuideFeedback() {
                 animate={{ opacity: 1, y: 0 }}
                 className="rounded-xl border bg-card p-6 text-center"
             >
-                <p className="text-sm font-medium text-foreground">شكراً على ملاحظاتك! سنستخدمها لتحسين المحتوى.</p>
+                <p className="text-sm font-medium text-foreground">
+                    شكراً على ملاحظاتك! سنستخدمها لتحسين المحتوى.
+                </p>
             </motion.div>
         );
     }
@@ -33,7 +35,9 @@ export function GuideFeedback() {
             transition={{ duration: 0.4 }}
             className="rounded-xl border bg-card p-6"
         >
-            <p className="mb-4 text-center text-sm font-medium text-foreground">هل كانت هذه الصفحة مفيدة؟</p>
+            <p className="mb-4 text-center text-sm font-medium text-foreground">
+                هل كانت هذه الصفحة مفيدة؟
+            </p>
 
             <div className="flex justify-center gap-4">
                 <button
@@ -71,9 +75,17 @@ export function GuideFeedback() {
                     transition={{ duration: 0.2 }}
                     className="mt-4 space-y-3 overflow-hidden"
                 >
-                    <p className="text-xs text-muted-foreground">ما الذي كان ينقصك؟</p>
+                    <p className="text-xs text-muted-foreground">
+                        ما الذي كان ينقصك؟
+                    </p>
                     <div className="flex flex-wrap gap-2">
-                        {['معلومات أوفى', 'أمثلة تطبيقية', 'صور توضيحية', 'روابط أكثر', 'شيء آخر'].map((opt) => (
+                        {[
+                            'معلومات أوفى',
+                            'أمثلة تطبيقية',
+                            'صور توضيحية',
+                            'روابط أكثر',
+                            'شيء آخر',
+                        ].map((opt) => (
                             <button
                                 key={opt}
                                 type="button"

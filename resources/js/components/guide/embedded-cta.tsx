@@ -14,7 +14,14 @@ interface EmbeddedCTAProps {
     className?: string;
 }
 
-export function EmbeddedCTA({ title, description, buttonText, href, icon: Icon, className }: EmbeddedCTAProps) {
+export function EmbeddedCTA({
+    title,
+    description,
+    buttonText,
+    href,
+    icon: Icon,
+    className,
+}: EmbeddedCTAProps) {
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -26,8 +33,8 @@ export function EmbeddedCTA({ title, description, buttonText, href, icon: Icon, 
                 className,
             )}
         >
-            <div className="absolute -left-10 -top-10 h-32 w-32 rounded-full bg-primary/10 blur-3xl" />
-            <div className="absolute -bottom-10 -right-10 h-24 w-24 rounded-full bg-primary/5 blur-3xl" />
+            <div className="absolute -top-10 -left-10 h-32 w-32 rounded-full bg-primary/10 blur-3xl" />
+            <div className="absolute -right-10 -bottom-10 h-24 w-24 rounded-full bg-primary/5 blur-3xl" />
 
             <div className="relative flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
                 <div className="space-y-2">

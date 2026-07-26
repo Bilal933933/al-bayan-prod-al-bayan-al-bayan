@@ -17,10 +17,17 @@ interface ReportPageProps {
 
 const pageVariants = {
     hidden: { opacity: 0, y: 15 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0, 0, 0.2, 1] as const } },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.4, ease: [0, 0, 0.2, 1] as const },
+    },
 };
 
-export default function ReportPage({ reports, recent_questions }: ReportPageProps) {
+export default function ReportPage({
+    reports,
+    recent_questions,
+}: ReportPageProps) {
     return (
         <>
             <Head title="الإبلاغ" />
@@ -32,19 +39,21 @@ export default function ReportPage({ reports, recent_questions }: ReportPageProp
                 className="mx-auto flex max-w-2xl flex-col gap-6 p-6"
             >
                 <div className="flex flex-col gap-1">
-                    <h1 className="text-2xl font-bold text-foreground">الإبلاغ / تواصل معنا</h1>
-                    <p className="text-sm text-muted-foreground">للإبلاغ عن مشكلة في سؤال أو محتوى</p>
+                    <h1 className="text-2xl font-bold text-foreground">
+                        الإبلاغ / تواصل معنا
+                    </h1>
+                    <p className="text-sm text-muted-foreground">
+                        للإبلاغ عن مشكلة في سؤال أو محتوى
+                    </p>
                 </div>
 
-                                <ReportForm recentQuestions={recent_questions} />
-                                <ReportList reports={reports} />
+                <ReportForm recentQuestions={recent_questions} />
+                <ReportList reports={reports} />
             </motion.div>
         </>
     );
 }
 
 ReportPage.layout = {
-    breadcrumbs: [
-        { title: 'الإبلاغ', href: report() },
-    ],
+    breadcrumbs: [{ title: 'الإبلاغ', href: report() }],
 };

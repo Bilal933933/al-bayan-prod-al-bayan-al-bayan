@@ -22,32 +22,46 @@ interface LiveSummaryCardProps {
 
 function getDifficultyLabel(slug?: string | null): string {
     if (slug === 'easy') {
-return 'سهل';
-}
+        return 'سهل';
+    }
 
     if (slug === 'medium') {
-return 'متوسط';
-}
+        return 'متوسط';
+    }
 
     if (slug === 'hard') {
-return 'صعب';
-}
+        return 'صعب';
+    }
 
     return 'جميع المستويات';
 }
 
-export default function LiveSummaryCard({ mode, data, onSubmit, loading }: LiveSummaryCardProps) {
+export default function LiveSummaryCard({
+    mode,
+    data,
+    onSubmit,
+    loading,
+}: LiveSummaryCardProps) {
     return (
-        <div className="sticky top-6 bg-card rounded-3xl border border-border shadow-lg overflow-hidden text-right" dir="rtl">
-            <div className={cn(
-                'p-5 text-primary-foreground font-bold flex items-center gap-3 transition-colors duration-300',
-                mode === 'simulation' ? 'bg-info' : mode === 'training' ? 'bg-primary' : 'bg-muted-foreground',
-            )}>
-                <Trophy className="w-5 h-5 text-warning" />
+        <div
+            className="sticky top-6 overflow-hidden rounded-3xl border border-border bg-card text-right shadow-lg"
+            dir="rtl"
+        >
+            <div
+                className={cn(
+                    'flex items-center gap-3 p-5 font-bold text-primary-foreground transition-colors duration-300',
+                    mode === 'simulation'
+                        ? 'bg-info'
+                        : mode === 'training'
+                          ? 'bg-primary'
+                          : 'bg-muted-foreground',
+                )}
+            >
+                <Trophy className="h-5 w-5 text-warning" />
                 <span>بطاقة مراجعة المحاولة الحية</span>
             </div>
 
-            <div className="p-6 space-y-5">
+            <div className="space-y-5 p-6">
                 <AnimatePresence mode="wait">
                     {!mode ? (
                         <motion.div
@@ -55,9 +69,10 @@ export default function LiveSummaryCard({ mode, data, onSubmit, loading }: LiveS
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="text-center py-8 text-muted-foreground font-medium text-sm"
+                            className="py-8 text-center text-sm font-medium text-muted-foreground"
                         >
-                            يرجى اختيار نوع المحاولة من اليمين لبدء تجهيز ورقة الأسئلة الذكية.
+                            يرجى اختيار نوع المحاولة من اليمين لبدء تجهيز ورقة
+                            الأسئلة الذكية.
                         </motion.div>
                     ) : (
                         <motion.div
@@ -66,41 +81,59 @@ export default function LiveSummaryCard({ mode, data, onSubmit, loading }: LiveS
                             animate={{ opacity: 1, y: 0 }}
                             className="space-y-4"
                         >
-                            <div className="flex justify-between items-center border-b border-border pb-3">
-                                <span className="text-xs text-muted-foreground font-bold">نوع المسار:</span>
-                                <span className={cn(
-                                    'text-xs font-black px-2.5 py-1 rounded-full',
-                                    mode === 'simulation' ? 'bg-info/10 text-info' : 'bg-primary/10 text-primary',
-                                )}>
-                                    {mode === 'simulation' ? 'اختبار محاكاة رسمي' : 'تدريب حر مرن'}
+                            <div className="flex items-center justify-between border-b border-border pb-3">
+                                <span className="text-xs font-bold text-muted-foreground">
+                                    نوع المسار:
+                                </span>
+                                <span
+                                    className={cn(
+                                        'rounded-full px-2.5 py-1 text-xs font-black',
+                                        mode === 'simulation'
+                                            ? 'bg-info/10 text-info'
+                                            : 'bg-primary/10 text-primary',
+                                    )}
+                                >
+                                    {mode === 'simulation'
+                                        ? 'اختبار محاكاة رسمي'
+                                        : 'تدريب حر مرن'}
                                 </span>
                             </div>
 
-                            <div className="flex justify-between items-center border-b border-border pb-3">
-                                <span className="text-xs text-muted-foreground font-bold">المحتوى المستهدف:</span>
+                            <div className="flex items-center justify-between border-b border-border pb-3">
+                                <span className="text-xs font-bold text-muted-foreground">
+                                    المحتوى المستهدف:
+                                </span>
                                 <span className="text-sm font-bold text-foreground">
                                     {data.title || data.topicName || 'لم يحدد'}
                                 </span>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-3 bg-muted p-3 rounded-2xl my-2">
+                            <div className="my-2 grid grid-cols-2 gap-3 rounded-2xl bg-muted p-3">
                                 <div className="text-center">
-                                    <span className="text-[10px] text-muted-foreground block font-bold">إجمالي الأسئلة</span>
-                                    <span className="text-base font-black text-foreground mt-0.5 block">
+                                    <span className="block text-[10px] font-bold text-muted-foreground">
+                                        إجمالي الأسئلة
+                                    </span>
+                                    <span className="mt-0.5 block text-base font-black text-foreground">
                                         {data.questionsCount || 0} أسئلة
                                     </span>
                                 </div>
-                                <div className="text-center border-r border-border">
-                                    <span className="text-[10px] text-muted-foreground block font-bold">الوقت المخصص</span>
-                                    <span className="text-base font-black text-foreground mt-0.5 block">
-                                        {data.withTimer === false ? 'مفتوح' : `${data.durationMinutes || 0} دقيقة`}
+                                <div className="border-r border-border text-center">
+                                    <span className="block text-[10px] font-bold text-muted-foreground">
+                                        الوقت المخصص
+                                    </span>
+                                    <span className="mt-0.5 block text-base font-black text-foreground">
+                                        {data.withTimer === false
+                                            ? 'مفتوح'
+                                            : `${data.durationMinutes || 0} دقيقة`}
                                     </span>
                                 </div>
                             </div>
 
                             {mode === 'training' && (
-                                <div className="flex justify-between items-center border-b border-border pb-3">
-                                    <span className="text-xs text-muted-foreground font-bold">مستوى الصعوبة:</span>
+                                <div className="flex items-center justify-between border-b border-border pb-3">
+                                    <span className="text-xs font-bold text-muted-foreground">
+                                        مستوى الصعوبة:
+                                    </span>
                                     <span className="text-xs font-black text-foreground">
                                         {getDifficultyLabel(data.difficulty)}
                                     </span>
@@ -108,37 +141,47 @@ export default function LiveSummaryCard({ mode, data, onSubmit, loading }: LiveS
                             )}
 
                             {mode === 'simulation' && data.sectionsCount && (
-                                <div className="flex justify-between items-center border-b border-border pb-3">
-                                    <span className="text-xs text-muted-foreground font-bold">عدد الأقسام الفرعية:</span>
-                                    <span className="text-xs font-black text-info">{data.sectionsCount} أقسام معرفية</span>
+                                <div className="flex items-center justify-between border-b border-border pb-3">
+                                    <span className="text-xs font-bold text-muted-foreground">
+                                        عدد الأقسام الفرعية:
+                                    </span>
+                                    <span className="text-xs font-black text-info">
+                                        {data.sectionsCount} أقسام معرفية
+                                    </span>
                                 </div>
                             )}
 
-                            <div className="border-t-2 border-dashed border-border my-4 relative">
-                                <div className="absolute -top-2.5 -right-8 w-5 h-5 bg-muted rounded-full" />
-                                <div className="absolute -top-2.5 -left-8 w-5 h-5 bg-muted rounded-full" />
+                            <div className="relative my-4 border-t-2 border-dashed border-border">
+                                <div className="absolute -top-2.5 -right-8 h-5 w-5 rounded-full bg-muted" />
+                                <div className="absolute -top-2.5 -left-8 h-5 w-5 rounded-full bg-muted" />
                             </div>
 
                             {mode === 'simulation' && (
-                                <div className="p-3 bg-destructive/10 rounded-xl border border-destructive/20 flex gap-2.5 text-right">
-                                    <AlertTriangle className="w-4 h-4 text-destructive shrink-0 mt-0.5" />
-                                    <p className="text-[11px] text-destructive font-bold leading-relaxed">
-                                        بمجرد النقر، يبدأ المؤقت الإجباري. الخروج أو إغلاق الصفحة يحتسب محاولة مهجورة (Abandoned) فوراً.
+                                <div className="flex gap-2.5 rounded-xl border border-destructive/20 bg-destructive/10 p-3 text-right">
+                                    <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
+                                    <p className="text-[11px] leading-relaxed font-bold text-destructive">
+                                        بمجرد النقر، يبدأ المؤقت الإجباري.
+                                        الخروج أو إغلاق الصفحة يحتسب محاولة
+                                        مهجورة (Abandoned) فوراً.
                                     </p>
                                 </div>
                             )}
 
                             <Button
                                 onClick={onSubmit}
-                                disabled={loading || (!data.title && !data.topicName)}
+                                disabled={
+                                    loading || (!data.title && !data.topicName)
+                                }
                                 className={cn(
-                                    'w-full py-6 text-primary-foreground font-black text-base rounded-2xl shadow-lg transition-all',
+                                    'w-full rounded-2xl py-6 text-base font-black text-primary-foreground shadow-lg transition-all',
                                     mode === 'simulation'
                                         ? 'bg-info hover:brightness-90'
                                         : 'bg-primary hover:brightness-90',
                                 )}
                             >
-                                {loading ? 'جاري تشييد الاختبار...' : 'تأكيد وبدء الاختبار الفوري'}
+                                {loading
+                                    ? 'جاري تشييد الاختبار...'
+                                    : 'تأكيد وبدء الاختبار الفوري'}
                             </Button>
                         </motion.div>
                     )}

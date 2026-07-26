@@ -28,13 +28,20 @@ const levels = [
     },
 ];
 
-export function StepDifficulty({ selected, onSelect, onNext, onPrev }: StepDifficultyProps) {
+export function StepDifficulty({
+    selected,
+    onSelect,
+    onNext,
+    onPrev,
+}: StepDifficultyProps) {
     return (
-        <div className="flex flex-1 flex-col px-4 pb-10 pt-6">
+        <div className="flex flex-1 flex-col px-4 pt-6 pb-10">
             <div className="mb-2 text-center">
                 <span className="text-4xl">💪</span>
             </div>
-            <h2 className="mb-1 text-center text-2xl font-black">ما مستواك الحالي؟</h2>
+            <h2 className="mb-1 text-center text-2xl font-black">
+                ما مستواك الحالي؟
+            </h2>
             <p className="mb-8 text-center text-sm text-muted-foreground">
                 لا تقلق! هذا مجرد تقدير أولي. سيتكيف النظام تلقائياً مع أدائك.
             </p>
@@ -54,8 +61,12 @@ export function StepDifficulty({ selected, onSelect, onNext, onPrev }: StepDiffi
                     >
                         <span className="shrink-0 text-3xl">{level.emoji}</span>
                         <div className="flex-1">
-                            <div className="text-sm font-bold">{level.name}</div>
-                            <div className="text-xs text-muted-foreground">{level.desc}</div>
+                            <div className="text-sm font-bold">
+                                {level.name}
+                            </div>
+                            <div className="text-xs text-muted-foreground">
+                                {level.desc}
+                            </div>
                         </div>
                         <div
                             className={cn(

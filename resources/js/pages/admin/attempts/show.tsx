@@ -41,29 +41,54 @@ export default function Show({ attempt }: ShowProps) {
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [deleting, setDeleting] = useState(false);
 
-    const statusInfo = statusConfig[attempt.status] ?? { label: attempt.status, classes: 'bg-muted text-muted-foreground' };
+    const statusInfo = statusConfig[attempt.status] ?? {
+        label: attempt.status,
+        classes: 'bg-muted text-muted-foreground',
+    };
 
-    const correctCount = attempt.sections.reduce((acc, s) => acc + s.questions.filter((q) => q.is_correct === true).length, 0);
-    const wrongCount = attempt.sections.reduce((acc, s) => acc + s.questions.filter((q) => q.is_correct === false).length, 0);
-    const unansweredCount = attempt.sections.reduce((acc, s) => acc + s.questions.filter((q) => q.is_correct === null).length, 0);
-    const percentage = attempt.total_questions > 0 ? Math.round((correctCount / attempt.total_questions) * 100) : 0;
+    const correctCount = attempt.sections.reduce(
+        (acc, s) =>
+            acc + s.questions.filter((q) => q.is_correct === true).length,
+        0,
+    );
+    const wrongCount = attempt.sections.reduce(
+        (acc, s) =>
+            acc + s.questions.filter((q) => q.is_correct === false).length,
+        0,
+    );
+    const unansweredCount = attempt.sections.reduce(
+        (acc, s) =>
+            acc + s.questions.filter((q) => q.is_correct === null).length,
+        0,
+    );
+    const percentage =
+        attempt.total_questions > 0
+            ? Math.round((correctCount / attempt.total_questions) * 100)
+            : 0;
 
-    const durationSeconds = getDurationSeconds(attempt.started_at, attempt.finished_at);
+    const durationSeconds = getDurationSeconds(
+        attempt.started_at,
+        attempt.finished_at,
+    );
 
     const allQuestions = attempt.sections.flatMap((s) =>
-        s.questions.map((q) => ({ question_id: q.question_id, is_correct: q.is_correct, order: q.order })),
+        s.questions.map((q) => ({
+            question_id: q.question_id,
+            is_correct: q.is_correct,
+            order: q.order,
+        })),
     );
 
     const filteredQuestionIds = new Set(
         attempt.sections.flatMap((s) => {
             const qs = s.questions.filter((q) => {
                 if (filter === 'wrong') {
-return q.is_correct === false;
-}
+                    return q.is_correct === false;
+                }
 
                 if (filter === 'unanswered') {
-return q.is_correct === null;
-}
+                    return q.is_correct === null;
+                }
 
                 return true;
             });
@@ -72,7 +97,9 @@ return q.is_correct === null;
         }),
     );
 
-    const filteredNavQuestions = allQuestions.filter((q) => filteredQuestionIds.has(q.question_id));
+    const filteredNavQuestions = allQuestions.filter((q) =>
+        filteredQuestionIds.has(q.question_id),
+    );
 
     function handleDelete() {
         setDeleting(true);
@@ -90,10 +117,22 @@ return q.is_correct === null;
             <div className="flex flex-col items-center gap-4 py-6">
                 <ScoreCircle percentage={percentage} />
                 <div className="flex items-center justify-center gap-5">
-                    <StatBadge count={correctCount} label="صحيحة" color="text-success" />
-                    <StatBadge count={wrongCount} label="خاطئة" color="text-destructive" />
+                    <StatBadge
+                        count={correctCount}
+                        label="صحيحة"
+                        color="text-success"
+                    />
+                    <StatBadge
+                        count={wrongCount}
+                        label="خاطئة"
+                        color="text-destructive"
+                    />
                     {unansweredCount > 0 && (
-                        <StatBadge count={unansweredCount} label="لم تُجب" color="text-muted-foreground" />
+                        <StatBadge
+                            count={unansweredCount}
+                            label="لم تُجب"
+                            color="text-muted-foreground"
+                        />
                     )}
                 </div>
             </div>
@@ -120,44 +159,71 @@ return q.is_correct === null;
                     <div className="flex flex-col gap-5">
                         {/* Breadcrumb */}
                         <nav className="flex items-center gap-1.5 px-5 text-sm text-muted-foreground sm:px-6">
-                            <Link href={dashboard()} className="inline-flex items-center gap-1 transition-colors hover:text-foreground">
+                            <Link
+                                href={dashboard()}
+                                className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
+                            >
                                 <House className="h-3.5 w-3.5" />
                                 <span>لوحة التحكم</span>
                             </Link>
                             <span className="text-muted-foreground/50">/</span>
-                            <Link href={attempts.index()} className="inline-flex items-center gap-1 transition-colors hover:text-foreground">
+                            <Link
+                                href={attempts.index()}
+                                className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
+                            >
                                 <List className="h-3.5 w-3.5" />
                                 <span>المحاولات</span>
                             </Link>
                             <span className="text-muted-foreground/50">/</span>
-                            <span className="font-medium text-foreground">عرض محاولة #{attempt.id}</span>
+                            <span className="font-medium text-foreground">
+                                عرض محاولة #{attempt.id}
+                            </span>
                         </nav>
 
                         {/* Header */}
                         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                            <Heading title={`عرض محاولة #${attempt.id}`} description={`${attempt.user?.name ?? '—'} - ${attempt.subject_name}`} />
-                            <Button variant="destructive" size="sm" onClick={() => setDeleteOpen(true)}>
+                            <Heading
+                                title={`عرض محاولة #${attempt.id}`}
+                                description={`${attempt.user?.name ?? '—'} - ${attempt.subject_name}`}
+                            />
+                            <Button
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => setDeleteOpen(true)}
+                            >
                                 <Trash2 className="h-4 w-4" />
                                 حذف
                             </Button>
                         </div>
 
                         {/* User Card */}
-                        {attempt.user && <AttemptUserCard user={attempt.user} />}
+                        {attempt.user && (
+                            <AttemptUserCard user={attempt.user} />
+                        )}
 
                         {/* Hero */}
                         <div className="rounded-2xl bg-card p-5 shadow-sm ring-border/50 sm:p-6">
                             <div className="flex flex-wrap items-center justify-between gap-3">
                                 <div className="min-w-0 flex-1">
-                                    <h1 className="text-xl font-bold sm:text-2xl">{attempt.subject_name}</h1>
+                                    <h1 className="text-xl font-bold sm:text-2xl">
+                                        {attempt.subject_name}
+                                    </h1>
                                     <div className="mt-1 flex flex-wrap items-center gap-2">
-                                        <span className={cn('rounded-full border px-2.5 py-0.5 text-[11px] font-medium', statusInfo.classes)}>
+                                        <span
+                                            className={cn(
+                                                'rounded-full border px-2.5 py-0.5 text-[11px] font-medium',
+                                                statusInfo.classes,
+                                            )}
+                                        >
                                             {statusInfo.label}
                                         </span>
                                         <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
-                                            {typeLabels[attempt.type] ?? attempt.type}
+                                            {typeLabels[attempt.type] ??
+                                                attempt.type}
                                         </span>
-                                        <span className="text-xs text-muted-foreground">{attempt.total_questions} سؤال</span>
+                                        <span className="text-xs text-muted-foreground">
+                                            {attempt.total_questions} سؤال
+                                        </span>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3 text-xs text-muted-foreground">
@@ -165,8 +231,14 @@ return q.is_correct === null;
                                         <Clock className="h-3.5 w-3.5" />
                                         {formatDuration(durationSeconds)}
                                     </span>
-                                    <span className="text-muted-foreground/50">|</span>
-                                    <DateDisplay date={attempt.started_at} format="relative" showTooltip />
+                                    <span className="text-muted-foreground/50">
+                                        |
+                                    </span>
+                                    <DateDisplay
+                                        date={attempt.started_at}
+                                        format="relative"
+                                        showTooltip
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -178,7 +250,7 @@ return q.is_correct === null;
                                     key={f.value}
                                     onClick={() => setFilter(f.value)}
                                     className={cn(
-                                        'inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-1.5 text-xs font-medium transition-all',
+                                        'inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium whitespace-nowrap transition-all',
                                         filter === f.value
                                             ? 'bg-primary text-primary-foreground shadow-sm'
                                             : 'bg-card text-muted-foreground ring-border hover:bg-muted',
@@ -189,10 +261,14 @@ return q.is_correct === null;
                                         <span
                                             className={cn(
                                                 'inline-flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold',
-                                                filter === f.value ? 'bg-white/20' : 'bg-muted text-muted-foreground',
+                                                filter === f.value
+                                                    ? 'bg-white/20'
+                                                    : 'bg-muted text-muted-foreground',
                                             )}
                                         >
-                                            {f.countKey === 'wrong' ? wrongCount : unansweredCount}
+                                            {f.countKey === 'wrong'
+                                                ? wrongCount
+                                                : unansweredCount}
                                         </span>
                                     )}
                                 </button>
@@ -201,7 +277,12 @@ return q.is_correct === null;
 
                         {/* Section Blocks */}
                         {attempt.sections.map((section) => (
-                            <SectionBlock key={section.id} section={section} attempt={attempt} filter={filter} />
+                            <SectionBlock
+                                key={section.id}
+                                section={section}
+                                attempt={attempt}
+                                filter={filter}
+                            />
                         ))}
                     </div>
 
@@ -214,7 +295,7 @@ return q.is_correct === null;
                 </div>
 
                 {/* Mobile FAB + Sheet */}
-                <div className="fixed bottom-6 right-6 z-50 lg:hidden">
+                <div className="fixed right-6 bottom-6 z-50 lg:hidden">
                     <Sheet open={navOpen} onOpenChange={setNavOpen}>
                         <SheetTrigger asChild>
                             <button className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 transition-all hover:scale-105 active:scale-95">
@@ -222,9 +303,7 @@ return q.is_correct === null;
                             </button>
                         </SheetTrigger>
                         <SheetContent side="bottom" className="rounded-t-2xl">
-                            <div className="pb-4">
-                                {sidebarContent}
-                            </div>
+                            <div className="pb-4">{sidebarContent}</div>
                         </SheetContent>
                     </Sheet>
                 </div>
@@ -233,10 +312,10 @@ return q.is_correct === null;
             <DeleteDialog
                 open={deleteOpen}
                 onOpenChange={(open) => {
- if (!open) {
-setDeleteOpen(false);
-} 
-}}
+                    if (!open) {
+                        setDeleteOpen(false);
+                    }
+                }}
                 description="هل أنت متأكد من حذف هذه المحاولة؟ هذا الإجراء لا يمكن التراجع عنه."
                 onDelete={handleDelete}
                 processing={deleting}

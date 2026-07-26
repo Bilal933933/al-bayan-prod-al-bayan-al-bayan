@@ -1,5 +1,12 @@
 import { Link, router } from '@inertiajs/react';
-import { Award, CheckCircle, Clock, FileText, Play, RotateCcw } from 'lucide-react';
+import {
+    Award,
+    CheckCircle,
+    Clock,
+    FileText,
+    Play,
+    RotateCcw,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { BestScore } from '@/types/topic';
 import { getColor } from './topic-colors';
@@ -37,8 +44,8 @@ export default function TopicCard({
 
     function handleResume(e: React.MouseEvent) {
         if (!hasInProgress || !inProgressAttemptId) {
-return;
-}
+            return;
+        }
 
         e.preventDefault();
         e.stopPropagation();
@@ -47,8 +54,8 @@ return;
 
     function handleStart(e: React.MouseEvent) {
         if (hasInProgress) {
-return;
-}
+            return;
+        }
 
         e.preventDefault();
         e.stopPropagation();
@@ -59,21 +66,30 @@ return;
     }
 
     const card = (
-        <div className={cn(
-            'relative flex flex-col justify-between rounded-2xl border p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg',
-            colors.border,
-            colors.bg,
-            colors.hover,
-        )}>
+        <div
+            className={cn(
+                'relative flex flex-col justify-between rounded-2xl border p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg',
+                colors.border,
+                colors.bg,
+                colors.hover,
+            )}
+        >
             <div>
                 <div className="mb-2 flex items-start justify-between gap-2">
-                    <h3 className={cn('text-lg font-bold leading-tight', colors.text)}>
+                    <h3
+                        className={cn(
+                            'text-lg leading-tight font-bold',
+                            colors.text,
+                        )}
+                    >
                         {name}
                     </h3>
                     {bestScore && (
                         <div className="flex shrink-0 items-center gap-1 rounded-lg border border-success/20 bg-success/10 px-2 py-1 text-xs font-semibold text-success">
                             <Award className="h-3.5 w-3.5" />
-                            <span>أفضل: {bestScore.correct}/{bestScore.total}</span>
+                            <span>
+                                أفضل: {bestScore.correct}/{bestScore.total}
+                            </span>
                         </div>
                     )}
                 </div>
@@ -91,12 +107,15 @@ return;
                     </span>
                     <span className="inline-flex items-center gap-1 rounded-md bg-muted/50 px-2.5 py-1">
                         <Clock className="h-3.5 w-3.5" />
-                        {durationMinutes ? `${durationMinutes} دقيقة` : 'بدون مؤقت'}
+                        {durationMinutes
+                            ? `${durationMinutes} دقيقة`
+                            : 'بدون مؤقت'}
                     </span>
                     {userAttemptsCount > 0 && (
                         <span className="inline-flex items-center gap-1 rounded-md bg-muted/50 px-2.5 py-1">
                             <CheckCircle className="h-3.5 w-3.5" />
-                            {userAttemptsCount} محاولة{userAttemptsCount > 1 ? 'ات' : ''}
+                            {userAttemptsCount} محاولة
+                            {userAttemptsCount > 1 ? 'ات' : ''}
                         </span>
                     )}
                 </div>
@@ -105,11 +124,16 @@ return;
                     <div className="mb-4">
                         <div className="flex items-center justify-between text-xs text-muted-foreground">
                             <span>نسبة الإنجاز</span>
-                            <span className={cn('font-semibold', colors.text)}>{scorePercent}%</span>
+                            <span className={cn('font-semibold', colors.text)}>
+                                {scorePercent}%
+                            </span>
                         </div>
                         <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-muted">
                             <div
-                                className={cn('h-full rounded-full transition-all duration-500', colors.primaryBg)}
+                                className={cn(
+                                    'h-full rounded-full transition-all duration-500',
+                                    colors.primaryBg,
+                                )}
                                 style={{ width: `${scorePercent}%` }}
                             />
                         </div>

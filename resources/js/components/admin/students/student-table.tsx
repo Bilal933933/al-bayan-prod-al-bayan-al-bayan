@@ -31,18 +31,39 @@ function handleSort(sort: string, direction: string, field: string) {
     });
 }
 
-function SortHeader({ field, label, className, sort, direction }: { field: string; label: string; className?: string; sort: string; direction: string }) {
+function SortHeader({
+    field,
+    label,
+    className,
+    sort,
+    direction,
+}: {
+    field: string;
+    label: string;
+    className?: string;
+    sort: string;
+    direction: string;
+}) {
     const isActive = sort === field;
 
     return (
-        <th className={cn('px-4 py-3 font-medium whitespace-nowrap group', className)}>
+        <th
+            className={cn(
+                'group px-4 py-3 font-medium whitespace-nowrap',
+                className,
+            )}
+        >
             <button
                 onClick={() => handleSort(sort, direction, field)}
-                className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+                className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
             >
                 {label}
-                {isActive && direction === 'asc' && <ArrowUp className="h-3 w-3" />}
-                {isActive && direction === 'desc' && <ArrowDown className="h-3 w-3" />}
+                {isActive && direction === 'asc' && (
+                    <ArrowUp className="h-3 w-3" />
+                )}
+                {isActive && direction === 'desc' && (
+                    <ArrowDown className="h-3 w-3" />
+                )}
             </button>
         </th>
     );
@@ -69,7 +90,9 @@ export default function StudentTable({
                 {hasFilters ? (
                     <>
                         <SearchX className="h-10 w-10 text-muted-foreground/30" />
-                        <p className="text-muted-foreground">لا توجد نتائج تطابق بحثك.</p>
+                        <p className="text-muted-foreground">
+                            لا توجد نتائج تطابق بحثك.
+                        </p>
                         <p className="text-sm text-muted-foreground/60">
                             حاول تغيير كلمات البحث أو إلغاء التصفية.
                         </p>
@@ -77,8 +100,12 @@ export default function StudentTable({
                 ) : (
                     <>
                         <Users className="h-10 w-10 text-muted-foreground/30" />
-                        <p className="text-muted-foreground">لا يوجد طلاب بعد.</p>
-                        <p className="text-sm text-muted-foreground/60">أضف أول طالب للبدء.</p>
+                        <p className="text-muted-foreground">
+                            لا يوجد طلاب بعد.
+                        </p>
+                        <p className="text-sm text-muted-foreground/60">
+                            أضف أول طالب للبدء.
+                        </p>
                         <Link href={students.create().url} className="mt-2">
                             <Button>إنشاء أول طالب</Button>
                         </Link>
@@ -93,12 +120,33 @@ export default function StudentTable({
             <table className="w-full text-sm">
                 <thead className="sticky top-0 z-10">
                     <tr className="border-b bg-muted/80 text-start backdrop-blur-sm">
-                        <SortHeader sort={sort} direction={direction} field="name" label="الاسم" />
-                        <SortHeader sort={sort} direction={direction} field="email" label="البريد الإلكتروني" />
-                        <th className="px-4 py-3 font-medium whitespace-nowrap">الحالة</th>
-                        <SortHeader sort={sort} direction={direction} field="created_at" label="تاريخ التسجيل" />
-                        <th className="px-4 py-3 font-medium whitespace-nowrap text-center">المحاولات</th>
-                        <th className="px-4 py-3 font-medium whitespace-nowrap">الإجراءات</th>
+                        <SortHeader
+                            sort={sort}
+                            direction={direction}
+                            field="name"
+                            label="الاسم"
+                        />
+                        <SortHeader
+                            sort={sort}
+                            direction={direction}
+                            field="email"
+                            label="البريد الإلكتروني"
+                        />
+                        <th className="px-4 py-3 font-medium whitespace-nowrap">
+                            الحالة
+                        </th>
+                        <SortHeader
+                            sort={sort}
+                            direction={direction}
+                            field="created_at"
+                            label="تاريخ التسجيل"
+                        />
+                        <th className="px-4 py-3 text-center font-medium whitespace-nowrap">
+                            المحاولات
+                        </th>
+                        <th className="px-4 py-3 font-medium whitespace-nowrap">
+                            الإجراءات
+                        </th>
                     </tr>
                 </thead>
                 <tbody>

@@ -24,7 +24,9 @@ const tabs: Tab[] = [
                         <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">
                             {i + 1}
                         </span>
-                        <span className="text-sm leading-relaxed text-muted-foreground">{text}</span>
+                        <span className="text-sm leading-relaxed text-muted-foreground">
+                            {text}
+                        </span>
                     </li>
                 ))}
             </ul>
@@ -48,7 +50,9 @@ const tabs: Tab[] = [
                         <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">
                             {i + 1}
                         </span>
-                        <span className="text-sm leading-relaxed text-muted-foreground">{text}</span>
+                        <span className="text-sm leading-relaxed text-muted-foreground">
+                            {text}
+                        </span>
                     </li>
                 ))}
             </ul>
@@ -70,7 +74,9 @@ const tabs: Tab[] = [
                         <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-purple-100 text-xs font-bold text-purple-700">
                             {i + 1}
                         </span>
-                        <span className="text-sm leading-relaxed text-muted-foreground">{text}</span>
+                        <span className="text-sm leading-relaxed text-muted-foreground">
+                            {text}
+                        </span>
                     </li>
                 ))}
             </ul>

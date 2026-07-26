@@ -4,12 +4,16 @@ interface ProgressBarProps {
     onStepClick: (step: number) => void;
 }
 
-export function ProgressBar({ currentStep, totalSteps, onStepClick }: ProgressBarProps) {
+export function ProgressBar({
+    currentStep,
+    totalSteps,
+    onStepClick,
+}: ProgressBarProps) {
     const percent = ((currentStep + 1) / totalSteps) * 100;
     const stepLabels = ['الترحيب', 'المواضيع', 'المستوى', 'الإشعارات'];
 
     return (
-        <div className="sticky top-0 z-10 bg-background pb-2 pt-4">
+        <div className="sticky top-0 z-10 bg-background pt-4 pb-2">
             <div className="mb-1.5 h-1 w-full overflow-hidden rounded-full bg-border">
                 <div
                     className="h-full rounded-full bg-gradient-to-l from-primary to-accent transition-all duration-500"
@@ -17,7 +21,9 @@ export function ProgressBar({ currentStep, totalSteps, onStepClick }: ProgressBa
                 />
             </div>
             <div className="mb-4 flex justify-between text-xs font-medium text-muted-foreground">
-                <span>الخطوة {currentStep + 1} من {totalSteps}</span>
+                <span>
+                    الخطوة {currentStep + 1} من {totalSteps}
+                </span>
                 <span>{Math.round(percent)}%</span>
             </div>
             <div className="flex justify-center gap-2">

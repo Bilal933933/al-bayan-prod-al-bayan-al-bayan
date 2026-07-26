@@ -43,12 +43,26 @@ const pageVariants = {
 
 const statVariants = {
     hidden: { opacity: 0, y: 10 },
-    visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.05, duration: 0.25 } }),
+    visible: (i: number) => ({
+        opacity: 1,
+        y: 0,
+        transition: { delay: i * 0.05, duration: 0.25 },
+    }),
 };
 
 const statCards = [
-    { icon: BookOpen, label: 'إجمالي', key: 'total' as const, color: '#3b82f6' },
-    { icon: CheckCircle, label: 'نشط', key: 'active' as const, color: '#22c55e' },
+    {
+        icon: BookOpen,
+        label: 'إجمالي',
+        key: 'total' as const,
+        color: '#3b82f6',
+    },
+    {
+        icon: CheckCircle,
+        label: 'نشط',
+        key: 'active' as const,
+        color: '#22c55e',
+    },
     { icon: Globe, label: 'عام', key: 'general' as const, color: '#8b5cf6' },
     { icon: Lock, label: 'خاص', key: 'private_' as const, color: '#f59e0b' },
 ];
@@ -84,7 +98,10 @@ export default function Index({
     useEffect(() => {
         const timer = setTimeout(() => {
             if (searchInput !== currentSearch) {
-                navigateWithParams({ search: searchInput || undefined, page: '1' });
+                navigateWithParams({
+                    search: searchInput || undefined,
+                    page: '1',
+                });
             }
         }, 400);
 
@@ -110,7 +127,10 @@ export default function Index({
             >
                 {/* رأس الصفحة */}
                 <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                    <Heading title="المحاور" description="إدارة محاور الاختبارات" />
+                    <Heading
+                        title="المحاور"
+                        description="إدارة محاور الاختبارات"
+                    />
                     <Link href={topics.create().url} className="shrink-0">
                         <Button>إضافة محور</Button>
                     </Link>
@@ -126,13 +146,20 @@ export default function Index({
                             initial="hidden"
                             animate="visible"
                             className="rounded-lg border bg-card p-3"
-                            style={{ borderInlineStart: `3px solid ${stat.color}` }}
+                            style={{
+                                borderInlineStart: `3px solid ${stat.color}`,
+                            }}
                         >
                             <div className="flex items-center gap-2 text-muted-foreground">
-                                <stat.icon className="h-4 w-4" style={{ color: stat.color }} />
+                                <stat.icon
+                                    className="h-4 w-4"
+                                    style={{ color: stat.color }}
+                                />
                                 <span className="text-xs">{stat.label}</span>
                             </div>
-                            <p className="mt-1 text-2xl font-bold">{stats?.[stat.key] ?? topicsPage.total}</p>
+                            <p className="mt-1 text-2xl font-bold">
+                                {stats?.[stat.key] ?? topicsPage.total}
+                            </p>
                         </motion.div>
                     ))}
                 </div>
@@ -152,9 +179,19 @@ export default function Index({
                         {filterTabs.map((tab) => (
                             <Button
                                 key={tab.value}
-                                variant={filter === tab.value ? 'default' : 'outline'}
+                                variant={
+                                    filter === tab.value ? 'default' : 'outline'
+                                }
                                 size="sm"
-                                onClick={() => navigateWithParams({ filter: tab.value === 'all' ? undefined : tab.value, page: '1' })}
+                                onClick={() =>
+                                    navigateWithParams({
+                                        filter:
+                                            tab.value === 'all'
+                                                ? undefined
+                                                : tab.value,
+                                        page: '1',
+                                    })
+                                }
                             >
                                 {tab.label}
                             </Button>
@@ -171,7 +208,9 @@ export default function Index({
                     sort={sort}
                     direction={direction}
                 />
-                {allTopics.length > 0 && <LaravelPagination meta={topicsPage} />}
+                {allTopics.length > 0 && (
+                    <LaravelPagination meta={topicsPage} />
+                )}
             </motion.div>
         </>
     );

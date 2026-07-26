@@ -9,7 +9,12 @@ interface ResultStatsCardProps {
     sub?: string;
 }
 
-export function ResultStatsCard({ icon: Icon, label, value, sub }: ResultStatsCardProps) {
+export function ResultStatsCard({
+    icon: Icon,
+    label,
+    value,
+    sub,
+}: ResultStatsCardProps) {
     const isNumeric = typeof value === 'number';
 
     return (
@@ -21,7 +26,9 @@ export function ResultStatsCard({ icon: Icon, label, value, sub }: ResultStatsCa
             <p className="mt-2 text-2xl font-bold tracking-tight">
                 {isNumeric ? <SlidingNumber number={value} inView /> : value}
             </p>
-            {sub && <p className="mt-0.5 text-xs text-muted-foreground">{sub}</p>}
+            {sub && (
+                <p className="mt-0.5 text-xs text-muted-foreground">{sub}</p>
+            )}
         </div>
     );
 }

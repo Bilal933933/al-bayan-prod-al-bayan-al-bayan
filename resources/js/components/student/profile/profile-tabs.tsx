@@ -16,11 +16,11 @@ export function ProfileTabs({ activeTab, onTabChange }: ProfileTabsProps) {
                 <button
                     key={tab.id}
                     onClick={() => onTabChange(tab.id)}
-                    className={`whitespace-nowrap border-b-2 px-5 py-3 text-sm font-semibold transition-colors
-                        ${activeTab === tab.id
+                    className={`border-b-2 px-5 py-3 text-sm font-semibold whitespace-nowrap transition-colors ${
+                        activeTab === tab.id
                             ? 'border-primary text-primary'
                             : 'border-transparent text-muted-foreground hover:text-foreground'
-                        }`}
+                    }`}
                 >
                     {tab.label}
                 </button>

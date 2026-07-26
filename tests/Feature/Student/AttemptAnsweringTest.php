@@ -174,6 +174,21 @@ it('prevents student from answering another students question', function () {
     $response->assertForbidden();
 });
 
+it('prevents deep idor — own attempt id with another students question', function () {
+    $other = User::factory()->create(['role' => 'student']);
+    $otherAttempt = createPracticeAttempt($this, $other);
+    $ownAttempt = createPracticeAttempt($this, $this->user);
+    $foreignAq = $otherAttempt->sections->first()->questions->first();
+    $correctOption = $foreignAq->question->options->firstWhere('is_correct', true);
+
+    $response = $this->actingAs($this->user)->patch(
+        route('student.attempts.questions.update', [$ownAttempt, $foreignAq]),
+        ['selected_option_id' => $correctOption->id],
+    );
+
+    $response->assertForbidden();
+});
+
 it('prevents student from finishing another students attempt', function () {
     $other = User::factory()->create(['role' => 'student']);
     $otherAttempt = createPracticeAttempt($this, $other);

@@ -10,20 +10,34 @@ interface QuestionCardProps {
     questionId: string;
 }
 
-export default function QuestionCard({ question, attempt, questionId }: QuestionCardProps) {
+export default function QuestionCard({
+    question,
+    attempt,
+    questionId,
+}: QuestionCardProps) {
     const isCompleted = attempt.status === 'completed';
     const hasCorrect = question.is_correct === true;
     const hasWrong = question.is_correct === false;
 
     return (
-        <div id={questionId} className="scroll-mt-20 rounded-xl border border-border bg-card p-5 shadow-sm transition-shadow hover:shadow-md">
+        <div
+            id={questionId}
+            className="scroll-mt-20 rounded-xl border border-border bg-card p-5 shadow-sm transition-shadow hover:shadow-md"
+        >
             <div className="mb-3 flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                     <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-xs font-bold text-primary">
                         {question.order + 1}
                     </span>
-                    <span className={cn('rounded-md px-2 py-0.5 text-[11px] font-medium', difficultyColors[question.question.difficulty] ?? 'bg-muted text-muted-foreground')}>
-                        {difficultyLabels[question.question.difficulty] ?? question.question.difficulty}
+                    <span
+                        className={cn(
+                            'rounded-md px-2 py-0.5 text-[11px] font-medium',
+                            difficultyColors[question.question.difficulty] ??
+                                'bg-muted text-muted-foreground',
+                        )}
+                    >
+                        {difficultyLabels[question.question.difficulty] ??
+                            question.question.difficulty}
                     </span>
                 </div>
                 {isCompleted && hasCorrect && (
@@ -50,12 +64,27 @@ export default function QuestionCard({ question, attempt, questionId }: Question
                     const isLong = textLen > 30;
 
                     return (
-                        <div key={option.id!} className={isLong ? 'sm:col-span-2' : ''}>
+                        <div
+                            key={option.id!}
+                            className={isLong ? 'sm:col-span-2' : ''}
+                        >
                             <OptionCard
-                                option={option as { id: number; text: string; is_correct: boolean }}
+                                option={
+                                    option as {
+                                        id: number;
+                                        text: string;
+                                        is_correct: boolean;
+                                    }
+                                }
                                 isCompleted={isCompleted}
-                                showCorrect={isCompleted && option.is_correct === true}
-                                showWrong={isCompleted && question.selected_option_id === option.id && option.is_correct === false}
+                                showCorrect={
+                                    isCompleted && option.is_correct === true
+                                }
+                                showWrong={
+                                    isCompleted &&
+                                    question.selected_option_id === option.id &&
+                                    option.is_correct === false
+                                }
                             />
                         </div>
                     );

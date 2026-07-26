@@ -5,8 +5,8 @@ function readValue<T>(key: string, defaultValue: T): T {
         const raw = localStorage.getItem(key);
 
         if (raw === null) {
-return defaultValue;
-}
+            return defaultValue;
+        }
 
         return JSON.parse(raw) as T;
     } catch {
@@ -50,7 +50,8 @@ export function useLocalStorage<T>(key: string, defaultValue: T) {
         (fnOrValue: T | ((prev: T) => T)) => {
             try {
                 const prev = readValue(key, defaultValue);
-                const next = fnOrValue instanceof Function ? fnOrValue(prev) : fnOrValue;
+                const next =
+                    fnOrValue instanceof Function ? fnOrValue(prev) : fnOrValue;
 
                 localStorage.setItem(key, JSON.stringify(next));
                 window.dispatchEvent(new StorageEvent('storage', { key }));

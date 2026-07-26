@@ -24,9 +24,14 @@ export class ErrorBoundary extends Component<Props, State> {
     render(): ReactNode {
         if (this.state.hasError) {
             return (
-                <div className="flex min-h-screen items-center justify-center bg-background p-8" dir="rtl">
+                <div
+                    className="flex min-h-screen items-center justify-center bg-background p-8"
+                    dir="rtl"
+                >
                     <div className="max-w-md text-center">
-                        <h1 className="mb-2 text-2xl font-bold text-foreground">حدث خطأ غير متوقع</h1>
+                        <h1 className="mb-2 text-2xl font-bold text-foreground">
+                            حدث خطأ غير متوقع
+                        </h1>
                         <p className="mb-6 text-muted-foreground">
                             حاول تحديث الصفحة أو العودة لاحقاً.
                         </p>

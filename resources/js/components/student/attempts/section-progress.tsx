@@ -14,10 +14,14 @@ interface SectionProgressProps {
     completedIndices: number[];
 }
 
-export function SectionProgress({ sections, currentIndex, completedIndices }: SectionProgressProps) {
+export function SectionProgress({
+    sections,
+    currentIndex,
+    completedIndices,
+}: SectionProgressProps) {
     if (sections.length <= 1) {
-return null;
-}
+        return null;
+    }
 
     return (
         <div className="mx-auto w-full max-w-4xl px-4 pt-4">
@@ -37,18 +41,24 @@ return null;
                             className="flex items-center gap-2"
                         >
                             {index > 0 && (
-                                <div className={cn(
-                                    'h-0.5 w-6 rounded-full',
-                                    isCompleted || isCurrent ? 'bg-primary' : 'bg-muted-foreground/20',
-                                )} />
+                                <div
+                                    className={cn(
+                                        'h-0.5 w-6 rounded-full',
+                                        isCompleted || isCurrent
+                                            ? 'bg-primary'
+                                            : 'bg-muted-foreground/20',
+                                    )}
+                                />
                             )}
                             <motion.div
                                 layout
                                 className={cn(
                                     'flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium transition-colors',
-                                    isCurrent && 'bg-primary/10 text-primary ring-1 ring-primary/30',
+                                    isCurrent &&
+                                        'bg-primary/10 text-primary ring-1 ring-primary/30',
                                     isCompleted && 'bg-success/10 text-success',
-                                    isPending && 'bg-muted text-muted-foreground',
+                                    isPending &&
+                                        'bg-muted text-muted-foreground',
                                 )}
                             >
                                 {isCompleted ? (
@@ -58,14 +68,15 @@ return null;
                                         {index + 1}
                                     </span>
                                 )}
-                                <span className="truncate max-w-28">
-                                    {section.topic?.name ?? `المحور ${index + 1}`}
+                                <span className="max-w-28 truncate">
+                                    {section.topic?.name ??
+                                        `المحور ${index + 1}`}
                                 </span>
                                 {isCurrent && (
                                     <motion.span
                                         initial={{ opacity: 0, width: 0 }}
                                         animate={{ opacity: 1, width: 'auto' }}
-                                        className="text-[10px] opacity-70 overflow-hidden"
+                                        className="overflow-hidden text-[10px] opacity-70"
                                     >
                                         {section.questions_count} سؤال
                                     </motion.span>

@@ -15,7 +15,8 @@ export function GuideProgress({ sections, className }: GuideProgressProps) {
     useEffect(() => {
         const handleScroll = () => {
             const scrollTop = window.scrollY;
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const docHeight =
+                document.documentElement.scrollHeight - window.innerHeight;
             const pct = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
             setProgress(pct);
 
@@ -39,9 +40,14 @@ export function GuideProgress({ sections, className }: GuideProgressProps) {
     }, [sections]);
 
     return (
-        <div className={cn('sticky top-0 z-40 bg-background/80 backdrop-blur-md', className)}>
+        <div
+            className={cn(
+                'sticky top-0 z-40 bg-background/80 backdrop-blur-md',
+                className,
+            )}
+        >
             <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-2 md:px-8">
-                <span className="whitespace-nowrap text-xs font-medium text-muted-foreground">
+                <span className="text-xs font-medium whitespace-nowrap text-muted-foreground">
                     رحلة المتقدم
                 </span>
 

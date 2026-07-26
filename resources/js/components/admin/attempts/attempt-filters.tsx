@@ -40,7 +40,11 @@ function navigateWithParams(overrides: Record<string, string | undefined>) {
     });
 }
 
-export default function AttemptFilters({ filters, topics, competitions }: AttemptFiltersProps) {
+export default function AttemptFilters({
+    filters,
+    topics,
+    competitions,
+}: AttemptFiltersProps) {
     const [searchInput, setSearchInput] = useState(filters.search || '');
 
     useEffect(() => {
@@ -67,7 +71,11 @@ export default function AttemptFilters({ filters, topics, competitions }: Attemp
 
             <Select
                 value={filters.type ?? 'all'}
-                onValueChange={(val) => navigateWithParams({ type: val === 'all' ? undefined : val })}
+                onValueChange={(val) =>
+                    navigateWithParams({
+                        type: val === 'all' ? undefined : val,
+                    })
+                }
             >
                 <SelectTrigger className="w-full sm:w-32">
                     <SelectValue placeholder="النوع" />
@@ -81,7 +89,11 @@ export default function AttemptFilters({ filters, topics, competitions }: Attemp
 
             <Select
                 value={filters.status ?? 'all'}
-                onValueChange={(val) => navigateWithParams({ status: val === 'all' ? undefined : val })}
+                onValueChange={(val) =>
+                    navigateWithParams({
+                        status: val === 'all' ? undefined : val,
+                    })
+                }
             >
                 <SelectTrigger className="w-full sm:w-36">
                     <SelectValue placeholder="الحالة" />
@@ -96,7 +108,11 @@ export default function AttemptFilters({ filters, topics, competitions }: Attemp
 
             <Select
                 value={filters.topic_id ?? 'all'}
-                onValueChange={(val) => navigateWithParams({ topic_id: val === 'all' ? undefined : val })}
+                onValueChange={(val) =>
+                    navigateWithParams({
+                        topic_id: val === 'all' ? undefined : val,
+                    })
+                }
             >
                 <SelectTrigger className="w-full sm:w-44">
                     <SelectValue placeholder="المحور" />
@@ -113,7 +129,11 @@ export default function AttemptFilters({ filters, topics, competitions }: Attemp
 
             <Select
                 value={filters.competition_id ?? 'all'}
-                onValueChange={(val) => navigateWithParams({ competition_id: val === 'all' ? undefined : val })}
+                onValueChange={(val) =>
+                    navigateWithParams({
+                        competition_id: val === 'all' ? undefined : val,
+                    })
+                }
             >
                 <SelectTrigger className="w-full sm:w-44">
                     <SelectValue placeholder="المسابقة" />

@@ -23,16 +23,20 @@ const MAX_RECENT = 10;
 
 function highlightText(text: string, query: string): React.ReactNode {
     if (!query) {
-return text;
-}
+        return text;
+    }
 
     const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const parts = text.split(new RegExp(`(${escaped})`, 'gi'));
 
     return parts.map((part, i) =>
-        part.toLowerCase() === query.toLowerCase()
-            ? <mark key={i} className="rounded px-0.5 bg-accent/60">{part}</mark>
-            : part,
+        part.toLowerCase() === query.toLowerCase() ? (
+            <mark key={i} className="rounded bg-accent/60 px-0.5">
+                {part}
+            </mark>
+        ) : (
+            part
+        ),
     );
 }
 
@@ -76,13 +80,15 @@ export function GlobalSearch({ open, onOpenChange }: Props) {
     const [results, setResults] = useState<SearchResponse | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(-1);
-    const [recentSearches, setRecentSearches] = useState<string[]>(loadRecentSearches);
+    const [recentSearches, setRecentSearches] =
+        useState<string[]>(loadRecentSearches);
     const inputRef = useRef<HTMLInputElement>(null);
     const debounceRef = useRef<ReturnType<typeof setTimeout>>(null);
     const prevOpenRef = useRef(open);
     const prevQueryLengthRef = useRef(0);
 
-    const allResults: { type: 'topic' | 'competition'; item: SearchResult }[] = [];
+    const allResults: { type: 'topic' | 'competition'; item: SearchResult }[] =
+        [];
 
     if (results) {
         for (const item of results.topics) {
@@ -110,7 +116,8 @@ export function GlobalSearch({ open, onOpenChange }: Props) {
             clearTimeout(debounceRef.current);
         }
 
-        const shouldClearResults = prevQueryLengthRef.current >= 2 && query.length < 2;
+        const shouldClearResults =
+            prevQueryLengthRef.current >= 2 && query.length < 2;
 
         if (query.length < 2) {
             if (shouldClearResults) {
@@ -130,7 +137,7 @@ export function GlobalSearch({ open, onOpenChange }: Props) {
                 fetch(`/search?q=${encodeURIComponent(query)}`, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json',
+                        Accept: 'application/json',
                     },
                 })
                     .then((res) => {
@@ -181,14 +188,20 @@ export function GlobalSearch({ open, onOpenChange }: Props) {
         }
     }
 
-    function navigateTo(result: { type: 'topic' | 'competition'; item: SearchResult }) {
+    function navigateTo(result: {
+        type: 'topic' | 'competition';
+        item: SearchResult;
+    }) {
         onOpenChange(false);
 
         const trimmed = query.trim();
 
         if (trimmed.length >= 2) {
             setRecentSearches((prev) => {
-                const next = [trimmed, ...prev.filter((s) => s !== trimmed)].slice(0, MAX_RECENT);
+                const next = [
+                    trimmed,
+                    ...prev.filter((s) => s !== trimmed),
+                ].slice(0, MAX_RECENT);
                 saveRecentSearches(next);
 
                 return next;
@@ -202,11 +215,15 @@ export function GlobalSearch({ open, onOpenChange }: Props) {
         }
     }
 
-    const hasNoResults = results && !isLoading && allResults.length === 0 && query.length >= 2;
+    const hasNoResults =
+        results && !isLoading && allResults.length === 0 && query.length >= 2;
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent hideCloseButton className="max-sm:top-8 top-[12vh] max-sm:mx-2 sm:max-w-xl shadow-2xl [--tw-translate-y:0] data-[state=open]:slide-in-from-top-3 data-[state=closed]:slide-out-to-top-3 max-sm:p-4">
+            <DialogContent
+                hideCloseButton
+                className="top-[12vh] [--tw-translate-y:0] shadow-2xl data-[state=closed]:slide-out-to-top-3 data-[state=open]:slide-in-from-top-3 max-sm:top-8 max-sm:mx-2 max-sm:p-4 sm:max-w-xl"
+            >
                 <DialogHeader className="sr-only">
                     <DialogTitle>البحث</DialogTitle>
                 </DialogHeader>
@@ -234,7 +251,10 @@ export function GlobalSearch({ open, onOpenChange }: Props) {
                     </button>
                 </div>
 
-                <div className="flex flex-col gap-4 overflow-y-auto max-sm:max-h-[50vh]" style={{ maxHeight: 'min(60vh, 400px)' }}>
+                <div
+                    className="flex flex-col gap-4 overflow-y-auto max-sm:max-h-[50vh]"
+                    style={{ maxHeight: 'min(60vh, 400px)' }}
+                >
                     {hasNoResults && (
                         <div className="flex flex-col items-center justify-center py-12">
                             <SearchX className="h-12 w-12 text-muted-foreground/60" />
@@ -246,21 +266,30 @@ export function GlobalSearch({ open, onOpenChange }: Props) {
 
                     {results && !isLoading && results.topics.length > 0 && (
                         <section>
-                            <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                            <h3 className="mb-2 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                                 المحاور
                             </h3>
                             <div className="flex flex-col gap-1">
                                 {results.topics.map((topic) => {
                                     const idx = allResults.findIndex(
-                                        (r) => r.type === 'topic' && r.item.id === topic.id,
+                                        (r) =>
+                                            r.type === 'topic' &&
+                                            r.item.id === topic.id,
                                     );
 
                                     return (
                                         <button
                                             key={`topic-${topic.id}`}
                                             type="button"
-                                            onClick={() => navigateTo({ type: 'topic', item: topic })}
-                                            onMouseEnter={() => setSelectedIndex(idx)}
+                                            onClick={() =>
+                                                navigateTo({
+                                                    type: 'topic',
+                                                    item: topic,
+                                                })
+                                            }
+                                            onMouseEnter={() =>
+                                                setSelectedIndex(idx)
+                                            }
                                             className={cn(
                                                 'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-start text-sm transition-colors',
                                                 selectedIndex === idx
@@ -269,7 +298,12 @@ export function GlobalSearch({ open, onOpenChange }: Props) {
                                             )}
                                         >
                                             <BookOpen className="h-4 w-4 shrink-0 text-muted-foreground" />
-                                            <span className="flex-1 truncate">{highlightText(topic.name, query)}</span>
+                                            <span className="flex-1 truncate">
+                                                {highlightText(
+                                                    topic.name,
+                                                    query,
+                                                )}
+                                            </span>
                                             <span className="shrink-0 text-xs text-muted-foreground">
                                                 {topic.code}
                                             </span>
@@ -280,41 +314,57 @@ export function GlobalSearch({ open, onOpenChange }: Props) {
                         </section>
                     )}
 
-                    {results && !isLoading && results.competitions.length > 0 && (
-                        <section>
-                            <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                                المسابقات
-                            </h3>
-                            <div className="flex flex-col gap-1">
-                                {results.competitions.map((competition) => {
-                                    const idx = allResults.findIndex(
-                                        (r) => r.type === 'competition' && r.item.id === competition.id,
-                                    );
+                    {results &&
+                        !isLoading &&
+                        results.competitions.length > 0 && (
+                            <section>
+                                <h3 className="mb-2 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                                    المسابقات
+                                </h3>
+                                <div className="flex flex-col gap-1">
+                                    {results.competitions.map((competition) => {
+                                        const idx = allResults.findIndex(
+                                            (r) =>
+                                                r.type === 'competition' &&
+                                                r.item.id === competition.id,
+                                        );
 
-                                    return (
-                                        <button
-                                            key={`competition-${competition.id}`}
-                                            type="button"
-                                            onClick={() => navigateTo({ type: 'competition', item: competition })}
-                                            onMouseEnter={() => setSelectedIndex(idx)}
-                                            className={cn(
-                                                'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-start text-sm transition-colors',
-                                                selectedIndex === idx
-                                                    ? 'bg-accent text-accent-foreground'
-                                                    : 'hover:bg-muted',
-                                            )}
-                                        >
-                                            <Trophy className="h-4 w-4 shrink-0 text-muted-foreground" />
-                                            <span className="flex-1 truncate">{highlightText(competition.name, query)}</span>
-                                            <span className="shrink-0 text-xs text-muted-foreground">
-                                                {competition.code}
-                                            </span>
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        </section>
-                    )}
+                                        return (
+                                            <button
+                                                key={`competition-${competition.id}`}
+                                                type="button"
+                                                onClick={() =>
+                                                    navigateTo({
+                                                        type: 'competition',
+                                                        item: competition,
+                                                    })
+                                                }
+                                                onMouseEnter={() =>
+                                                    setSelectedIndex(idx)
+                                                }
+                                                className={cn(
+                                                    'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-start text-sm transition-colors',
+                                                    selectedIndex === idx
+                                                        ? 'bg-accent text-accent-foreground'
+                                                        : 'hover:bg-muted',
+                                                )}
+                                            >
+                                                <Trophy className="h-4 w-4 shrink-0 text-muted-foreground" />
+                                                <span className="flex-1 truncate">
+                                                    {highlightText(
+                                                        competition.name,
+                                                        query,
+                                                    )}
+                                                </span>
+                                                <span className="shrink-0 text-xs text-muted-foreground">
+                                                    {competition.code}
+                                                </span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </section>
+                        )}
 
                     {!query && recentSearches.length > 0 && (
                         <section>
@@ -328,7 +378,7 @@ export function GlobalSearch({ open, onOpenChange }: Props) {
                                         setRecentSearches([]);
                                         saveRecentSearches([]);
                                     }}
-                                    className="text-xs text-muted-foreground hover:text-foreground cursor-pointer"
+                                    className="cursor-pointer text-xs text-muted-foreground hover:text-foreground"
                                 >
                                     مسح الكل
                                 </button>
@@ -345,14 +395,18 @@ export function GlobalSearch({ open, onOpenChange }: Props) {
                                         className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-start text-sm transition-colors hover:bg-muted"
                                     >
                                         <History className="h-4 w-4 shrink-0 text-muted-foreground" />
-                                        <span className="flex-1 truncate">{term}</span>
+                                        <span className="flex-1 truncate">
+                                            {term}
+                                        </span>
                                         <button
                                             type="button"
                                             onMouseDown={(e) => {
                                                 e.stopPropagation();
                                                 e.preventDefault();
                                                 setRecentSearches((prev) => {
-                                                    const next = prev.filter((s) => s !== term);
+                                                    const next = prev.filter(
+                                                        (s) => s !== term,
+                                                    );
                                                     saveRecentSearches(next);
 
                                                     return next;
@@ -375,18 +429,24 @@ export function GlobalSearch({ open, onOpenChange }: Props) {
                     )}
                 </div>
 
-                <div className="-mx-6 -mb-6 mt-2 rounded-b-lg bg-muted/50 px-6 py-2.5">
+                <div className="-mx-6 mt-2 -mb-6 rounded-b-lg bg-muted/50 px-6 py-2.5">
                     <div className="flex items-center justify-between text-xs text-muted-foreground">
                         <span className="flex items-center gap-1.5">
-                            <kbd className="rounded border bg-background px-1.5 py-0.5 font-mono text-[11px] font-medium">↑↓</kbd>
+                            <kbd className="rounded border bg-background px-1.5 py-0.5 font-mono text-[11px] font-medium">
+                                ↑↓
+                            </kbd>
                             <span>للتنقل</span>
                         </span>
                         <span className="flex items-center gap-1.5">
-                            <kbd className="rounded border bg-background px-1.5 py-0.5 font-mono text-[11px] font-medium">↵</kbd>
+                            <kbd className="rounded border bg-background px-1.5 py-0.5 font-mono text-[11px] font-medium">
+                                ↵
+                            </kbd>
                             <span>للاختيار</span>
                         </span>
                         <span className="flex items-center gap-1.5">
-                            <kbd className="rounded border bg-background px-1.5 py-0.5 font-mono text-[11px] font-medium">ESC</kbd>
+                            <kbd className="rounded border bg-background px-1.5 py-0.5 font-mono text-[11px] font-medium">
+                                ESC
+                            </kbd>
                             <span>للإغلاق</span>
                         </span>
                     </div>

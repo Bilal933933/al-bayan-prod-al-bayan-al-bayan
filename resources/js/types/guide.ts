@@ -49,7 +49,15 @@ export interface FaqItem {
     answer: string;
 }
 
-export type SectionType = 'content' | 'checklist' | 'tips' | 'warnings' | 'faq' | 'cta' | 'table' | 'legalreference';
+export type SectionType =
+    | 'content'
+    | 'checklist'
+    | 'tips'
+    | 'warnings'
+    | 'faq'
+    | 'cta'
+    | 'table'
+    | 'legalreference';
 
 export interface ParsedSection {
     id: string;

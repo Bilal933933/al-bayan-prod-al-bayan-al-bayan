@@ -19,7 +19,10 @@ export function ProfileStatsGrid({ stats }: ProfileStatsGridProps) {
         {
             icon: Gauge,
             label: 'متوسط النتيجة',
-            value: stats.avg_score_percentage !== null ? `${stats.avg_score_percentage}%` : '—',
+            value:
+                stats.avg_score_percentage !== null
+                    ? `${stats.avg_score_percentage}%`
+                    : '—',
             iconColor: 'text-emerald-600',
             bgColor: 'bg-gradient-to-br from-emerald-500/10 to-emerald-500/20',
             borderColor: 'border-emerald-500/30',

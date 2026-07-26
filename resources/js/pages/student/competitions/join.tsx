@@ -10,12 +10,20 @@ import competitions from '@/routes/student/competitions';
 import type { Competition, ChildCompetition } from '@/types/competition';
 
 interface JoinProps {
-    competition: Competition & { users_count?: number; topics_count?: number; children?: ChildCompetition[] };
+    competition: Competition & {
+        users_count?: number;
+        topics_count?: number;
+        children?: ChildCompetition[];
+    };
     is_joined: boolean;
     total_questions: number;
 }
 
-export default function Join({ competition, is_joined, total_questions }: JoinProps) {
+export default function Join({
+    competition,
+    is_joined,
+    total_questions,
+}: JoinProps) {
     return (
         <>
             <Head title={`الانضمام إلى ${competition.name}`} />
@@ -46,12 +54,16 @@ export default function Join({ competition, is_joined, total_questions }: JoinPr
 
                         <PerksList />
 
-                        {competition.children && competition.children.length > 0 && (
-                            <ChildrenList children={competition.children} />
-                        )}
+                        {competition.children &&
+                            competition.children.length > 0 && (
+                                <ChildrenList children={competition.children} />
+                            )}
 
                         <div className="pt-4">
-                            <JoinActions competition={competition} isJoined={is_joined} />
+                            <JoinActions
+                                competition={competition}
+                                isJoined={is_joined}
+                            />
                         </div>
                     </div>
                 </motion.div>

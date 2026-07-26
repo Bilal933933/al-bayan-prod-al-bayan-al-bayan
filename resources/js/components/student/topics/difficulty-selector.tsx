@@ -36,10 +36,15 @@ interface DifficultySelectorProps {
     onChange: (value: string | null) => void;
 }
 
-export function DifficultySelector({ value, onChange }: DifficultySelectorProps) {
+export function DifficultySelector({
+    value,
+    onChange,
+}: DifficultySelectorProps) {
     return (
         <div>
-            <h3 className="mb-3 text-sm font-medium text-muted-foreground">مستوى الصعوبة:</h3>
+            <h3 className="mb-3 text-sm font-medium text-muted-foreground">
+                مستوى الصعوبة:
+            </h3>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {difficulties.map((d) => {
                     const isSelected = value === d.key;
@@ -54,18 +59,35 @@ export function DifficultySelector({ value, onChange }: DifficultySelectorProps)
                                 'flex flex-col gap-1.5 rounded-xl border p-3.5 text-right transition-all duration-200',
                                 d.class,
                                 isSelected && 'ring-2',
-                                isSelected && d.key === null && 'ring-foreground/20',
-                                isSelected && d.key === 'easy' && 'ring-success/20',
-                                isSelected && d.key === 'medium' && 'ring-warning/20',
-                                isSelected && d.key === 'hard' && 'ring-destructive/20',
+                                isSelected &&
+                                    d.key === null &&
+                                    'ring-foreground/20',
+                                isSelected &&
+                                    d.key === 'easy' &&
+                                    'ring-success/20',
+                                isSelected &&
+                                    d.key === 'medium' &&
+                                    'ring-warning/20',
+                                isSelected &&
+                                    d.key === 'hard' &&
+                                    'ring-destructive/20',
                                 !isSelected && 'bg-card hover:shadow-sm',
                             )}
                         >
                             <div className="flex items-center gap-2">
-                                <span className={cn('h-2.5 w-2.5 rounded-full', d.dot)} />
-                                <span className="text-sm font-semibold">{d.label}</span>
+                                <span
+                                    className={cn(
+                                        'h-2.5 w-2.5 rounded-full',
+                                        d.dot,
+                                    )}
+                                />
+                                <span className="text-sm font-semibold">
+                                    {d.label}
+                                </span>
                             </div>
-                            <span className="text-xs text-muted-foreground">{d.description}</span>
+                            <span className="text-xs text-muted-foreground">
+                                {d.description}
+                            </span>
                         </button>
                     );
                 })}

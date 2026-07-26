@@ -40,7 +40,7 @@ export default function Dashboard({
                     distribution={stats.questions.distribution}
                 />
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                     <TopicAnalyzer data={topicPerformance} />
                     <CompMonitor data={competitionsMonitor} />
                     <QuickSidebar systemHealth={systemHealthCount} />

@@ -39,7 +39,9 @@ export default function Create({ topics, competitions, topicId }: CreateProps) {
     );
     const [loading, setLoading] = useState(false);
 
-    const [selectedTopic, setSelectedTopic] = useState<number | null>(topicId ?? null);
+    const [selectedTopic, setSelectedTopic] = useState<number | null>(
+        topicId ?? null,
+    );
     const [difficulty, setDifficulty] = useState<string | null>(null);
     const [questionsCount, setQuestionsCount] = useState<number>(
         initialTopic?.default_questions_count ?? DEFAULT_QUESTIONS_COUNT,
@@ -48,15 +50,18 @@ export default function Create({ topics, competitions, topicId }: CreateProps) {
 
     const [selectedComp, setSelectedComp] = useState<Competition | null>(null);
 
-    const handleTopicChange = useCallback((id: number) => {
-        setSelectedTopic(id);
-        const topic = topics.find((t) => t.id === id);
+    const handleTopicChange = useCallback(
+        (id: number) => {
+            setSelectedTopic(id);
+            const topic = topics.find((t) => t.id === id);
 
-        if (topic) {
-            setQuestionsCount(topic.default_questions_count);
-            setWithTimer(true);
-        }
-    }, [topics]);
+            if (topic) {
+                setQuestionsCount(topic.default_questions_count);
+                setWithTimer(true);
+            }
+        },
+        [topics],
+    );
 
     const currentTopic = useMemo(
         () => topics.find((t) => t.id === selectedTopic),
@@ -69,7 +74,9 @@ export default function Create({ topics, competitions, topicId }: CreateProps) {
                 topicName: currentTopic.name,
                 questionsCount,
                 withTimer,
-                durationMinutes: withTimer ? (currentTopic.default_duration_minutes ?? 15) : undefined,
+                durationMinutes: withTimer
+                    ? (currentTopic.default_duration_minutes ?? 15)
+                    : undefined,
                 difficulty,
             };
         }
@@ -84,17 +91,28 @@ export default function Create({ topics, competitions, topicId }: CreateProps) {
         }
 
         return {};
-    }, [mode, selectedTopic, currentTopic, questionsCount, withTimer, difficulty, selectedComp]);
+    }, [
+        mode,
+        selectedTopic,
+        currentTopic,
+        questionsCount,
+        withTimer,
+        difficulty,
+        selectedComp,
+    ]);
 
-    const handleModeChange = useCallback((newMode: 'training' | 'simulation') => {
-        setMode(newMode);
+    const handleModeChange = useCallback(
+        (newMode: 'training' | 'simulation') => {
+            setMode(newMode);
 
-        if (newMode === 'training') {
-            setSelectedComp(null);
-        } else {
-            setSelectedTopic(null);
-        }
-    }, []);
+            if (newMode === 'training') {
+                setSelectedComp(null);
+            } else {
+                setSelectedTopic(null);
+            }
+        },
+        [],
+    );
 
     const handleFinalSubmit = useCallback(() => {
         if (mode === 'training' && selectedTopic) {
@@ -118,9 +136,19 @@ export default function Create({ topics, competitions, topicId }: CreateProps) {
                 },
             );
         } else if (mode === 'simulation' && selectedComp) {
-            router.visit(studentCompetitions.show({ competition: selectedComp.slug }).url);
+            router.visit(
+                studentCompetitions.show({ competition: selectedComp.slug })
+                    .url,
+            );
         }
-    }, [mode, selectedTopic, selectedComp, difficulty, questionsCount, withTimer]);
+    }, [
+        mode,
+        selectedTopic,
+        selectedComp,
+        difficulty,
+        questionsCount,
+        withTimer,
+    ]);
 
     return (
         <>
@@ -130,78 +158,94 @@ export default function Create({ topics, competitions, topicId }: CreateProps) {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className="max-w-6xl mx-auto px-4 pt-8 pb-6 text-right"
+                className="mx-auto max-w-6xl px-4 pt-8 pb-6 text-right"
                 dir="rtl"
             >
-                <div className="flex justify-between items-center mb-8">
+                <div className="mb-8 flex items-center justify-between">
                     <div className="space-y-1">
-                        <h1 className="text-2xl font-black text-foreground">تجهيز محاولة جديدة</h1>
+                        <h1 className="text-2xl font-black text-foreground">
+                            تجهيز محاولة جديدة
+                        </h1>
                         <p className="text-xs font-bold text-muted-foreground">
-                            اختر أسلوب الاختبار والتحقق الذي يناسب خطتك الدراسية الحالية.
+                            اختر أسلوب الاختبار والتحقق الذي يناسب خطتك الدراسية
+                            الحالية.
                         </p>
                     </div>
                     <Link
                         href={dashboard().url}
-                        className="flex items-center gap-1.5 text-xs font-black text-muted-foreground bg-muted hover:bg-muted/80 px-4 py-2 rounded-xl transition-all border border-border"
+                        className="flex items-center gap-1.5 rounded-xl border border-border bg-muted px-4 py-2 text-xs font-black text-muted-foreground transition-all hover:bg-muted/80"
                     >
-                        <ArrowRight className="w-4 h-4" />
+                        <ArrowRight className="h-4 w-4" />
                         <span>رجوع للوحة التحكم</span>
                     </Link>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 items-start">
-                    <div className="lg:col-span-6 space-y-8 bg-card p-6 rounded-3xl border border-border shadow-xs">
+                <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-10">
+                    <div className="space-y-8 rounded-3xl border border-border bg-card p-6 shadow-xs lg:col-span-6">
                         <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-3 text-sm dark:border-blue-900 dark:bg-blue-950/20">
                             <p>
-                                <span className="font-semibold">📘 أول مرة تخوض الاختبار؟</span>{' '}
+                                <span className="font-semibold">
+                                    📘 أول مرة تخوض الاختبار؟
+                                </span>{' '}
                                 <Link
                                     href="/guide/exam-day"
                                     className="text-primary underline underline-offset-2"
                                 >
                                     اقرأ دليل يوم الاختبار
-                                </Link>
-                                {' '}— تعرف على ترتيب القاعة، المستندات المطلوبة، وآلية الامتحان.
+                                </Link>{' '}
+                                — تعرف على ترتيب القاعة، المستندات المطلوبة،
+                                وآلية الامتحان.
                             </p>
                         </div>
 
                         <div>
-                            <label className="block text-sm font-black text-foreground mb-3">اختر مسار التقييم:</label>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <label className="mb-3 block text-sm font-black text-foreground">
+                                اختر مسار التقييم:
+                            </label>
+                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                 <button
                                     type="button"
                                     onClick={() => handleModeChange('training')}
                                     className={cn(
-                                        'p-5 rounded-2xl border-2 text-right transition-all duration-300 relative',
+                                        'relative rounded-2xl border-2 p-5 text-right transition-all duration-300',
                                         mode === 'training'
-                                            ? 'border-primary bg-primary/5 shadow-md scale-[1.01]'
+                                            ? 'scale-[1.01] border-primary bg-primary/5 shadow-md'
                                             : 'border-border opacity-60 hover:opacity-100',
                                     )}
                                 >
-                                    <div className="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-3">
-                                        <BookOpen className="w-5 h-5" />
+                                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                                        <BookOpen className="h-5 w-5" />
                                     </div>
-                                    <span className="font-black text-base text-foreground block">تدريب حر ومرن</span>
-                                    <span className="text-xs text-muted-foreground font-bold block mt-1 leading-relaxed">
-                                        تخصيص كامل لعدد الأسئلة، تحديد مستوى الصعوبة، مع خيار إيقاف المؤقت.
+                                    <span className="block text-base font-black text-foreground">
+                                        تدريب حر ومرن
+                                    </span>
+                                    <span className="mt-1 block text-xs leading-relaxed font-bold text-muted-foreground">
+                                        تخصيص كامل لعدد الأسئلة، تحديد مستوى
+                                        الصعوبة، مع خيار إيقاف المؤقت.
                                     </span>
                                 </button>
 
                                 <button
                                     type="button"
-                                    onClick={() => handleModeChange('simulation')}
+                                    onClick={() =>
+                                        handleModeChange('simulation')
+                                    }
                                     className={cn(
-                                        'p-5 rounded-2xl border-2 text-right transition-all duration-300 relative',
+                                        'relative rounded-2xl border-2 p-5 text-right transition-all duration-300',
                                         mode === 'simulation'
-                                            ? 'border-info bg-info/5 shadow-md scale-[1.01]'
+                                            ? 'scale-[1.01] border-info bg-info/5 shadow-md'
                                             : 'border-border opacity-60 hover:opacity-100',
                                     )}
                                 >
-                                    <div className="w-10 h-10 bg-info/10 text-info rounded-xl flex items-center justify-center mb-3">
-                                        <GraduationCap className="w-5 h-5" />
+                                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-info/10 text-info">
+                                        <GraduationCap className="h-5 w-5" />
                                     </div>
-                                    <span className="font-black text-base text-foreground block">اختبار محاكاة رسمي</span>
-                                    <span className="text-xs text-muted-foreground font-bold block mt-1 leading-relaxed">
-                                        خوض اختبارات المسابقات الرسمية الموزعة بمؤقت زمني صارم وشروط حقيقية.
+                                    <span className="block text-base font-black text-foreground">
+                                        اختبار محاكاة رسمي
+                                    </span>
+                                    <span className="mt-1 block text-xs leading-relaxed font-bold text-muted-foreground">
+                                        خوض اختبارات المسابقات الرسمية الموزعة
+                                        بمؤقت زمني صارم وشروط حقيقية.
                                     </span>
                                 </button>
                             </div>
@@ -232,23 +276,27 @@ export default function Create({ topics, competitions, topicId }: CreateProps) {
                                 animate={{ opacity: 1, y: 0 }}
                                 className="space-y-4"
                             >
-                                <label className="block text-sm font-black text-foreground mb-2">
+                                <label className="mb-2 block text-sm font-black text-foreground">
                                     اختر مسابقة رسمية من المسابقات المفعلة:
                                 </label>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                                     {competitions.map((comp) => (
                                         <button
                                             key={comp.id}
                                             type="button"
-                                            onClick={() => setSelectedComp(comp)}
+                                            onClick={() =>
+                                                setSelectedComp(comp)
+                                            }
                                             className={cn(
-                                                'p-4 rounded-xl border text-right transition-all',
+                                                'rounded-xl border p-4 text-right transition-all',
                                                 selectedComp?.id === comp.id
-                                                    ? 'border-info bg-info/10 text-info font-black'
+                                                    ? 'border-info bg-info/10 font-black text-info'
                                                     : 'border-border bg-muted text-foreground hover:bg-muted/80',
                                             )}
                                         >
-                                            <span className="text-sm block font-bold">{comp.name}</span>
+                                            <span className="block text-sm font-bold">
+                                                {comp.name}
+                                            </span>
                                         </button>
                                     ))}
                                 </div>

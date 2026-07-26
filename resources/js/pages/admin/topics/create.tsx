@@ -38,7 +38,10 @@ export default function Create() {
                 transition={{ duration: 0.3 }}
                 className="flex flex-1 flex-col gap-4 p-6"
             >
-                <Heading title="إنشاء محور" description="أضف محور اختبار جديد" />
+                <Heading
+                    title="إنشاء محور"
+                    description="أضف محور اختبار جديد"
+                />
                 <div className="max-w-2xl">
                     <TopicForm
                         data={data}

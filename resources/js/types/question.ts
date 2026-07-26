@@ -1,7 +1,8 @@
 export interface QuestionOption {
-    id?: number;
+    id: number;
     text: string;
-    is_correct: boolean;
+    is_correct?: boolean;
+    order?: number;
 }
 
 export interface Question {

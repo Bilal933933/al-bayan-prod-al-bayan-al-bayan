@@ -7,11 +7,13 @@ interface KpiGridProps {
 }
 
 export function KpiGrid({ stats }: KpiGridProps) {
-    const standaloneCount = stats.competitions.total - stats.competitions.containers;
+    const standaloneCount =
+        stats.competitions.total - stats.competitions.containers;
 
-    const totalDistribution = stats.questions.distribution.easy
-        + stats.questions.distribution.medium
-        + stats.questions.distribution.hard;
+    const totalDistribution =
+        stats.questions.distribution.easy +
+        stats.questions.distribution.medium +
+        stats.questions.distribution.hard;
 
     return (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

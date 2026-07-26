@@ -54,20 +54,26 @@ export function useAttemptEngine(attempt: Attempt) {
         [setLockedArray],
     );
 
-    const flaggedQuestions = useMemo(() => new Set(flaggedArray), [flaggedArray]);
-    const toggleFlag = useCallback((key: string) => {
-        setFlaggedArray((prev) => {
-            const set = new Set(prev);
+    const flaggedQuestions = useMemo(
+        () => new Set(flaggedArray),
+        [flaggedArray],
+    );
+    const toggleFlag = useCallback(
+        (key: string) => {
+            setFlaggedArray((prev) => {
+                const set = new Set(prev);
 
-            if (set.has(key)) {
-                set.delete(key);
-            } else {
-                set.add(key);
-            }
+                if (set.has(key)) {
+                    set.delete(key);
+                } else {
+                    set.add(key);
+                }
 
-            return [...set];
-        });
-    }, [setFlaggedArray]);
+                return [...set];
+            });
+        },
+        [setFlaggedArray],
+    );
 
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const abortRef = useRef<AbortController | null>(null);
@@ -92,7 +98,9 @@ export function useAttemptEngine(attempt: Attempt) {
     const isSectionSubmitted = currentSectionSubmitted;
 
     const submittedSectionIndices = sections
-        .map((s: AttemptSection, idx: number) => (s.submitted_at !== null ? idx : -1))
+        .map((s: AttemptSection, idx: number) =>
+            s.submitted_at !== null ? idx : -1,
+        )
         .filter((idx: number) => idx !== -1);
 
     const answeredQuestions = new Set<string>();
@@ -105,56 +113,67 @@ export function useAttemptEngine(attempt: Attempt) {
         }
     }
 
-    const loadSection = useCallback((sectionIndex: number) => {
-        const section = sections[sectionIndex];
+    const loadSection = useCallback(
+        (sectionIndex: number) => {
+            const section = sections[sectionIndex];
 
-        if (!section) {
-            return;
-        }
+            if (!section) {
+                return;
+            }
 
-        const cached = sectionsData.get(section.id);
+            const cached = sectionsData.get(section.id);
 
-        if (cached?.questions) {
-            setIsLoadingSection(false);
+            if (cached?.questions) {
+                setIsLoadingSection(false);
 
-            return;
-        }
+                return;
+            }
 
-        abortRef.current?.abort();
-        abortRef.current = new AbortController();
+            abortRef.current?.abort();
+            abortRef.current = new AbortController();
 
-        setIsLoadingSection(true);
+            setIsLoadingSection(true);
 
-        fetch(
-            attempts.sections.show({ attempt: attempt.id, section: section.id })
-                .url,
-            { signal: abortRef.current.signal },
-        )
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error('Failed to load section');
-                }
+            fetch(
+                attempts.sections.show({
+                    attempt: attempt.id,
+                    section: section.id,
+                }).url,
+                { signal: abortRef.current.signal },
+            )
+                .then((res) => {
+                    if (!res.ok) {
+                        throw new Error('Failed to load section');
+                    }
 
-                return res.json();
-            })
-            .then((data: AttemptSection) => {
-                setSectionsData((prev) => {
-                    const next = new Map(prev);
-                    next.set(data.id, data);
+                    return res.json();
+                })
+                .then((data: AttemptSection) => {
+                    setSectionsData((prev) => {
+                        const next = new Map(prev);
+                        next.set(data.id, data);
 
-                    return next;
+                        return next;
+                    });
+                    setIsLoadingSection(false);
+                })
+                .catch((err: unknown) => {
+                    if (err instanceof Error && err.name === 'AbortError') {
+                        return;
+                    }
+
+                    toast.error('فشل تحميل أسئلة القسم. حاول مرة أخرى.');
+                    setIsLoadingSection(false);
                 });
-                setIsLoadingSection(false);
-            })
-            .catch((err: unknown) => {
-                if (err instanceof Error && err.name === 'AbortError') {
-                    return;
-                }
-
-                toast.error('فشل تحميل أسئلة القسم. حاول مرة أخرى.');
-                setIsLoadingSection(false);
-            });
-    }, [sections, sectionsData, attempt.id, setIsLoadingSection, setSectionsData]);
+        },
+        [
+            sections,
+            sectionsData,
+            attempt.id,
+            setIsLoadingSection,
+            setSectionsData,
+        ],
+    );
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -205,16 +224,15 @@ export function useAttemptEngine(attempt: Attempt) {
 
             submitSectionRef.current();
         }
-    }, [
-        elapsedSeconds,
-        currentSectionDuration,
-        currentSectionSubmitted,
-    ]);
+    }, [elapsedSeconds, currentSectionDuration, currentSectionSubmitted]);
 
     function handleSelectOption(optionId: number) {
-        if (!currentQuestion || currentQuestion.selected_option_id === optionId) {
-return;
-}
+        if (
+            !currentQuestion ||
+            currentQuestion.selected_option_id === optionId
+        ) {
+            return;
+        }
 
         const isLocked =
             isSimulation &&
@@ -223,8 +241,8 @@ return;
             );
 
         if (isLocked) {
-return;
-}
+            return;
+        }
 
         const url = attempts.questions.update({
             attempt: attempt.id,
@@ -289,8 +307,8 @@ return;
 
     const handleSubmitSection = useCallback(() => {
         if (isSubmittingSection || !currentSection || currentSectionSubmitted) {
-return;
-}
+            return;
+        }
 
         setIsSubmittingSection(true);
 
@@ -356,7 +374,9 @@ return;
             loadSection(nextSectionIndex);
 
             if (isSimulation && !isSectionSubmitted) {
-                const xsrfMatch = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]*)/);
+                const xsrfMatch = document.cookie.match(
+                    /(?:^|;\s*)XSRF-TOKEN=([^;]*)/,
+                );
 
                 fetch(
                     attempts.sections.submit({
@@ -367,9 +387,11 @@ return;
                         method: 'POST',
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest',
-                            'Accept': 'application/json',
+                            Accept: 'application/json',
                             'Content-Type': 'application/json',
-                            'X-XSRF-TOKEN': xsrfMatch ? decodeURIComponent(xsrfMatch[1]) : '',
+                            'X-XSRF-TOKEN': xsrfMatch
+                                ? decodeURIComponent(xsrfMatch[1])
+                                : '',
                         },
                         body: '{}',
                     },
@@ -438,8 +460,8 @@ return;
 
     function handleFinish() {
         if (isFinishing) {
-return;
-}
+            return;
+        }
 
         setIsFinishing(true);
 

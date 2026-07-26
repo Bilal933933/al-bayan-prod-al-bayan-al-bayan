@@ -18,26 +18,49 @@ interface AttemptTimelineProps {
 }
 
 const statusConfig = {
-    completed: { icon: CheckCircle, class: 'text-success', bg: 'bg-success/10', label: 'مكتمل' },
-    in_progress: { icon: Clock, class: 'text-warning', bg: 'bg-warning/10', label: 'قيد التنفيذ' },
-    abandoned: { icon: XCircle, class: 'text-destructive', bg: 'bg-destructive/10', label: 'ملغي' },
+    completed: {
+        icon: CheckCircle,
+        class: 'text-success',
+        bg: 'bg-success/10',
+        label: 'مكتمل',
+    },
+    in_progress: {
+        icon: Clock,
+        class: 'text-warning',
+        bg: 'bg-warning/10',
+        label: 'قيد التنفيذ',
+    },
+    abandoned: {
+        icon: XCircle,
+        class: 'text-destructive',
+        bg: 'bg-destructive/10',
+        label: 'ملغي',
+    },
 };
 
 export function AttemptTimeline({ attempts }: AttemptTimelineProps) {
     if (attempts.length === 0) {
-return null;
-}
+        return null;
+    }
 
     return (
         <div>
-            <h3 className="mb-3 text-sm font-medium text-muted-foreground">آخر المحاولات:</h3>
+            <h3 className="mb-3 text-sm font-medium text-muted-foreground">
+                آخر المحاولات:
+            </h3>
             <div className="space-y-2">
                 {attempts.map((attempt, index) => {
-                    const config = statusConfig[attempt.status] ?? statusConfig.completed;
+                    const config =
+                        statusConfig[attempt.status] ?? statusConfig.completed;
                     const Icon = config.icon;
-                    const score = attempt.total_questions > 0
-                        ? Math.round((attempt.correct_answers / attempt.total_questions) * 100)
-                        : null;
+                    const score =
+                        attempt.total_questions > 0
+                            ? Math.round(
+                                  (attempt.correct_answers /
+                                      attempt.total_questions) *
+                                      100,
+                              )
+                            : null;
 
                     return (
                         <div
@@ -48,18 +71,38 @@ return null;
                                 index === 0 && 'border-muted-foreground/20',
                             )}
                         >
-                            <div className="flex items-center gap-3 min-w-0">
-                                <div className={cn('flex h-8 w-8 shrink-0 items-center justify-center rounded-full', config.bg)}>
-                                    <Icon className={cn('h-4 w-4', config.class)} />
+                            <div className="flex min-w-0 items-center gap-3">
+                                <div
+                                    className={cn(
+                                        'flex h-8 w-8 shrink-0 items-center justify-center rounded-full',
+                                        config.bg,
+                                    )}
+                                >
+                                    <Icon
+                                        className={cn('h-4 w-4', config.class)}
+                                    />
                                 </div>
                                 <div className="min-w-0">
                                     <div className="flex items-center gap-2">
-                                        <span className="text-sm font-medium"><DateDisplay date={attempt.created_at} format="relative" /></span>
-                                        <span className={cn('text-xs', config.class)}>{config.label}</span>
+                                        <span className="text-sm font-medium">
+                                            <DateDisplay
+                                                date={attempt.created_at}
+                                                format="relative"
+                                            />
+                                        </span>
+                                        <span
+                                            className={cn(
+                                                'text-xs',
+                                                config.class,
+                                            )}
+                                        >
+                                            {config.label}
+                                        </span>
                                     </div>
                                     {attempt.status === 'completed' && (
                                         <p className="text-xs text-muted-foreground">
-                                            {attempt.correct_answers}/{attempt.total_questions}
+                                            {attempt.correct_answers}/
+                                            {attempt.total_questions}
                                             {score !== null && ` (${score}%)`}
                                         </p>
                                     )}
@@ -67,7 +110,12 @@ return null;
                             </div>
 
                             {attempt.status === 'in_progress' && (
-                                <Button size="xs" variant="secondary" asChild className="gap-1 shrink-0">
+                                <Button
+                                    size="xs"
+                                    variant="secondary"
+                                    asChild
+                                    className="shrink-0 gap-1"
+                                >
                                     <Link href={`/attempts/${attempt.id}`}>
                                         <ArrowLeft className="h-3 w-3" />
                                         استئناف

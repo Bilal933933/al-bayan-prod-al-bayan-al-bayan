@@ -1,7 +1,11 @@
 import { BookOpen } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function QuestionExplanationCard({ explanation }: { explanation: string }) {
+export default function QuestionExplanationCard({
+    explanation,
+}: {
+    explanation: string;
+}) {
     return (
         <Card className="border-warning/30 bg-warning/5">
             <CardHeader>
@@ -11,9 +15,7 @@ export default function QuestionExplanationCard({ explanation }: { explanation: 
                 </CardTitle>
             </CardHeader>
             <CardContent>
-                <p className="leading-relaxed text-warning">
-                    {explanation}
-                </p>
+                <p className="leading-relaxed text-warning">{explanation}</p>
             </CardContent>
         </Card>
     );

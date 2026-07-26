@@ -9,7 +9,11 @@ type Props = React.ComponentProps<'main'> & {
 
 export function AppContent({ variant = 'sidebar', children, ...props }: Props) {
     if (variant === 'sidebar') {
-        return <SidebarInset {...props}><PageTransition>{children}</PageTransition></SidebarInset>;
+        return (
+            <SidebarInset {...props}>
+                <PageTransition>{children}</PageTransition>
+            </SidebarInset>
+        );
     }
 
     return (

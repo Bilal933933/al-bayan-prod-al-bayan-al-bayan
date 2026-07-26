@@ -45,13 +45,32 @@ const pageVariants = {
 
 const statVariants = {
     hidden: { opacity: 0, y: 10 },
-    visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.05, duration: 0.25 } }),
+    visible: (i: number) => ({
+        opacity: 1,
+        y: 0,
+        transition: { delay: i * 0.05, duration: 0.25 },
+    }),
 };
 
 const statCards = [
-    { icon: Users, label: 'إجمالي الطلاب', key: 'total' as const, color: '#3b82f6' },
-    { icon: UserCheck, label: 'مفعل', key: 'verified' as const, color: '#22c55e' },
-    { icon: UserPlus, label: 'جديد هذا الأسبوع', key: 'new_this_week' as const, color: '#f59e0b' },
+    {
+        icon: Users,
+        label: 'إجمالي الطلاب',
+        key: 'total' as const,
+        color: '#3b82f6',
+    },
+    {
+        icon: UserCheck,
+        label: 'مفعل',
+        key: 'verified' as const,
+        color: '#22c55e',
+    },
+    {
+        icon: UserPlus,
+        label: 'جديد هذا الأسبوع',
+        key: 'new_this_week' as const,
+        color: '#f59e0b',
+    },
 ];
 
 function navigateWithParams(overrides: Record<string, string | undefined>) {
@@ -85,7 +104,10 @@ export default function Index({
     useEffect(() => {
         const timer = setTimeout(() => {
             if (searchInput !== currentSearch) {
-                navigateWithParams({ search: searchInput || undefined, page: '1' });
+                navigateWithParams({
+                    search: searchInput || undefined,
+                    page: '1',
+                });
             }
         }, 400);
 
@@ -110,7 +132,10 @@ export default function Index({
                 className="flex flex-1 flex-col gap-5 p-6"
             >
                 <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                    <Heading title="الطلاب" description="إدارة الطلاب المسجلين" />
+                    <Heading
+                        title="الطلاب"
+                        description="إدارة الطلاب المسجلين"
+                    />
                     <Link href={students.create().url} className="shrink-0">
                         <Button>إضافة طالب</Button>
                     </Link>
@@ -125,13 +150,20 @@ export default function Index({
                             initial="hidden"
                             animate="visible"
                             className="rounded-lg border bg-card p-3"
-                            style={{ borderInlineStart: `3px solid ${stat.color}` }}
+                            style={{
+                                borderInlineStart: `3px solid ${stat.color}`,
+                            }}
                         >
                             <div className="flex items-center gap-2 text-muted-foreground">
-                                <stat.icon className="h-4 w-4" style={{ color: stat.color }} />
+                                <stat.icon
+                                    className="h-4 w-4"
+                                    style={{ color: stat.color }}
+                                />
                                 <span className="text-xs">{stat.label}</span>
                             </div>
-                            <p className="mt-1 text-2xl font-bold">{stats?.[stat.key] ?? 0}</p>
+                            <p className="mt-1 text-2xl font-bold">
+                                {stats?.[stat.key] ?? 0}
+                            </p>
                         </motion.div>
                     ))}
                 </div>
@@ -150,9 +182,21 @@ export default function Index({
                         {filterTabs.map((tab) => (
                             <Button
                                 key={tab.value}
-                                variant={verifiedFilter === tab.value ? 'default' : 'outline'}
+                                variant={
+                                    verifiedFilter === tab.value
+                                        ? 'default'
+                                        : 'outline'
+                                }
                                 size="sm"
-                                onClick={() => navigateWithParams({ verified: tab.value === 'all' ? undefined : tab.value, page: '1' })}
+                                onClick={() =>
+                                    navigateWithParams({
+                                        verified:
+                                            tab.value === 'all'
+                                                ? undefined
+                                                : tab.value,
+                                        page: '1',
+                                    })
+                                }
                             >
                                 {tab.label}
                             </Button>
@@ -167,7 +211,9 @@ export default function Index({
                     sort={sort}
                     direction={direction}
                 />
-                {allStudents.length > 0 && <LaravelPagination meta={studentsPage} />}
+                {allStudents.length > 0 && (
+                    <LaravelPagination meta={studentsPage} />
+                )}
             </motion.div>
         </>
     );

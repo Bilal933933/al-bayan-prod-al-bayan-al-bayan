@@ -76,7 +76,7 @@ export function GuidePage({
             {/* Sidebar — desktop */}
             <aside className="hidden w-60 shrink-0 lg:block print:hidden">
                 <nav className="sticky top-24 space-y-1">
-                    <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <h4 className="mb-3 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                         {hero.title}
                     </h4>
                     {sidebarSteps.length > 0 && (
@@ -92,7 +92,9 @@ export function GuidePage({
                             className="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-foreground data-[active=true]:bg-primary/10 data-[active=true]:font-medium data-[active=true]:text-primary"
                         >
                             <span className="flex size-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-bold text-muted-foreground transition-all data-[active=true]:border-primary data-[active=true]:bg-primary data-[active=true]:text-primary-foreground">
-                                {sidebarSteps.findIndex((s) => s.id === step.id) + 1}
+                                {sidebarSteps.findIndex(
+                                    (s) => s.id === step.id,
+                                ) + 1}
                             </span>
                             <span className="truncate">{step.label}</span>
                         </a>
@@ -103,7 +105,10 @@ export function GuidePage({
             {/* Content */}
             <div className="min-w-0 flex-1 space-y-6">
                 {/* Hero */}
-                <GuideHero {...hero} className="print:border-none print:shadow-none" />
+                <GuideHero
+                    {...hero}
+                    className="print:border-none print:shadow-none"
+                />
 
                 {/* Timeline */}
                 {timeline.length > 0 && (
@@ -161,7 +166,9 @@ export function GuidePage({
                                             </span>
                                         )}
                                         {article.updated && (
-                                            <span>تم التحديث {article.updated}</span>
+                                            <span>
+                                                تم التحديث {article.updated}
+                                            </span>
                                         )}
                                     </div>
                                 </Link>
@@ -178,7 +185,9 @@ export function GuidePage({
                         viewport={{ once: true }}
                         transition={{ duration: 0.5 }}
                     >
-                        <h2 className="mb-4 text-lg font-bold">المصادر الرسمية</h2>
+                        <h2 className="mb-4 text-lg font-bold">
+                            المصادر الرسمية
+                        </h2>
                         <div className="grid gap-3 sm:grid-cols-2">
                             {sources.map((source) => (
                                 <SourceCard key={source.title} {...source} />
@@ -194,4 +203,12 @@ export function GuidePage({
     );
 }
 
-export type { GuidePageProps, SectionConfig, TimelineStep, SidebarStep, ProgressSection, RelatedArticle, Source };
+export type {
+    GuidePageProps,
+    SectionConfig,
+    TimelineStep,
+    SidebarStep,
+    ProgressSection,
+    RelatedArticle,
+    Source,
+};

@@ -13,16 +13,16 @@ export function ProgressChart({ data }: ProgressChartProps) {
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
- if (entry.isIntersecting) {
-setVisible(true);
-} 
-},
+                if (entry.isIntersecting) {
+                    setVisible(true);
+                }
+            },
             { threshold: 0.1 },
         );
 
         if (ref.current) {
-observer.observe(ref.current);
-}
+            observer.observe(ref.current);
+        }
 
         return () => observer.disconnect();
     }, []);
@@ -44,19 +44,24 @@ observer.observe(ref.current);
                     const heightPct = (item.percentage / maxVal) * 100;
 
                     return (
-                        <div key={i} className="flex flex-1 flex-col items-center gap-1.5">
+                        <div
+                            key={i}
+                            className="flex flex-1 flex-col items-center gap-1.5"
+                        >
                             <div
-                                className="group relative w-full rounded-t-md bg-gradient-to-t from-primary to-primary-light transition-all duration-700"
+                                className="group to-primary-light relative w-full rounded-t-md bg-gradient-to-t from-primary transition-all duration-700"
                                 style={{
                                     height: visible ? `${heightPct}%` : '0%',
                                     minHeight: visible ? 4 : 0,
                                 }}
                             >
-                                <span className="pointer-events-none absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-foreground px-2 py-1 text-xs font-bold text-background opacity-0 transition-opacity group-hover:opacity-100">
+                                <span className="pointer-events-none absolute -top-7 left-1/2 -translate-x-1/2 rounded-md bg-foreground px-2 py-1 text-xs font-bold whitespace-nowrap text-background opacity-0 transition-opacity group-hover:opacity-100">
                                     {item.percentage}%
                                 </span>
                             </div>
-                            <span className="text-xs text-muted-foreground">{item.month}</span>
+                            <span className="text-xs text-muted-foreground">
+                                {item.month}
+                            </span>
                         </div>
                     );
                 })}

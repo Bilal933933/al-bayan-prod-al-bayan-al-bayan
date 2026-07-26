@@ -13,7 +13,7 @@ export function SectionHeader({ title, href }: SectionHeaderProps) {
             {href && (
                 <Link
                     href={href}
-                    className="text-sm font-medium text-primary hover:underline flex items-center gap-1"
+                    className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
                 >
                     عرض الكل
                     <ChevronRight className="h-3.5 w-3.5" />

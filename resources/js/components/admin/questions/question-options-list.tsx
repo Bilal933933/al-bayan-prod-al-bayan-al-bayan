@@ -3,9 +3,17 @@ import type { QuestionOption } from '@/types/question';
 
 const optionLetters = ['أ', 'ب', 'ج', 'د', 'ه', 'و'];
 
-export default function QuestionOptionsList({ options }: { options?: QuestionOption[] }) {
+export default function QuestionOptionsList({
+    options,
+}: {
+    options?: QuestionOption[];
+}) {
     if (!options || options.length === 0) {
-        return <p className="text-center text-sm text-muted-foreground">لا توجد خيارات.</p>;
+        return (
+            <p className="text-center text-sm text-muted-foreground">
+                لا توجد خيارات.
+            </p>
+        );
     }
 
     return (
@@ -22,14 +30,18 @@ export default function QuestionOptionsList({ options }: { options?: QuestionOpt
                                 : 'border-border bg-card dark:border-border dark:bg-card'
                         }`}
                     >
-                        <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sm font-bold ${
-                            isCorrect
-                                ? 'bg-success/20 text-success'
-                                : 'bg-muted text-muted-foreground'
-                        }`}>
+                        <div
+                            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sm font-bold ${
+                                isCorrect
+                                    ? 'bg-success/20 text-success'
+                                    : 'bg-muted text-muted-foreground'
+                            }`}
+                        >
                             {optionLetters[index] ?? index + 1}
                         </div>
-                        <p className={`flex-1 text-base ${isCorrect ? 'font-medium text-success' : ''}`}>
+                        <p
+                            className={`flex-1 text-base ${isCorrect ? 'font-medium text-success' : ''}`}
+                        >
                             {option.text}
                         </p>
                         {isCorrect && (

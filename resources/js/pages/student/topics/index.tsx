@@ -25,7 +25,9 @@ const pageVariants = {
 
 export default function Index({ topics }: IndexProps) {
     const [search, setSearch] = useState('');
-    const [visibilityFilter, setVisibilityFilter] = useState<string | null>(null);
+    const [visibilityFilter, setVisibilityFilter] = useState<string | null>(
+        null,
+    );
 
     const filtered = useMemo(() => {
         let result = topics;
@@ -37,37 +39,55 @@ export default function Index({ topics }: IndexProps) {
         if (search.trim()) {
             const q = search.trim().toLowerCase();
             result = result.filter(
-                (t) => t.name.toLowerCase().includes(q) || t.code.toLowerCase().includes(q),
+                (t) =>
+                    t.name.toLowerCase().includes(q) ||
+                    t.code.toLowerCase().includes(q),
             );
         }
 
         return result;
     }, [topics, search, visibilityFilter]);
 
-    const counts = useMemo(() => ({
-        all: topics.length,
-        general: topics.filter((t) => t.visibility === 'general').length,
-        private: topics.filter((t) => t.visibility === 'private').length,
-    }), [topics]);
+    const counts = useMemo(
+        () => ({
+            all: topics.length,
+            general: topics.filter((t) => t.visibility === 'general').length,
+            private: topics.filter((t) => t.visibility === 'private').length,
+        }),
+        [topics],
+    );
 
     const stats = useMemo(() => {
-        const totalAttempts = topics.reduce((sum, t) => sum + (t.user_attempts_count ?? 0), 0);
-        const uniqueTopics = topics.filter((t) => (t.user_attempts_count ?? 0) > 0).length;
+        const totalAttempts = topics.reduce(
+            (sum, t) => sum + (t.user_attempts_count ?? 0),
+            0,
+        );
+        const uniqueTopics = topics.filter(
+            (t) => (t.user_attempts_count ?? 0) > 0,
+        ).length;
 
         const scores = topics
             .map((t) => t.best_score)
-            .filter((s): s is { correct: number; total: number } => s !== null && s !== undefined);
+            .filter(
+                (s): s is { correct: number; total: number } =>
+                    s !== null && s !== undefined,
+            );
 
-        const averageScore = scores.length > 0
-            ? (scores.reduce((sum, s) => sum + (s.correct / s.total) * 100, 0) / scores.length)
-            : null;
+        const averageScore =
+            scores.length > 0
+                ? scores.reduce(
+                      (sum, s) => sum + (s.correct / s.total) * 100,
+                      0,
+                  ) / scores.length
+                : null;
 
         const lastPracticeLabel: string | null = null;
 
         return { totalAttempts, uniqueTopics, averageScore, lastPracticeLabel };
     }, [topics]);
 
-    const showEmptyResult = filtered.length === 0 && (search || visibilityFilter);
+    const showEmptyResult =
+        filtered.length === 0 && (search || visibilityFilter);
 
     return (
         <>
@@ -82,13 +102,15 @@ export default function Index({ topics }: IndexProps) {
                 <nav className="flex items-center gap-1.5 text-sm text-muted-foreground">
                     <Link
                         href={competitions.index().url}
-                        className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+                        className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
                     >
                         <House className="h-3.5 w-3.5" />
                         <span>الرئيسية</span>
                     </Link>
                     <ChevronLeft className="h-3.5 w-3.5" />
-                    <span className="font-medium text-foreground">التدريب الحر</span>
+                    <span className="font-medium text-foreground">
+                        التدريب الحر
+                    </span>
                 </nav>
 
                 <div>
@@ -132,10 +154,14 @@ export default function Index({ topics }: IndexProps) {
                                 description={topic.description}
                                 questionsCount={topic.default_questions_count}
                                 durationMinutes={topic.default_duration_minutes}
-                                href={topicsRoutes.show({ topic: topic.id }).url}
+                                href={
+                                    topicsRoutes.show({ topic: topic.id }).url
+                                }
                                 userAttemptsCount={topic.user_attempts_count}
                                 hasInProgress={topic.has_in_progress}
-                                inProgressAttemptId={topic.in_progress_attempt_id}
+                                inProgressAttemptId={
+                                    topic.in_progress_attempt_id
+                                }
                                 bestScore={topic.best_score}
                             />
                         ))}

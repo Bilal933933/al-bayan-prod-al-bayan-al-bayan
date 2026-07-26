@@ -49,7 +49,12 @@ const containerVariants = {
     visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
 };
 
-export default function Show({ student, attempts, joinedCompetitions, stats }: ShowProps) {
+export default function Show({
+    student,
+    attempts,
+    joinedCompetitions,
+    stats,
+}: ShowProps) {
     return (
         <>
             <Head title={`${student.name}`} />
@@ -70,36 +75,66 @@ export default function Show({ student, attempts, joinedCompetitions, stats }: S
                     <div className="relative p-6 sm:p-8">
                         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                             <div className="flex items-center gap-3">
-                                <Link href={students.index().url} className="text-white/70 hover:text-white transition-opacity">
+                                <Link
+                                    href={students.index().url}
+                                    className="text-white/70 transition-opacity hover:text-white"
+                                >
                                     <ArrowRight className="h-5 w-5" />
                                 </Link>
                                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20 text-lg font-bold text-white">
                                     {student.name.charAt(0)}
                                 </div>
                                 <div>
-                                    <h1 className="text-2xl font-bold text-white sm:text-3xl">{student.name}</h1>
-                                    <p className="flex items-center gap-1.5 text-sm text-white/70" dir="ltr">
+                                    <h1 className="text-2xl font-bold text-white sm:text-3xl">
+                                        {student.name}
+                                    </h1>
+                                    <p
+                                        className="flex items-center gap-1.5 text-sm text-white/70"
+                                        dir="ltr"
+                                    >
                                         <Mail className="h-3.5 w-3.5" />
                                         {student.email}
                                     </p>
                                 </div>
                             </div>
-                            <Link href={students.edit({ student: student.id }).url}>
-                                <Button variant="secondary" size="sm" className="backdrop-blur-sm">
-                                    <Pencil className="h-4 w-4 ms-1" />
+                            <Link
+                                href={
+                                    students.edit({ student: student.id }).url
+                                }
+                            >
+                                <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    className="backdrop-blur-sm"
+                                >
+                                    <Pencil className="ms-1 h-4 w-4" />
                                     تعديل
                                 </Button>
                             </Link>
                         </div>
 
                         <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/70">
-                            <Badge variant={student.email_verified_at ? 'default' : 'destructive'} className="backdrop-blur-sm">
-                                {student.email_verified_at ? 'بريد مفعل' : 'بريد غير مفعل'}
+                            <Badge
+                                variant={
+                                    student.email_verified_at
+                                        ? 'default'
+                                        : 'destructive'
+                                }
+                                className="backdrop-blur-sm"
+                            >
+                                {student.email_verified_at
+                                    ? 'بريد مفعل'
+                                    : 'بريد غير مفعل'}
                             </Badge>
                             <span className="opacity-40">|</span>
                             <span className="flex items-center gap-1.5">
                                 <Calendar className="h-3.5 w-3.5" />
-                                انضم <DateDisplay date={student.created_at} format="relative" showTooltip />
+                                انضم{' '}
+                                <DateDisplay
+                                    date={student.created_at}
+                                    format="relative"
+                                    showTooltip
+                                />
                             </span>
                         </div>
                     </div>
@@ -110,31 +145,47 @@ export default function Show({ student, attempts, joinedCompetitions, stats }: S
                     <Card>
                         <CardContent className="flex flex-col items-center gap-2 p-4 text-center">
                             <History className="h-5 w-5 text-primary" />
-                            <p className="text-2xl font-bold">{stats.total_attempts}</p>
-                            <p className="text-xs text-muted-foreground">إجمالي المحاولات</p>
+                            <p className="text-2xl font-bold">
+                                {stats.total_attempts}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                                إجمالي المحاولات
+                            </p>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardContent className="flex flex-col items-center gap-2 p-4 text-center">
                             <Trophy className="h-5 w-5 text-yellow-500" />
                             <p className="text-2xl font-bold">
-                                {stats.avg_score !== null ? `${stats.avg_score}%` : '—'}
+                                {stats.avg_score !== null
+                                    ? `${stats.avg_score}%`
+                                    : '—'}
                             </p>
-                            <p className="text-xs text-muted-foreground">متوسط الدرجات</p>
+                            <p className="text-xs text-muted-foreground">
+                                متوسط الدرجات
+                            </p>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardContent className="flex flex-col items-center gap-2 p-4 text-center">
                             <Layers className="h-5 w-5 text-purple-500" />
-                            <p className="text-2xl font-bold">{stats.joined_competitions}</p>
-                            <p className="text-xs text-muted-foreground">مسابقات منضم</p>
+                            <p className="text-2xl font-bold">
+                                {stats.joined_competitions}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                                مسابقات منضم
+                            </p>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardContent className="flex flex-col items-center gap-2 p-4 text-center">
                             <Flame className="h-5 w-5 text-orange-500" />
-                            <p className="text-2xl font-bold">{stats.streak_days}</p>
-                            <p className="text-xs text-muted-foreground">أيام متتالية</p>
+                            <p className="text-2xl font-bold">
+                                {stats.streak_days}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                                أيام متتالية
+                            </p>
                         </CardContent>
                     </Card>
                 </div>
@@ -151,7 +202,9 @@ export default function Show({ student, attempts, joinedCompetitions, stats }: S
                             {attempts.length === 0 ? (
                                 <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-10 text-center">
                                     <History className="mb-2 h-6 w-6 text-muted-foreground/40" />
-                                    <p className="text-sm text-muted-foreground">لا توجد محاولات بعد.</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        لا توجد محاولات بعد.
+                                    </p>
                                 </div>
                             ) : (
                                 <div className="space-y-3">
@@ -161,24 +214,53 @@ export default function Show({ student, attempts, joinedCompetitions, stats }: S
                                             className="flex items-center justify-between rounded-lg border p-3 text-sm"
                                         >
                                             <div className="flex items-center gap-3">
-                                                <Badge variant="outline">#{attempt.id}</Badge>
+                                                <Badge variant="outline">
+                                                    #{attempt.id}
+                                                </Badge>
                                                 <span className="font-medium">
-                                                    {attempt.competition?.name ?? attempt.subject_name ?? '—'}
+                                                    {attempt.competition
+                                                        ?.name ??
+                                                        attempt.subject_name ??
+                                                        '—'}
                                                 </span>
                                                 <Badge
-                                                    variant={attempt.status === 'completed' ? 'default' : attempt.status === 'in_progress' ? 'secondary' : 'destructive'}
-                                                    className="text-[10px] px-1.5 py-0"
+                                                    variant={
+                                                        attempt.status ===
+                                                        'completed'
+                                                            ? 'default'
+                                                            : attempt.status ===
+                                                                'in_progress'
+                                                              ? 'secondary'
+                                                              : 'destructive'
+                                                    }
+                                                    className="px-1.5 py-0 text-[10px]"
                                                 >
-                                                    {attempt.status === 'completed' ? 'مكتملة' : attempt.status === 'in_progress' ? 'جارية' : 'ملغية'}
+                                                    {attempt.status ===
+                                                    'completed'
+                                                        ? 'مكتملة'
+                                                        : attempt.status ===
+                                                            'in_progress'
+                                                          ? 'جارية'
+                                                          : 'ملغية'}
                                                 </Badge>
                                             </div>
                                             <div className="flex items-center gap-3 text-muted-foreground">
-                                                {attempt.status === 'completed' && (
+                                                {attempt.status ===
+                                                    'completed' && (
                                                     <span className="font-medium text-foreground">
-                                                        {attempt.correct_answers}/{attempt.total_questions}
+                                                        {
+                                                            attempt.correct_answers
+                                                        }
+                                                        /
+                                                        {
+                                                            attempt.total_questions
+                                                        }
                                                     </span>
                                                 )}
-                                                <DateDisplay date={attempt.created_at} format="short" />
+                                                <DateDisplay
+                                                    date={attempt.created_at}
+                                                    format="short"
+                                                />
                                             </div>
                                         </div>
                                     ))}
@@ -197,7 +279,9 @@ export default function Show({ student, attempts, joinedCompetitions, stats }: S
                             {joinedCompetitions.length === 0 ? (
                                 <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-10 text-center">
                                     <Layers className="mb-2 h-6 w-6 text-muted-foreground/40" />
-                                    <p className="text-sm text-muted-foreground">لم ينضم لأي مسابقة بعد.</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        لم ينضم لأي مسابقة بعد.
+                                    </p>
                                 </div>
                             ) : (
                                 <div className="space-y-3">
@@ -207,16 +291,32 @@ export default function Show({ student, attempts, joinedCompetitions, stats }: S
                                             className="flex items-center justify-between rounded-lg border p-3 text-sm"
                                         >
                                             <div>
-                                                <p className="font-medium">{competition.name}</p>
+                                                <p className="font-medium">
+                                                    {competition.name}
+                                                </p>
                                                 <p className="text-xs text-muted-foreground">
-                                                    انضم <DateDisplay date={competition.pivot.joined_at} format="relative" showTooltip />
+                                                    انضم{' '}
+                                                    <DateDisplay
+                                                        date={
+                                                            competition.pivot
+                                                                .joined_at
+                                                        }
+                                                        format="relative"
+                                                        showTooltip
+                                                    />
                                                 </p>
                                             </div>
                                             <Badge
-                                                variant={competition.is_active ? 'default' : 'destructive'}
-                                                className="text-[10px] px-1.5 py-0"
+                                                variant={
+                                                    competition.is_active
+                                                        ? 'default'
+                                                        : 'destructive'
+                                                }
+                                                className="px-1.5 py-0 text-[10px]"
                                             >
-                                                {competition.is_active ? 'نشط' : 'غير نشط'}
+                                                {competition.is_active
+                                                    ? 'نشط'
+                                                    : 'غير نشط'}
                                             </Badge>
                                         </div>
                                     ))}

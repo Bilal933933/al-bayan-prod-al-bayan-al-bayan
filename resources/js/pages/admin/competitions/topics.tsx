@@ -36,7 +36,11 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'المحاور', href: '#' },
 ];
 
-export default function Topics({ competition, attachedTopics, availableTopics }: TopicsProps) {
+export default function Topics({
+    competition,
+    attachedTopics,
+    availableTopics,
+}: TopicsProps) {
     const [linkedTopics, setLinkedTopics] = useState<LinkedTopicEntry[]>(() =>
         attachedTopics.map((t) => ({
             topic_id: t.id,
@@ -46,7 +50,7 @@ export default function Topics({ competition, attachedTopics, availableTopics }:
             questions_count: t.pivot.questions_count,
             duration_minutes: t.pivot.duration_minutes,
             difficulty_distribution: t.pivot.difficulty_distribution,
-        }))
+        })),
     );
 
     const [selectedTopicId, setSelectedTopicId] = useState<number | null>(null);
@@ -57,19 +61,19 @@ export default function Topics({ competition, attachedTopics, availableTopics }:
     const [errors, setErrors] = useState<Record<string, string>>({});
 
     const remainingTopics = availableTopics.filter(
-        (t) => !linkedTopics.some((lt) => lt.topic_id === t.id)
+        (t) => !linkedTopics.some((lt) => lt.topic_id === t.id),
     );
 
     const addTopic = useCallback(() => {
         if (!selectedTopicId) {
-return;
-}
+            return;
+        }
 
         const topic = availableTopics.find((t) => t.id === selectedTopicId);
 
         if (!topic) {
-return;
-}
+            return;
+        }
 
         setLinkedTopics((prev) => [
             ...prev,
@@ -94,11 +98,16 @@ return;
         setLinkedTopics((prev) => prev.filter((t) => t.topic_id !== topicId));
     }, []);
 
-    const updateTopic = useCallback((topicId: number, data: Partial<LinkedTopicEntry>) => {
-        setLinkedTopics((prev) =>
-            prev.map((t) => (t.topic_id === topicId ? { ...t, ...data } : t))
-        );
-    }, []);
+    const updateTopic = useCallback(
+        (topicId: number, data: Partial<LinkedTopicEntry>) => {
+            setLinkedTopics((prev) =>
+                prev.map((t) =>
+                    t.topic_id === topicId ? { ...t, ...data } : t,
+                ),
+            );
+        },
+        [],
+    );
 
     function handleSave() {
         setSaving(true);
@@ -113,16 +122,20 @@ return;
             })),
         };
 
-        router.put(competitions.topics.sync({ competition: competition.slug }).url, payload, {
-            onSuccess: () => {
-                setSaving(false);
+        router.put(
+            competitions.topics.sync({ competition: competition.slug }).url,
+            payload,
+            {
+                onSuccess: () => {
+                    setSaving(false);
+                },
+                onError: (err) => {
+                    setErrors(err);
+                    setSaving(false);
+                },
+                preserveScroll: true,
             },
-            onError: (err) => {
-                setErrors(err);
-                setSaving(false);
-            },
-            preserveScroll: true,
-        });
+        );
     }
 
     return (
@@ -158,37 +171,73 @@ return;
                                     {showAddForm ? (
                                         <div className="flex flex-wrap items-end gap-2">
                                             <div className="grid gap-0.5">
-                                                <Label className="text-[10px] md:text-xs">المحور</Label>
+                                                <Label className="text-[10px] md:text-xs">
+                                                    المحور
+                                                </Label>
                                                 <select
-                                                    value={selectedTopicId ?? ''}
-                                                    onChange={(e) => setSelectedTopicId(e.target.value ? Number(e.target.value) : null)}
-                                                    className="border-input h-8 rounded-md border bg-transparent px-2 text-xs shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] md:text-sm"
+                                                    value={
+                                                        selectedTopicId ?? ''
+                                                    }
+                                                    onChange={(e) =>
+                                                        setSelectedTopicId(
+                                                            e.target.value
+                                                                ? Number(
+                                                                      e.target
+                                                                          .value,
+                                                                  )
+                                                                : null,
+                                                        )
+                                                    }
+                                                    className="h-8 rounded-md border border-input bg-transparent px-2 text-xs shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 md:text-sm"
                                                 >
-                                                    <option value="">اختر...</option>
-                                                    {remainingTopics.map((t) => (
-                                                        <option key={t.id} value={t.id}>
-                                                            {t.name}
-                                                        </option>
-                                                    ))}
+                                                    <option value="">
+                                                        اختر...
+                                                    </option>
+                                                    {remainingTopics.map(
+                                                        (t) => (
+                                                            <option
+                                                                key={t.id}
+                                                                value={t.id}
+                                                            >
+                                                                {t.name}
+                                                            </option>
+                                                        ),
+                                                    )}
                                                 </select>
                                             </div>
                                             <div className="grid gap-0.5">
-                                                <Label className="text-[10px] md:text-xs">أسئلة</Label>
+                                                <Label className="text-[10px] md:text-xs">
+                                                    أسئلة
+                                                </Label>
                                                 <Input
                                                     type="number"
                                                     min={1}
                                                     value={newQuestionsCount}
-                                                    onChange={(e) => setNewQuestionsCount(Number(e.target.value))}
+                                                    onChange={(e) =>
+                                                        setNewQuestionsCount(
+                                                            Number(
+                                                                e.target.value,
+                                                            ),
+                                                        )
+                                                    }
                                                     className="h-8 w-14 text-center text-xs md:w-16 md:text-sm"
                                                 />
                                             </div>
                                             <div className="grid gap-0.5">
-                                                <Label className="text-[10px] md:text-xs">دقائق</Label>
+                                                <Label className="text-[10px] md:text-xs">
+                                                    دقائق
+                                                </Label>
                                                 <Input
                                                     type="number"
                                                     min={1}
                                                     value={newDuration}
-                                                    onChange={(e) => setNewDuration(Number(e.target.value))}
+                                                    onChange={(e) =>
+                                                        setNewDuration(
+                                                            Number(
+                                                                e.target.value,
+                                                            ),
+                                                        )
+                                                    }
                                                     className="h-8 w-14 text-center text-xs md:w-16 md:text-sm"
                                                 />
                                             </div>
@@ -198,13 +247,15 @@ return;
                                                 size="sm"
                                                 className="h-8 text-xs"
                                             >
-                                                <Plus className="h-3.5 w-3.5 ms-1" />
+                                                <Plus className="ms-1 h-3.5 w-3.5" />
                                                 إضافة
                                             </Button>
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
-                                                onClick={() => setShowAddForm(false)}
+                                                onClick={() =>
+                                                    setShowAddForm(false)
+                                                }
                                                 className="h-8 w-8"
                                             >
                                                 <X className="h-3.5 w-3.5" />
@@ -217,7 +268,7 @@ return;
                                             onClick={() => setShowAddForm(true)}
                                             className="h-8 text-xs"
                                         >
-                                            <Plus className="h-3.5 w-3.5 ms-1" />
+                                            <Plus className="ms-1 h-3.5 w-3.5" />
                                             إضافة محور
                                         </Button>
                                     )}
@@ -230,7 +281,7 @@ return;
                                 size="sm"
                                 className="h-8 text-xs"
                             >
-                                <Save className="h-3.5 w-3.5 ms-1" />
+                                <Save className="ms-1 h-3.5 w-3.5" />
                                 {saving ? 'جاري الحفظ...' : 'حفظ'}
                             </Button>
                         </div>
@@ -240,7 +291,9 @@ return;
                     {linkedTopics.length === 0 ? (
                         <div className="flex flex-col items-center justify-center gap-2 py-12 text-muted-foreground">
                             <BookOpen className="h-8 w-8 text-muted-foreground/30" />
-                            <p className="text-xs md:text-sm">لا توجد محاور مرتبطة بعد.</p>
+                            <p className="text-xs md:text-sm">
+                                لا توجد محاور مرتبطة بعد.
+                            </p>
                             <p className="text-xs text-muted-foreground/60">
                                 اضفط على "إضافة محور" لربط أول محور
                             </p>
@@ -250,10 +303,18 @@ return;
                             <table className="w-full text-xs md:text-sm">
                                 <thead className="sticky top-0 z-10">
                                     <tr className="border-b bg-muted/80 backdrop-blur-sm">
-                                        <th className="px-4 py-2 text-start font-medium">المحور</th>
-                                        <th className="px-4 py-2 text-start font-medium whitespace-nowrap">الكود</th>
-                                        <th className="px-4 py-2 text-center font-medium whitespace-nowrap">عدد الأسئلة</th>
-                                        <th className="px-4 py-2 text-center font-medium whitespace-nowrap">المدة (دق)</th>
+                                        <th className="px-4 py-2 text-start font-medium">
+                                            المحور
+                                        </th>
+                                        <th className="px-4 py-2 text-start font-medium whitespace-nowrap">
+                                            الكود
+                                        </th>
+                                        <th className="px-4 py-2 text-center font-medium whitespace-nowrap">
+                                            عدد الأسئلة
+                                        </th>
+                                        <th className="px-4 py-2 text-center font-medium whitespace-nowrap">
+                                            المدة (دق)
+                                        </th>
                                         <th className="px-4 py-2 text-center font-medium whitespace-nowrap"></th>
                                     </tr>
                                 </thead>
@@ -261,20 +322,29 @@ return;
                                     {linkedTopics.map((t, i) => (
                                         <TopicLinkRow
                                             key={t.topic_id}
-                                            topic={{
-                                                id: t.topic_id,
-                                                name: t.name,
-                                                code: t.code,
-                                                visibility: t.visibility,
-                                                pivot: {
-                                                    questions_count: t.questions_count,
-                                                    duration_minutes: t.duration_minutes,
-                                                    difficulty_distribution: t.difficulty_distribution,
-                                                },
-                                            } as TopicWithPivot}
+                                            topic={
+                                                {
+                                                    id: t.topic_id,
+                                                    name: t.name,
+                                                    code: t.code,
+                                                    visibility: t.visibility,
+                                                    pivot: {
+                                                        questions_count:
+                                                            t.questions_count,
+                                                        duration_minutes:
+                                                            t.duration_minutes,
+                                                        difficulty_distribution:
+                                                            t.difficulty_distribution,
+                                                    },
+                                                } as TopicWithPivot
+                                            }
                                             index={i}
-                                            onRemove={() => removeTopic(t.topic_id)}
-                                            onChange={(data) => updateTopic(t.topic_id, data)}
+                                            onRemove={() =>
+                                                removeTopic(t.topic_id)
+                                            }
+                                            onChange={(data) =>
+                                                updateTopic(t.topic_id, data)
+                                            }
                                         />
                                     ))}
                                 </tbody>
@@ -286,7 +356,10 @@ return;
                 {/* العودة للمسابقة */}
                 <div className="flex justify-start">
                     <Link
-                        href={competitions.show({ competition: competition.slug }).url}
+                        href={
+                            competitions.show({ competition: competition.slug })
+                                .url
+                        }
                         className="shrink-0"
                     >
                         <Button variant="outline" size="sm">

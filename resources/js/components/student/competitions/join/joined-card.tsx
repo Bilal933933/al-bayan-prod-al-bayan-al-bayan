@@ -18,13 +18,17 @@ const cardVariants = {
 function formatDate(dateStr: string): string {
     const date = new Date(dateStr);
 
-    return date.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+    return date.toLocaleDateString('ar-EG', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
 }
 
 function timeAgo(dateStr: string | null | undefined): string {
     if (!dateStr) {
-return '—';
-}
+        return '—';
+    }
 
     const now = new Date();
     const date = new Date(dateStr);
@@ -32,20 +36,20 @@ return '—';
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
     if (diffDays === 0) {
-return 'اليوم';
-}
+        return 'اليوم';
+    }
 
     if (diffDays === 1) {
-return 'أمس';
-}
+        return 'أمس';
+    }
 
     if (diffDays < 7) {
-return `منذ ${diffDays} أيام`;
-}
+        return `منذ ${diffDays} أيام`;
+    }
 
     if (diffDays < 30) {
-return `منذ ${Math.floor(diffDays / 7)} أسابيع`;
-}
+        return `منذ ${Math.floor(diffDays / 7)} أسابيع`;
+    }
 
     return formatDate(dateStr);
 }
@@ -63,18 +67,28 @@ export default function JoinedCard({
     return (
         <motion.div
             variants={cardVariants}
-            whileHover={{ y: -4, transition: { duration: 0.2, ease: 'easeOut' } }}
+            whileHover={{
+                y: -4,
+                transition: { duration: 0.2, ease: 'easeOut' },
+            }}
         >
             <div
                 className={cn(
                     'relative flex flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-all duration-300 hover:shadow-md',
                     competition.color ? 'border-transparent' : 'border-border',
                 )}
-                style={competition.color ? { borderColor: `${competition.color}30` } : undefined}
+                style={
+                    competition.color
+                        ? { borderColor: `${competition.color}30` }
+                        : undefined
+                }
             >
                 {/* شريط لوني علوي */}
                 {competition.color && (
-                    <div className="h-1.5 w-full" style={{ background: competition.color }} />
+                    <div
+                        className="h-1.5 w-full"
+                        style={{ background: competition.color }}
+                    />
                 )}
 
                 <div className="flex flex-1 flex-col p-5">
@@ -82,12 +96,16 @@ export default function JoinedCard({
                     <div className="flex items-start gap-4">
                         <div
                             className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
-                            style={competition.color ? {
-                                backgroundColor: `${competition.color}18`,
-                                color: competition.color,
-                            } : {
-                                backgroundColor: 'hsl(var(--muted))',
-                            }}
+                            style={
+                                competition.color
+                                    ? {
+                                          backgroundColor: `${competition.color}18`,
+                                          color: competition.color,
+                                      }
+                                    : {
+                                          backgroundColor: 'hsl(var(--muted))',
+                                      }
+                            }
                         >
                             {Icon ? (
                                 <Icon className="h-5 w-5" />
@@ -136,7 +154,11 @@ export default function JoinedCard({
                     {/* زر متابعة */}
                     <div className="mt-4 flex justify-end border-t pt-4">
                         <Link
-                            href={competitions.show({ competition: competition.slug }).url}
+                            href={
+                                competitions.show({
+                                    competition: competition.slug,
+                                }).url
+                            }
                             className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-slate-800 active:scale-95"
                         >
                             متابعة

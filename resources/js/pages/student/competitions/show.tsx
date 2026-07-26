@@ -1,6 +1,14 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { BookOpen, ChevronLeft, Folder, House, Library, Play, Loader2 } from 'lucide-react';
+import {
+    BookOpen,
+    ChevronLeft,
+    Folder,
+    House,
+    Library,
+    Play,
+    Loader2,
+} from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import CompetitionCard from '@/components/student/competitions/competition-card';
@@ -42,27 +50,42 @@ const itemVariants = {
     },
 } as const;
 
-export default function Show({ competition, children, topics, is_joined, total_questions, total_minutes, users_count, avg_score_percentage }: ShowProps) {
+export default function Show({
+    competition,
+    children,
+    topics,
+    is_joined,
+    total_questions,
+    total_minutes,
+    users_count,
+    avg_score_percentage,
+}: ShowProps) {
     const [starting, setStarting] = useState(false);
-    const sectionTitleClass = 'flex items-center gap-2 border-r-4 border-primary pr-3';
+    const sectionTitleClass =
+        'flex items-center gap-2 border-r-4 border-primary pr-3';
     const sectionIconClass = 'h-5 w-5 text-primary';
     const sectionHeadingClass = 'text-lg font-bold text-foreground';
-    const emptyClass = 'rounded-2xl border border-dashed border-border bg-card py-12 text-center text-muted-foreground';
+    const emptyClass =
+        'rounded-2xl border border-dashed border-border bg-card py-12 text-center text-muted-foreground';
 
     function handleStartExam() {
         setStarting(true);
-        router.post(startCompetitionAttempt.url({ competition: competition.slug }), {}, {
-            onError: (errors) => {
-                const messages = Object.values(errors);
+        router.post(
+            startCompetitionAttempt.url({ competition: competition.slug }),
+            {},
+            {
+                onError: (errors) => {
+                    const messages = Object.values(errors);
 
-                if (messages.length > 0) {
-                    toast.error(messages[0]);
-                }
+                    if (messages.length > 0) {
+                        toast.error(messages[0]);
+                    }
 
-                setStarting(false);
+                    setStarting(false);
+                },
+                onFinish: () => setStarting(false),
             },
-            onFinish: () => setStarting(false),
-        });
+        );
     }
 
     return (
@@ -73,13 +96,19 @@ export default function Show({ competition, children, topics, is_joined, total_q
                 {/* Breadcrumb */}
                 <div className="border-b border-border bg-card py-3 sm:py-4">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6">
-                        <nav className="flex items-center gap-1.5 sm:gap-2.5 text-xs font-medium text-muted-foreground sm:text-sm">
-                            <Link href="/" className="flex items-center gap-1 transition-colors hover:text-foreground">
+                        <nav className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground sm:gap-2.5 sm:text-sm">
+                            <Link
+                                href="/"
+                                className="flex items-center gap-1 transition-colors hover:text-foreground"
+                            >
                                 <House className="h-3.5 w-3.5" />
                                 <span>الرئيسية</span>
                             </Link>
                             <ChevronLeft className="h-3.5 w-3.5 text-muted-foreground/60" />
-                            <Link href="/student/competitions" className="transition-colors hover:text-foreground">
+                            <Link
+                                href="/student/competitions"
+                                className="transition-colors hover:text-foreground"
+                            >
                                 المسابقات
                             </Link>
                             {competition.parent && (
@@ -105,14 +134,15 @@ export default function Show({ competition, children, topics, is_joined, total_q
                 <CompetitionShowHero competition={competition} />
 
                 {/* Stats Cards */}
-                {competition.classification !== 'container' && topics.length > 0 && (
-                    <CompetitionShowStats
-                        totalMinutes={total_minutes}
-                        totalQuestions={total_questions}
-                        usersCount={users_count}
-                        avgScorePercentage={avg_score_percentage}
-                    />
-                )}
+                {competition.classification !== 'container' &&
+                    topics.length > 0 && (
+                        <CompetitionShowStats
+                            totalMinutes={total_minutes}
+                            totalQuestions={total_questions}
+                            usersCount={users_count}
+                            avgScorePercentage={avg_score_percentage}
+                        />
+                    )}
 
                 {/* Content */}
                 <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
@@ -124,15 +154,20 @@ export default function Show({ competition, children, topics, is_joined, total_q
                         >
                             <div className={sectionTitleClass}>
                                 <Folder className={sectionIconClass} />
-                                <h2 className={sectionHeadingClass}>المسابقات الفرعية</h2>
+                                <h2 className={sectionHeadingClass}>
+                                    المسابقات الفرعية
+                                </h2>
                             </div>
 
                             <div className="mt-6">
                                 {children.length > 0 ? (
-                                    <CompetitionCardList competitions={children} />
+                                    <CompetitionCardList
+                                        competitions={children}
+                                    />
                                 ) : (
                                     <div className={emptyClass}>
-                                        لا توجد مسابقات فرعية متاحة حالياً داخل هذه الحاوية.
+                                        لا توجد مسابقات فرعية متاحة حالياً داخل
+                                        هذه الحاوية.
                                     </div>
                                 )}
                             </div>
@@ -145,26 +180,42 @@ export default function Show({ competition, children, topics, is_joined, total_q
                         >
                             <div className={sectionTitleClass}>
                                 <BookOpen className={sectionIconClass} />
-                                <h2 className={sectionHeadingClass}>محاور الاختبار</h2>
-                                <span className="text-sm font-normal text-muted-foreground/60">({topics.length})</span>
+                                <h2 className={sectionHeadingClass}>
+                                    محاور الاختبار
+                                </h2>
+                                <span className="text-sm font-normal text-muted-foreground/60">
+                                    ({topics.length})
+                                </span>
                             </div>
 
                             <div className="mt-6">
                                 {topics.length > 0 ? (
-                                    <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
                                         {topics.map((topic) => (
                                             <TopicCard
                                                 key={topic.id}
                                                 id={topic.id}
                                                 name={topic.name}
                                                 description={topic.description}
-                                                questionsCount={topic.pivot.questions_count}
-                                                durationMinutes={topic.pivot.duration_minutes}
-                                                userAttemptsCount={topic.user_attempts_count}
-                                                hasInProgress={topic.has_in_progress}
-                                                inProgressAttemptId={topic.in_progress_attempt_id}
+                                                questionsCount={
+                                                    topic.pivot.questions_count
+                                                }
+                                                durationMinutes={
+                                                    topic.pivot.duration_minutes
+                                                }
+                                                userAttemptsCount={
+                                                    topic.user_attempts_count
+                                                }
+                                                hasInProgress={
+                                                    topic.has_in_progress
+                                                }
+                                                inProgressAttemptId={
+                                                    topic.in_progress_attempt_id
+                                                }
                                                 bestScore={topic.best_score}
-                                                href={topicShow.url({ topic: topic.id })}
+                                                href={topicShow.url({
+                                                    topic: topic.id,
+                                                })}
                                             />
                                         ))}
                                     </div>
@@ -179,11 +230,23 @@ export default function Show({ competition, children, topics, is_joined, total_q
                             <div className="mt-12">
                                 <div className="mb-5 flex items-center gap-3">
                                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-100">
-                                        <svg className="h-5 w-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        <svg
+                                            className="h-5 w-5 text-teal-600"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                            />
                                         </svg>
                                     </div>
-                                    <h2 className="text-lg font-bold text-foreground">معلومات عامة</h2>
+                                    <h2 className="text-lg font-bold text-foreground">
+                                        معلومات عامة
+                                    </h2>
                                 </div>
                                 <CompetitionInfoTabs />
                             </div>
@@ -194,9 +257,13 @@ export default function Show({ competition, children, topics, is_joined, total_q
                                         <Library className="size-5" />
                                     </div>
                                     <div>
-                                        <h4 className="text-sm font-bold">📘 قبل أن تبدأ</h4>
+                                        <h4 className="text-sm font-bold">
+                                            📘 قبل أن تبدأ
+                                        </h4>
                                         <p className="mt-1 text-xs text-muted-foreground">
-                                            اقرأ دليل يوم الاختبار لتعرف ما ينتظرك — من تجهيز المستندات إلى داخل القاعة.
+                                            اقرأ دليل يوم الاختبار لتعرف ما
+                                            ينتظرك — من تجهيز المستندات إلى داخل
+                                            القاعة.
                                         </p>
                                         <Link
                                             href="/guide/exam-day"
@@ -220,11 +287,15 @@ export default function Show({ competition, children, topics, is_joined, total_q
                                         ) : (
                                             <Play className="h-5 w-5 fill-white" />
                                         )}
-                                        {starting ? 'جارٍ إنشاء الاختبار...' : 'ابدأ اختبار المحاكاة'}
+                                        {starting
+                                            ? 'جارٍ إنشاء الاختبار...'
+                                            : 'ابدأ اختبار المحاكاة'}
                                     </button>
                                 ) : (
                                     <Link
-                                        href={competitions.join.url({ competition: competition.slug })}
+                                        href={competitions.join.url({
+                                            competition: competition.slug,
+                                        })}
                                         className="inline-flex items-center gap-2.5 rounded-2xl bg-blue-600 px-8 py-4 text-base font-bold text-white shadow-lg transition-all hover:bg-blue-700 hover:shadow-xl active:scale-95"
                                     >
                                         الانضمام إلى المسابقة
@@ -239,9 +310,13 @@ export default function Show({ competition, children, topics, is_joined, total_q
     );
 }
 
-function CompetitionCardList({ competitions }: { competitions: Competition[] }) {
+function CompetitionCardList({
+    competitions,
+}: {
+    competitions: Competition[];
+}) {
     return (
-        <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
             {competitions.map((child) => (
                 <motion.div key={child.id} variants={itemVariants}>
                     <CompetitionCard competition={child} />

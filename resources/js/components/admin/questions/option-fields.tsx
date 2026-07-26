@@ -16,14 +16,24 @@ interface OptionFieldsProps {
     errors?: Record<string, string>;
 }
 
-export default function OptionFields({ options, type, onChange, errors }: OptionFieldsProps) {
+export default function OptionFields({
+    options,
+    type,
+    onChange,
+    errors,
+}: OptionFieldsProps) {
     function handleTextChange(index: number, text: string) {
-        const updated = options.map((opt, i) => (i === index ? { ...opt, text } : opt));
+        const updated = options.map((opt, i) =>
+            i === index ? { ...opt, text } : opt,
+        );
         onChange(updated);
     }
 
     function handleCorrectChange(index: number) {
-        const updated = options.map((opt, i) => ({ ...opt, is_correct: i === index }));
+        const updated = options.map((opt, i) => ({
+            ...opt,
+            is_correct: i === index,
+        }));
         onChange(updated);
     }
 
@@ -33,8 +43,8 @@ export default function OptionFields({ options, type, onChange, errors }: Option
 
     function removeOption(index: number) {
         if (options.length <= 2) {
-return;
-}
+            return;
+        }
 
         const updated = options.filter((_, i) => i !== index);
         onChange(updated);
@@ -47,7 +57,10 @@ return;
             {type === 'true_false' ? (
                 <div className="space-y-2">
                     {options.map((option, index) => (
-                        <div key={index} className="flex items-center gap-3 rounded-lg border bg-muted/30 p-3">
+                        <div
+                            key={index}
+                            className="flex items-center gap-3 rounded-lg border bg-muted/30 p-3"
+                        >
                             <input
                                 type="radio"
                                 name="correct_option"
@@ -55,7 +68,9 @@ return;
                                 onChange={() => handleCorrectChange(index)}
                                 className="h-4 w-4 shrink-0 border-border text-primary"
                             />
-                            <span className="text-sm font-medium">{option.text}</span>
+                            <span className="text-sm font-medium">
+                                {option.text}
+                            </span>
                         </div>
                     ))}
                 </div>
@@ -72,7 +87,9 @@ return;
                             />
                             <Input
                                 value={option.text}
-                                onChange={(e) => handleTextChange(index, e.target.value)}
+                                onChange={(e) =>
+                                    handleTextChange(index, e.target.value)
+                                }
                                 placeholder={`الخيار ${index + 1}`}
                                 className="flex-1"
                             />
@@ -89,7 +106,13 @@ return;
                             )}
                         </div>
                     ))}
-                    <Button type="button" variant="outline" size="sm" onClick={addOption} className="mt-1">
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={addOption}
+                        className="mt-1"
+                    >
                         <Plus className="h-4 w-4" />
                         إضافة خيار
                     </Button>

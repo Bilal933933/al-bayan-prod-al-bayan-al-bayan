@@ -1,6 +1,12 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Calendar, Mail, MessageSquareText, User } from 'lucide-react';
+import {
+    ArrowRight,
+    Calendar,
+    Mail,
+    MessageSquareText,
+    User,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -12,7 +18,10 @@ import { reportTypeMeta, reportStatusMeta } from '@/types/report';
 import type { ReportItem } from '@/types/report';
 
 interface ShowProps {
-    report: ReportItem & { description: string; user: { id: number; name: string; email: string; created_at: string } };
+    report: ReportItem & {
+        description: string;
+        user: { id: number; name: string; email: string; created_at: string };
+    };
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -26,10 +35,26 @@ const containerVariants = {
 };
 
 const statusActions = [
-    { value: 'pending', label: 'قيد المراجعة', color: 'bg-amber-500 hover:bg-amber-600' },
-    { value: 'reviewed', label: 'تمت المراجعة', color: 'bg-purple-500 hover:bg-purple-600' },
-    { value: 'resolved', label: 'تم العلاج', color: 'bg-green-500 hover:bg-green-600' },
-    { value: 'rejected', label: 'غير مقبول', color: 'bg-red-500 hover:bg-red-600' },
+    {
+        value: 'pending',
+        label: 'قيد المراجعة',
+        color: 'bg-amber-500 hover:bg-amber-600',
+    },
+    {
+        value: 'reviewed',
+        label: 'تمت المراجعة',
+        color: 'bg-purple-500 hover:bg-purple-600',
+    },
+    {
+        value: 'resolved',
+        label: 'تم العلاج',
+        color: 'bg-green-500 hover:bg-green-600',
+    },
+    {
+        value: 'rejected',
+        label: 'غير مقبول',
+        color: 'bg-red-500 hover:bg-red-600',
+    },
 ];
 
 export default function Show({ report }: ShowProps) {
@@ -74,14 +99,29 @@ export default function Show({ report }: ShowProps) {
                                     بلاغ #{report.id}
                                 </h1>
                                 <p className="mt-1 text-sm text-muted-foreground">
-                                    {new Date(report.created_at).toLocaleDateString('ar-SA', {
-                                        year: 'numeric', month: 'long', day: 'numeric',
-                                        hour: '2-digit', minute: '2-digit',
+                                    {new Date(
+                                        report.created_at,
+                                    ).toLocaleDateString('ar-SA', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
                                     })}
                                 </p>
                             </div>
-                            <span className={cn('inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold', statusMeta.bgClass)}>
-                                <span className={cn('h-1.5 w-1.5 rounded-full', statusMeta.dotClass)} />
+                            <span
+                                className={cn(
+                                    'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold',
+                                    statusMeta.bgClass,
+                                )}
+                            >
+                                <span
+                                    className={cn(
+                                        'h-1.5 w-1.5 rounded-full',
+                                        statusMeta.dotClass,
+                                    )}
+                                />
                                 {statusMeta.label}
                             </span>
                         </div>
@@ -94,14 +134,27 @@ export default function Show({ report }: ShowProps) {
                                     <User className="h-4 w-4 text-muted-foreground" />
                                     المرسل
                                 </h2>
-                                <p className="text-sm font-bold">{report.user?.name}</p>
-                                <p className="flex items-center gap-1.5 text-sm text-muted-foreground" dir="ltr">
+                                <p className="text-sm font-bold">
+                                    {report.user?.name}
+                                </p>
+                                <p
+                                    className="flex items-center gap-1.5 text-sm text-muted-foreground"
+                                    dir="ltr"
+                                >
                                     <Mail className="h-3.5 w-3.5" />
                                     {report.user?.email}
                                 </p>
                                 <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
                                     <Calendar className="h-3.5 w-3.5" />
-                                    مسجل منذ {report.user?.created_at ? new Date(report.user.created_at).toLocaleDateString('ar-SA', { year: 'numeric', month: 'short' }) : '—'}
+                                    مسجل منذ{' '}
+                                    {report.user?.created_at
+                                        ? new Date(
+                                              report.user.created_at,
+                                          ).toLocaleDateString('ar-SA', {
+                                              year: 'numeric',
+                                              month: 'short',
+                                          })
+                                        : '—'}
                                 </p>
                             </div>
 
@@ -121,9 +174,12 @@ export default function Show({ report }: ShowProps) {
 
                         {report.question && (
                             <div className="mb-5 space-y-2">
-                                <h2 className="text-sm font-bold text-foreground">السؤال المرتبط</h2>
+                                <h2 className="text-sm font-bold text-foreground">
+                                    السؤال المرتبط
+                                </h2>
                                 <div className="rounded-xl border bg-muted p-3 text-xs leading-relaxed text-muted-foreground">
-                                    #{report.question.id}: {report.question.text}
+                                    #{report.question.id}:{' '}
+                                    {report.question.text}
                                 </div>
                             </div>
                         )}
@@ -149,12 +205,16 @@ export default function Show({ report }: ShowProps) {
                                 <button
                                     key={action.value}
                                     type="button"
-                                    onClick={() => handleStatusChange(action.value)}
+                                    onClick={() =>
+                                        handleStatusChange(action.value)
+                                    }
                                     disabled={report.status === action.value}
                                     className={cn(
                                         'rounded-lg px-4 py-2 text-xs font-bold text-white transition-all',
-                                        'disabled:opacity-40 disabled:cursor-not-allowed',
-                                        report.status === action.value ? 'ring-2 ring-white/40 ring-offset-2 ring-offset-background' : '',
+                                        'disabled:cursor-not-allowed disabled:opacity-40',
+                                        report.status === action.value
+                                            ? 'ring-2 ring-white/40 ring-offset-2 ring-offset-background'
+                                            : '',
                                         action.color,
                                     )}
                                 >
@@ -168,7 +228,6 @@ export default function Show({ report }: ShowProps) {
         </>
     );
 }
-
 
 Show.layout = {
     breadcrumbs,

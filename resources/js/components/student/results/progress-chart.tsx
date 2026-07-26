@@ -8,8 +8,8 @@ interface ProgressChartProps {
 
 export function ProgressChart({ data }: ProgressChartProps) {
     if (data.length === 0) {
-return null;
-}
+        return null;
+    }
 
     const allZero = data.every((p) => p.percentage === 0);
 
@@ -17,7 +17,9 @@ return null;
         return (
             <div className="flex flex-col items-center justify-center gap-2 py-8 text-center">
                 <BarChart3 className="h-8 w-8 text-muted-foreground/30" />
-                <p className="text-sm text-muted-foreground/60">قم بإجراء المزيد من الاختبارات ليظهر تقدمك هنا.</p>
+                <p className="text-sm text-muted-foreground/60">
+                    قم بإجراء المزيد من الاختبارات ليظهر تقدمك هنا.
+                </p>
             </div>
         );
     }

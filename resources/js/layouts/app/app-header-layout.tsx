@@ -12,7 +12,9 @@ export default function AppHeaderLayout({
     return (
         <AppShell variant="header">
             <AppHeader breadcrumbs={breadcrumbs} />
-            <div className={hasBreadcrumbs ? 'h-28 shrink-0' : 'h-16 shrink-0'} />
+            <div
+                className={hasBreadcrumbs ? 'h-28 shrink-0' : 'h-16 shrink-0'}
+            />
             <AppContent variant="header">{children}</AppContent>
         </AppShell>
     );

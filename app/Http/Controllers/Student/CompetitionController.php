@@ -32,13 +32,16 @@ class CompetitionController extends Controller
             ->orderBy('order')
             ->get();
 
-        $myCompetitions = auth()->user()->competitions()
-            ->active()
-            ->withPivot('joined_at')
-            ->withCount(['topics', 'users'])
-            ->withCount(['attempts as user_attempts_count' => fn ($q) => $q->where('user_id', auth()->id())])
-            ->withMax(['attempts as last_attempt_at' => fn ($q) => $q->where('user_id', auth()->id())], 'created_at')
-            ->get();
+        $myCompetitions = collect();
+        if (auth()->check()) {
+            $myCompetitions = auth()->user()->competitions()
+                ->active()
+                ->withPivot('joined_at')
+                ->withCount(['topics', 'users'])
+                ->withCount(['attempts as user_attempts_count' => fn ($q) => $q->where('user_id', auth()->id())])
+                ->withMax(['attempts as last_attempt_at' => fn ($q) => $q->where('user_id', auth()->id())], 'created_at')
+                ->get();
+        }
 
         return inertia('student/competitions/index', [
             'competitions' => $competitions,
@@ -113,9 +116,9 @@ class CompetitionController extends Controller
                 ?->users_count ?? 0;
         }
 
-        $isJoined = auth()->user()->competitions()
-            ->where('competition_id', $competition->getRootId())
-            ->exists();
+        $isJoined = auth()->check()
+            ? auth()->user()->competitions()->where('competition_id', $competition->getRootId())->exists()
+            : false;
 
         return inertia('student/competitions/show', [
             'competition' => $competition,

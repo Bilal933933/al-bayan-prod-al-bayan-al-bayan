@@ -18,7 +18,11 @@ export default function OnboardingPage({ topics }: OnboardingPageProps) {
     const [step, setStep] = useState(0);
     const [selectedTopics, setSelectedTopics] = useState<number[]>([]);
     const [difficulty, setDifficulty] = useState<string | null>(null);
-    const [notifs, setNotifs] = useState({ daily: false, comp: false, streak: true });
+    const [notifs, setNotifs] = useState({
+        daily: false,
+        comp: false,
+        streak: true,
+    });
     const [loading, setLoading] = useState(false);
     const [completed, setCompleted] = useState(false);
 
@@ -28,39 +32,42 @@ export default function OnboardingPage({ topics }: OnboardingPageProps) {
         );
     }, []);
 
-    const handleNotifToggle = useCallback((key: 'daily' | 'comp' | 'streak') => {
-        setNotifs((prev) => ({ ...prev, [key]: !prev[key] }));
-    }, []);
+    const handleNotifToggle = useCallback(
+        (key: 'daily' | 'comp' | 'streak') => {
+            setNotifs((prev) => ({ ...prev, [key]: !prev[key] }));
+        },
+        [],
+    );
 
     const handleFinish = useCallback(() => {
         if (!difficulty || selectedTopics.length === 0) {
-return;
-}
+            return;
+        }
 
         setLoading(true);
-            router.post(
-                onboarding.store().url,
-                {
-                    topic_ids: selectedTopics,
-                    difficulty,
-                    notifications: notifs,
-                },
-                {
-                    onSuccess: () => setCompleted(true),
-                    onError: () => setLoading(false),
-                },
-            );
+        router.post(
+            onboarding.store().url,
+            {
+                topic_ids: selectedTopics,
+                difficulty,
+                notifications: notifs,
+            },
+            {
+                onSuccess: () => setCompleted(true),
+                onError: () => setLoading(false),
+            },
+        );
     }, [selectedTopics, difficulty, notifs]);
 
     useEffect(() => {
         if (completed) {
-return;
-}
+            return;
+        }
 
         const onPopState = () => {
             if (step > 0) {
-setStep(step - 1);
-}
+                setStep(step - 1);
+            }
         };
         window.addEventListener('popstate', onPopState);
 
@@ -86,8 +93,19 @@ setStep(step - 1);
                         onSkip={() => {
                             router.post(
                                 onboarding.store().url,
-                                { topic_ids: [topics[0]?.id].filter(Boolean), difficulty: 'intermediate', notifications: { daily: false, comp: false, streak: false } },
-                                { onSuccess: () => window.location.href = '/dashboard' },
+                                {
+                                    topic_ids: [topics[0]?.id].filter(Boolean),
+                                    difficulty: 'intermediate',
+                                    notifications: {
+                                        daily: false,
+                                        comp: false,
+                                        streak: false,
+                                    },
+                                },
+                                {
+                                    onSuccess: () =>
+                                        (window.location.href = '/dashboard'),
+                                },
                             );
                         }}
                     />
@@ -124,22 +142,36 @@ setStep(step - 1);
             default:
                 return null;
         }
-    }, [step, completed, selectedTopics, difficulty, notifs, loading, topics, handleTopicToggle, handleNotifToggle, handleFinish]);
+    }, [
+        step,
+        completed,
+        selectedTopics,
+        difficulty,
+        notifs,
+        loading,
+        topics,
+        handleTopicToggle,
+        handleNotifToggle,
+        handleFinish,
+    ]);
 
     return (
         <>
             <Head title="مرحباً بك" />
 
-            <div className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-background px-4" dir="rtl">
+            <div
+                className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-background px-4"
+                dir="rtl"
+            >
                 {!completed && (
                     <ProgressBar
                         currentStep={step}
                         totalSteps={4}
                         onStepClick={(n) => {
- if (n < step) {
-setStep(n);
-} 
-}}
+                            if (n < step) {
+                                setStep(n);
+                            }
+                        }}
                     />
                 )}
 

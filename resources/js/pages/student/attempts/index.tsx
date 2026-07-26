@@ -54,37 +54,49 @@ const filterTabs = [
 function getGroupKey(dateStr: string): string {
     const date = new Date(dateStr);
     const now = new Date();
-    const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+    const diffDays = Math.floor(
+        (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24),
+    );
 
     if (diffDays === 0) {
-return 'اليوم';
-}
+        return 'اليوم';
+    }
 
     if (diffDays <= 7) {
-return 'هذا الأسبوع';
-}
+        return 'هذا الأسبوع';
+    }
 
     if (diffDays <= 30) {
-return 'هذا الشهر';
-}
+        return 'هذا الشهر';
+    }
 
     if (diffDays <= 60) {
-return 'الشهر الماضي';
-}
+        return 'الشهر الماضي';
+    }
 
     return 'أقدم';
 }
 
-const groupOrder = ['اليوم', 'هذا الأسبوع', 'هذا الشهر', 'الشهر الماضي', 'أقدم'];
+const groupOrder = [
+    'اليوم',
+    'هذا الأسبوع',
+    'هذا الشهر',
+    'الشهر الماضي',
+    'أقدم',
+];
 
-export default function Index({ attempts: paginated, filters, stats }: IndexProps) {
+export default function Index({
+    attempts: paginated,
+    filters,
+    stats,
+}: IndexProps) {
     const [search, setSearch] = useState('');
 
     const grouped = useMemo(() => {
         const filtered = paginated.data.filter((a) => {
             if (!search.trim()) {
-return true;
-}
+                return true;
+            }
 
             const q = search.trim().toLowerCase();
 
@@ -97,8 +109,8 @@ return true;
             const key = getGroupKey(attempt.started_at);
 
             if (!groups[key]) {
-groups[key] = [];
-}
+                groups[key] = [];
+            }
 
             groups[key].push(attempt);
         }
@@ -116,7 +128,9 @@ groups[key] = [];
         );
     }
 
-    const hasInProgress = paginated.data.some((a) => a.status === 'in_progress');
+    const hasInProgress = paginated.data.some(
+        (a) => a.status === 'in_progress',
+    );
 
     return (
         <>
@@ -172,9 +186,11 @@ groups[key] = [];
                 {paginated.data.length === 0 ? (
                     <EmptyState
                         icon={History}
-                        title={filters.type
-                            ? `لا توجد محاولات ${typeLabels[filters.type] ?? ''} سابقة`
-                            : 'لا توجد محاولات سابقة'}
+                        title={
+                            filters.type
+                                ? `لا توجد محاولات ${typeLabels[filters.type] ?? ''} سابقة`
+                                : 'لا توجد محاولات سابقة'
+                        }
                         description="ابدأ تدريباً حراً أو شارك في مسابقة لتظهر محاولاتك هنا"
                         actionLabel="ابدأ التدريب"
                         actionHref={attempts.create().url}
@@ -192,17 +208,23 @@ groups[key] = [];
                         {hasInProgress && (
                             <section>
                                 <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-warning">
-                                    <span className="h-2 w-2 rounded-full bg-warning animate-pulse" />
+                                    <span className="h-2 w-2 animate-pulse rounded-full bg-warning" />
                                     نشط
                                 </h2>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                                     {paginated.data
-                                        .filter((a) => a.status === 'in_progress')
+                                        .filter(
+                                            (a) => a.status === 'in_progress',
+                                        )
                                         .map((attempt) => (
                                             <AttemptCard
                                                 key={attempt.id}
                                                 attempt={attempt}
-                                                href={attempts.show({ attempt: attempt.id }).url}
+                                                href={
+                                                    attempts.show({
+                                                        attempt: attempt.id,
+                                                    }).url
+                                                }
                                             />
                                         ))}
                                 </div>
@@ -216,20 +238,24 @@ groups[key] = [];
                                 );
 
                                 if (completedToday.length === 0) {
-return null;
-}
+                                    return null;
+                                }
 
                                 return (
                                     <section key={groupName}>
                                         <h2 className="mb-3 text-sm font-semibold text-muted-foreground">
                                             {groupName}
                                         </h2>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                                             {completedToday.map((attempt) => (
                                                 <AttemptCard
                                                     key={attempt.id}
                                                     attempt={attempt}
-                                                    href={attempts.show({ attempt: attempt.id }).url}
+                                                    href={
+                                                        attempts.show({
+                                                            attempt: attempt.id,
+                                                        }).url
+                                                    }
                                                 />
                                             ))}
                                         </div>
@@ -242,12 +268,16 @@ return null;
                                     <h2 className="mb-3 text-sm font-semibold text-muted-foreground">
                                         {groupName}
                                     </h2>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                                         {groupAttempts.map((attempt) => (
                                             <AttemptCard
                                                 key={attempt.id}
                                                 attempt={attempt}
-                                                href={attempts.show({ attempt: attempt.id }).url}
+                                                href={
+                                                    attempts.show({
+                                                        attempt: attempt.id,
+                                                    }).url
+                                                }
                                             />
                                         ))}
                                     </div>
@@ -258,32 +288,51 @@ return null;
                 )}
 
                 {paginated.meta && paginated.meta.last_page > 1 && (
-                    <div className="flex items-center justify-center gap-1" dir="ltr">
+                    <div
+                        className="flex items-center justify-center gap-1"
+                        dir="ltr"
+                    >
                         {paginated.meta.prev_page_url && (
-                            <Link href={paginated.meta.prev_page_url} preserveScroll>
+                            <Link
+                                href={paginated.meta.prev_page_url}
+                                preserveScroll
+                            >
                                 <Button variant="outline" size="sm">
                                     <ChevronRight className="h-4 w-4" />
                                 </Button>
                             </Link>
                         )}
-                        {paginated.links?.filter(l => !['&laquo; Previous', '&raquo; Next'].includes(l.label)).map((link) => (
-                            <Link
-                                key={link.label}
-                                href={link.url ?? '#'}
-                                preserveScroll
-                                preserveState
-                            >
-                                <Button
-                                    variant={link.active ? 'default' : 'outline'}
-                                    size="sm"
-                                    className="min-w-[36px]"
+                        {paginated.links
+                            ?.filter(
+                                (l) =>
+                                    ![
+                                        '&laquo; Previous',
+                                        '&raquo; Next',
+                                    ].includes(l.label),
+                            )
+                            .map((link) => (
+                                <Link
+                                    key={link.label}
+                                    href={link.url ?? '#'}
+                                    preserveScroll
+                                    preserveState
                                 >
-                                    {link.label}
-                                </Button>
-                            </Link>
-                        ))}
+                                    <Button
+                                        variant={
+                                            link.active ? 'default' : 'outline'
+                                        }
+                                        size="sm"
+                                        className="min-w-[36px]"
+                                    >
+                                        {link.label}
+                                    </Button>
+                                </Link>
+                            ))}
                         {paginated.meta.next_page_url && (
-                            <Link href={paginated.meta.next_page_url} preserveScroll>
+                            <Link
+                                href={paginated.meta.next_page_url}
+                                preserveScroll
+                            >
                                 <Button variant="outline" size="sm">
                                     <ChevronLeft className="h-4 w-4" />
                                 </Button>

@@ -16,7 +16,7 @@ export default function BreadcrumbTrail({
         <nav className="flex items-center gap-1.5 text-sm text-muted-foreground">
             <Link
                 href={competitions.index().url}
-                className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+                className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
             >
                 <House className="h-3.5 w-3.5" />
                 <span>الرئيسية</span>
@@ -27,8 +27,10 @@ export default function BreadcrumbTrail({
                     <ChevronLeft className="h-3.5 w-3.5" />
 
                     <Link
-                        href={competitions.show({ competition: parent.slug }).url}
-                        className="hover:text-foreground transition-colors"
+                        href={
+                            competitions.show({ competition: parent.slug }).url
+                        }
+                        className="transition-colors hover:text-foreground"
                     >
                         {parent.name}
                     </Link>

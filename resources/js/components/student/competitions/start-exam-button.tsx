@@ -51,7 +51,7 @@ export default function StartExamButton({
                 </span>
 
                 {code && (
-                    <span className="relative z-10 text-xs opacity-80 font-mono">
+                    <span className="relative z-10 font-mono text-xs opacity-80">
                         ({code})
                     </span>
                 )}

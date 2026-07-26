@@ -1,4 +1,11 @@
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import {
+    PieChart,
+    Pie,
+    Cell,
+    ResponsiveContainer,
+    Tooltip,
+    Legend,
+} from 'recharts';
 
 interface DifficultyChartProps {
     distribution: {
@@ -19,18 +26,18 @@ export function DifficultyChart({ distribution }: DifficultyChartProps) {
         { name: 'سهل', value: distribution.easy, color: COLORS.easy },
         { name: 'متوسط', value: distribution.medium, color: COLORS.medium },
         { name: 'صعب', value: distribution.hard, color: COLORS.hard },
-    ].filter(d => d.value > 0);
+    ].filter((d) => d.value > 0);
 
     if (data.length === 0) {
         return (
-            <div className="flex items-center justify-center h-48 text-sm text-muted-foreground">
+            <div className="flex h-48 items-center justify-center text-sm text-muted-foreground">
                 لا توجد بيانات
             </div>
         );
     }
 
     return (
-        <div className="w-full h-64" dir="ltr">
+        <div className="h-64 w-full" dir="ltr">
             <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                     <Pie
@@ -57,7 +64,9 @@ export function DifficultyChart({ distribution }: DifficultyChartProps) {
                     />
                     <Legend
                         formatter={(value: string) => (
-                            <span style={{ fontSize: '12px', fontWeight: 500 }}>{value}</span>
+                            <span style={{ fontSize: '12px', fontWeight: 500 }}>
+                                {value}
+                            </span>
                         )}
                     />
                 </PieChart>

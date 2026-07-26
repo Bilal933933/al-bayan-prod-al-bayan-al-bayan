@@ -34,7 +34,7 @@ export default function CompetitionTableRow({
             className={`border-b transition-colors hover:bg-muted/50 ${rowBg}`}
         >
             <td
-                className="break-words px-4 py-3"
+                className="px-4 py-3 break-words"
                 style={
                     competition.color
                         ? {
@@ -69,27 +69,34 @@ export default function CompetitionTableRow({
                         return null;
                     })()}
                     <Link
-                        href={competitions.show({ competition: competition.slug }).url}
-                        className="break-words hover:text-primary transition-colors"
+                        href={
+                            competitions.show({ competition: competition.slug })
+                                .url
+                        }
+                        className="break-words transition-colors hover:text-primary"
                     >
                         {competition.name}
                     </Link>
                 </div>
             </td>
-            <td className="whitespace-nowrap px-4 py-3 font-mono text-xs">
+            <td className="px-4 py-3 font-mono text-xs whitespace-nowrap">
                 {competition.code}
             </td>
-            <td className="whitespace-nowrap px-4 py-3">
+            <td className="px-4 py-3 whitespace-nowrap">
                 <ClassificationBadge
                     classification={competition.classification}
                 />
             </td>
-            <td className="whitespace-nowrap px-4 py-3">{competition.order}</td>
-            <td className="break-words px-4 py-3">
+            <td className="px-4 py-3 whitespace-nowrap">{competition.order}</td>
+            <td className="px-4 py-3 break-words">
                 {competition.parent ? (
                     <Link
-                        href={competitions.show({ competition: competition.parent.slug }).url}
-                        className="inline-flex items-center gap-1.5 hover:text-primary transition-colors"
+                        href={
+                            competitions.show({
+                                competition: competition.parent.slug,
+                            }).url
+                        }
+                        className="inline-flex items-center gap-1.5 transition-colors hover:text-primary"
                     >
                         {competition.parent.color && (
                             <span
@@ -99,15 +106,19 @@ export default function CompetitionTableRow({
                                 }}
                             />
                         )}
-                        <span className="break-words">{competition.parent.name}</span>
+                        <span className="break-words">
+                            {competition.parent.name}
+                        </span>
                     </Link>
                 ) : (
                     <span className="text-muted-foreground">—</span>
                 )}
             </td>
-            <td className="whitespace-nowrap px-4 py-3 text-center">
+            <td className="px-4 py-3 text-center whitespace-nowrap">
                 {(competition.children_count ?? 0) > 0 ? (
-                    <Badge variant="secondary">{competition.children_count}</Badge>
+                    <Badge variant="secondary">
+                        {competition.children_count}
+                    </Badge>
                 ) : (
                     <span className="text-muted-foreground">
                         {competition.children_count ?? 0}
@@ -120,19 +131,25 @@ export default function CompetitionTableRow({
                         {
                             label: 'عرض التفاصيل',
                             icon: Eye,
-                            href: competitions.show({ competition: competition.slug }).url,
+                            href: competitions.show({
+                                competition: competition.slug,
+                            }).url,
                         },
                         {
                             label: 'تعديل',
                             icon: Pencil,
-                            href: competitions.edit({ competition: competition.slug }).url,
+                            href: competitions.edit({
+                                competition: competition.slug,
+                            }).url,
                         },
                         ...(competition.can_have_topics
                             ? [
                                   {
                                       label: 'إدارة المحاور',
                                       icon: Layers,
-                                      href: competitions.topics.edit({ competition: competition.slug }).url,
+                                      href: competitions.topics.edit({
+                                          competition: competition.slug,
+                                      }).url,
                                   } as const,
                               ]
                             : []),
@@ -150,10 +167,13 @@ export default function CompetitionTableRow({
                     onOpenChange={setDeleteOpen}
                     description={`هل أنت متأكد من حذف المسابقة "${competition.name}"؟ هذا الإجراء لا يمكن التراجع عنه.`}
                     onDelete={() => {
-                        router.delete(competitions.destroy(competition.slug).url, {
-                            onSuccess: () => setDeleteOpen(false),
-                            onFinish: () => setDeleteOpen(false),
-                        });
+                        router.delete(
+                            competitions.destroy(competition.slug).url,
+                            {
+                                onSuccess: () => setDeleteOpen(false),
+                                onFinish: () => setDeleteOpen(false),
+                            },
+                        );
                     }}
                 />
             </td>

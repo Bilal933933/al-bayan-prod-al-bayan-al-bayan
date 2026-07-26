@@ -69,14 +69,19 @@ export default function QuestionForm({
                     <Label htmlFor="topic_id">المحور</Label>
                     <Select
                         value={String(data.topic_id)}
-                        onValueChange={(val) => setData('topic_id', Number(val))}
+                        onValueChange={(val) =>
+                            setData('topic_id', Number(val))
+                        }
                     >
                         <SelectTrigger id="topic_id">
                             <SelectValue placeholder="اختر المحور" />
                         </SelectTrigger>
                         <SelectContent>
                             {topics.map((topic) => (
-                                <SelectItem key={topic.id} value={String(topic.id)}>
+                                <SelectItem
+                                    key={topic.id}
+                                    value={String(topic.id)}
+                                >
                                     {topic.name}
                                 </SelectItem>
                             ))}
@@ -88,7 +93,7 @@ export default function QuestionForm({
                 <div className="grid gap-2">
                     <Label>نوع السؤال</Label>
                     <div className="flex items-center gap-6 pt-1">
-                        <label className="flex items-center gap-2 cursor-pointer">
+                        <label className="flex cursor-pointer items-center gap-2">
                             <input
                                 type="radio"
                                 name="type"
@@ -98,7 +103,7 @@ export default function QuestionForm({
                             />
                             <span className="text-sm">اختيار من متعدد</span>
                         </label>
-                        <label className="flex items-center gap-2 cursor-pointer">
+                        <label className="flex cursor-pointer items-center gap-2">
                             <input
                                 type="radio"
                                 name="type"
@@ -118,7 +123,7 @@ export default function QuestionForm({
                 <Label htmlFor="text">نص السؤال</Label>
                 <textarea
                     id="text"
-                    className="border-input placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground flex h-24 w-full min-w-0 rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] md:text-sm"
+                    className="flex h-24 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 md:text-sm"
                     value={data.text}
                     onChange={(e) => setData('text', e.target.value)}
                     placeholder="أدخل نص السؤال..."
@@ -132,7 +137,12 @@ export default function QuestionForm({
                     <Label htmlFor="difficulty">مستوى الصعوبة</Label>
                     <Select
                         value={data.difficulty}
-                        onValueChange={(val) => setData('difficulty', val as 'easy' | 'medium' | 'hard')}
+                        onValueChange={(val) =>
+                            setData(
+                                'difficulty',
+                                val as 'easy' | 'medium' | 'hard',
+                            )
+                        }
                     >
                         <SelectTrigger id="difficulty">
                             <SelectValue placeholder="اختر المستوى" />
@@ -151,8 +161,10 @@ export default function QuestionForm({
                     <select
                         id="is_active"
                         value={data.is_active ? '1' : '0'}
-                        onChange={(e) => setData('is_active', e.target.value === '1')}
-                        className="border-input placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] md:text-sm"
+                        onChange={(e) =>
+                            setData('is_active', e.target.value === '1')
+                        }
+                        className="flex h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 md:text-sm"
                     >
                         <option value="1">نشط</option>
                         <option value="0">غير نشط</option>
@@ -173,22 +185,28 @@ export default function QuestionForm({
             <div className="grid gap-2">
                 <Label htmlFor="explanation">
                     شرح الإجابة
-                    <span className="text-xs text-muted-foreground me-1">(يظهر في صفحة النتائج)</span>
+                    <span className="me-1 text-xs text-muted-foreground">
+                        (يظهر في صفحة النتائج)
+                    </span>
                 </Label>
                 <textarea
                     id="explanation"
-                    className="border-input placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground flex h-20 w-full min-w-0 rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] md:text-sm"
+                    className="flex h-20 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 md:text-sm"
                     value={data.explanation ?? ''}
-                    onChange={(e) => setData('explanation', e.target.value || null)}
+                    onChange={(e) =>
+                        setData('explanation', e.target.value || null)
+                    }
                     placeholder="شرح يظهر للطالب بعد انتهاء المحاولة..."
                 />
                 <InputError message={errors.explanation} />
             </div>
 
             {/* أزرار الإرسال */}
-            <div className="flex flex-col items-center gap-4 pt-4 border-t sm:flex-row sm:justify-between">
+            <div className="flex flex-col items-center gap-4 border-t pt-4 sm:flex-row sm:justify-between">
                 <span className="text-sm text-muted-foreground">
-                    {submitLabel === 'إنشاء السؤال' ? 'إضافة سؤال جديد' : 'تحديث بيانات السؤال'}
+                    {submitLabel === 'إنشاء السؤال'
+                        ? 'إضافة سؤال جديد'
+                        : 'تحديث بيانات السؤال'}
                 </span>
                 <div className="flex w-full gap-3 sm:w-auto">
                     <Button

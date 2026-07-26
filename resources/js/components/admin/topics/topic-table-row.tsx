@@ -24,16 +24,24 @@ export default function TopicTableRow({
             transition={{ duration: 0.2, delay: index * 0.03 }}
             className="border-b transition-colors hover:bg-muted/50"
         >
-            <td className="break-words px-4 py-3 font-medium">{topic.name}</td>
-            <td className="whitespace-nowrap px-4 py-3 font-mono text-xs">{topic.code}</td>
-            <td className="whitespace-nowrap px-4 py-3">
+            <td className="px-4 py-3 font-medium break-words">{topic.name}</td>
+            <td className="px-4 py-3 font-mono text-xs whitespace-nowrap">
+                {topic.code}
+            </td>
+            <td className="px-4 py-3 whitespace-nowrap">
                 <VisibilityBadge visibility={topic.visibility} />
             </td>
-            <td className="whitespace-nowrap px-4 py-3 text-center">{topic.default_questions_count}</td>
-            <td className="whitespace-nowrap px-4 py-3 text-center">
-                {topic.default_duration_minutes ? `${topic.default_duration_minutes} د` : '—'}
+            <td className="px-4 py-3 text-center whitespace-nowrap">
+                {topic.default_questions_count}
             </td>
-            <td className="whitespace-nowrap px-4 py-3 text-center">{topic.competitions_count ?? 0}</td>
+            <td className="px-4 py-3 text-center whitespace-nowrap">
+                {topic.default_duration_minutes
+                    ? `${topic.default_duration_minutes} د`
+                    : '—'}
+            </td>
+            <td className="px-4 py-3 text-center whitespace-nowrap">
+                {topic.competitions_count ?? 0}
+            </td>
             <td className="px-4 py-3">
                 <RowActions
                     items={[

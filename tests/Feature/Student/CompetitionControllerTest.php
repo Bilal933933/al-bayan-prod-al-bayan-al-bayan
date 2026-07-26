@@ -11,10 +11,10 @@ beforeEach(function () {
 
 // ─── Index ────────────────────────────────────────────────────
 
-it('guest cannot access competitions index', function () {
+it('guest can access competitions index', function () {
     $response = $this->get(route('student.competitions.index'));
 
-    $response->assertRedirect(route('login'));
+    $response->assertOk();
 });
 
 it('shows empty state when no competitions exist', function () {
@@ -126,12 +126,12 @@ it('orders competitions by the order field', function () {
 
 // ─── Show ─────────────────────────────────────────────────────
 
-it('guest cannot access competition show', function () {
+it('guest can access competition show', function () {
     $competition = Competition::factory()->standalone()->active()->create();
 
     $response = $this->get(route('student.competitions.show', $competition));
 
-    $response->assertRedirect(route('login'));
+    $response->assertOk();
 });
 
 it('returns 404 for inactive competition', function () {
