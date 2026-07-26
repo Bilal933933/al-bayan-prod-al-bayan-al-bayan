@@ -95,6 +95,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
 
     const [isVisible, setIsVisible] = useState(true);
     const [searchOpen, setSearchOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
     const lastScrollY = useRef(0);
 
     useEffect(() => {
@@ -121,6 +122,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                 setIsVisible(true);
             }
 
+            setScrolled(currentScrollY > 8);
             lastScrollY.current = currentScrollY;
         };
 
@@ -135,9 +137,10 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                 className={cn(
                     'fixed inset-x-0 top-0 z-50 transition-transform duration-300',
                     isVisible ? 'translate-y-0' : '-translate-y-full',
+                    scrolled && 'shadow-sm',
                 )}
             >
-                <div className="border-b border-sidebar-border/80 bg-background">
+                <div className="border-b border-sidebar-border/80 bg-background/95 backdrop-blur-xs transition-shadow">
                     <div className="mx-auto flex h-16 items-center px-4 md:max-w-7xl">
                         {/* Mobile Menu */}
                         <div className="lg:hidden">
@@ -159,7 +162,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                         Navigation menu
                                     </SheetTitle>
                                     <div className="flex items-center justify-between px-4 pt-4">
-                                        <AppLogoIcon className="h-6 w-6 fill-current text-black dark:text-white" />
+                                        <AppLogoIcon className="h-6 w-6 fill-current text-foreground" />
                                         <SheetClose className="rounded-xs opacity-70 transition-opacity hover:opacity-100">
                                             <XIcon className="size-4" />
                                             <span className="sr-only">
@@ -174,7 +177,13 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                                     <Link
                                                         key={item.title}
                                                         href={item.href}
-                                                        className="flex items-center space-x-2 font-medium"
+                                                        className={cn(
+                                                            'flex items-center gap-2 rounded-lg p-2 font-medium transition-colors',
+                                                            whenCurrentUrl(
+                                                                item.href,
+                                                                'bg-accent/20 text-accent-foreground',
+                                                            ),
+                                                        )}
                                                     >
                                                         {item.icon && (
                                                             <item.icon className="h-5 w-5" />
@@ -194,7 +203,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                         <Link
                             href={dashboard()}
                             prefetch
-                            className="flex items-center space-x-2"
+                            className="flex items-center gap-2"
                         >
                             <AppLogo />
                         </Link>
@@ -224,9 +233,14 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                                 )}
                                                 {item.title}
                                             </Link>
-                                            {isCurrentUrl(item.href) && (
-                                                <div className="absolute start-0 bottom-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"></div>
-                                            )}
+                                            <div
+                                                className={cn(
+                                                    'absolute start-0 bottom-0 h-0.5 translate-y-px bg-accent transition-all duration-200',
+                                                    isCurrentUrl(item.href)
+                                                        ? 'w-full opacity-100'
+                                                        : 'w-0 opacity-0',
+                                                )}
+                                            />
                                         </NavigationMenuItem>
                                     ))}
                                 </NavigationMenuList>
@@ -241,11 +255,13 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                     className="group h-9 w-9 cursor-pointer"
                                     onClick={() => setSearchOpen(true)}
                                     title="بحث (Ctrl+K)"
+                                    aria-label="بحث"
                                 >
                                     <Search className="!size-5 opacity-80 group-hover:opacity-100" />
                                 </Button>
                                 <ThemeSwitcher />
                             </div>
+                            <span className="mx-1 h-5 w-px bg-border" />
                             {page.component !== 'student/attempts/create' && (
                                 <Link href={attempts.create().url}>
                                     <Button
@@ -290,8 +306,8 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                     </div>
                 </div>
                 {breadcrumbs.length > 1 && (
-                    <div className="flex w-full border-b border-sidebar-border/70">
-                        <div className="mx-auto flex h-12 w-full items-center justify-start px-4 text-muted-foreground md:max-w-7xl">
+                    <div className="flex w-full border-t border-sidebar-border/40 bg-muted/20">
+                        <div className="mx-auto flex h-10 w-full items-center justify-start px-4 text-muted-foreground md:max-w-7xl">
                             <Breadcrumbs breadcrumbs={breadcrumbs} />
                         </div>
                     </div>

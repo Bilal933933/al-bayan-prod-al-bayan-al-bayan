@@ -18,19 +18,37 @@ export default function CompetitionGrid({
         return null;
     }
 
+    const containers = items.filter((c) => c.classification === 'container');
+    const cards = items.filter((c) => c.classification !== 'container');
+
     return (
-        <motion.div
-            variants={gridVariants}
-            initial="hidden"
-            animate="visible"
-            className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
-        >
-            {items.map((competition) => (
-                <CompetitionCard
-                    key={competition.id}
-                    competition={competition}
-                />
-            ))}
-        </motion.div>
+        <div className="space-y-6">
+            {containers.length > 0 && (
+                <div className="flex flex-col gap-5">
+                    {containers.map((competition) => (
+                        <CompetitionCard
+                            key={competition.id}
+                            competition={competition}
+                        />
+                    ))}
+                </div>
+            )}
+
+            {cards.length > 0 && (
+                <motion.div
+                    variants={gridVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="grid grid-cols-1 gap-5 sm:grid-cols-2"
+                >
+                    {cards.map((competition) => (
+                        <CompetitionCard
+                            key={competition.id}
+                            competition={competition}
+                        />
+                    ))}
+                </motion.div>
+            )}
+        </div>
     );
 }
