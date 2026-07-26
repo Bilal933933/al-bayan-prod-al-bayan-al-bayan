@@ -213,6 +213,28 @@ export function useAttemptEngine(attempt: Attempt) {
 
     useEffect(() => {
         if (
+            loadedSection?.started_at &&
+            !isLoadingSection &&
+            currentSectionDuration > 0
+        ) {
+            const startedAt = new Date(
+                loadedSection.started_at,
+            ).getTime();
+            const now = Date.now();
+            const elapsed = Math.floor((now - startedAt) / 1000);
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setElapsedSeconds(
+                Math.min(elapsed, currentSectionDuration * 60),
+            );
+        }
+    }, [
+        loadedSection?.started_at,
+        isLoadingSection,
+        currentSectionDuration,
+    ]);
+
+    useEffect(() => {
+        if (
             currentSectionDuration > 0 &&
             !currentSectionSubmitted &&
             elapsedSeconds >= currentSectionDuration * 60 - 1
