@@ -1,3 +1,4 @@
+import { ProfileSection } from '@/components/student/profile/profile-section';
 import type { Badge } from '@/types/profile';
 
 interface BadgesGridProps {
@@ -10,26 +11,25 @@ export function BadgesGrid({ badges }: BadgesGridProps) {
     }
 
     return (
-        <div>
-            <div className="mb-4 flex items-center gap-2">
-                <span className="text-lg" aria-hidden="true">
-                    🏅
-                </span>
-                <h3 className="text-sm font-bold">الشارات</h3>
-            </div>
+        <ProfileSection
+            icon={<span className="text-lg">🏅</span>}
+            title="الشارات"
+        >
             <div className="grid grid-cols-4 gap-2.5 sm:grid-cols-8">
                 {badges.map((badge, i) => (
                     <div
                         key={i}
-                        className="hover:bg-primary-light flex cursor-pointer flex-col items-center gap-1.5 rounded-xl bg-muted p-3.5 transition-all hover:scale-105"
+                        className="group flex cursor-pointer flex-col items-center gap-1.5 rounded-xl bg-muted p-3.5 transition-all hover:scale-105 hover:bg-brand-teal/10"
                     >
-                        <span className="text-2xl">{badge.emoji}</span>
-                        <span className="text-xs font-semibold">
+                        <span className="text-2xl transition-transform group-hover:scale-110">
+                            {badge.emoji}
+                        </span>
+                        <span className="text-xs font-semibold text-muted-foreground group-hover:text-foreground">
                             {badge.name}
                         </span>
                     </div>
                 ))}
             </div>
-        </div>
+        </ProfileSection>
     );
 }

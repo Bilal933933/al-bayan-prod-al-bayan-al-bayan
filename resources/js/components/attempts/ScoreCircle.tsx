@@ -62,6 +62,7 @@ export default function ScoreCircle({ percentage }: ScoreCircleProps) {
             </svg>
             <span
                 className="absolute text-3xl font-extrabold"
+                dir="ltr"
                 style={{ color: colorVar }}
             >
                 <SlidingNumber number={percentage} />%

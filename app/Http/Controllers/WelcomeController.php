@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\Services\LeaderboardServiceInterface;
 use App\Contracts\Services\PlatformInsightsServiceInterface;
+use Inertia\Response;
 
 class WelcomeController extends Controller
 {
@@ -57,7 +58,7 @@ class WelcomeController extends Controller
         private readonly PlatformInsightsServiceInterface $insightsService,
     ) {}
 
-    public function index(): \Inertia\Response
+    public function index(): Response
     {
         $stats = $this->leaderboardService->stats();
         $podium = $this->leaderboardService->rankings('all_time')['podium'];
@@ -71,7 +72,7 @@ class WelcomeController extends Controller
             'podium' => $hasActivity ? $podium : self::DEMO_PODIUM,
             'popularTopics' => $hasActivity ? $popularTopics : self::DEMO_TOPICS,
             'scoreDistribution' => $hasActivity ? $scoreDistribution : self::DEMO_DISTRIBUTION,
-            'isPreview' => !$hasActivity,
+            'isPreview' => ! $hasActivity,
         ]);
     }
 }

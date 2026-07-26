@@ -9,6 +9,7 @@ use App\Models\Topic;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
+use Inertia\Response;
 
 class GuestPracticeController extends Controller
 {
@@ -18,7 +19,7 @@ class GuestPracticeController extends Controller
 
     const int RATE_LIMIT_DECAY_SECONDS = 3600;
 
-    public function show(): \Inertia\Response
+    public function show(): Response
     {
         $topic = Topic::active()->general()
             ->whereHas('questions', fn ($q) => $q->active())

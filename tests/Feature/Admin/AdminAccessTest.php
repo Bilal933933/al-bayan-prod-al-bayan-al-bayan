@@ -23,3 +23,19 @@ it('admin user can access admin pages', function () {
 
     $response->assertOk();
 });
+
+it('unverified admin is redirected to verification notice', function () {
+    $admin = User::factory()->admin()->unverified()->create();
+
+    $response = $this->actingAs($admin)->get(route('admin.topics.index'));
+
+    $response->assertRedirect(route('verification.notice'));
+});
+
+it('unverified student is redirected to verification notice', function () {
+    $user = User::factory()->unverified()->create();
+
+    $response = $this->actingAs($user)->get(route('student.dashboard'));
+
+    $response->assertRedirect(route('verification.notice'));
+});

@@ -31,8 +31,17 @@ class ReportController extends Controller
                     'id' => $r->question->id,
                     'text' => $r->question->text,
                 ] : null,
+                'admin_response' => $r->admin_response,
+                'admin_response_at' => $r->admin_response_at?->toISOString(),
+                'admin_read_at' => $r->admin_read_at?->toISOString(),
                 'created_at' => $r->created_at,
-            ]);
+            ])
+            ->values();
+
+        $unreadCount = Report::query()
+            ->where('user_id', $user->id)
+            ->unreadResponse()
+            ->count();
 
         $recentQuestions = AttemptQuestion::query()
             ->whereHas('section.attempt', function ($q) use ($user) {
@@ -52,6 +61,7 @@ class ReportController extends Controller
 
         return inertia('student/report', [
             'reports' => $reports,
+            'unread_count' => $unreadCount,
             'recent_questions' => $recentQuestions,
         ]);
     }
@@ -75,5 +85,18 @@ class ReportController extends Controller
         ]);
 
         return to_route('student.report');
+    }
+
+    public function markAllAsRead(): RedirectResponse
+    {
+        /** @var User */
+        $user = auth()->user();
+
+        Report::query()
+            ->where('user_id', $user->id)
+            ->unreadResponse()
+            ->update(['admin_read_at' => now()]);
+
+        return back();
     }
 }

@@ -7,6 +7,7 @@ import {
     MessageSquareText,
     User,
 } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -16,6 +17,7 @@ import reports from '@/routes/admin/reports';
 import type { BreadcrumbItem } from '@/types';
 import { reportTypeMeta, reportStatusMeta } from '@/types/report';
 import type { ReportItem } from '@/types/report';
+import { Textarea } from '@/components/ui/textarea';
 
 interface ShowProps {
     report: ReportItem & {
@@ -58,14 +60,18 @@ const statusActions = [
 ];
 
 export default function Show({ report }: ShowProps) {
+    const [adminResponse, setAdminResponse] = useState(
+        report.admin_response ?? '',
+    );
+
     const handleStatusChange = (newStatus: string) => {
         router.patch(
             reports.update({ report: report.id }).url,
-            { status: newStatus },
+            { status: newStatus, admin_response: adminResponse || undefined },
             {
                 preserveScroll: true,
-                onSuccess: () => toast.success('تم تحديث الحالة بنجاح'),
-                onError: () => toast.error('حدث خطأ أثناء تحديث الحالة'),
+                onSuccess: () => toast.success('تم تحديث البلاغ بنجاح'),
+                onError: () => toast.error('حدث خطأ أثناء تحديث البلاغ'),
             },
         );
     };
@@ -192,14 +198,64 @@ export default function Show({ report }: ShowProps) {
                                 {report.description}
                             </div>
                         </div>
+
+                        {report.admin_response && (
+                            <>
+                                <Separator className="my-5" />
+                                <div className="space-y-2">
+                                    <h2 className="flex items-center gap-2 text-sm font-bold text-foreground">
+                                        <MessageSquareText className="h-4 w-4 text-muted-foreground" />
+                                        ردي السابق
+                                    </h2>
+                                    {report.admin_response_at && (
+                                        <p className="text-xs text-muted-foreground">
+                                            {new Date(
+                                                report.admin_response_at,
+                                            ).toLocaleDateString('ar-SA', {
+                                                year: 'numeric',
+                                                month: 'long',
+                                                day: 'numeric',
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                            })}
+                                        </p>
+                                    )}
+                                    <div className="rounded-xl border border-brand-teal/20 bg-brand-teal/5 p-4 text-sm leading-relaxed">
+                                        {report.admin_response}
+                                    </div>
+                                </div>
+                            </>
+                        )}
                     </CardContent>
                 </Card>
 
                 <Card>
                     <CardContent className="p-6">
-                        <h2 className="mb-4 text-sm font-bold text-foreground">
+                        <div className="mb-5 space-y-3">
+                            <h2 className="flex items-center gap-2 text-sm font-bold text-foreground">
+                                <MessageSquareText className="h-4 w-4 text-muted-foreground" />
+                                الرد على البلاغ
+                            </h2>
+                            <p className="text-xs text-muted-foreground">
+                                اكتب ردّك للطالب (اختياري)، ثم اختر الحالة
+                                الجديدة
+                            </p>
+                            <Textarea
+                                value={adminResponse}
+                                onChange={(e) =>
+                                    setAdminResponse(e.target.value)
+                                }
+                                placeholder="اكتب ردّك هنا..."
+                                className="min-h-[100px] resize-y"
+                                dir="auto"
+                            />
+                        </div>
+
+                        <Separator className="mb-5" />
+
+                        <h3 className="mb-3 text-xs font-bold text-muted-foreground">
                             تغيير الحالة
-                        </h2>
+                        </h3>
                         <div className="flex flex-wrap gap-2">
                             {statusActions.map((action) => (
                                 <button

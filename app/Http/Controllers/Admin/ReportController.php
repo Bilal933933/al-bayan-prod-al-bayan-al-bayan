@@ -81,10 +81,19 @@ class ReportController extends Controller
     {
         $validated = $request->validate([
             'status' => ['required', 'string', 'in:pending,reviewed,resolved,rejected'],
+            'admin_response' => ['nullable', 'string', 'max:2000'],
         ]);
 
-        $report->update($validated);
+        $data = ['status' => $validated['status']];
 
-        return back()->with('success', 'تم تحديث حالة البلاغ بنجاح.');
+        if ($request->filled('admin_response')) {
+            $data['admin_response'] = $validated['admin_response'];
+            $data['admin_response_at'] = now();
+            $data['admin_read_at'] = null;
+        }
+
+        $report->update($data);
+
+        return back()->with('success', 'تم تحديث البلاغ بنجاح.');
     }
 }

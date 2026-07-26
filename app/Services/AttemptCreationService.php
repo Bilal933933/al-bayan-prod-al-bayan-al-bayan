@@ -89,10 +89,15 @@ class AttemptCreationService implements AttemptCreationServiceInterface
             $totalQuestions = 0;
 
             foreach ($topics as $order => $topic) {
+                $distribution = $topic->pivot->difficulty_distribution;
+                if (is_string($distribution)) {
+                    $distribution = json_decode($distribution, true);
+                }
+
                 $topicQuestions = $this->selectQuestionsForTopic(
                     $topic,
                     $topic->pivot->questions_count,
-                    $topic->pivot->difficulty_distribution,
+                    $distribution,
                 );
 
                 if ($topicQuestions->isEmpty()) {

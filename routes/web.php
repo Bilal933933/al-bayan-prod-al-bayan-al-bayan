@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Guest\GuestPracticeController;
 use App\Http\Controllers\Student\CompetitionController;
 use App\Http\Controllers\Student\TopicController;
@@ -49,5 +50,14 @@ Route::prefix('guide')->group(function () {
 });
 Route::inertia('faq', 'faq')->name('faq');
 Route::inertia('resources', 'resources')->name('resources');
+
+// Google OAuth
+Route::middleware('guest')->group(function () {
+    Route::get('auth/google/redirect', [GoogleController::class, 'redirect'])
+        ->name('auth.google.redirect');
+
+    Route::get('auth/google/callback', [GoogleController::class, 'callback'])
+        ->name('auth.google.callback');
+});
 
 require __DIR__.'/settings.php';

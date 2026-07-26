@@ -38,7 +38,7 @@ export default function NavigationGrid({
             <div className="mb-3 text-xs font-medium text-muted-foreground">
                 خريطة الأسئلة
             </div>
-            <div className="grid grid-cols-5 gap-1.5" dir="rtl">
+            <div className="grid grid-cols-5 gap-1.5" dir="ltr">
                 {allQuestions.map((q, i) => {
                     const isVisible = questions.some(
                         (fq) => fq.question_id === q.question_id,

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -12,6 +13,9 @@ class Report extends Model
         'question_id',
         'type',
         'description',
+        'admin_response',
+        'admin_response_at',
+        'admin_read_at',
         'status',
     ];
 
@@ -19,6 +23,8 @@ class Report extends Model
     {
         return [
             'question_id' => 'integer',
+            'admin_response_at' => 'datetime',
+            'admin_read_at' => 'datetime',
         ];
     }
 
@@ -32,5 +38,12 @@ class Report extends Model
     public function question(): BelongsTo
     {
         return $this->belongsTo(Question::class);
+    }
+
+    /** @param Builder<Report> $query */
+    public function scopeUnreadResponse(Builder $query): void
+    {
+        $query->whereNotNull('admin_response')
+            ->whereNull('admin_read_at');
     }
 }

@@ -1,4 +1,12 @@
+import { ProfileSection } from '@/components/student/profile/profile-section';
 import type { Achievement } from '@/types/profile';
+
+const iconBgMap: Record<string, string> = {
+    info: 'bg-brand-sky/20 text-brand-sky',
+    accent: 'bg-brand-gold/20 text-brand-gold',
+    success: 'bg-brand-teal/20 text-brand-teal',
+    destructive: 'bg-brand-brick/20 text-brand-brick',
+};
 
 interface AchievementsListProps {
     achievements: Achievement[];
@@ -10,22 +18,18 @@ export function AchievementsList({ achievements }: AchievementsListProps) {
     }
 
     return (
-        <div>
-            <div className="mb-4 flex items-center gap-2">
-                <span className="text-lg" aria-hidden="true">
-                    🏆
-                </span>
-                <h3 className="text-sm font-bold">أفضل الإنجازات</h3>
-            </div>
+        <ProfileSection
+            icon={<span className="text-lg">🏆</span>}
+            title="أفضل الإنجازات"
+        >
             <div className="space-y-2.5">
                 {achievements.map((item, i) => (
                     <div
                         key={i}
-                        className="hover:bg-primary-light flex items-center gap-3.5 rounded-xl bg-muted p-3.5 transition-all"
+                        className="flex items-center gap-3.5 rounded-xl bg-muted p-3.5 transition-all hover:bg-brand-teal/5"
                     >
                         <div
-                            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xl"
-                            style={{ backgroundColor: item.iconBg }}
+                            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xl ${iconBgMap[item.iconBg] ?? 'bg-muted-foreground/10 text-muted-foreground'}`}
                         >
                             {item.icon}
                         </div>
@@ -43,6 +47,6 @@ export function AchievementsList({ achievements }: AchievementsListProps) {
                     </div>
                 ))}
             </div>
-        </div>
+        </ProfileSection>
     );
 }

@@ -17,9 +17,12 @@ use App\Services\LeaderboardService;
 use App\Services\PlatformInsightsService;
 use App\Services\QuestionImportService;
 use Carbon\CarbonImmutable;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
@@ -49,6 +52,8 @@ class AppServiceProvider extends ServiceProvider
         JsonResource::withoutWrapping();
 
         Gate::policy(Attempt::class, AttemptPolicy::class);
+
+        Event::listen(Registered::class, SendEmailVerificationNotification::class);
 
         $this->configureDefaults();
 

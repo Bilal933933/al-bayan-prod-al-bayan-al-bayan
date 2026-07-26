@@ -98,6 +98,7 @@ class ProfileController extends Controller
                     'name' => $user->name,
                     'email' => $user->email,
                     'initial' => mb_substr($user->name, 0, 1),
+                    'avatar' => $user->avatar,
                 ],
                 'stats' => [
                     'total_attempts' => $totalAttempts,
@@ -160,7 +161,7 @@ class ProfileController extends Controller
         if ($bestAttempt) {
             $achievements[] = [
                 'icon' => '🎯',
-                'iconBg' => '#dbeafe',
+                'iconBg' => 'info',
                 'title' => 'إجابات مثالية',
                 'description' => "{$bestAttempt->score_percentage}% إجابات صحيحة",
                 'date' => $bestAttempt->finished_at?->format('j F Y') ?? '—',
@@ -176,7 +177,7 @@ class ProfileController extends Controller
         if ($perfectAttempt) {
             $achievements[] = [
                 'icon' => '👑',
-                'iconBg' => '#fef3c7',
+                'iconBg' => 'accent',
                 'title' => 'المركز الأول',
                 'description' => 'درجة كاملة 100%',
                 'date' => $perfectAttempt->finished_at?->format('j F Y') ?? '—',
@@ -191,7 +192,7 @@ class ProfileController extends Controller
         if ($totalQuestions >= 100) {
             $achievements[] = [
                 'icon' => '📚',
-                'iconBg' => '#dcfce7',
+                'iconBg' => 'success',
                 'title' => 'قارئ نشط',
                 'description' => "أكثر من {$totalQuestions} سؤال",
                 'date' => now()->format('j F Y'),
@@ -210,7 +211,7 @@ class ProfileController extends Controller
         if ($fastestAttempt && $fastestAttempt->time_per_q < 5) {
             $achievements[] = [
                 'icon' => '⚡',
-                'iconBg' => '#f3e8ff',
+                'iconBg' => 'destructive',
                 'title' => 'أسرع إجابة',
                 'description' => 'متوسط '.round((float) $fastestAttempt->time_per_q, 1).' ثانية للسؤال',
                 'date' => now()->format('j F Y'),

@@ -33,6 +33,7 @@ export interface ProfileData {
         name: string;
         email: string;
         initial: string;
+        avatar?: string | null;
     };
     stats: ProfileStats;
     streak_days: number;

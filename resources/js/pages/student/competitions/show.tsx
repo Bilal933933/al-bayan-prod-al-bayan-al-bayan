@@ -70,11 +70,17 @@ export default function Show({
 
     function handleStartExam() {
         setStarting(true);
+        const competitionUrl = competitions.show({
+            competition: competition.slug,
+        }).url;
+
         router.post(
             startCompetitionAttempt.url({ competition: competition.slug }),
             {},
             {
                 onError: (errors) => {
+                    window.history.replaceState(null, '', competitionUrl);
+
                     const messages = Object.values(errors);
 
                     if (messages.length > 0) {

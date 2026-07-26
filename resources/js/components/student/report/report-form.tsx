@@ -34,10 +34,11 @@ export function ReportForm({ recentQuestions = [] }: ReportFormProps) {
     const [loading, setLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [showDropdown, setShowDropdown] = useState(false);
+    const [searchTriggered, setSearchTriggered] = useState(false);
 
-    const filteredQuestions = recentQuestions.filter((q) =>
-        q.text.includes(searchQuery),
-    );
+    const filteredQuestions = searchTriggered
+        ? recentQuestions.filter((q) => q.text.includes(searchQuery))
+        : [];
 
     const selectedQuestion = recentQuestions.find(
         (q) => q.id === Number(questionId),
@@ -145,15 +146,26 @@ export function ReportForm({ recentQuestions = [] }: ReportFormProps) {
                                 </span>
                             </label>
                             <div className="relative">
-                                <Search className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                 <input
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => {
                                         setSearchQuery(e.target.value);
-                                        setShowDropdown(true);
+                                        setSearchTriggered(false);
+
+                                        if (!e.target.value) {
+                                            setShowDropdown(false);
+                                        }
                                     }}
-                                    onFocus={() => setShowDropdown(true)}
+                                    onKeyDown={(e) => {
+                                        if (
+                                            e.key === 'Enter' &&
+                                            searchQuery.trim()
+                                        ) {
+                                            setSearchTriggered(true);
+                                            setShowDropdown(true);
+                                        }
+                                    }}
                                     onBlur={() =>
                                         setTimeout(
                                             () => setShowDropdown(false),
@@ -161,14 +173,25 @@ export function ReportForm({ recentQuestions = [] }: ReportFormProps) {
                                         )
                                     }
                                     placeholder="ابحث عن السؤال..."
-                                    className="w-full rounded-xl border border-border bg-muted p-3 pr-10 text-sm text-foreground transition-all outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                                    className="w-full rounded-xl border border-border bg-muted p-3 pl-10 text-sm text-foreground transition-all outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        if (searchQuery.trim()) {
+                                            setSearchTriggered(true);
+                                            setShowDropdown(true);
+                                        }
+                                    }}
+                                    className="absolute top-1/2 left-1 -translate-y-1/2 rounded-lg p-2 text-muted-foreground transition-colors hover:bg-muted-foreground/10 hover:text-foreground"
+                                >
+                                    <Search className="h-4 w-4" />
+                                </button>
                             </div>
-                            {showDropdown &&
-                                searchQuery &&
-                                filteredQuestions.length > 0 && (
-                                    <div className="absolute z-20 mt-1 max-h-48 w-full overflow-y-auto rounded-xl border border-border bg-card shadow-lg">
-                                        {filteredQuestions.map((q) => (
+                            {showDropdown && searchTriggered && (
+                                <div className="absolute z-20 mt-1 max-h-48 w-full overflow-y-auto rounded-xl border border-border bg-card shadow-lg">
+                                    {filteredQuestions.length > 0 ? (
+                                        filteredQuestions.map((q) => (
                                             <button
                                                 key={q.id}
                                                 type="button"
@@ -176,6 +199,7 @@ export function ReportForm({ recentQuestions = [] }: ReportFormProps) {
                                                     setQuestionId(String(q.id));
                                                     setSearchQuery('');
                                                     setShowDropdown(false);
+                                                    setSearchTriggered(false);
                                                 }}
                                                 className={`block w-full px-3 py-2.5 text-right text-sm transition-colors hover:bg-muted ${Number(questionId) === q.id ? 'bg-primary/5 font-bold' : ''}`}
                                             >
@@ -184,9 +208,14 @@ export function ReportForm({ recentQuestions = [] }: ReportFormProps) {
                                                 </span>{' '}
                                                 {q.text}
                                             </button>
-                                        ))}
-                                    </div>
-                                )}
+                                        ))
+                                    ) : (
+                                        <div className="px-3 py-4 text-center text-sm text-muted-foreground">
+                                            لا توجد أسئلة تطابق بحثك
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                             {selectedQuestion && (
                                 <div className="mt-2 rounded-lg bg-muted px-3 py-2 text-xs text-muted-foreground">
                                     <span className="text-xs text-muted-foreground">

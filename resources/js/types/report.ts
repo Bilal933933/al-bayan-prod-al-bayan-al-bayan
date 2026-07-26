@@ -5,6 +5,9 @@ export interface ReportItem {
     status: ReportStatus;
     user?: { id: number; name: string; email: string };
     question: { id: number; text: string } | null;
+    admin_response: string | null;
+    admin_response_at: string | null;
+    admin_read_at: string | null;
     created_at: string;
 }
 

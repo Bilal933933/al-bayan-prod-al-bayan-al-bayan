@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Student\AttemptController;
-use App\Http\Controllers\Student\CompetitionController;
 use App\Http\Controllers\Student\DashboardController;
 use App\Http\Controllers\Student\JoinCompetitionController;
 use App\Http\Controllers\Student\LeaderboardController;
@@ -10,7 +9,7 @@ use App\Http\Controllers\Student\ProfileController;
 use App\Http\Controllers\Student\ReportController;
 use App\Http\Controllers\Student\ResultController;
 use App\Http\Controllers\Student\SearchController;
-use App\Http\Controllers\Student\TopicController;
+use App\Models\Competition;
 use App\Models\Topic;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -25,6 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Student report route
     Route::get('report', [ReportController::class, 'index'])->name('student.report');
     Route::post('report', [ReportController::class, 'store'])->name('student.report.store');
+    Route::patch('report/read-all', [ReportController::class, 'markAllAsRead'])->name('student.report.read-all');
 
     // Student onboarding route
     Route::get('onboarding', [OnboardingController::class, 'index'])->name('student.onboarding');
@@ -56,6 +56,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'actionLabel' => 'تصفح المسابقات',
             'actionHref' => route('student.competitions.index'),
         ]));
+        Route::get('/{competition}/attempts', fn (Competition $competition) => redirect()->route('student.competitions.show', $competition))->name('attempts.redirect');
     });
 
     // Student topic routes (POST actions only — GET routes are public in web.php)

@@ -12,9 +12,9 @@ export function ProfileStatsGrid({ stats }: ProfileStatsGridProps) {
             icon: Layers,
             label: 'محاولات',
             value: stats.total_attempts,
-            iconColor: 'text-blue-600',
-            bgColor: 'bg-gradient-to-br from-blue-500/10 to-blue-500/20',
-            borderColor: 'border-blue-500/30',
+            iconColor: 'text-brand-teal',
+            bgColor: 'bg-gradient-to-br from-brand-teal/10 to-brand-teal/20',
+            borderColor: 'border-brand-teal/20',
         },
         {
             icon: Gauge,
@@ -23,25 +23,25 @@ export function ProfileStatsGrid({ stats }: ProfileStatsGridProps) {
                 stats.avg_score_percentage !== null
                     ? `${stats.avg_score_percentage}%`
                     : '—',
-            iconColor: 'text-emerald-600',
-            bgColor: 'bg-gradient-to-br from-emerald-500/10 to-emerald-500/20',
-            borderColor: 'border-emerald-500/30',
+            iconColor: 'text-brand-sky',
+            bgColor: 'bg-gradient-to-br from-brand-sky/10 to-brand-sky/20',
+            borderColor: 'border-brand-sky/20',
         },
         {
             icon: Trophy,
             label: 'مسابقات',
             value: stats.competitions_count,
-            iconColor: 'text-amber-600',
-            bgColor: 'bg-gradient-to-br from-amber-500/10 to-amber-500/20',
-            borderColor: 'border-amber-500/30',
+            iconColor: 'text-brand-gold',
+            bgColor: 'bg-gradient-to-br from-brand-gold/10 to-brand-gold/20',
+            borderColor: 'border-brand-gold/20',
         },
         {
             icon: Clock,
             label: 'متوسط الوقت',
             value: stats.avg_time_formatted,
-            iconColor: 'text-purple-600',
-            bgColor: 'bg-gradient-to-br from-purple-500/10 to-purple-500/20',
-            borderColor: 'border-purple-500/30',
+            iconColor: 'text-brand-brick',
+            bgColor: 'bg-gradient-to-br from-brand-brick/10 to-brand-brick/20',
+            borderColor: 'border-brand-brick/20',
         },
     ];
 

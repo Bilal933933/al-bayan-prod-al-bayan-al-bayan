@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Contracts\Services\AttemptCreationServiceInterface;
 use App\Contracts\Services\ExamGradingServiceInterface;
-use App\Models\AttemptQuestion;
 use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -21,8 +20,8 @@ class DemoActivitySeeder extends Seeder
 
         $users = collect(range(1, 25))->map(function (int $i) {
             return User::factory()->create([
-                'name' => 'متدرب ' . $i,
-                'email' => 'demo+' . $i . '@albayan.test',
+                'name' => 'متدرب '.$i,
+                'email' => 'demo+'.$i.'@albayan.test',
                 'email_verified_at' => now(),
             ]);
         });
@@ -67,7 +66,7 @@ class DemoActivitySeeder extends Seeder
             }
         }
 
-        $this->command?->info('✓ Demo users created: ' . $users->count());
-        $this->command?->info('  Emails: demo+1@albayan.test … demo+' . $users->count() . '@albayan.test');
+        $this->command?->info('✓ Demo users created: '.$users->count());
+        $this->command?->info('  Emails: demo+1@albayan.test … demo+'.$users->count().'@albayan.test');
     }
 }

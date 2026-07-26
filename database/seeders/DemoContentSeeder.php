@@ -57,9 +57,9 @@ class DemoContentSeeder extends Seeder
                 $difficulty = $difficulties[array_rand($difficulties)];
 
                 $questionText = match ($difficulty) {
-                    Question::DIFFICULTY_EASY => 'ما هو المقصود بـ "' . fake()->word() . '" في ' . $topic->name . '؟',
-                    Question::DIFFICULTY_MEDIUM => 'كيف تفرق بين "' . fake()->word() . '" و"' . fake()->word() . '" في ' . $topic->name . '؟',
-                    Question::DIFFICULTY_HARD => 'ما الحكم عند "' . fake()->word() . '" في سياق ' . $topic->name . ' مع ذكر الأدلة؟',
+                    Question::DIFFICULTY_EASY => 'ما هو المقصود بـ "'.fake()->word().'" في '.$topic->name.'؟',
+                    Question::DIFFICULTY_MEDIUM => 'كيف تفرق بين "'.fake()->word().'" و"'.fake()->word().'" في '.$topic->name.'؟',
+                    Question::DIFFICULTY_HARD => 'ما الحكم عند "'.fake()->word().'" في سياق '.$topic->name.' مع ذكر الأدلة؟',
                 };
 
                 $question = Question::factory()->create([
@@ -84,7 +84,7 @@ class DemoContentSeeder extends Seeder
             for ($j = 0; $j < 4; $j++) {
                 QuestionOption::factory()->create([
                     'question_id' => $question->id,
-                    'text' => 'الخيار ' . chr(65 + $j) . ': ' . fake()->sentence(5),
+                    'text' => 'الخيار '.chr(65 + $j).': '.fake()->sentence(5),
                     'is_correct' => $j === $correctIndex,
                     'order' => $j,
                 ]);
@@ -102,7 +102,7 @@ class DemoContentSeeder extends Seeder
             QuestionOption::factory()->create([
                 'question_id' => $question->id,
                 'text' => 'خطأ',
-                'is_correct' => !$isCorrect,
+                'is_correct' => ! $isCorrect,
                 'order' => 1,
             ]);
         }

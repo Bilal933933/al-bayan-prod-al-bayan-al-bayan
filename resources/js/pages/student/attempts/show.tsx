@@ -64,10 +64,27 @@ export default function Show({ attempt }: ShowProps) {
             };
         }, [attempt.sections, attempt.total_questions]);
 
-    const durationSeconds = useMemo(
-        () => getDurationSeconds(attempt.started_at, attempt.finished_at),
-        [attempt.started_at, attempt.finished_at],
-    );
+    const { durationSeconds, isExpired } = useMemo(() => {
+        const secs = getDurationSeconds(
+            attempt.started_at,
+            attempt.finished_at,
+        );
+        const totalAllowed = attempt.sections.reduce(
+            (acc, s) => acc + (s.duration_minutes ?? 0) * 60,
+            0,
+        );
+        const hasTimer = attempt.sections.some(
+            (s) => s.duration_minutes !== null,
+        );
+
+        return {
+            durationSeconds: secs,
+            isExpired:
+                hasTimer &&
+                totalAllowed > 0 &&
+                secs >= totalAllowed - 60,
+        };
+    }, [attempt.started_at, attempt.finished_at, attempt.sections]);
 
     const { allQuestions, filteredNavQuestions } = useMemo(() => {
         const all = attempt.sections.flatMap((s) =>
@@ -174,13 +191,13 @@ export default function Show({ attempt }: ShowProps) {
                         </nav>
 
                         {/* Compact Hero */}
-                        <div className="rounded-2xl bg-card p-5 shadow-sm ring-border/50 sm:p-6">
-                            <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div className="rounded-2xl bg-card shadow-sm ring-border/50">
+                            <div className="flex items-start justify-between gap-4 p-5 sm:p-6">
                                 <div className="min-w-0 flex-1">
                                     <h1 className="text-xl font-bold sm:text-2xl">
                                         {attempt.subject_name}
                                     </h1>
-                                    <div className="mt-1 flex flex-wrap items-center gap-2">
+                                    <div className="mt-2 flex flex-wrap items-center gap-2">
                                         <span
                                             className={cn(
                                                 'rounded-full border px-2.5 py-0.5 text-[11px] font-medium',
@@ -193,25 +210,33 @@ export default function Show({ attempt }: ShowProps) {
                                             {typeLabels[attempt.type] ??
                                                 attempt.type}
                                         </span>
-                                        <span className="text-xs text-muted-foreground">
-                                            {attempt.total_questions} سؤال
+                                    </div>
+                                    <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
+                                        <span className="font-bold text-foreground">
+                                            {attempt.total_questions}
                                         </span>
+                                        <span>سؤال</span>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                                    <span className="flex items-center gap-1">
-                                        <Clock className="h-3.5 w-3.5" />
-                                        {formatDuration(durationSeconds)}
+                                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-primary/10 sm:h-20 sm:w-20">
+                                    <span className="text-xl font-extrabold text-primary sm:text-2xl">
+                                        {percentage}%
                                     </span>
-                                    <span className="text-muted-foreground/50">
-                                        |
-                                    </span>
-                                    <DateDisplay
-                                        date={attempt.started_at}
-                                        format="relative"
-                                        showTooltip
-                                    />
                                 </div>
+                            </div>
+                            <div className="flex items-center gap-4 border-t border-border/50 px-5 py-3 text-xs text-muted-foreground sm:px-6">
+                                <span className="flex items-center gap-1.5">
+                                    <Clock className="h-3.5 w-3.5" />
+                                    {isExpired || durationSeconds === 0 ? <span className="font-bold text-destructive">انتهي الوقت</span> : formatDuration(durationSeconds)}
+                                </span>
+                                <span className="text-muted-foreground/30">
+                                    |
+                                </span>
+                                <DateDisplay
+                                    date={attempt.started_at}
+                                    format="relative"
+                                    showTooltip
+                                />
                             </div>
                         </div>
 

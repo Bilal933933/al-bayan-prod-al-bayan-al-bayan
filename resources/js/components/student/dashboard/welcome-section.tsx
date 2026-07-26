@@ -84,10 +84,12 @@ export function WelcomeSection({ user, stats }: WelcomeSectionProps) {
                             <Trophy className="h-4 w-4 text-yellow-300" />
                             <span>
                                 متوسط النتيجة:{' '}
-                                <SlidingNumber
-                                    number={stats.average_percentage ?? 0}
-                                />
-                                %
+                                <span dir="ltr">
+                                    <SlidingNumber
+                                        number={stats.average_percentage ?? 0}
+                                    />
+                                    %
+                                </span>
                             </span>
                         </div>
                     )}

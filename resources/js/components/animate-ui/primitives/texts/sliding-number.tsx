@@ -319,6 +319,7 @@ function SlidingNumber({
         <motion.span
             ref={localRef}
             data-slot="sliding-number"
+            dir="ltr"
             style={{
                 display: 'inline-flex',
                 alignItems: 'center',
